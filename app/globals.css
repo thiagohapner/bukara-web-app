@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Bukara brand color tokens — override Tailwind's orange
+   palette so every *-orange-* class resolves to brand green.
+   Components are untouched.
+   ============================================================ */
+@theme {
+  --color-orange-50:  #e8f7f6;   /* hero panel, category hover bg */
+  --color-orange-400: #00bfb3;   /* lighter hover variant           */
+  --color-orange-500: #00A597;   /* Action Green — primary accent   */
+  --color-orange-600: #007A70;   /* Focus / darker hover            */
+
+  --color-slate-900: #022221;    /* Bukara dark — primary text      */
+  --color-slate-800: #022221;    /* Bukara dark — secondary text    */
+}
+
+/* ============================================================
+   Bukara brand color tokens (full set, for CSS-var usage)
+   ============================================================ */
+:root {
+  /* Brand & Accent */
+  --orange:      #00A597;   /* replaces the old #F97316          */
+  --orange-dark: #007A70;   /* replaces the old #EA580C          */
+
+  --color-primary:         #00A597;
+  --color-primary-focus:   #007A70;
+  --color-primary-on-dark: #00A597;
+
+  /* Text */
+  --color-ink:          #131514;
+  --color-body:         #131514;
+  --color-body-on-dark: #ffffff;
+  --color-body-muted:   #cccccc;
+  --color-ink-muted-80: #333333;
+  --color-ink-muted-48: #7a7a7a;
+
+  /* Surface */
+  --color-canvas:                   #ffffff;
+  --color-canvas-parchment:         #f5f5f7;
+  --color-surface-pearl:            #fafafc;
+  --color-surface-tile-1:           #272729;
+  --color-surface-tile-2:           #2a2a2c;
+  --color-surface-tile-3:           #252527;
+  --color-surface-black:            #000000;
+  --color-surface-chip-translucent: #d2d2d7;
+
+  /* Lines */
+  --color-divider-soft: #f0f0f0;
+  --color-hairline:     #e0e0e0;
+
+  /* On / Status */
+  --color-on-primary: #ffffff;
+  --color-on-dark:    #ffffff;
+  --color-error:      #FF3C40;
+
+  /* Fonts (kept from original) */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Legacy aliases kept so nothing else breaks */
+  --navy:     #0F172A;
+  --navy-mid: #1E293B;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #022221;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 22s linear infinite;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   Component utilities
+   ============================================================ */
+
+/* Product card */
+.product-card {
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+.img-zoom {
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Primary CTA button (named "orange" for back-compat, uses brand green) */
+.btn-orange {
+  background: var(--orange);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.7rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn-orange:hover {
+  background: var(--orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(0, 165, 151, 0.45);
+}
+
+/* Outline button */
+.btn-outline {
+  background: transparent;
+  color: #022221;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 9999px;
+  padding: 0.55rem 1.4rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-outline:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+/* Section "View all" link */
+.view-all {
+  font-size: 0.875rem;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.view-all:hover {
+  color: var(--orange);
+  text-decoration: none;
+}
+
+/* Stars — intentionally warm gold, not brand teal */
+.stars {
+  color: #FBBF24;
+  letter-spacing: 0.05em;
+}
