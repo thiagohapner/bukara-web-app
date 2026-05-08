@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HiTech — Find Your Perfect Tech Companion",
+  title: "Bukara GmbH",
   description:
     "Premium electronics, gadgets, and tech accessories. Best prices guaranteed.",
   icons: { icon: "/vercel.svg" },
