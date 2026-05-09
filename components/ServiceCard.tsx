@@ -29,7 +29,7 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
 
   const imageBlock = (
     <div
-      className="relative flex-shrink-0 flex items-center justify-center w-full sm:w-[42%] h-48 sm:h-auto overflow-hidden"
+      className={`relative flex-shrink-0 flex items-center justify-center w-full sm:w-[42%] h-48 sm:h-auto overflow-hidden ${!isEven ? "sm:order-last" : ""}`}
       style={{ background: imageBg, minHeight: "260px" }}
     >
       {heroImage ? (
@@ -51,7 +51,7 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
   );
 
   const contentBlock = (
-    <div className="flex-1 p-8 sm:p-10 flex flex-col justify-center">
+    <div className={`flex-1 p-8 sm:p-10 flex flex-col justify-center ${!isEven ? "sm:order-first" : ""}`}>
       {service.badge && (
         <span className="inline-flex self-start text-[12px] font-bold bg-[#065194] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-4">
           {service.badge}
@@ -99,17 +99,8 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
 
   return (
     <div className="service-card border border-slate-100 rounded-2xl overflow-hidden bg-white w-full flex flex-col sm:flex-row">
-      {isEven ? (
-        <>
-          {imageBlock}
-          {contentBlock}
-        </>
-      ) : (
-        <>
-          {contentBlock}
-          {imageBlock}
-        </>
-      )}
+      {imageBlock}
+      {contentBlock}
     </div>
   );
 }
