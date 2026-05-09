@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import AnnouncementBar from "@/components/AnnouncementBar";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -10,8 +13,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Bukara GmbH",
-  description:
-    "Premium electronics, gadgets, and tech accessories. Best prices guaranteed.",
+  description: "Professionelle Fräswerkzeuge, Schärfservice und Sonderwerkzeuge — exklusiver ITA-Partner.",
   icons: { icon: "/vercel.svg" },
 };
 
@@ -19,8 +21,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
-      <body className="min-h-screen flex flex-col">{children}</body>
+    <html lang="de" className={`${inter.variable}`}>
+      <body className="min-h-screen flex flex-col">
+        <ScrollToTop />
+        <Navbar />
+        <AnnouncementBar />
+        {children}
+      </body>
     </html>
   );
 }

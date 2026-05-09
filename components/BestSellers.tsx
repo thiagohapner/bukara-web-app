@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BEST_SELLERS } from "@/lib/data";
+import { BUKARA_PRODUCTS } from "@/lib/data";
 import ProductCard from "./ProductCard";
 import SectionHeader from "./SectionHeader";
 
@@ -36,12 +36,12 @@ export default function BestSellers() {
     <section ref={sectionRef} className="py-16 bg-white">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
         <div className="bs-header">
-          <SectionHeader title="Best Selling Products" />
+          <SectionHeader title="Unsere Produkte" viewAllHref="/produkte" />
         </div>
-        <div className="bs-grid grid grid-cols-2 md:grid-cols-4 gap-5">
-          {BEST_SELLERS.map((product) => (
-            <div key={product.id} className="bs-card">
-              <ProductCard product={product} size="lg" />
+        <div className="bs-grid grid grid-cols-1 md:grid-cols-3 gap-5">
+          {BUKARA_PRODUCTS.map((product, i) => (
+            <div key={product.slug} className="bs-card">
+              <ProductCard product={product} index={i} />
             </div>
           ))}
         </div>

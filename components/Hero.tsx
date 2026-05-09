@@ -14,7 +14,6 @@ export default function Hero() {
       tl.from(".hero-title",   { opacity: 0, y: 40, duration: 0.8 })
         .from(".hero-desc",    { opacity: 0, y: 24, duration: 0.6 }, "-=0.4")
         .from(".hero-cta",     { opacity: 0, y: 20, duration: 0.5 }, "-=0.3")
-        .from(".hero-social",  { opacity: 0, y: 16, duration: 0.5 }, "-=0.3")
         .from(".hero-keyboard",{ opacity: 0, x: 60, scale: 0.88, duration: 1, ease: "back.out(1.2)" }, "-=0.9")
         .from(".hero-phones",  { opacity: 0, x: -50, y: 30, scale: 0.88, duration: 1, ease: "back.out(1.2)" }, "-=0.8");
 
@@ -56,7 +55,7 @@ export default function Hero() {
             Ihr Rundumpartner bei Werkzeug für die Holz- und Kunstoffbearbeitung.
             Schnell flexibel und ohne Mindeststückzahl
           </p>
-          <div className="hero-cta flex flex-wrap gap-3 mb-10">
+          <div className="hero-cta flex flex-wrap gap-3 mb-8">
             <button className="btn-orange text-sm">
               Online shop
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24">
@@ -68,22 +67,6 @@ export default function Hero() {
             </button>
           </div>
 
-          {/* Social proof */}
-          <div className="hero-social flex items-center gap-2.5 mt-[100px]">
-            <Image
-              src="/30_years.svg"
-              alt="30 Jahre"
-              width={54}
-              height={54}
-              className="w-[54px] h-[54px]"
-            />
-            <div>
-              <p className="text-sm font-semibold text-slate-800 leading-tight">
-                Wir feiern unser 30-jähriges Jubiläum 🎉{" "}
-              </p>
-              <p className="text-sm text-slate-400 mt-0.5">Zuverlässige Präzision seit 1996</p>
-            </div>
-          </div>
 
         </div>
 
@@ -98,7 +81,7 @@ export default function Hero() {
               Schärfservice
             </div>
             <Image
-              src="/main_image_small.png"
+              src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/hero/main_image_small.png"
               alt="Bukara Tool"
               fill
               className="object-cover"
@@ -115,7 +98,7 @@ export default function Hero() {
               Premium Product Line
             </div>
             <Image
-              src="/main_image.png"
+              src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/hero/main_image.png"
               alt="Bukara End Mill"
               fill
               className="object-cover"

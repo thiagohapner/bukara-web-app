@@ -53,16 +53,16 @@ export default function Footer() {
             <div className="flex flex-col gap-3">
               <input
                 type="text"
-                placeholder="Enter your name"
-                className="bg-transparent text-white text-sm px-4 py-2.5 rounded border border-white/20 focus:outline-none focus:border-white placeholder:text-slate-500"
+                placeholder="Ihr Name"
+                className="w-full bg-white/10 text-white text-sm px-4 py-3 rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#00A597]/40 focus:border-[#00A597] transition-colors placeholder:text-slate-400"
               />
               <input
                 type="email"
-                placeholder="Enter email"
-                className="bg-transparent text-white text-sm px-4 py-2.5 rounded border border-white/20 focus:outline-none focus:border-white placeholder:text-slate-500"
+                placeholder="Ihre E-Mail"
+                className="w-full bg-white/10 text-white text-sm px-4 py-3 rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#00A597]/40 focus:border-[#00A597] transition-colors placeholder:text-slate-400"
               />
-              <button className="bg-white text-[#022221] text-sm font-semibold px-5 py-2.5 rounded hover:bg-slate-100 transition-colors">
-                Submit
+              <button className="btn-orange w-full justify-center">
+                Anmelden
               </button>
             </div>
           </div>

@@ -43,6 +43,196 @@ export interface PromoTile {
 
 export const NAV_LINKS = ["Produkte", "Lösungen", "Über uns", "B2B Portal", "Kontakt"];
 
+export interface BukaraService {
+  slug: string;
+  name: string;
+  tagline: string;
+  description: string;
+  badge?: string;
+  type: "schaerfen" | "sonderwerkzeug";
+  highlights: string[];
+  priceLabel: string;
+  images?: string[];
+}
+
+export const SERVICES: BukaraService[] = [
+  {
+    slug: "schaerfservice",
+    name: "Schärfservice",
+    tagline: "Professionelles Schärfen. Deutschlandweit.",
+    description:
+      "Nutzen Sie unseren schnellen und unkomplizierten Werkzeugservice (Nachschärfen, Reparatur, Instandsetzung) – für nahezu alle Werkzeugarten. Unser Abholservice ist für Sie selbstverständlich kostenlos — für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.",
+    badge: "Service",
+    type: "schaerfen",
+    highlights: [
+      "Bukara-Werkzeuge & Fremdwerkzeuge",
+      "Deutschlandweite Abholung & Rückgabe",
+      "Fertig in 1–2 Wochen",
+      "Faire Preise, keine Mindestmenge",
+    ],
+    priceLabel: "Auf Anfrage",
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/schaerfservice/main_image_small.png",
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/schaerfservice/A3679582.png",
+    ],
+  },
+  {
+    slug: "sonderwerkzeug",
+    name: "Sonderwerkzeuge",
+    tagline: "Maßgefertigt nach Ihren Spezifikationen.",
+    description:
+      "Wir fertigen Werkzeuge individuell nach Ihren Zeichnungen und Anforderungen. Ob Einzel- oder Serienproduktion — wir beraten Sie von der Spezifikation bis zur Lieferung.",
+    badge: "Service",
+    type: "sonderwerkzeug",
+    highlights: [
+      "Individuelle Fertigung nach Zeichnung oder Spezifikation",
+      "Alle gängigen Werkstoffe",
+      "Klein- und Großserien",
+      "Technische Beratung inklusive",
+    ],
+    priceLabel: "Auf Anfrage",
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/sonderwerkzeug/Frame%2065%20(4).png",
+    ],
+  },
+];
+
+export interface BukaraProduct {
+  slug: string;
+  name: string;
+  tagline: string;
+  description: string;
+  badge?: string;
+  sku?: string;
+  originalPrice?: number;
+  campaignPrice?: number;
+  hasVariants?: boolean;
+  images?: string[];
+}
+
+export interface X99Variant {
+  id: string;
+  sku: string;
+  variant_name: string;
+  original_price: number;
+  campaign_price: number;
+  sort_order: number;
+}
+
+export interface Deal {
+  slug: string;
+  title: string;
+  subtitle: string;
+  fromPrice: number;
+  discountPercent: number;
+  includedProducts: string[];
+  badge: string;
+  fixedItems: Array<{ name: string; originalPrice: number; campaignPrice: number }>;
+  cardImage?: string;
+  images?: string[];
+}
+
+export const BUKARA_PRODUCTS: BukaraProduct[] = [
+  {
+    slug: "x99-fraeser",
+    name: "X99 Fräser",
+    tagline: "One tool. All materials.",
+    description:
+      "Whether softwood, hardwood, MDF or coated chipboard — the X99 delivers clean results across all common wood-based materials. The premium Platinum coating, combined with the special nesting carbide grade, supports long tool life even when working with abrasive materials.",
+    badge: "-30%",
+    hasVariants: true,
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-1.png",
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-2.png",
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-3.png",
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-4.png",
+    ],
+  },
+  {
+    slug: "thermo-schrumpffutter",
+    name: "Thermo-Schrumpffutter",
+    tagline: "Präzision für Hochgeschwindigkeitsanwendungen.",
+    description:
+      "The slim design, high concentric accuracy and low-vibration clamping make the holder especially quiet and suitable for high-speed applications.",
+    sku: "515-00009-02-0",
+    originalPrice: 125.00,
+  },
+  {
+    slug: "turbonesting-turbinen-komplett-set",
+    name: "TurboNesting-Turbinen Komplett Set",
+    tagline: "Aktive Spanabfuhr für maximale Performance.",
+    description:
+      "The turbine set supports cutter performance by actively removing chips from the cutting path. Interchangeable collets allow different tool diameters to be used flexibly.",
+    sku: "512-00034-01-3",
+    originalPrice: 430.00,
+  },
+];
+
+export const X99_VARIANTS: X99Variant[] = [
+  { id: "1", sku: "667-00001-01-0", variant_name: "D6 NL3/22 GL70 S6 Z2+6 rechtsl./pos-neg",    original_price: 79.60,  campaign_price: 55.72,  sort_order: 1 },
+  { id: "2", sku: "667-00002-01-0", variant_name: "D8 NL4,2/22 GL70 S8 Z2+6 rechtsl./pos-neg",  original_price: 81.90,  campaign_price: 57.33,  sort_order: 2 },
+  { id: "3", sku: "667-00003-01-0", variant_name: "D10 NL4,5/25 GL80 S10 Z2+6 rechtsl./pos-neg", original_price: 89.60,  campaign_price: 62.72,  sort_order: 3 },
+  { id: "4", sku: "667-00004-01-0", variant_name: "D10 NL4,5/35 GL80 S10 Z2+6 rechtsl./pos-neg", original_price: 95.10,  campaign_price: 66.57,  sort_order: 4 },
+  { id: "5", sku: "667-00005-01-0", variant_name: "D12 NL5,5/25 GL80 S12 Z2+6 rechtsl./pos-neg", original_price: 110.10, campaign_price: 77.07,  sort_order: 5 },
+  { id: "6", sku: "667-00006-01-0", variant_name: "D12 NL5,5/35 GL80 S12 Z2+6 rechtsl./pos-neg", original_price: 117.40, campaign_price: 82.18,  sort_order: 6 },
+  { id: "7", sku: "667-00007-01-0", variant_name: "D16 NL7,5/35 GL90 S16 Z2+6 rechtsl./pos-neg", original_price: 175.70, campaign_price: 122.99, sort_order: 7 },
+  { id: "8", sku: "667-00008-01-0", variant_name: "D16 NL7,5/50 GL100 S16 Z2+6 rechtsl./pos-neg", original_price: 220.00, campaign_price: 154.00, sort_order: 8 },
+];
+
+export const DEALS: Deal[] = [
+  {
+    slug: "x99-only",
+    title: "X99 Fräser",
+    subtitle: "Das Universalwerkzeug für alle gängigen Holzwerkstoffe.",
+    fromPrice: 55.72,
+    discountPercent: 30,
+    includedProducts: ["X99 Fräser (Verfügbar in 8 Ausführungen)"],
+    badge: "-30%",
+    fixedItems: [],
+    cardImage: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/nur-x99/x-99-deal.png",
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-1.png",
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-2.png",
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-3.png",
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-4.png",
+    ],
+  },
+  {
+    slug: "x99-thermo-bundle",
+    title: "X99 + Thermo-Schrumpffutter",
+    subtitle: "Präzise Spanntechnik trifft Hochleistungsfräser.",
+    fromPrice: 143.22,
+    discountPercent: 30,
+    includedProducts: [
+      "X99 Fräser (Verfügbar in 8 Ausführungen)",
+      "Thermo-Schrumpffutter HSK 63F d16 A75",
+    ],
+    badge: "-30%",
+    fixedItems: [{ name: "Thermo-Schrumpffutter", originalPrice: 125.00, campaignPrice: 87.50 }],
+    cardImage: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set2/set2-2.png",
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set2/set2-1.png",
+    ],
+  },
+  {
+    slug: "x99-turbonesting-set",
+    title: "X99 + TurboNesting Set",
+    subtitle: "Aktive Spanabfuhr für reibungslosen Dauerbetrieb.",
+    fromPrice: 356.72,
+    discountPercent: 30,
+    includedProducts: [
+      "X99 Fräser (Verfügbar in 8 Ausführungen)",
+      "TurboNesting-Turbinen Komplett Set",
+    ],
+    badge: "-30%",
+    fixedItems: [{ name: "TurboNesting-Turbinen Komplett Set", originalPrice: 430.00, campaignPrice: 301.00 }],
+    cardImage: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set3/set3-2.png",
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set3/set3-1.png",
+    ],
+  },
+];
+
 export const CATEGORIES: Category[] = [
   { id: 1, name: "Smartphones", slug: "smartphones" },
   { id: 2, name: "Smartwatch", slug: "smartwatch" },
