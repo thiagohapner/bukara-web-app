@@ -130,6 +130,7 @@ export interface Deal {
   fixedItems: Array<{ name: string; originalPrice: number; campaignPrice: number }>;
   cardImage?: string;
   images?: string[];
+  active?: boolean;
 }
 
 export const BUKARA_PRODUCTS: BukaraProduct[] = [
@@ -156,6 +157,9 @@ export const BUKARA_PRODUCTS: BukaraProduct[] = [
       "The slim design, high concentric accuracy and low-vibration clamping make the holder especially quiet and suitable for high-speed applications.",
     sku: "515-00009-02-0",
     originalPrice: 125.00,
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/thermo/thermo.png",
+    ],
   },
   {
     slug: "turbonesting-turbinen-komplett-set",
@@ -165,6 +169,9 @@ export const BUKARA_PRODUCTS: BukaraProduct[] = [
       "The turbine set supports cutter performance by actively removing chips from the cutting path. Interchangeable collets allow different tool diameters to be used flexibly.",
     sku: "512-00034-01-3",
     originalPrice: 430.00,
+    images: [
+      "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/turbinenset/turbinenset.png",
+    ],
   },
 ];
 
@@ -189,6 +196,7 @@ export const DEALS: Deal[] = [
     includedProducts: ["X99 Fräser (Verfügbar in 8 Ausführungen)"],
     badge: "-30%",
     fixedItems: [],
+    active: true,
     cardImage: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/nur-x99/x-99-deal.png",
     images: [
       "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/X99/x-99-1.png",
@@ -209,6 +217,7 @@ export const DEALS: Deal[] = [
     ],
     badge: "-30%",
     fixedItems: [{ name: "Thermo-Schrumpffutter", originalPrice: 125.00, campaignPrice: 87.50 }],
+    active: true,
     cardImage: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set2/set2-2.png",
     images: [
       "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set2/set2-1.png",
@@ -226,6 +235,7 @@ export const DEALS: Deal[] = [
     ],
     badge: "-30%",
     fixedItems: [{ name: "TurboNesting-Turbinen Komplett Set", originalPrice: 430.00, campaignPrice: 301.00 }],
+    active: true,
     cardImage: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set3/set3-2.png",
     images: [
       "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/set3/set3-1.png",
@@ -234,13 +244,13 @@ export const DEALS: Deal[] = [
 ];
 
 export const CATEGORIES: Category[] = [
-  { id: 1, name: "Smartphones", slug: "smartphones" },
-  { id: 2, name: "Smartwatch", slug: "smartwatch" },
-  { id: 3, name: "Games & video", slug: "games" },
-  { id: 4, name: "Home Automation", slug: "home" },
-  { id: 5, name: "Headphones", slug: "headphones" },
-  { id: 6, name: "Laptops", slug: "laptops" },
-  { id: 7, name: "Tech Gadget", slug: "gadget" },
+  { id: 1, name: "Kreissägen",              slug: "kreissaegen" },
+  { id: 2, name: "Schaftwerkzeuge",         slug: "schaftwerkzeuge" },
+  { id: 3, name: "Bohrer",                  slug: "bohrer" },
+  { id: 4, name: "Spannsysteme",            slug: "spannsysteme" },
+  { id: 5, name: "Hartmetall-Spiralbohrer", slug: "hartmetall-spiralbohrer" },
+  { id: 6, name: "Fräser",                  slug: "fraeser" },
+  { id: 7, name: "Schärfservice",           slug: "schaerfservice" },
 ];
 
 export const BEST_SELLERS: Product[] = [

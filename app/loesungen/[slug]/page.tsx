@@ -124,11 +124,6 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
         </div>
 
         <div className="flex-1 min-w-0">
-          {service.badge && (
-            <span className="inline-flex text-[12px] font-bold bg-[#065194] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-4">
-              {service.badge}
-            </span>
-          )}
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
             {service.name}
           </h1>
@@ -358,7 +353,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                 {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                 {!submitting && (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 )}
               </button>
@@ -447,11 +442,6 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
         </div>
 
         <div className="flex-1 min-w-0">
-          {service.badge && (
-            <span className="inline-flex text-[12px] font-bold bg-[#065194] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-4">
-              {service.badge}
-            </span>
-          )}
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
             {service.name}
           </h1>
@@ -637,7 +627,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                 {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                 {!submitting && (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 )}
               </button>

@@ -112,6 +112,7 @@ function ProduktContent({ slug }: { slug: string }) {
     setSubmitError(null);
     const { error } = await supabase.from("inquiries").insert({
       offer_id: null,
+      product_name: product.name,
       selected_x99_variant_id: selectedVariant?.id ?? null,
       quantity,
       company_name: form.company,
@@ -146,16 +147,12 @@ function ProduktContent({ slug }: { slug: string }) {
             images={product.images ?? []}
             placeholderBg={gallery.bg}
             placeholderLabel={gallery.label}
+            badge={product.badge}
           />
         </div>
 
         {/* Content + form */}
         <div className="flex-1 min-w-0">
-          {product.badge && (
-            <span className="inline-flex text-[12px] font-bold bg-[#9B242A] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-3">
-              {product.badge}
-            </span>
-          )}
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-1">
             {product.name}
           </h1>
@@ -359,7 +356,7 @@ function ProduktContent({ slug }: { slug: string }) {
               {submitting ? "Wird gesendet…" : "Anfrage absenden"}
               {!submitting && (
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               )}
             </button>

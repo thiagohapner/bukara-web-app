@@ -7,6 +7,7 @@ interface Props {
   images: string[];
   placeholderBg: string;
   placeholderLabel: string;
+  badge?: string;
 }
 
 function PlaceholderBlock({ bg, label, className = "" }: { bg: string; label: string; className?: string }) {
@@ -25,7 +26,7 @@ function PlaceholderBlock({ bg, label, className = "" }: { bg: string; label: st
   );
 }
 
-export default function ProductGallery({ images, placeholderBg, placeholderLabel }: Props) {
+export default function ProductGallery({ images, placeholderBg, placeholderLabel, badge }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Only show slots for real images; fall back to one placeholder when none provided
@@ -60,6 +61,11 @@ export default function ProductGallery({ images, placeholderBg, placeholderLabel
 
         {/* Main image */}
         <div className="relative flex-1 aspect-[3/4] rounded-2xl overflow-hidden">
+          {badge && (
+            <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+              {badge}
+            </span>
+          )}
           {activeImage ? (
             <Image
               src={activeImage}
@@ -84,6 +90,11 @@ export default function ProductGallery({ images, placeholderBg, placeholderLabel
             key={i}
             className="flex-shrink-0 w-[82%] aspect-[3/4] snap-start rounded-2xl overflow-hidden relative"
           >
+            {i === 0 && badge && (
+              <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+                {badge}
+              </span>
+            )}
             {img ? (
               <Image
                 src={img}

@@ -26,6 +26,11 @@ export default function DealCard({ deal, index }: DealCardProps) {
       className={`relative flex-shrink-0 flex items-center justify-center w-full sm:w-[42%] h-48 sm:h-auto overflow-hidden ${!isEven ? "sm:order-last" : ""}`}
       style={{ background: imageBg, minHeight: "260px" }}
     >
+      {deal.badge && (
+        <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+          {deal.badge}
+        </span>
+      )}
       {heroImage ? (
         <Image src={heroImage} alt={deal.title} fill className="object-cover" />
       ) : (
@@ -41,11 +46,6 @@ export default function DealCard({ deal, index }: DealCardProps) {
 
   const contentBlock = (
     <div className={`flex-1 p-8 sm:p-10 flex flex-col justify-center ${!isEven ? "sm:order-first" : ""}`}>
-      {/* Badge */}
-      <span className="inline-flex self-start text-[12px] font-bold bg-[#9B242A] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-4">
-        {deal.badge}
-      </span>
-
       {/* Title & subtitle */}
       <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
         {deal.title}
@@ -94,7 +94,7 @@ export default function DealCard({ deal, index }: DealCardProps) {
         >
           Zum Angebot
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </Link>
       </div>

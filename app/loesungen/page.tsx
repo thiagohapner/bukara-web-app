@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
+import DealsPromo from "@/components/DealsPromo";
 import { SERVICES } from "@/lib/data";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -42,10 +43,16 @@ export default function LoesungenPage() {
           </nav>
         </div>
 
-        <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-8 flex flex-col gap-6">
-          {SERVICES.map((service, i) => (
-            <ServiceCard key={service.slug} service={service} index={i} />
-          ))}
+        <section className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-10">
+          <DealsPromo variant="full" lightBg />
+        </section>
+
+        <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
+            {SERVICES.map((service, i) => (
+              <ServiceCard key={service.slug} service={service} index={i} variant="panel" />
+            ))}
+          </div>
         </section>
       </main>
       <Footer />

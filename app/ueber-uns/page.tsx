@@ -103,7 +103,7 @@ export default function UeberUnsPage() {
               <Link href="/loesungen/sonderwerkzeug" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Sonderwerkzeuge anfragen
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </div>
@@ -113,8 +113,13 @@ export default function UeberUnsPage() {
         {/* ── 3. B2B Portal ── */}
         <section className="ueber-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
           <div className="flex flex-col lg:flex-row-reverse gap-12 items-center">
-            <div className="w-full lg:w-[48%] flex-shrink-0">
-              <Placeholder bg="#f5ede8" label="B2B Portal" className="aspect-[4/3]" />
+            <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
+              <Image
+                src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/ueber-uns/produkte.png"
+                alt="Schnell und digital bestellen"
+                fill
+                className="object-cover"
+              />
             </div>
             <div className="flex-1">
               <p className="text-xs font-semibold text-[#00A597] uppercase tracking-widest mb-3">Unser Sortiment</p>
@@ -135,7 +140,7 @@ export default function UeberUnsPage() {
                 <Link href="/produkte" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                   Produkte entdecken
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
                 <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
@@ -182,7 +187,7 @@ export default function UeberUnsPage() {
               <Link href="/loesungen/schaerfservice" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Schärfservice anfragen
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </div>
@@ -220,7 +225,7 @@ export default function UeberUnsPage() {
             >
               E-Mail schreiben
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>
           </div>

@@ -2,9 +2,36 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { PROMO_TILES } from "@/lib/data";
+
+const TILES = [
+  {
+    id: 1,
+    badge: "Sonderwerkzeug",
+    title: "Werkzeuge nach Ihren Spezifikationen",
+    cta: "Jetzt anfragen",
+    href: "/loesungen/sonderwerkzeug",
+    image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/sonderwerkzeug/Frame%2065%20(4).png",
+  },
+  {
+    id: 2,
+    badge: "Standardsortiment",
+    title: "Premium-Werkzeuge zu Top-Preisen",
+    cta: "Produkte entdecken",
+    href: "/produkte",
+    image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/hero/main_image.png",
+  },
+  {
+    id: 3,
+    badge: "Schärfservice",
+    title: "Bequemer Schärfservice — Deutschlandweit",
+    cta: "Service anfragen",
+    href: "/loesungen/schaerfservice",
+    image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/schaerfservice/main_image_small.png",
+  },
+];
 
 export default function PromoTiles() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -26,48 +53,36 @@ export default function PromoTiles() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-6 bg-white">
+    <section ref={sectionRef} className="py-16 bg-white">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
         <div className="promo-grid grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {PROMO_TILES.map((tile) => (
-            <div
+          {TILES.map((tile) => (
+            <Link
               key={tile.id}
-              className="promo-tile relative rounded-2xl overflow-hidden min-h-[200px] flex items-center justify-between px-7 py-7 cursor-pointer group"
-              style={{ backgroundColor: tile.bg }}
+              href={tile.href}
+              style={{ textDecoration: "none" }}
+              className="promo-tile relative rounded-2xl overflow-hidden min-h-[200px] flex items-center justify-between px-7 py-7 group"
             >
+              <div style={{ backgroundColor: "#F5F5F7" }} className="absolute inset-0" />
+
               {/* Text */}
               <div className="z-10 max-w-[55%]">
-                <p
-                  className={`text-[10px] font-bold tracking-widest uppercase mb-2 ${
-                    tile.dark ? "text-orange-400" : "text-orange-500"
-                  }`}
-                >
+                <p className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "#00A597" }}>
                   {tile.badge}
                 </p>
-                <h3
-                  className={`text-[17px] font-semibold leading-tight mb-4 ${
-                    tile.dark ? "text-white" : "text-slate-800"
-                  }`}
-                >
+                <h3 className="text-[17px] font-semibold leading-tight mb-4" style={{ color: "#022221" }}>
                   {tile.title}
                 </h3>
-                <button
-                  className={`inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-250 ${
-                    tile.dark
-                      ? "bg-orange-500 text-white hover:bg-orange-400"
-                      : "text-white hover:opacity-90"
-                  }`}
-                  style={tile.dark ? undefined : { backgroundColor: "#044749" }}
-                >
+                <span className="inline-flex items-center gap-2 text-sm font-semibold underline-offset-2 group-hover:underline" style={{ color: "#044749" }}>
                   {tile.cta}
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </button>
+                </span>
               </div>
 
               {/* Image */}
-              <div className="w-[42%] h-[160px] relative flex-shrink-0">
+              <div className="w-[42%] h-[160px] relative flex-shrink-0 z-10 rounded-xl overflow-hidden">
                 <Image
                   src={tile.image}
                   alt={tile.title}
@@ -76,7 +91,8 @@ export default function PromoTiles() {
                   sizes="(max-width: 640px) 50vw, 20vw"
                 />
               </div>
-            </div>
+
+            </Link>
           ))}
         </div>
       </div>

@@ -1,15 +1,29 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
 
 interface Props {
   variant?: "full" | "compact" | "hero";
+  lightBg?: boolean;
 }
 
-const TAG_ICON = <span style={{ fontSize: "3.375rem", lineHeight: 1 }}>🎁</span>;
-
-export default function DealsPromo({ variant = "full" }: Props) {
+export default function DealsPromo({ variant = "full", lightBg = false }: Props) {
+  const emojiRef = useRef<HTMLSpanElement>(null);
   const isCompact = variant === "compact";
+
+  useEffect(() => {
+    if (!emojiRef.current) return;
+    const tween = gsap.to(emojiRef.current, {
+      y: -5,
+      duration: 2.6,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
+    return () => { tween.kill(); };
+  }, []);
 
   if (variant === "hero") {
     return (
@@ -19,8 +33,8 @@ export default function DealsPromo({ variant = "full" }: Props) {
         style={{ textDecoration: "none", background: "linear-gradient(135deg, #00A597 0%, #007A70 100%)" }}
       >
         <div className="flex items-center gap-3 px-5 py-4">
-          <span className="flex w-12 h-12 rounded-xl bg-transparent items-center justify-center flex-shrink-0 text-white">
-            {TAG_ICON}
+          <span ref={emojiRef} className="flex w-12 h-12 rounded-xl bg-transparent items-center justify-center flex-shrink-0 text-white" style={{ fontSize: "4.5rem", lineHeight: 1 }}>
+            🎁
           </span>
           <div>
             <p className="text-sm font-extrabold text-white leading-snug">
@@ -37,27 +51,36 @@ export default function DealsPromo({ variant = "full" }: Props) {
     <Link
       href="/angebote"
       className="group block rounded-2xl overflow-hidden"
-      style={{ textDecoration: "none", background: "linear-gradient(135deg, #00A597 0%, #007A70 100%)" }}
+      style={{
+        textDecoration: "none",
+        background: lightBg ? "#f1f5f9" : "linear-gradient(135deg, #00A597 0%, #007A70 100%)",
+      }}
     >
-      <div className={`flex flex-col sm:flex-row items-center justify-between gap-4 ${isCompact ? "px-6 py-5" : "px-8 py-7"}`}>
-        <div className="flex items-center gap-4">
-          <span className={`hidden sm:flex ${isCompact ? "w-12 h-12" : "w-14 h-14"} rounded-xl bg-transparent items-center justify-center flex-shrink-0 text-white`}>
-            {TAG_ICON}
+      <div className={`flex flex-col sm:flex-row items-center justify-between gap-6 ${isCompact ? "px-6 py-5" : "px-16 py-16"}`}>
+        <div className="flex items-center gap-6">
+          <span
+            ref={emojiRef}
+            className={`hidden sm:flex ${isCompact ? "w-12 h-12" : "w-20 h-20"} rounded-xl bg-transparent items-center justify-center flex-shrink-0`}
+            style={{ fontSize: "4.5rem", lineHeight: 1 }}
+          >
+            🎁
           </span>
           <div>
-            <p className="text-xs font-bold text-white/70 uppercase tracking-widest mb-0.5">
+            <p className="text-sm font-bold uppercase tracking-widest mb-1" style={{ color: lightBg ? "#00A597" : "rgba(255,255,255,0.7)" }}>
               Wir feiern mit Ihnen unser Jubiläum
             </p>
-            <p className={`${isCompact ? "text-sm sm:text-base" : "text-base sm:text-lg"} font-extrabold text-white leading-snug`}>
+            <p className={`${isCompact ? "text-sm sm:text-base" : "text-xl sm:text-2xl"} font-extrabold leading-snug`} style={{ color: lightBg ? "#022221" : "#ffffff" }}>
               30 Jahre Bukara - Ein Jahr voller Deals und Angebote
             </p>
-            <p className="text-s text-white/60 mt-0.5">Bukara - Zuverlässige Präzision seit 1996</p>
           </div>
         </div>
-        <span className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-[#00A597] font-semibold text-sm rounded-full px-5 py-2.5 group-hover:bg-orange-50 transition-colors whitespace-nowrap">
-          Jetzt entdecken
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        <span
+          className="flex-shrink-0 inline-flex items-center gap-2 font-semibold text-base rounded-full px-7 py-3.5 transition-colors whitespace-nowrap"
+          style={lightBg ? { backgroundColor: "#00A597", color: "#ffffff" } : { backgroundColor: "#ffffff", color: "#00A597" }}
+        >
+          Angebote entdecken
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </span>
       </div>

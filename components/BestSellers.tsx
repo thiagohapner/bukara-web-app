@@ -33,7 +33,7 @@ export default function BestSellers() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 bg-white">
+    <section ref={sectionRef} className="pt-8 pb-16 bg-white">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
         <div className="bs-header">
           <SectionHeader title="Unsere Produkte" viewAllHref="/produkte" />

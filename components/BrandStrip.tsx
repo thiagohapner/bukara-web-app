@@ -4,7 +4,7 @@ export default function BrandStrip() {
   const doubled = [...BRANDS, ...BRANDS, ...BRANDS, ...BRANDS];
 
   return (
-    <section className="py-12 bg-white border-y border-slate-100 overflow-hidden">
+    <section className="py-[3.6rem] bg-white border-y border-slate-100 overflow-hidden">
       <div className="marquee-track">
         {doubled.map((brand, i) => (
           <div

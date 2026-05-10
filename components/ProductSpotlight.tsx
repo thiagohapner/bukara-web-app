@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -36,28 +35,22 @@ export default function ProductSpotlight() {
           {/* Text */}
           <div className="spotlight-text">
             <p className="text-[10px] font-bold tracking-widest uppercase text-orange-500 mb-2">
-              SonicBlast Headphones
+              Wir feiern mit Ihnen unser Jubiläum 🎉
             </p>
             <h2 className="text-3xl font-semibold text-slate-900 mb-5">
-              HarmonyHear Headphone
+              30 Jahre Bukara - Ein Jahr voller Deals und Angebote
             </h2>
             <button className="btn-orange text-sm">
-              Shop Now
+              Angebote entdecken
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </button>
           </div>
 
-          {/* Image */}
-          <div className="spotlight-img w-full sm:w-[340px] h-[180px] relative flex-shrink-0">
-            <Image
-              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=700&q=80"
-              alt="HarmonyHear Headphone"
-              fill
-              className="object-contain"
-              sizes="(max-width: 640px) 80vw, 340px"
-            />
+          {/* Emoji */}
+          <div className="spotlight-img flex-shrink-0 flex items-center justify-center w-[120px] h-[120px]">
+            <span style={{ fontSize: "6rem", lineHeight: 1 }}>🎁</span>
           </div>
         </div>
       </div>

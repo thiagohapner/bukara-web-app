@@ -118,6 +118,7 @@ function DealContent({ dealSlug }: { dealSlug: string }) {
     setSubmitError(null);
     const { error } = await supabase.from("inquiries").insert({
       offer_id: offerDbId,
+      product_name: deal.title,
       selected_x99_variant_id: selectedVariant.id,
       quantity,
       company_name: form.company,
@@ -152,7 +153,12 @@ function DealContent({ dealSlug }: { dealSlug: string }) {
       <div className="flex flex-col lg:flex-row gap-10 items-start">
 
       {/* Gallery */}
-      <div className="w-full lg:w-[42%] flex-shrink-0 lg:sticky lg:top-[72px]">
+      <div className="relative w-full lg:w-[42%] flex-shrink-0 lg:sticky lg:top-[72px]">
+        {deal.badge && (
+          <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+            {deal.badge}
+          </span>
+        )}
         <ProductGallery
           images={deal.images ?? []}
           placeholderBg={gallery.bg}
@@ -162,10 +168,6 @@ function DealContent({ dealSlug }: { dealSlug: string }) {
 
       {/* Content + form */}
       <div className="flex-1 min-w-0">
-      {/* Badge + title */}
-      <span className="inline-flex text-[12px] font-bold bg-[#9B242A] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-4">
-        {deal.badge}
-      </span>
       <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
         {deal.title}
       </h1>
@@ -422,7 +424,7 @@ function DealContent({ dealSlug }: { dealSlug: string }) {
           {submitting ? "Wird gesendet…" : "Anfrage absenden"}
           {!submitting && (
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           )}
         </button>
