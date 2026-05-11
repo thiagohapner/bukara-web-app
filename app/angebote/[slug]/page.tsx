@@ -153,16 +153,12 @@ function DealContent({ dealSlug }: { dealSlug: string }) {
       <div className="flex flex-col lg:flex-row gap-10 items-start">
 
       {/* Gallery */}
-      <div className="relative w-full lg:w-[42%] flex-shrink-0 lg:sticky lg:top-[72px]">
-        {deal.badge && (
-          <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
-            {deal.badge}
-          </span>
-        )}
+      <div className="w-full lg:w-[42%] flex-shrink-0 lg:sticky lg:top-[72px]">
         <ProductGallery
           images={deal.images ?? []}
           placeholderBg={gallery.bg}
           placeholderLabel={gallery.label}
+          badge={deal.badge}
         />
       </div>
 
