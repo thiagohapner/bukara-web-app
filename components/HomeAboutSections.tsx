@@ -71,7 +71,7 @@ export default function HomeAboutSections() {
         <div className="flex flex-col lg:flex-row-reverse gap-12 items-center">
           <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
             <Image
-              src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/ueber-uns/produkte.png"
+              src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/ueber-uns/assortment.png"
               alt="Schnell und digital bestellen"
               fill
               className="object-cover"
