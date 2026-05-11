@@ -41,15 +41,34 @@ type SchaerfForm = {
 };
 
 type SonderForm = {
+  // Step 1
+  anwendung: string[];
+  anwendungSonstiges: string;
+  material: string[];
+  materialSonstiges: string;
+  materialstaerke: string;
+  // Step 2
+  maschine: string[];
+  maschineSonstiges: string;
+  maschinentyp: string;
+  zielProblem: string[];
+  zielSonstiges: string;
+  sichtkanten: string;
+  // Step 3
+  prioritaetStandzeit: string;
+  prioritaetPreis: string;
+  stueckzahl: string[];
+  teileProTag: string;
+  bestehendesWerkzeug: string;
+  bestehendesBeschreibung: string;
+  loesungsumfang: string[];
+  // Step 4
   company: string;
   vat: string;
   contact: string;
   email: string;
   phone: string;
   message: string;
-  material: string;
-  dimensions: string;
-  quantity: string;
 };
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -153,40 +172,19 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   Firma <span className="text-[#9B242A]">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={form.company}
-                  onChange={field("company")}
-                  className={inputClass()}
-                  placeholder="Muster GmbH"
-                />
+                <input type="text" required value={form.company} onChange={field("company")} className={inputClass()} placeholder="Muster GmbH" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   Kontaktperson <span className="text-[#9B242A]">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={form.contact}
-                  onChange={field("contact")}
-                  className={inputClass()}
-                  placeholder="Max Mustermann"
-                />
+                <input type="text" required value={form.contact} onChange={field("contact")} className={inputClass()} placeholder="Max Mustermann" />
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   E-Mail <span className="text-[#9B242A]">*</span>
                 </label>
-                <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={field("email")}
-                  className={inputClass()}
-                  placeholder="anfrage@firma.de"
-                />
+                <input type="email" required value={form.email} onChange={field("email")} className={inputClass()} placeholder="anfrage@firma.de" />
               </div>
             </div>
 
@@ -196,39 +194,20 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   Abweichende Abholadresse / Sonstige Bemerkungen
                 </label>
-                <textarea
-                  rows={2}
-                  value={form.pickupAddressDeviation}
-                  onChange={field("pickupAddressDeviation")}
-                  className={inputClass("resize-none")}
-                  placeholder="Falls abweichend von Ihrer hinterlegten Adresse..."
-                />
+                <textarea rows={2} value={form.pickupAddressDeviation} onChange={field("pickupAddressDeviation")} className={inputClass("resize-none")} placeholder="Falls abweichend von Ihrer hinterlegten Adresse..." />
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   Gewünschtes Abholdatum <span className="text-[#9B242A]">*</span>
                 </label>
-                <input
-                  type="date"
-                  required
-                  value={form.pickupDate}
-                  onChange={field("pickupDate")}
-                  className={inputClass()}
-                />
+                <input type="date" required value={form.pickupDate} onChange={field("pickupDate")} className={inputClass()} />
                 <p className="text-[11px] text-slate-400 mt-1.5">Abholungen erfolgen in der Regel zwischen 07:00 und 16:00 Uhr</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   Abholungszeiten <span className="text-[#9B242A]">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={form.pickupTimes}
-                  onChange={field("pickupTimes")}
-                  className={inputClass()}
-                  placeholder="z. B. 08:00–12:00, 13:00–16:00"
-                />
+                <input type="text" required value={form.pickupTimes} onChange={field("pickupTimes")} className={inputClass()} placeholder="z. B. 08:00–12:00, 13:00–16:00" />
                 <p className="text-[11px] text-slate-400 mt-1.5">Falls Mittagspause, bitte angeben</p>
               </div>
               <div className="sm:col-span-2">
@@ -238,15 +217,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                 <div className="flex flex-wrap gap-4">
                   {(["Büro", "Warenannahme", "Sonstiges"] as const).map((loc) => (
                     <label key={loc} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="pickupLocation"
-                        value={loc}
-                        checked={form.pickupLocation === loc}
-                        onChange={() => setForm((f) => ({ ...f, pickupLocation: loc }))}
-                        className="accent-[#00A597] w-4 h-4"
-                        required
-                      />
+                      <input type="radio" name="pickupLocation" value={loc} checked={form.pickupLocation === loc} onChange={() => setForm((f) => ({ ...f, pickupLocation: loc }))} className="accent-[#00A597] w-4 h-4" required />
                       <span className="text-sm text-slate-800">{loc}</span>
                     </label>
                   ))}
@@ -260,28 +231,14 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   Paketgröße <span className="text-[#9B242A]">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={form.packageSize}
-                  onChange={field("packageSize")}
-                  className={inputClass()}
-                  placeholder="z. B. 30 × 20 × 15"
-                />
+                <input type="text" required value={form.packageSize} onChange={field("packageSize")} className={inputClass()} placeholder="z. B. 30 × 20 × 15" />
                 <p className="text-[11px] text-slate-400 mt-1.5">Höhe × Breite × Tiefe in cm</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
                   Paketgewicht <span className="text-[#9B242A]">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={form.packageWeight}
-                  onChange={field("packageWeight")}
-                  className={inputClass()}
-                  placeholder="z. B. 5"
-                />
+                <input type="text" required value={form.packageWeight} onChange={field("packageWeight")} className={inputClass()} placeholder="z. B. 5" />
                 <p className="text-[11px] text-slate-400 mt-1.5">in kg</p>
               </div>
             </div>
@@ -299,15 +256,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                     { value: "nein",          label: "Nein, ist nicht erwünscht – bitte unbearbeitet zurückschicken" },
                   ] as const).map(({ value, label }) => (
                     <label key={value} className="flex items-start gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="carbideReplacement"
-                        value={value}
-                        checked={form.carbideReplacement === value}
-                        onChange={() => setForm((f) => ({ ...f, carbideReplacement: value }))}
-                        className="accent-[#00A597] w-4 h-4 mt-0.5 flex-shrink-0"
-                        required
-                      />
+                      <input type="radio" name="carbideReplacement" value={value} checked={form.carbideReplacement === value} onChange={() => setForm((f) => ({ ...f, carbideReplacement: value }))} className="accent-[#00A597] w-4 h-4 mt-0.5 flex-shrink-0" required />
                       <span className="text-sm text-slate-800">{label}</span>
                     </label>
                   ))}
@@ -323,15 +272,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                     { value: "neutral", label: "Neutrale Gravur" },
                   ] as const).map(({ value, label }) => (
                     <label key={value} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="engraving"
-                        value={value}
-                        checked={form.engraving === value}
-                        onChange={() => setForm((f) => ({ ...f, engraving: value }))}
-                        className="accent-[#00A597] w-4 h-4"
-                        required
-                      />
+                      <input type="radio" name="engraving" value={value} checked={form.engraving === value} onChange={() => setForm((f) => ({ ...f, engraving: value }))} className="accent-[#00A597] w-4 h-4" required />
                       <span className="text-sm text-slate-800">{label}</span>
                     </label>
                   ))}
@@ -339,17 +280,10 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
               </div>
             </div>
 
-            {submitError && (
-              <p className="text-sm text-red-500 mb-4 mt-4">{submitError}</p>
-            )}
+            {submitError && <p className="text-sm text-red-500 mb-4 mt-4">{submitError}</p>}
 
             <div className="mt-8">
-              <button
-                type="submit"
-                disabled={submitting}
-                className="btn-orange"
-                style={{ opacity: submitting ? 0.7 : 1 }}
-              >
+              <button type="submit" disabled={submitting} className="btn-orange" style={{ opacity: submitting ? 0.7 : 1 }}>
                 {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                 {!submitting && (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -371,18 +305,62 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
   const gallery = SERVICE_GALLERY[serviceSlug] ?? { bg: "#f5ede8", label: "SWZ" };
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [form, setForm] = useState<SonderForm>({
+    anwendung: [], anwendungSonstiges: "",
+    material: [], materialSonstiges: "",
+    materialstaerke: "",
+    maschine: [], maschineSonstiges: "", maschinentyp: "",
+    zielProblem: [], zielSonstiges: "",
+    sichtkanten: "",
+    prioritaetStandzeit: "", prioritaetPreis: "",
+    stueckzahl: [], teileProTag: "",
+    bestehendesWerkzeug: "", bestehendesBeschreibung: "",
+    loesungsumfang: [],
     company: "", vat: "", contact: "", email: "", phone: "", message: "",
-    material: "", dimensions: "", quantity: "",
   });
 
-  function field(key: keyof SonderForm) {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-      setForm((f) => ({ ...f, [key]: e.target.value }));
+  function txt(key: keyof SonderForm) {
+    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm(f => ({ ...f, [key]: e.target.value }));
   }
+
+  function toggle(arrKey: keyof SonderForm, value: string) {
+    setForm(f => {
+      const arr = f[arrKey] as string[];
+      return { ...f, [arrKey]: arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value] };
+    });
+  }
+
+  // Render helpers (called as functions, not JSX components, to avoid remount issues)
+  const chk = (arrKey: keyof SonderForm, value: string) => {
+    const arr = form[arrKey] as string[];
+    return (
+      <label key={value} className="flex items-center gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={arr.includes(value)}
+          onChange={() => toggle(arrKey, value)}
+          className="accent-[#00A597] w-4 h-4 flex-shrink-0"
+        />
+        <span className="text-sm text-slate-800">{value}</span>
+      </label>
+    );
+  };
+
+  const radioBtn = (name: string, stateKey: keyof SonderForm, value: string) => {
+    const active = (form[stateKey] as string) === value;
+    return (
+      <label key={value} className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-colors ${active ? "border-[#00A597] bg-[#00A597]/5" : "border-slate-200 hover:border-slate-300"}`}>
+        <input type="radio" name={name} value={value} checked={active}
+          onChange={() => setForm(f => ({ ...f, [stateKey]: value }))} className="sr-only" />
+        <span className={`text-sm font-medium ${active ? "text-[#00A597]" : "text-slate-700"}`}>{value}</span>
+      </label>
+    );
+  };
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -391,13 +369,10 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
 
     let specFileUrl: string | null = null;
     const file = fileRef.current?.files?.[0] ?? null;
-
     if (file) {
       const ext = file.name.split(".").pop();
       const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error: uploadError } = await supabase.storage
-        .from("service-files")
-        .upload(path, file);
+      const { error: uploadError } = await supabase.storage.from("service-files").upload(path, file);
       if (uploadError) {
         setSubmitting(false);
         setSubmitError("Datei konnte nicht hochgeladen werden. Bitte versuchen Sie es erneut.");
@@ -415,10 +390,27 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
       email: form.email,
       phone: form.phone || null,
       message: form.message || null,
-      material: form.material || null,
-      dimensions_spec: form.dimensions || null,
-      quantity_needed: form.quantity ? parseInt(form.quantity) : null,
       spec_file_url: specFileUrl,
+      sonder_details: {
+        anwendung: form.anwendung,
+        anwendungSonstiges: form.anwendungSonstiges || null,
+        material: form.material,
+        materialSonstiges: form.materialSonstiges || null,
+        materialstaerke: form.materialstaerke || null,
+        maschine: form.maschine,
+        maschineSonstiges: form.maschineSonstiges || null,
+        maschinentyp: form.maschinentyp || null,
+        zielProblem: form.zielProblem,
+        zielSonstiges: form.zielSonstiges || null,
+        sichtkanten: form.sichtkanten || null,
+        prioritaetStandzeit: form.prioritaetStandzeit || null,
+        prioritaetPreis: form.prioritaetPreis || null,
+        stueckzahl: form.stueckzahl,
+        teileProTag: form.teileProTag || null,
+        bestehendesWerkzeug: form.bestehendesWerkzeug || null,
+        bestehendesBeschreibung: form.bestehendesBeschreibung || null,
+        loesungsumfang: form.loesungsumfang,
+      },
     });
 
     setSubmitting(false);
@@ -428,6 +420,8 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
       router.push("/danke");
     }
   }
+
+  const STEP_LABELS = ["Anwendung & Material", "Maschine & Ziel", "Prioritäten & Umfang", "Kontaktdaten"];
 
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10 pb-20">
@@ -449,14 +443,11 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
           <p className="text-slate-700 text-sm mb-6 leading-relaxed">{service.description}</p>
 
           <div className="mb-6">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">
-              Leistungen
-            </p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Leistungen</p>
             <ul className="flex flex-col gap-2">
               {service.highlights.map((h) => (
                 <li key={h} className="flex items-start gap-2 text-sm text-slate-900">
-                  <CheckIcon />
-                  {h}
+                  <CheckIcon />{h}
                 </li>
               ))}
             </ul>
@@ -464,173 +455,236 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
 
           <div className="h-px bg-slate-100 mb-8" />
 
-          <form onSubmit={handleSubmit} noValidate>
-            <SectionLabel>Ihre Kontaktdaten</SectionLabel>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
-              <div>
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Firmenname <span className="text-[#9B242A]">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={form.company}
-                  onChange={field("company")}
-                  className={inputClass()}
-                  placeholder="Muster GmbH"
-                />
+          {/* Step indicator */}
+          <div className="flex items-start mb-8">
+            {STEP_LABELS.map((label, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center relative">
+                {i < STEP_LABELS.length - 1 && (
+                  <div className={`absolute top-4 left-1/2 w-full h-px transition-colors ${step > i + 1 ? "bg-[#00A597]" : "bg-slate-200"}`} />
+                )}
+                <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${step >= i + 1 ? "bg-[#00A597] text-white" : "bg-slate-100 text-slate-400"}`}>
+                  {step > i + 1 ? (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : i + 1}
+                </div>
+                <span className="text-[10px] text-slate-400 mt-1.5 text-center leading-tight px-1">{label}</span>
               </div>
-              <div>
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  USt-IdNr.
-                </label>
-                <input
-                  type="text"
-                  value={form.vat}
-                  onChange={field("vat")}
-                  className={inputClass()}
-                  placeholder="DE123456789"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Ansprechpartner <span className="text-[#9B242A]">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={form.contact}
-                  onChange={field("contact")}
-                  className={inputClass()}
-                  placeholder="Max Mustermann"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  E-Mail <span className="text-[#9B242A]">*</span>
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={field("email")}
-                  className={inputClass()}
-                  placeholder="anfrage@firma.de"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">Telefon</label>
-                <input
-                  type="tel"
-                  value={form.phone}
-                  onChange={field("phone")}
-                  className={inputClass()}
-                  placeholder="+49 (0) 123 456789"
-                />
-              </div>
-            </div>
+            ))}
+          </div>
 
-            <SectionLabel>Werkzeugspezifikation</SectionLabel>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
-              <div>
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Material <span className="text-[#9B242A]">*</span>
-                </label>
-                <select
-                  required
-                  value={form.material}
-                  onChange={field("material")}
-                  className={inputClass()}
-                >
-                  <option value="">Bitte wählen</option>
-                  <option value="Holz">Holz</option>
-                  <option value="MDF/Spanplatte">MDF / Spanplatte</option>
-                  <option value="Kunststoff">Kunststoff</option>
-                  <option value="Aluminium">Aluminium</option>
-                  <option value="Sonstige">Sonstige</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Benötigte Stückzahl <span className="text-[#9B242A]">*</span>
-                </label>
-                <input
-                  type="number"
-                  min={1}
-                  required
-                  value={form.quantity}
-                  onChange={field("quantity")}
-                  className={inputClass()}
-                  placeholder="z. B. 10"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Abmessungen & Spezifikationen <span className="text-[#9B242A]">*</span>
-                </label>
-                <textarea
-                  rows={4}
-                  required
-                  value={form.dimensions}
-                  onChange={field("dimensions")}
-                  className={inputClass("resize-none")}
-                  placeholder="z. B. Durchmesser 12 mm, Schneidenlänge 35 mm, Schaftdurchmesser 12 mm, Toleranz ±0,01 mm..."
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Technische Zeichnung / Spezifikation{" "}
-                  <span className="text-slate-400 font-normal">(optional, PDF, DXF, DWG, JPG, PNG — max. 10 MB)</span>
-                </label>
-                <div
-                  className="border border-dashed border-slate-300 rounded-xl px-4 py-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#00A597] transition-colors bg-slate-50"
-                  onClick={() => fileRef.current?.click()}
-                >
-                  <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                  </svg>
-                  <span className="text-sm text-slate-500">
-                    {fileName ? fileName : "Datei auswählen oder hier ablegen"}
-                  </span>
-                  <input
-                    ref={fileRef}
-                    type="file"
-                    accept=".pdf,.dxf,.dwg,.jpg,.jpeg,.png"
-                    className="hidden"
-                    onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
-                  />
+          <form onSubmit={handleSubmit} noValidate>
+
+            {/* ── STEP 1: Anwendung & Material ── */}
+            {step === 1 && (
+              <div className="flex flex-col gap-6">
+                <div>
+                  <SectionLabel>1. Anwendung</SectionLabel>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {["Plattenzuschnitt", "Nuten / Falzen", "Kantenbearbeitung", "Bohren", "Fräsen / Kontur", "Profilbearbeitung", "Sonstiges"].map(v => chk("anwendung", v))}
+                  </div>
+                  {form.anwendung.includes("Sonstiges") && (
+                    <input type="text" value={form.anwendungSonstiges} onChange={txt("anwendungSonstiges")} className={inputClass("mt-2")} placeholder="Beschreibung…" />
+                  )}
+                </div>
+
+                <div className="h-px bg-slate-100" />
+
+                <div>
+                  <SectionLabel>2. Material</SectionLabel>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {["Spanplatte", "MDF / HDF", "Multiplex", "Massivholz", "HPL / Kompaktplatte", "Kunststoff", "Aluminium", "Verbundmaterial", "Sonstiges"].map(v => chk("material", v))}
+                  </div>
+                  {form.material.includes("Sonstiges") && (
+                    <input type="text" value={form.materialSonstiges} onChange={txt("materialSonstiges")} className={inputClass("mt-2")} placeholder="Beschreibung…" />
+                  )}
+                </div>
+
+                <div className="h-px bg-slate-100" />
+
+                <div>
+                  <SectionLabel>3. Materialstärke / Abmessungen</SectionLabel>
+                  <input type="text" value={form.materialstaerke} onChange={txt("materialstaerke")} className={inputClass()} placeholder="z. B. 18 mm, 300 × 600 mm" />
                 </div>
               </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-slate-500 mb-1.5">Nachricht</label>
-                <textarea
-                  rows={4}
-                  value={form.message}
-                  onChange={field("message")}
-                  className={inputClass("resize-none")}
-                  placeholder="Weitere Angaben zu Ihrem Projekt oder besonderen Anforderungen..."
-                />
-              </div>
-            </div>
-
-            {submitError && (
-              <p className="text-sm text-red-500 mb-4 mt-4">{submitError}</p>
             )}
 
-            <div className="mt-6">
-              <button
-                type="submit"
-                disabled={submitting}
-                className="btn-orange"
-                style={{ opacity: submitting ? 0.7 : 1 }}
-              >
-                {submitting ? "Wird gesendet…" : "Anfrage absenden"}
-                {!submitting && (
+            {/* ── STEP 2: Maschine & Ziel ── */}
+            {step === 2 && (
+              <div className="flex flex-col gap-6">
+                <div>
+                  <SectionLabel>4. Maschine</SectionLabel>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {["CNC", "Formatkreissäge", "Nesting", "Kantenanleimmaschine", "Tischfräse", "Sonstiges"].map(v => chk("maschine", v))}
+                  </div>
+                  {form.maschine.includes("Sonstiges") && (
+                    <input type="text" value={form.maschineSonstiges} onChange={txt("maschineSonstiges")} className={inputClass("mt-2")} placeholder="Beschreibung…" />
+                  )}
+                  <div className="mt-3">
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Maschinentyp / Hersteller</label>
+                    <input type="text" value={form.maschinentyp} onChange={txt("maschinentyp")} className={inputClass()} placeholder="z. B. Homag BOF 211, Biesse Rover B" />
+                  </div>
+                </div>
+
+                <div className="h-px bg-slate-100" />
+
+                <div>
+                  <SectionLabel>5. Ziel / Problem</SectionLabel>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {["Bessere Schnittqualität", "Höhere Standzeit", "Schnellere Bearbeitung", "Werkzeug funktioniert nicht optimal", "Neue Anwendung", "Sonstiges"].map(v => chk("zielProblem", v))}
+                  </div>
+                  {form.zielProblem.includes("Sonstiges") && (
+                    <input type="text" value={form.zielSonstiges} onChange={txt("zielSonstiges")} className={inputClass("mt-2")} placeholder="Beschreibung…" />
+                  )}
+                </div>
+
+                <div className="h-px bg-slate-100" />
+
+                <div>
+                  <SectionLabel>6. Sichtkanten</SectionLabel>
+                  <div className="flex flex-wrap gap-3">
+                    {["Ja", "Nein", "Teilweise"].map(v => radioBtn("sichtkanten", "sichtkanten", v))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── STEP 3: Prioritäten & Umfang ── */}
+            {step === 3 && (
+              <div className="flex flex-col gap-6">
+                <div>
+                  <SectionLabel>7. Prioritäten</SectionLabel>
+                  <p className="text-xs font-medium text-slate-500 mb-2">Standzeit vs. Geschwindigkeit</p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {["Maximale Standzeit", "Ausgewogen", "Maximale Geschwindigkeit"].map(v => radioBtn("prioritaetStandzeit", "prioritaetStandzeit", v))}
+                  </div>
+                  <p className="text-xs font-medium text-slate-500 mb-2">Preis vs. Leistung</p>
+                  <div className="flex flex-wrap gap-2">
+                    {["Möglichst günstig", "Ausgewogen", "Maximale Performance"].map(v => radioBtn("prioritaetPreis", "prioritaetPreis", v))}
+                  </div>
+                </div>
+
+                <div className="h-px bg-slate-100" />
+
+                <div>
+                  <SectionLabel>8. Stückzahl / Einsatz</SectionLabel>
+                  <div className="flex flex-wrap gap-4 mb-3">
+                    {["Einzelteile", "Kleinserie", "Serienfertigung"].map(v => chk("stueckzahl", v))}
+                  </div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1.5">Teile pro Tag / Woche</label>
+                  <input type="text" value={form.teileProTag} onChange={txt("teileProTag")} className={inputClass()} placeholder="z. B. 50 / Tag" />
+                </div>
+
+                <div className="h-px bg-slate-100" />
+
+                <div>
+                  <SectionLabel>9. Bestehendes Werkzeug</SectionLabel>
+                  <div className="flex flex-wrap gap-3 mb-3">
+                    {["Ja", "Nein"].map(v => radioBtn("bestehendesWerkzeug", "bestehendesWerkzeug", v))}
+                  </div>
+                  {form.bestehendesWerkzeug === "Ja" && (
+                    <input type="text" value={form.bestehendesBeschreibung} onChange={txt("bestehendesBeschreibung")} className={inputClass()} placeholder="Beschreibung des bestehenden Werkzeugs…" />
+                  )}
+                </div>
+
+                <div className="h-px bg-slate-100" />
+
+                <div>
+                  <SectionLabel>10. Lösungsumfang</SectionLabel>
+                  <div className="flex flex-col gap-2.5">
+                    {["Komplettlösung inkl. Beratung", "Nur Werkzeug", "Beratung gewünscht"].map(v => chk("loesungsumfang", v))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── STEP 4: Kontaktdaten ── */}
+            {step === 4 && (
+              <div className="flex flex-col gap-4">
+                <SectionLabel>Kontaktdaten</SectionLabel>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Firmenname <span className="text-[#9B242A]">*</span></label>
+                    <input type="text" required value={form.company} onChange={txt("company")} className={inputClass()} placeholder="Muster GmbH" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">USt-IdNr.</label>
+                    <input type="text" value={form.vat} onChange={txt("vat")} className={inputClass()} placeholder="DE123456789" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Ansprechpartner <span className="text-[#9B242A]">*</span></label>
+                    <input type="text" required value={form.contact} onChange={txt("contact")} className={inputClass()} placeholder="Max Mustermann" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">E-Mail <span className="text-[#9B242A]">*</span></label>
+                    <input type="email" required value={form.email} onChange={txt("email")} className={inputClass()} placeholder="anfrage@firma.de" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Telefon</label>
+                    <input type="tel" value={form.phone} onChange={txt("phone")} className={inputClass()} placeholder="+49 (0) 123 456789" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                    Technische Zeichnung / Spezifikation{" "}
+                    <span className="text-slate-400 font-normal">(optional, PDF, DXF, DWG, JPG, PNG — max. 10 MB)</span>
+                  </label>
+                  <div
+                    className="border border-dashed border-slate-300 rounded-xl px-4 py-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#00A597] transition-colors bg-slate-50"
+                    onClick={() => fileRef.current?.click()}
+                  >
+                    <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                    </svg>
+                    <span className="text-sm text-slate-500">{fileName ?? "Datei auswählen oder hier ablegen"}</span>
+                    <input ref={fileRef} type="file" accept=".pdf,.dxf,.dwg,.jpg,.jpeg,.png" className="hidden"
+                      onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)} />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1.5">Nachricht</label>
+                  <textarea rows={4} value={form.message} onChange={txt("message")} className={inputClass("resize-none")}
+                    placeholder="Weitere Angaben zu Ihrem Projekt oder besonderen Anforderungen…" />
+                </div>
+
+                {submitError && <p className="text-sm text-red-500">{submitError}</p>}
+              </div>
+            )}
+
+            {/* Navigation */}
+            <div className={`flex items-center mt-8 ${step > 1 ? "justify-between" : "justify-end"}`}>
+              {step > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setStep(s => s - 1)}
+                  className="text-sm text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                  </svg>
+                  Zurück
+                </button>
+              )}
+              {step < 4 ? (
+                <button type="button" onClick={() => setStep(s => s + 1)} className="btn-orange">
+                  Weiter
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                )}
-              </button>
+                </button>
+              ) : (
+                <button type="submit" disabled={submitting} className="btn-orange" style={{ opacity: submitting ? 0.7 : 1 }}>
+                  {submitting ? "Wird gesendet…" : "Anfrage absenden"}
+                  {!submitting && (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  )}
+                </button>
+              )}
             </div>
           </form>
         </div>
