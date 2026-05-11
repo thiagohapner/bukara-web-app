@@ -60,22 +60,25 @@ export default function ProductGallery({ images, placeholderBg, placeholderLabel
         )}
 
         {/* Main image */}
-        <div className="relative flex-1 aspect-[3/4] rounded-2xl overflow-hidden">
+        <div className="relative flex-1 aspect-[3/4]">
+          {/* Image clipped to rounded corners independently of badge */}
+          <div className="absolute inset-0 rounded-2xl overflow-hidden">
+            {activeImage ? (
+              <Image
+                src={activeImage}
+                alt={placeholderLabel}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
+            ) : (
+              <PlaceholderBlock bg={placeholderBg} label={placeholderLabel} />
+            )}
+          </div>
           {badge && (
-            <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+            <span className="absolute top-3 left-3 z-20 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
               {badge}
             </span>
-          )}
-          {activeImage ? (
-            <Image
-              src={activeImage}
-              alt={placeholderLabel}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
-          ) : (
-            <PlaceholderBlock bg={placeholderBg} label={placeholderLabel} />
           )}
         </div>
       </div>
