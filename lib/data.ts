@@ -231,7 +231,10 @@ export const DEALS: Deal[] = [
     discountPercent: 30,
     includedProducts: [
       "X99 Fräser (Verfügbar in 8 Ausführungen)",
-      "TurboNesting-Turbinen Komplett Set",
+      "Turbine",
+      "Schlüssel",
+      "Spannzange",
+      "Futter",
     ],
     badge: "-30%",
     fixedItems: [{ name: "TurboNesting-Turbinen Komplett Set", originalPrice: 430.00, campaignPrice: 301.00 }],
