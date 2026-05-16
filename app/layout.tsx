@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import AnnouncementBar from "@/components/AnnouncementBar";
-import ScrollToTop from "@/components/ScrollToTop";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,9 +20,6 @@ export default function RootLayout({
   return (
     <html lang="de" className={`${inter.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <ScrollToTop />
-        <Navbar />
-        <AnnouncementBar />
         {children}
       </body>
     </html>

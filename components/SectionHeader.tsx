@@ -1,3 +1,5 @@
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+
 interface Props {
   title: string;
   viewAllHref?: string;
@@ -11,9 +13,7 @@ export default function SectionHeader({ title, viewAllHref = "#" }: Props) {
       </h2>
       <a href={viewAllHref} className="view-all font-medium">
         View All
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
+        <ArrowRightIcon className="w-4 h-4" />
       </a>
     </div>
   );

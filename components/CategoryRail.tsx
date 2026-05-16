@@ -3,7 +3,15 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { CATEGORIES } from "@/lib/data";
+const CATEGORIES = [
+  { id: 1, name: "Kreissägen", slug: "kreissaegen" },
+  { id: 2, name: "Schaftwerkzeuge", slug: "schaftwerkzeuge" },
+  { id: 3, name: "Bohrer", slug: "bohrer" },
+  { id: 4, name: "Spannsysteme", slug: "spannsysteme" },
+  { id: 5, name: "Hartmetall-Spiralbohrer", slug: "hartmetall-spiralbohrer" },
+  { id: 6, name: "Fräser", slug: "fraeser" },
+  { id: 7, name: "Schärfservice", slug: "schaerfservice" },
+];
 
 const ICONS: Record<string, React.ReactNode> = {
   // Circular saw blade — outer circle, center hole, 8 tooth marks

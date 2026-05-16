@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 interface Props {
   images: string[];
@@ -10,16 +12,10 @@ interface Props {
   badge?: string;
 }
 
-function PlaceholderBlock({ bg, label, className = "" }: { bg: string; label: string; className?: string }) {
+function PlaceholderBlock({ bg, label }: { bg: string; label: string }) {
   return (
-    <div
-      className={`w-full h-full flex items-center justify-center ${className}`}
-      style={{ background: bg }}
-    >
-      <span
-        className="font-black tracking-tighter select-none text-2xl"
-        style={{ color: "rgba(0,165,151,0.18)" }}
-      >
+    <div className="w-full h-full flex items-center justify-center" style={{ background: bg }}>
+      <span className="font-black tracking-tighter select-none text-2xl" style={{ color: "rgba(0,165,151,0.18)" }}>
         {label}
       </span>
     </div>
@@ -27,91 +23,121 @@ function PlaceholderBlock({ bg, label, className = "" }: { bg: string; label: st
 }
 
 export default function ProductGallery({ images, placeholderBg, placeholderLabel, badge }: Props) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Only show slots for real images; fall back to one placeholder when none provided
-  const hasImages = images.length > 0;
-  const slots = hasImages ? images : [null];
-  const activeImage = hasImages ? images[Math.min(activeIndex, images.length - 1)] : null;
+  // Escape key to close
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLightboxIndex(null); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [lightboxIndex]);
+
+  // Prevent body scroll when lightbox is open
+  useEffect(() => {
+    document.body.style.overflow = lightboxIndex !== null ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [lightboxIndex]);
+
+  const mainImage = images.length > 0 ? images[0] : null;
 
   return (
     <>
-      {/* ── Desktop: thumbs column + main image ── */}
-      <div className="hidden lg:flex flex-row gap-3 h-full">
-        {/* Thumbnail column — only shown when there are multiple images */}
-        {images.length > 1 && (
-          <div className="flex flex-col gap-2 w-[72px] flex-shrink-0">
-            {images.map((img, idx) => {
-              const isActive = activeIndex === idx;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => setActiveIndex(idx)}
-                  className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-colors flex-shrink-0 ${
-                    isActive ? "border-[#00A597]" : "border-transparent hover:border-slate-300"
-                  }`}
-                  aria-label={`Bild ${idx + 1}`}
-                >
-                  <Image src={img} alt={`${placeholderLabel} ${idx + 1}`} fill className="object-cover" />
-                </button>
-              );
-            })}
-          </div>
-        )}
-
+      {/* ── Desktop: main image + 3/4 grid below ── */}
+      <div className="hidden lg:block">
         {/* Main image */}
-        <div className="relative flex-1 aspect-[3/4]">
-          {/* Image clipped to rounded corners independently of badge */}
-          <div className="absolute inset-0 rounded-2xl overflow-hidden">
-            {activeImage ? (
-              <Image
-                src={activeImage}
-                alt={placeholderLabel}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-            ) : (
-              <PlaceholderBlock bg={placeholderBg} label={placeholderLabel} />
-            )}
-          </div>
+        <div
+          className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden mb-2 cursor-zoom-in"
+          onClick={() => mainImage && setLightboxIndex(0)}
+        >
+          {mainImage ? (
+            <Image src={mainImage} alt={placeholderLabel} fill className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 55vw" />
+          ) : (
+            <PlaceholderBlock bg={placeholderBg} label={placeholderLabel} />
+          )}
           {badge && (
-            <span className="absolute top-3 left-3 z-20 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+            <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
               {badge}
             </span>
           )}
         </div>
+
+        {/* Additional images grid */}
+        {images.length > 1 && (
+          <div className="grid grid-cols-2 gap-2">
+            {images.slice(1, 5).map((img, idx) => (
+              <div
+                key={idx}
+                className="relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-zoom-in"
+                onClick={() => setLightboxIndex(idx + 1)}
+              >
+                <Image src={img} alt={`${placeholderLabel} ${idx + 2}`} fill className="object-cover" sizes="27vw" />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* ── Mobile: horizontal scroll-snap gallery ── */}
+      {/* ── Mobile: horizontal scroll-snap ── */}
       <div
         className="lg:hidden flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2"
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
-        {slots.map((img, i) => (
-          <div
-            key={i}
-            className="flex-shrink-0 w-[82%] aspect-[3/4] snap-start rounded-2xl overflow-hidden relative"
-          >
+        {(images.length > 0 ? images : [null]).map((img, i) => (
+          <div key={i} className="flex-shrink-0 w-[82%] aspect-[3/4] snap-start rounded-2xl overflow-hidden relative">
             {i === 0 && badge && (
               <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
                 {badge}
               </span>
             )}
             {img ? (
-              <Image
-                src={img}
-                alt={`${placeholderLabel} ${i + 1}`}
-                fill
-                className="object-cover"
-                sizes="82vw"
-              />
+              <Image src={img} alt={`${placeholderLabel} ${i + 1}`} fill className="object-cover" sizes="82vw" />
             ) : (
               <PlaceholderBlock bg={placeholderBg} label={placeholderLabel} />
             )}
           </div>
         ))}
       </div>
+
+      {/* ── Lightbox — rendered via portal directly on document.body ── */}
+      {lightboxIndex !== null && images[lightboxIndex] &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center"
+            style={{ backgroundColor: "rgba(0,0,0,0.92)" }}
+            onClick={() => setLightboxIndex(null)}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setLightboxIndex(null)}
+              className="absolute top-5 right-5 z-10 w-11 h-11 rounded-full flex items-center justify-center text-white transition-colors"
+              style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
+              aria-label="Schließen"
+            >
+              <XMarkIcon className="w-6 h-6" />
+            </button>
+
+            {/* Image — stopPropagation prevents backdrop-click from firing */}
+            <div
+              className="relative"
+              style={{ width: "min(85vw, 700px)", height: "85vh" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={images[lightboxIndex]}
+                alt={`${placeholderLabel} ${lightboxIndex + 1}`}
+                fill
+                className="object-contain"
+                sizes="85vw"
+                priority
+              />
+            </div>
+          </div>,
+          document.body
+        )
+      }
     </>
   );
 }

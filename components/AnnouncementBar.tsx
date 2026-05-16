@@ -1,3 +1,5 @@
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+
 export default function AnnouncementBar() {
   return (
     <div
@@ -7,9 +9,7 @@ export default function AnnouncementBar() {
       Nutzen Sie unseren Schärfservice · Deutschlandweite Abholung · Faire Preise · Fertig in 1–2 Wochen.{" "}
       <a href="/loesungen/schaerfservice" style={{ color: "#044749" }} className="inline-flex items-center gap-0.5 font-semibold underline-offset-2 hover:underline">
         Jetzt anfragen
-        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
+        <ArrowRightIcon className="w-3 h-3" strokeWidth={2.5} />
       </a>
     </div>
   );

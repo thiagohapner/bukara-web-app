@@ -4,8 +4,13 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ARTICLES } from "@/lib/data";
 import SectionHeader from "./SectionHeader";
+
+const ARTICLES = [
+  { id: 1, title: "Tips for improving your gaming experience at home", date: "Apr 1, 2025", image: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=600&q=80", category: "Gaming" },
+  { id: 2, title: "Tech gift guide finding the perfect gift for every occasion", date: "Apr 1, 2025", image: "https://images.unsplash.com/photo-1549637642-90187f64f420?w=600&q=80", category: "Gift Guide" },
+  { id: 3, title: "Tips for setting up a home office for remote work success", date: "Apr 1, 2025", image: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80", category: "Work" },
+];
 
 export default function NewsArticles() {
   const sectionRef = useRef<HTMLElement>(null);

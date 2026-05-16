@@ -5,15 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CheckIcon, ArrowRightIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function CheckIcon() {
-  return (
-    <svg className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
-  );
+function AboutCheckIcon() {
+  return <CheckIcon className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
 }
 
 export default function HomeAboutSections() {
@@ -58,9 +55,7 @@ export default function HomeAboutSections() {
             </p>
             <Link href="/loesungen/sonderwerkzeug" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
               Sonderwerkzeuge anfragen
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
             </Link>
           </div>
         </div>
@@ -95,15 +90,11 @@ export default function HomeAboutSections() {
             <div className="flex flex-wrap gap-3">
               <Link href="/produkte" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Produkte entdecken
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+                <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
               </Link>
               <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Zum B2B Portal
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
+                <ArrowTopRightOnSquareIcon className="w-4 h-4" strokeWidth={2.5} />
               </a>
             </div>
           </div>
@@ -135,16 +126,14 @@ export default function HomeAboutSections() {
             <ul className="flex flex-col gap-2 mb-8">
               {["Faire Preise", "Schnelle Durchlaufzeit", "In der Regel innerhalb von 1–2 Wochen geschärft zurück"].map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-slate-900">
-                  <CheckIcon />
+                  <AboutCheckIcon />
                   {item}
                 </li>
               ))}
             </ul>
             <Link href="/loesungen/schaerfservice" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
               Schärfservice anfragen
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
             </Link>
           </div>
         </div>

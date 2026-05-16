@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
+import { ArrowRightIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -59,15 +60,11 @@ export default function Hero() {
           <div className="hero-cta flex flex-wrap gap-3 mb-8">
             <Link href="/loesungen/sonderwerkzeug" className="btn-orange text-sm" style={{ textDecoration: "none" }}>
               Sonderwerkzeug
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.2} />
             </Link>
             <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline text-sm inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
               Zum B2B Portal
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
+              <ArrowTopRightOnSquareIcon className="w-4 h-4" strokeWidth={2.2} />
             </a>
           </div>
 

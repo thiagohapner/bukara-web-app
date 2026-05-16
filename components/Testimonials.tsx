@@ -4,7 +4,10 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { TESTIMONIALS } from "@/lib/data";
+const TESTIMONIALS = [
+  { id: 1, name: "Lena Alexander", location: "Florida, US", rating: 5, text: "The CyberSleek Gaming Keyboard is a must-have for serious gamers! The keys are responsive and the customizable lighting adds a cool aesthetic to my gaming setup. Love it!", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" },
+  { id: 2, name: "Cameron Williamson", location: "New York, US", rating: 5, text: "The EchoSync Smart Home system has made my life so much easier! I can control my lights, thermostat, and security cameras from my phone, which adds a new level of convenience.", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" },
+];
 
 export default function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);

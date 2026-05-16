@@ -1,32 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { BukaraProduct } from "@/lib/data";
+import { formatEur } from "@/lib/pricing";
 
-const PLACEHOLDER_BG = ["#e6eff5", "#f5ede8", "#e8f7f6"];
-
-interface Props {
-  product: BukaraProduct;
-  index?: number;
+export interface ProductCardData {
+  slug: string;
+  name: string;
+  badge?: string;
+  image?: string;
+  galleryBg: string;
+  hasVariants?: boolean;
+  fromCampaignPrice?: number;
+  fromOriginalPrice?: number;
 }
 
-export default function ProductCard({ product, index = 0 }: Props) {
-  const bg = PLACEHOLDER_BG[index % PLACEHOLDER_BG.length];
+export default function ProductCard({ card }: { card: ProductCardData }) {
+  const showPrice = card.fromCampaignPrice != null || card.fromOriginalPrice != null;
+  const isCampaign = card.fromCampaignPrice != null && card.fromOriginalPrice != null && card.fromCampaignPrice < card.fromOriginalPrice;
 
   return (
-    <Link href={`/produkte/${product.slug}`} style={{ textDecoration: "none", display: "block" }}>
+    <Link href={`/produkte/${card.slug}`} style={{ textDecoration: "none", display: "block" }}>
       <div className="product-card bg-white rounded-2xl overflow-hidden border border-slate-100 group">
 
         {/* Portrait image */}
-        <div className="relative aspect-[3/4] overflow-hidden" style={{ background: bg }}>
-          {product.badge && (
+        <div className="relative aspect-[3/4] overflow-hidden" style={{ background: card.galleryBg }}>
+          {card.badge && (
             <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
-              {product.badge}
+              {card.badge}
             </span>
           )}
-          {product.images?.[0] ? (
+          {card.image ? (
             <Image
-              src={product.images[0]}
-              alt={product.name}
+              src={card.image}
+              alt={card.name}
               fill
               className="object-cover img-zoom"
               sizes="(max-width: 768px) 50vw, 33vw"
@@ -34,7 +39,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <span className="text-4xl font-black tracking-tighter select-none" style={{ color: "rgba(0,165,151,0.18)" }}>
-                {product.name.substring(0, 3).toUpperCase()}
+                {card.name.substring(0, 3).toUpperCase()}
               </span>
             </div>
           )}
@@ -46,24 +51,21 @@ export default function ProductCard({ product, index = 0 }: Props) {
             Zerspanungswerkzeug
           </p>
           <h3 className="text-sm font-semibold text-slate-900 mb-2 leading-snug line-clamp-2">
-            {product.name}
+            {card.name}
           </h3>
-          {(product.campaignPrice != null || product.originalPrice != null || product.hasVariants) && (
+          {showPrice && (
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-[15px] font-bold ${(product.hasVariants || product.campaignPrice != null) ? "text-[#9B242A]" : "text-slate-900"}`}>
-                {product.hasVariants ? "ab " : ""}
-                {product.hasVariants
-                  ? "55,72"
-                  : (product.campaignPrice ?? product.originalPrice)!.toFixed(2).replace(".", ",")} €
+              <span className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+                {card.hasVariants ? "ab " : ""}
+                {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}
               </span>
-              {product.hasVariants ? (
-                <span className="text-xs text-slate-500 line-through">79,60 €</span>
-              ) : (
-                product.campaignPrice != null && product.originalPrice != null && (
-                  <span className="text-xs text-slate-500 line-through">
-                    {product.originalPrice.toFixed(2).replace(".", ",")} €
+              {isCampaign && (
+                <span className="flex items-baseline gap-1">
+                  <span className="text-xs text-slate-500 line-through">{formatEur(card.fromOriginalPrice!)}</span>
+                  <span className="text-xs font-semibold text-[#9B242A]">
+                    -{Math.round((1 - card.fromCampaignPrice! / card.fromOriginalPrice!) * 100)}%
                   </span>
-                )
+                </span>
               )}
             </div>
           )}

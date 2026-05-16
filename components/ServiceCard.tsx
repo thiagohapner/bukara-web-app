@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BukaraService } from "@/lib/data";
+import { CheckIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 
 const PLACEHOLDER_COLORS = ["#e8f7f6", "#f5ede8"];
 const PLACEHOLDER_LABELS = ["SRV", "SWZ"];
@@ -13,12 +14,8 @@ interface ServiceCardProps {
   variant?: "default" | "panel";
 }
 
-function CheckIcon() {
-  return (
-    <svg className="w-4 h-4 text-[#9B242A] mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
-  );
+function ServiceCheckIcon() {
+  return <CheckIcon className="w-4 h-4 text-[#9B242A] mt-0.5 flex-shrink-0" strokeWidth={2.5} />;
 }
 
 export default function ServiceCard({ service, index, variant = "default" }: ServiceCardProps) {
@@ -41,7 +38,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
             <ul className="flex flex-col gap-1.5">
               {service.highlights.map((h) => (
                 <li key={h} className="flex items-start gap-2 text-sm text-slate-900">
-                  <CheckIcon />
+                  <ServiceCheckIcon />
                   {h}
                 </li>
               ))}
@@ -57,9 +54,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
             style={{ textDecoration: "none" }}
           >
             Zum Service
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+            <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
           </Link>
         </div>
         <div className="relative w-full" style={{ height: "300px" }}>
@@ -133,9 +128,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
           style={{ textDecoration: "none" }}
         >
           Zum Service
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
+          <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
         </Link>
       </div>
     </div>

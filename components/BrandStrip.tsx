@@ -1,4 +1,4 @@
-import { BRANDS } from "@/lib/data";
+const BRANDS = ["Hourglass", "Capsule", "Lightbox", "Spherule", "CommandR", "Luminous", "Hourglass", "Capsule"];
 
 export default function BrandStrip() {
   const doubled = [...BRANDS, ...BRANDS, ...BRANDS, ...BRANDS];

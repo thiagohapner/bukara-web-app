@@ -2,42 +2,49 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Deal } from "@/lib/data";
+import { formatEur } from "@/lib/pricing";
+import { CheckIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 
-const IMAGE_COLORS_EVEN = "#e6eff5";
-const IMAGE_COLORS_ODD = "#f5ede8";
+const IMAGE_BG_EVEN = "#e6eff5";
+const IMAGE_BG_ODD  = "#f5ede8";
+const ICON_LABELS   = ["X99", "X99+HSK", "X99+TBN"];
 
-const DEAL_ICON_LABELS = ["X99", "X99+HSK", "X99+TBN"];
+export interface DealCardData {
+  slug: string;
+  href: string;
+  title: string;
+  subtitle: string;
+  discountPercent: number;
+  fromCampaignPrice: number;
+  fromOriginalPrice: number;
+  includedProducts: string[];
+  cardImage?: string;
+}
 
-interface DealCardProps {
-  deal: Deal;
+interface Props {
+  deal: DealCardData;
   index: number;
 }
 
-export default function DealCard({ deal, index }: DealCardProps) {
-  const isEven = index % 2 === 0;
-  const imageBg = isEven ? IMAGE_COLORS_EVEN : IMAGE_COLORS_ODD;
-  const iconLabel = DEAL_ICON_LABELS[index] ?? "SET";
-
-  const heroImage = deal.cardImage ?? null;
+export default function DealCard({ deal, index }: Props) {
+  const isEven    = index % 2 === 0;
+  const imageBg   = isEven ? IMAGE_BG_EVEN : IMAGE_BG_ODD;
+  const iconLabel = ICON_LABELS[index] ?? "SET";
 
   const imageBlock = (
     <div
       className={`relative flex-shrink-0 flex items-center justify-center w-full sm:w-[42%] h-48 sm:h-auto overflow-hidden ${!isEven ? "sm:order-last" : ""}`}
       style={{ background: imageBg, minHeight: "260px" }}
     >
-      {deal.badge && (
+      {deal.discountPercent > 0 && (
         <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
-          {deal.badge}
+          -{deal.discountPercent}%
         </span>
       )}
-      {heroImage ? (
-        <Image src={heroImage} alt={deal.title} fill className="object-cover" />
+      {deal.cardImage ? (
+        <Image src={deal.cardImage} alt={deal.title} fill className="object-cover" />
       ) : (
-        <span
-          className="text-5xl font-black tracking-tighter select-none text-center px-4"
-          style={{ color: "rgba(0,165,151,0.15)" }}
-        >
+        <span className="text-5xl font-black tracking-tighter select-none text-center px-4" style={{ color: "rgba(0,165,151,0.15)" }}>
           {iconLabel}
         </span>
       )}
@@ -46,13 +53,11 @@ export default function DealCard({ deal, index }: DealCardProps) {
 
   const contentBlock = (
     <div className={`flex-1 p-8 sm:p-10 flex flex-col justify-center ${!isEven ? "sm:order-first" : ""}`}>
-      {/* Title & subtitle */}
       <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
         {deal.title}
       </h2>
       <p className="text-slate-500 text-sm mb-6 leading-relaxed">{deal.subtitle}</p>
 
-      {/* Included products */}
       <div className="mb-6">
         <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
           Enthaltene Produkte
@@ -60,42 +65,33 @@ export default function DealCard({ deal, index }: DealCardProps) {
         <ul className="flex flex-col gap-1.5">
           {deal.includedProducts.map((p) => (
             <li key={p} className="flex items-start gap-2 text-sm text-slate-900">
-              <svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
+              <CheckIcon className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" strokeWidth={2.5} />
               {p}
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Price */}
       <div className="mb-2 flex items-baseline gap-3 flex-wrap">
         <div>
           <span className="text-xs text-slate-400 font-medium">Ab </span>
-          <span className="text-2xl font-extrabold text-[#9B242A]">
-            {deal.fromPrice.toFixed(2).replace(".", ",")} €
-          </span>
+          <span className="text-2xl font-extrabold text-[#9B242A]">{formatEur(deal.fromCampaignPrice)}</span>
         </div>
-        <span className="text-sm text-slate-400 line-through">
-          Statt {(deal.fromPrice / (1 - deal.discountPercent / 100)).toFixed(2).replace(".", ",")} €
+        <span className="flex items-baseline gap-1">
+          <span className="text-sm text-slate-400 line-through">{formatEur(deal.fromOriginalPrice)}</span>
+          {deal.discountPercent > 0 && (
+            <span className="text-sm font-semibold text-[#9B242A]">-{deal.discountPercent}%</span>
+          )}
         </span>
       </div>
       <p className="text-xs text-slate-400 mb-7 leading-relaxed">
-        inkl. {deal.discountPercent}% Kampagnenrabatt · Bei Bestellwert ab 500 € zusätzlich −10% und kostenloser Versand
+        inkl. {deal.discountPercent}% Kampagnenrabatt · Ab 200 € kostenloser Versand · Ab 500 € zusätzlich −10%
       </p>
 
-      {/* CTA */}
       <div>
-        <Link
-          href={`/angebote/${deal.slug}`}
-          className="btn-orange inline-flex items-center gap-2"
-          style={{ textDecoration: "none" }}
-        >
+        <Link href={deal.href} className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
           Zum Angebot
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
+          <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
         </Link>
       </div>
     </div>

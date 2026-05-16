@@ -4,9 +4,10 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import BukaraLogo from "./BukaraLogo";
-import { DEALS } from "@/lib/data";
+import { useCart } from "./CartContext";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
-const activeDealsCount = DEALS.filter((d) => d.active).length;
+const activeDealsCount: number = 3;
 
 const NAV_LINKS = [
   { label: "Produkte", href: "/produkte" },
@@ -28,6 +29,7 @@ const AngeboteBadge = () => (
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { cartCount, openDrawer } = useCart();
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-slate-200">
@@ -70,12 +72,27 @@ export default function Navbar() {
           })}
         </ul>
 
-        {/* Right — partnership badge + hamburger */}
+        {/* Right — partnership badge + cart + hamburger */}
         <div className="flex items-center gap-3 flex-shrink-0">
           <div className="hidden lg:inline-flex items-center gap-1.5 bg-white rounded-lg px-3 py-1.5" style={{ border: "1px solid #e8e8e8" }}>
             <span className="text-[11px] font-medium whitespace-nowrap" style={{ color: "#022221" }}>Exklusiver Partner von</span>
             <Image src="/ITA_Logo.png" alt="ITA Tools" width={44} height={14} className="object-contain" />
           </div>
+
+          {/* Cart icon */}
+          <button
+            type="button"
+            aria-label="Warenkorb"
+            onClick={openDrawer}
+            className="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+          >
+            <ShoppingCartIcon className="w-5 h-5 text-slate-700" strokeWidth={1.7} />
+            {cartCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold text-white px-1 leading-none" style={{ backgroundColor: "#9B242A" }}>
+                {cartCount}
+              </span>
+            )}
+          </button>
 
           <button
             aria-label="Menu"

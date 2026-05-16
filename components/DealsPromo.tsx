@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 interface Props {
   variant?: "full" | "compact" | "hero";
@@ -79,9 +80,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
           style={lightBg ? { backgroundColor: "#00A597", color: "#ffffff" } : { backgroundColor: "#ffffff", color: "#00A597" }}
         >
           Angebote entdecken
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
+          <ArrowRightIcon className="w-5 h-5" strokeWidth={2.5} />
         </span>
       </div>
     </Link>
