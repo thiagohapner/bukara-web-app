@@ -384,7 +384,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
               </div>
             ))}
 
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-8">
               <div className="flex items-center border border-slate-800 rounded-full select-none h-12">
                 <button
                   type="button"
@@ -412,13 +412,8 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 {addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
               </button>
             </div>
-            <p className="text-[11px] text-slate-400 text-center">
-              19% MwSt. zzgl. Versandkosten · Ab 200 € kostenloser Versand · Ab 500 € zusätzlich 10% Rabatt
-            </p>
 
-            <div className="mt-8">
-              <OrderBenefits />
-            </div>
+            <OrderBenefits />
 
             {accordionSections.length > 0 && (
               <div id="deal-accordion" className="mt-8 scroll-mt-24">
