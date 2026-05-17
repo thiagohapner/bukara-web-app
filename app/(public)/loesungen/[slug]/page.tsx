@@ -31,6 +31,7 @@ type SchaerfForm = {
   pickupDate: string;
   pickupTimes: string;
   pickupLocation: "Büro" | "Warenannahme" | "Sonstiges" | "";
+  pickupLocationSonstiges: string;
   packageSize: string;
   packageWeight: string;
   carbideReplacement: "wirtschaftlich" | "rücksprache" | "nein" | "";
@@ -85,7 +86,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [form, setForm] = useState<SchaerfForm>({
     company: "", contact: "", email: "",
-    pickupAddressDeviation: "", pickupDate: "", pickupTimes: "", pickupLocation: "",
+    pickupAddressDeviation: "", pickupDate: "", pickupTimes: "", pickupLocation: "", pickupLocationSonstiges: "",
     packageSize: "", packageWeight: "",
     carbideReplacement: "", engraving: "",
   });
@@ -113,7 +114,9 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
       pickup_address_deviation: form.pickupAddressDeviation || null,
       preferred_pickup_date: form.pickupDate || null,
       pickup_times: form.pickupTimes || null,
-      pickup_location: form.pickupLocation || null,
+      pickup_location: form.pickupLocation === "Sonstiges"
+        ? (form.pickupLocationSonstiges || "Sonstiges")
+        : (form.pickupLocation || null),
       package_size: form.packageSize || null,
       package_weight: form.packageWeight || null,
       carbide_replacement: form.carbideReplacement ? carbideLabels[form.carbideReplacement] : null,
@@ -220,6 +223,16 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                     </label>
                   ))}
                 </div>
+                {form.pickupLocation === "Sonstiges" && (
+                  <input
+                    type="text"
+                    value={form.pickupLocationSonstiges}
+                    onChange={field("pickupLocationSonstiges")}
+                    className={inputClass("mt-3")}
+                    placeholder="Bitte beschreiben Sie den Abholungsort…"
+                    required
+                  />
+                )}
               </div>
             </div>
 
