@@ -9,7 +9,7 @@ import { useCart } from "@/components/CartContext";
 import { type BukaraSku, type ProductSpec, type ProductMaterial, type ProductCuttingData } from "@/lib/data";
 import { formatEur } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase";
-import { CheckIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -383,26 +383,34 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
               </div>
             ))}
 
-            <div className="flex items-center gap-3 mb-4">
-              <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-900 hover:border-[#00A597] hover:text-[#00A597] transition-colors text-lg font-bold select-none">−</button>
-              <span className="w-10 text-center text-base font-semibold text-slate-900">{quantity}</span>
-              <button type="button" onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-900 hover:border-[#00A597] hover:text-[#00A597] transition-colors text-lg font-bold select-none">+</button>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center border border-slate-800 rounded-full select-none h-12">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                >
+                  <ChevronLeftIcon className="w-4 h-4" strokeWidth={2.5} />
+                </button>
+                <span className="min-w-[1.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => q + 1)}
+                  className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                >
+                  <ChevronRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={loading || !offer}
+                className="btn-black flex-1 justify-center"
+                style={{ opacity: loading || !offer ? 0.6 : 1 }}
+              >
+                {addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
+              </button>
             </div>
-
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              disabled={loading || !offer}
-              className="btn-black w-full justify-center mb-2"
-              style={{ opacity: loading || !offer ? 0.6 : 1 }}
-            >
-              {addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
-              {addedState === "idle" && (
-                <ShoppingCartIcon className="w-4 h-4" strokeWidth={2.5} />
-              )}
-            </button>
             <p className="text-[11px] text-slate-400 text-center">
               19% MwSt. zzgl. Versandkosten · Ab 200 € kostenloser Versand · Ab 500 € zusätzlich 10% Rabatt
             </p>
