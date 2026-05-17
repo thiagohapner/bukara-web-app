@@ -262,13 +262,26 @@ async function syncRows<T extends { id?: string; _deleted?: boolean; sort_order:
   table: string, fk: string, entityId: string, rows: T[]
 ) {
   const toDelete = rows.filter(r => r.id && r._deleted).map(r => r.id!);
-  const toUpsert = rows
+  const clean = rows
     .filter(r => !r._deleted)
     .map((r, i) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { _deleted, ...rest } = r as T & { _deleted?: boolean };
       return { ...rest, [fk]: entityId, sort_order: i };
     });
-  if (toDelete.length) await db.from(table).delete().in("id", toDelete);
-  if (toUpsert.length) await db.from(table).upsert(toUpsert, { onConflict: "id" });
+  const toUpdate = clean.filter(r => r.id);
+  const toInsert = clean.filter(r => !r.id);
+
+  if (toDelete.length) {
+    const { error } = await db.from(table).delete().in("id", toDelete);
+    if (error) throw error;
+  }
+  if (toUpdate.length) {
+    const { error } = await db.from(table).upsert(toUpdate, { onConflict: "id" });
+    if (error) throw error;
+  }
+  if (toInsert.length) {
+    const { error } = await db.from(table).insert(toInsert);
+    if (error) throw error;
+  }
 }
