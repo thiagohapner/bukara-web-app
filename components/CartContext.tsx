@@ -3,13 +3,13 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import {
   getStoredCartId,
+  clearStoredCartId,
   getOrCreateCart,
   getCartItems,
   addToCart,
   addDealToCart,
   updateQuantity,
   removeItem,
-  clearCart,
   type CartItem,
 } from "@/lib/cart";
 
@@ -94,8 +94,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems(updated);
   }, [cartId]);
 
-  const clearAll = useCallback(async (id: string) => {
-    await clearCart(id);
+  const clearAll = useCallback(async (_id: string) => {
+    clearStoredCartId();
     setCartId(null);
     setItems([]);
   }, []);
