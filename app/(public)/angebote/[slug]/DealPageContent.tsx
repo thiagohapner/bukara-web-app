@@ -370,7 +370,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
             <div className="h-px bg-slate-100 mb-5" />
 
             {items.filter((i) => i.requires_variant_selection).map((item) => (
-              <div key={item.product_id} className="mb-4">
+              <div key={item.product_id} className="mb-8">
                 <p className="text-base font-bold text-slate-900 mb-2">Ausführung</p>
                 <CustomSelect
                   value={selectedSkuIds[item.product_id] ?? ""}
