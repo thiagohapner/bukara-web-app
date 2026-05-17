@@ -227,8 +227,8 @@ export default function CheckoutPage() {
           data: { order: { ...order, ...form }, items: emailItems, totals },
         }),
       });
-    } catch {
-      // Email failure is non-blocking — order is already saved
+    } catch (err) {
+      console.error("[email] order:", err);
     }
 
     if (cartId) await clearAll(cartId);

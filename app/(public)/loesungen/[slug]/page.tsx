@@ -128,6 +128,33 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
       return;
     }
 
+    try {
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "schaerfen",
+          data: {
+            company: form.company,
+            contact: form.contact,
+            email: form.email,
+            pickupAddressDeviation: form.pickupAddressDeviation,
+            pickupDate: form.pickupDate,
+            pickupTimes: form.pickupTimes,
+            pickupLocation: form.pickupLocation === "Sonstiges"
+              ? (form.pickupLocationSonstiges || "Sonstiges")
+              : form.pickupLocation,
+            packageSize: form.packageSize,
+            packageWeight: form.packageWeight,
+            carbideReplacement: form.carbideReplacement ? carbideLabels[form.carbideReplacement] : null,
+            engraving: form.engraving,
+          },
+        }),
+      });
+    } catch (err) {
+      console.error("[email] schaerfen:", err);
+    }
+
     router.push("/danke");
   }
 
@@ -438,6 +465,28 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
     if (error) {
       setSubmitError("Ihre Anfrage konnte leider nicht gesendet werden. Bitte versuchen Sie es erneut.");
       return;
+    }
+
+    try {
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "sonderwerkzeug",
+          data: {
+            company_name: form.company,
+            vat_number: form.vat || null,
+            contact_name: form.contact,
+            email: form.email,
+            phone: form.phone || null,
+            message: form.message || null,
+            spec_file_url: specFileUrl,
+            sonder_details: sonderDetails,
+          },
+        }),
+      });
+    } catch (err) {
+      console.error("[email] sonderwerkzeug:", err);
     }
 
     router.push("/danke");

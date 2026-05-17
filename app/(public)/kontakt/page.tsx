@@ -80,6 +80,26 @@ export default function KontaktPage() {
       return;
     }
 
+    try {
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "contact",
+          data: {
+            name: form.name,
+            company: form.company,
+            email: form.email,
+            phone: form.phone,
+            subject: form.subject,
+            message: form.message,
+          },
+        }),
+      });
+    } catch (err) {
+      console.error("[email] contact:", err);
+    }
+
     router.push("/danke");
   }
 
