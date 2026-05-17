@@ -319,7 +319,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
               <p className="text-sm text-slate-400 mb-4">Artikel-Nr.: {selectedAnchorSku.artikel_nr}</p>
             )}
 
-            <div className="flex items-baseline gap-3 mb-4">
+            <div className="flex items-baseline gap-3 mb-1">
               {loading ? (
                 <span className="text-2xl font-extrabold text-slate-200">—</span>
               ) : (
@@ -336,6 +336,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 </>
               )}
             </div>
+            <p className="text-[11px] text-slate-400 mb-4">zzgl. 19% MwSt.</p>
 
             {offer?.subtitle && (
               <p className="text-base text-slate-900 leading-relaxed mb-2">{offer.subtitle}</p>
