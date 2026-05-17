@@ -32,7 +32,7 @@ export default function CustomSelect({ value, onChange, options }: Props) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between border border-slate-200 rounded-xl px-4 py-3 text-base text-slate-900 bg-white cursor-pointer"
+        className="w-full flex items-center justify-between border border-slate-800 rounded-xl px-4 py-3 text-base text-slate-900 bg-white cursor-pointer"
       >
         <span>{selected?.label ?? "—"}</span>
         <ChevronDownIcon
