@@ -10,6 +10,7 @@ import { type BukaraSku, type ProductSpec, type ProductMaterial, type ProductCut
 import { formatEur } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase";
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import OrderBenefits from "@/components/OrderBenefits";
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -414,6 +415,10 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
             <p className="text-[11px] text-slate-400 text-center">
               19% MwSt. zzgl. Versandkosten · Ab 200 € kostenloser Versand · Ab 500 € zusätzlich 10% Rabatt
             </p>
+
+            <div className="mt-8">
+              <OrderBenefits />
+            </div>
 
             {accordionSections.length > 0 && (
               <div id="deal-accordion" className="mt-8 scroll-mt-24">
