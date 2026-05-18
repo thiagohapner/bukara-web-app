@@ -1,5 +1,7 @@
 import { supabaseAdmin } from "@/lib/admin/supabaseAdmin";
 
+export const dynamic = "force-dynamic";
+
 async function getStats() {
   const [products, deals, orders] = await Promise.all([
     supabaseAdmin.from("products").select("id", { count: "exact", head: true }),
