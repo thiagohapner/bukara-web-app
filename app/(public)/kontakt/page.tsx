@@ -100,7 +100,7 @@ export default function KontaktPage() {
       console.error("[email] contact:", err);
     }
 
-    router.push("/danke");
+    router.push("/danke?type=contact");
   }
 
   return (

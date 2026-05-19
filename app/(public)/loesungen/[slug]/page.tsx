@@ -155,7 +155,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
       console.error("[email] schaerfen:", err);
     }
 
-    router.push("/danke");
+    router.push("/danke?type=schaerfen");
   }
 
   return (
@@ -489,7 +489,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
       console.error("[email] sonderwerkzeug:", err);
     }
 
-    router.push("/danke");
+    router.push("/danke?type=sonderwerkzeug");
   }
 
   const STEP_LABELS = ["Anwendung & Material", "Maschine & Ziel", "Prioritäten & Umfang", "Kontaktdaten"];

@@ -232,7 +232,7 @@ export default function CheckoutPage() {
     }
 
     if (cartId) await clearAll(cartId);
-    router.push("/danke");
+    router.push("/danke?type=order");
   }
 
   return (
