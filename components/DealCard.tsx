@@ -84,10 +84,6 @@ export default function DealCard({ deal, index }: Props) {
           )}
         </span>
       </div>
-      <p className="text-xs text-slate-400 mb-7 leading-relaxed">
-        inkl. {deal.discountPercent}% Kampagnenrabatt · Ab 200 € kostenloser Versand · Ab 500 € zusätzlich −10%
-      </p>
-
       <div>
         <Link href={deal.href} className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
           Zum Angebot
