@@ -113,7 +113,7 @@ function OrderSummary() {
           </div>
           {totalSavings > 0 && (
             <div className="flex justify-between font-semibold rounded-xl px-3 py-2.5" style={{ background: "#e8f7f6", color: "#00A597" }}>
-              <span>Ihre Ersparnis</span>
+              <span>Ihr Ersparnis</span>
               <span>−{formatEur(totalSavings)}</span>
             </div>
           )}
