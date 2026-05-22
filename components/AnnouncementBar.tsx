@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRight } from "lucide-react";
 
 export default function AnnouncementBar() {
   return (
@@ -9,7 +9,7 @@ export default function AnnouncementBar() {
       Nutzen Sie unseren Schärfservice · Deutschlandweite Abholung · Faire Preise · Fertig in 1–2 Wochen.{" "}
       <a href="/loesungen/schaerfservice" style={{ color: "#044749" }} className="inline-flex items-center gap-0.5 font-semibold underline-offset-2 hover:underline">
         Jetzt anfragen
-        <ArrowRightIcon className="w-3 h-3" strokeWidth={2.5} />
+        <ArrowRight className="w-3 h-3" strokeWidth={2.5} />
       </a>
     </div>
   );

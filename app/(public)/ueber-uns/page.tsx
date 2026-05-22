@@ -6,12 +6,12 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "@/components/Footer";
-import { CheckIcon, ArrowRightIcon, ArrowTopRightOnSquareIcon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
+import { Check, ArrowRight, ExternalLink, Mail, Phone } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function UeberCheckIcon() {
-  return <CheckIcon className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
+function UeberCheck() {
+  return <Check className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
 }
 
 function Placeholder({ bg, label, className = "" }: { bg: string; label: string; className?: string }) {
@@ -99,7 +99,7 @@ export default function UeberUnsPage() {
               </p>
               <Link href="/loesungen/sonderwerkzeug" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Sonderwerkzeuge anfragen
-                <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>
             </div>
           </div>
@@ -134,11 +134,11 @@ export default function UeberUnsPage() {
               <div className="flex flex-wrap gap-3">
                 <Link href="/produkte" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                   Produkte entdecken
-                  <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                 </Link>
                 <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                   Zum B2B Portal
-                  <ArrowTopRightOnSquareIcon className="w-4 h-4" strokeWidth={2.5} />
+                  <ExternalLink className="w-4 h-4" strokeWidth={2.5} />
                 </a>
               </div>
             </div>
@@ -170,14 +170,14 @@ export default function UeberUnsPage() {
               <ul className="flex flex-col gap-2 mb-8">
                 {["Faire Preise", "Schnelle Durchlaufzeit", "In der Regel innerhalb von 1–2 Wochen geschärft zurück"].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-slate-900">
-                    <UeberCheckIcon />
+                    <UeberCheck />
                     {item}
                   </li>
                 ))}
               </ul>
               <Link href="/loesungen/schaerfservice" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Schärfservice anfragen
-                <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>
             </div>
           </div>
@@ -194,11 +194,11 @@ export default function UeberUnsPage() {
               <span className="font-semibold text-white">Bukara GmbH · Siemensstraße 24 · 72280 Dornstetten</span>
               <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 mt-1">
                 <a href="mailto:info@bukara.de" className="flex items-center gap-1.5 hover:text-white transition-colors" style={{ textDecoration: "none", color: "rgba(255,255,255,0.85)" }}>
-                  <EnvelopeIcon className="w-4 h-4" />
+                  <Mail className="w-4 h-4" />
                   info@bukara.de
                 </a>
                 <a href="tel:+4974439661-0" className="flex items-center gap-1.5 hover:text-white transition-colors" style={{ textDecoration: "none", color: "rgba(255,255,255,0.85)" }}>
-                  <PhoneIcon className="w-4 h-4" />
+                  <Phone className="w-4 h-4" />
                   +49 7443 / 9661-0
                 </a>
               </div>
@@ -209,7 +209,7 @@ export default function UeberUnsPage() {
               style={{ textDecoration: "none", color: "#00A597" }}
             >
               E-Mail schreiben
-              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
             </a>
           </div>
         </section>

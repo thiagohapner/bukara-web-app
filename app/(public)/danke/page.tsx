@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Footer from "@/components/Footer";
-import { CheckIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { Check, ChevronLeft } from "lucide-react";
 
 const MESSAGES: Record<string, string> = {
   contact: "Wir haben Ihre Nachricht erhalten und melden uns in Kürze bei Ihnen.",
@@ -24,7 +24,7 @@ function DankeContent() {
         className="w-20 h-20 rounded-full flex items-center justify-center mb-8"
         style={{ background: "rgba(0,165,151,0.08)" }}
       >
-        <CheckIcon className="w-10 h-10" style={{ color: "#00A597" }} strokeWidth={2.5} />
+        <Check className="w-10 h-10" style={{ color: "#00A597" }} strokeWidth={2.5} />
       </div>
 
       <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4 leading-tight">
@@ -39,7 +39,7 @@ function DankeContent() {
         className="btn-outline inline-flex items-center gap-2"
         style={{ textDecoration: "none" }}
       >
-        <ChevronLeftIcon className="w-4 h-4" />
+        <ChevronLeft className="w-4 h-4" />
         Zur Startseite
       </Link>
     </div>

@@ -7,14 +7,7 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/components/CartContext";
 import { cartTotals, formatEur } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase";
-import {
-  DocumentTextIcon,
-  ClockIcon,
-  CheckIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/24/outline";
+import { FileText, Clock, Check, Phone, Mail, ArrowRight } from "lucide-react";
 
 function inputClass(extra = "") {
   return `w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#00A597]/20 focus:border-[#00A597] transition-colors ${extra}`;
@@ -134,7 +127,7 @@ function OrderSummary() {
           className="flex items-center gap-2 text-sm text-slate-700 hover:text-slate-900 mb-2 transition-colors"
           style={{ textDecoration: "none" }}
         >
-          <PhoneIcon className="w-4 h-4 flex-shrink-0" />
+          <Phone className="w-4 h-4 flex-shrink-0" />
           +49 7443 / 9661-0
         </a>
         <a
@@ -142,7 +135,7 @@ function OrderSummary() {
           className="flex items-center gap-2 text-sm text-slate-700 hover:text-slate-900 transition-colors"
           style={{ textDecoration: "none" }}
         >
-          <EnvelopeIcon className="w-4 h-4 flex-shrink-0" />
+          <Mail className="w-4 h-4 flex-shrink-0" />
           info@bukara.de
         </a>
       </div>
@@ -253,15 +246,15 @@ export default function CheckoutPage() {
           <div className="flex flex-wrap gap-x-6 gap-y-2 mb-8 pb-6 border-b border-slate-100">
             <TrustItem
               text="Bequem per Rechnung bezahlen"
-              icon={<DocumentTextIcon className="w-4 h-4" />}
+              icon={<FileText className="w-4 h-4" />}
             />
             <TrustItem
               text="Auftragsbestätigung innerhalb von 24 Std."
-              icon={<ClockIcon className="w-4 h-4" />}
+              icon={<Clock className="w-4 h-4" />}
             />
             <TrustItem
               text="Geprüfte Qualität & zuverlässiger Versand"
-              icon={<CheckIcon className="w-4 h-4" />}
+              icon={<Check className="w-4 h-4" />}
             />
           </div>
 
@@ -321,7 +314,7 @@ export default function CheckoutPage() {
                 >
                   {submitting ? "Wird gesendet…" : "Bestellung aufgeben"}
                   {!submitting && (
-                    <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                    <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                   )}
                 </button>
 

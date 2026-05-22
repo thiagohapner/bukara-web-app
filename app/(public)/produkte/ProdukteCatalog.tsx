@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { AdjustmentsHorizontalIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { SlidersHorizontal, X } from "lucide-react";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 import DealsPromo from "@/components/DealsPromo";
@@ -331,7 +331,7 @@ export default function ProdukteCatalog() {
                 className="lg:hidden w-full flex items-center justify-center gap-2 btn-outline mb-5 text-sm"
                 onClick={() => setDrawerOpen(true)}
               >
-                <AdjustmentsHorizontalIcon className="w-4 h-4" />
+                <SlidersHorizontal className="w-4 h-4" />
                 Filter
                 {hasActiveFilters && (
                   <span className="ml-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-bold">
@@ -458,7 +458,7 @@ export default function ProdukteCatalog() {
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
               <span className="text-sm font-semibold text-slate-900">Filter</span>
               <button onClick={() => setDrawerOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                <XMarkIcon className="w-5 h-5" />
+                <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-5">

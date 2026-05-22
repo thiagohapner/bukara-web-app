@@ -7,7 +7,7 @@ import CustomSelect from "@/components/CustomSelect";
 import { useCart } from "@/components/CartContext";
 import { type BukaraSku } from "@/lib/data";
 import { formatEur } from "@/lib/pricing";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface AccessoryItem {
   id: string;
@@ -102,7 +102,7 @@ function AccessoryRow({ accessory }: { accessory: AccessoryItem }) {
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               className="px-2.5 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
             >
-              <ChevronLeftIcon className="w-3.5 h-3.5" strokeWidth={2.5} />
+              <ChevronLeft className="w-3.5 h-3.5" strokeWidth={2.5} />
             </button>
             <span className="min-w-[1.25rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
             <button
@@ -110,7 +110,7 @@ function AccessoryRow({ accessory }: { accessory: AccessoryItem }) {
               onClick={() => setQuantity((q) => q + 1)}
               className="px-2.5 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
             >
-              <ChevronRightIcon className="w-3.5 h-3.5" strokeWidth={2.5} />
+              <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.5} />
             </button>
           </div>
           <button

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatEur } from "@/lib/pricing";
-import { CheckIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { Check, ArrowRight } from "lucide-react";
 
 const IMAGE_BG_EVEN = "#e6eff5";
 const IMAGE_BG_ODD  = "#f5ede8";
@@ -65,7 +65,7 @@ export default function DealCard({ deal, index }: Props) {
         <ul className="flex flex-col gap-1.5">
           {deal.includedProducts.map((p) => (
             <li key={p} className="flex items-start gap-2 text-sm text-slate-900">
-              <CheckIcon className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" strokeWidth={2.5} />
+              <Check className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" strokeWidth={2.5} />
               {p}
             </li>
           ))}
@@ -91,7 +91,7 @@ export default function DealCard({ deal, index }: Props) {
       <div>
         <Link href={deal.href} className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
           Zum Angebot
-          <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+          <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
         </Link>
       </div>
     </div>

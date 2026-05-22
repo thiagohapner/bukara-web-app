@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
-import { MapPinIcon, PhoneIcon, EnvelopeIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 import CustomSelect from "@/components/CustomSelect";
 import { DS_INPUT } from "@/lib/ds";
 
@@ -144,10 +144,10 @@ export default function KontaktPage() {
                 <p className="text-xs text-slate-400 mb-6">Präzisionswerkzeuge & Service</p>
 
                 <div className="flex flex-col gap-4 mb-8">
-                  <InfoRow icon={<MapPinIcon className="w-5 h-5" />}>
+                  <InfoRow icon={<MapPin className="w-5 h-5" />}>
                     Siemensstraße 24<br />72280 Dornstetten
                   </InfoRow>
-                  <InfoRow icon={<PhoneIcon className="w-5 h-5" />}>
+                  <InfoRow icon={<Phone className="w-5 h-5" />}>
                     <a
                       href="tel:+4974439661-0"
                       className="hover:text-slate-900 transition-colors"
@@ -156,7 +156,7 @@ export default function KontaktPage() {
                       +49 7443 / 9661-0
                     </a>
                   </InfoRow>
-                  <InfoRow icon={<EnvelopeIcon className="w-5 h-5" />}>
+                  <InfoRow icon={<Mail className="w-5 h-5" />}>
                     <a
                       href="mailto:info@bukara.de"
                       className="hover:text-slate-900 transition-colors"
@@ -174,7 +174,7 @@ export default function KontaktPage() {
                     style={{ textDecoration: "none" }}
                   >
                     Mehr über uns
-                    <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                    <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                   </Link>
                 </div>
 
@@ -283,7 +283,7 @@ export default function KontaktPage() {
                   >
                     {submitting ? "Wird gesendet…" : "Nachricht senden"}
                     {!submitting && (
-                      <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                      <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                     )}
                   </button>
                 </div>

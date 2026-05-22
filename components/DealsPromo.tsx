@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRight } from "lucide-react";
 
 interface Props {
   variant?: "full" | "compact" | "hero";
@@ -80,7 +80,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
           style={lightBg ? { backgroundColor: "#00A597", color: "#ffffff" } : { backgroundColor: "#ffffff", color: "#00A597" }}
         >
           Angebote entdecken
-          <ArrowRightIcon className="w-5 h-5" strokeWidth={2.5} />
+          <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
         </span>
       </div>
     </Link>

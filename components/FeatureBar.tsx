@@ -3,37 +3,31 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  ShieldCheckIcon,
-  TruckIcon,
-  CreditCardIcon,
-  BoltIcon,
-  WrenchScrewdriverIcon,
-} from "@heroicons/react/24/outline";
+import { ShieldCheck, Truck, CreditCard, Zap, Wrench } from "lucide-react";
 
 const FEATURES = [
   {
-    icon: <ShieldCheckIcon className="w-7 h-7" strokeWidth={1.6} />,
+    icon: <ShieldCheck className="w-7 h-7" strokeWidth={1.6} />,
     title: "Sendungsverfolgung",
     sub: "Bestellstatus jederzeit im Blick",
   },
   {
-    icon: <TruckIcon className="w-7 h-7" strokeWidth={1.6} />,
+    icon: <Truck className="w-7 h-7" strokeWidth={1.6} />,
     title: "Kostenloser Versand",
     sub: "Ab einem Bestellwert von 200 €",
   },
   {
-    icon: <CreditCardIcon className="w-7 h-7" strokeWidth={1.6} />,
+    icon: <CreditCard className="w-7 h-7" strokeWidth={1.6} />,
     title: "Flexible Zahlung",
     sub: "Rechnung, Vorkasse & mehr",
   },
   {
-    icon: <BoltIcon className="w-7 h-7" strokeWidth={1.6} />,
+    icon: <Zap className="w-7 h-7" strokeWidth={1.6} />,
     title: "Schnelle Lieferung",
     sub: "Direkt zu Ihnen ins Unternehmen",
   },
   {
-    icon: <WrenchScrewdriverIcon className="w-7 h-7" strokeWidth={1.6} />,
+    icon: <Wrench className="w-7 h-7" strokeWidth={1.6} />,
     title: "Expertenberatung",
     sub: "Persönliche Beratung durch Fachleute",
   },

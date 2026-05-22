@@ -9,7 +9,7 @@ import { useCart } from "@/components/CartContext";
 import { type BukaraSku, type ProductSpec, type ProductMaterial, type ProductCuttingData } from "@/lib/data";
 import { formatEur } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase";
-import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import OrderBenefits from "@/components/OrderBenefits";
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
@@ -54,8 +54,8 @@ interface BundleItem {
 
 function round2(n: number) { return Math.round(n * 100) / 100; }
 
-function DealCheckIcon() {
-  return <CheckIcon className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#00A597]" strokeWidth={2.5} />;
+function DealCheck() {
+  return <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#00A597]" strokeWidth={2.5} />;
 }
 
 // ─── Main export (receives slug from server-component shell) ──────────────────
@@ -360,7 +360,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 <ul className="flex flex-col gap-2">
                   {items.map((item) => (
                     <li key={item.product_id} className="flex items-start gap-2 text-sm text-slate-900">
-                      <DealCheckIcon />
+                      <DealCheck />
                       {item.product_name}
                       {item.requires_variant_selection && ` (${item.skus.length} Ausführungen)`}
                     </li>
@@ -392,7 +392,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                   className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
                 >
-                  <ChevronLeftIcon className="w-4 h-4" strokeWidth={2.5} />
+                  <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
                 </button>
                 <span className="min-w-[1.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
                 <button
@@ -400,7 +400,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                   onClick={() => setQuantity((q) => q + 1)}
                   className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
                 >
-                  <ChevronRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                  <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
                 </button>
               </div>
               <button

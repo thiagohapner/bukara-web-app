@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ChevronDown } from "lucide-react";
 
 interface Option {
   value: string;
@@ -35,7 +35,7 @@ export default function CustomSelect({ value, onChange, options }: Props) {
         className="w-full flex items-center justify-between border border-slate-800 rounded-xl px-4 py-3 text-base text-slate-900 bg-white cursor-pointer"
       >
         <span>{selected?.label ?? "—"}</span>
-        <ChevronDownIcon
+        <ChevronDown
           className="w-4 h-4 text-slate-400 flex-shrink-0 ml-3 transition-transform duration-200"
           style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
         />

@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRight } from "lucide-react";
 
 interface Props {
   title: string;
@@ -13,7 +13,7 @@ export default function SectionHeader({ title, viewAllHref = "#" }: Props) {
       </h2>
       <a href={viewAllHref} className="view-all font-medium">
         View All
-        <ArrowRightIcon className="w-4 h-4" />
+        <ArrowRight className="w-4 h-4" />
       </a>
     </div>
   );

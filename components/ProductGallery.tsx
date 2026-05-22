@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { X } from "lucide-react";
 
 interface Props {
   images: string[];
@@ -125,7 +125,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
               style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
               aria-label="Schließen"
             >
-              <XMarkIcon className="w-6 h-6" />
+              <X className="w-6 h-6" />
             </button>
 
             {/* Image — stopPropagation prevents backdrop-click from firing */}

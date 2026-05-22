@@ -8,15 +8,15 @@ import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 import ProductGallery from "@/components/ProductGallery";
-import { CheckIcon, ArrowRightIcon, ArrowLeftIcon, ArrowUpTrayIcon } from "@heroicons/react/24/outline";
+import { Check, ArrowRight, ArrowLeft, Upload } from "lucide-react";
 
 const SERVICE_GALLERY: Record<string, { bg: string; label: string }> = {
   "schaerfservice":  { bg: "#e8f7f6", label: "SRV" },
   "sonderwerkzeug": { bg: "#f5ede8", label: "SWZ" },
 };
 
-function ServiceFeatureCheckIcon() {
-  return <CheckIcon className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
+function ServiceFeatureCheck() {
+  return <Check className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
 }
 
 function inputClass(extra = "") {
@@ -184,7 +184,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             <ul className="flex flex-col gap-2">
               {service.highlights.map((h) => (
                 <li key={h} className="flex items-start gap-2 text-sm text-slate-900">
-                  <ServiceFeatureCheckIcon />
+                  <ServiceFeatureCheck />
                   {h}
                 </li>
               ))}
@@ -324,7 +324,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
               <button type="submit" disabled={submitting} className="btn-orange" style={{ opacity: submitting ? 0.7 : 1 }}>
                 {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                 {!submitting && (
-                  <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                 )}
               </button>
             </div>
@@ -518,7 +518,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
             <ul className="flex flex-col gap-2">
               {service.highlights.map((h) => (
                 <li key={h} className="flex items-start gap-2 text-sm text-slate-900">
-                  <ServiceFeatureCheckIcon />{h}
+                  <ServiceFeatureCheck />{h}
                 </li>
               ))}
             </ul>
@@ -535,7 +535,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                 )}
                 <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${step >= i + 1 ? "bg-[#00A597] text-white" : "bg-slate-100 text-slate-400"}`}>
                   {step > i + 1 ? (
-                    <CheckIcon className="w-4 h-4" strokeWidth={2.5} />
+                    <Check className="w-4 h-4" strokeWidth={2.5} />
                   ) : i + 1}
                 </div>
                 <span className="text-[10px] text-slate-400 mt-1.5 text-center leading-tight px-1">{label}</span>
@@ -704,7 +704,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                     className="border border-dashed border-slate-300 rounded-xl px-4 py-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#00A597] transition-colors bg-slate-50"
                     onClick={() => fileRef.current?.click()}
                   >
-                    <ArrowUpTrayIcon className="w-6 h-6 text-slate-400" strokeWidth={1.5} />
+                    <Upload className="w-6 h-6 text-slate-400" strokeWidth={1.5} />
                     <span className="text-sm text-slate-500">{fileName ?? "Datei auswählen oder hier ablegen"}</span>
                     <input ref={fileRef} type="file" accept=".pdf,.dxf,.dwg,.jpg,.jpeg,.png" className="hidden"
                       onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)} />
@@ -729,20 +729,20 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                   onClick={() => setStep(s => s - 1)}
                   className="text-sm text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1.5"
                 >
-                  <ArrowLeftIcon className="w-4 h-4" strokeWidth={2.2} />
+                  <ArrowLeft className="w-4 h-4" strokeWidth={2.2} />
                   Zurück
                 </button>
               )}
               {step < 4 ? (
                 <button type="button" onClick={() => setStep(s => s + 1)} className="btn-orange">
                   Weiter
-                  <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                 </button>
               ) : (
                 <button type="submit" disabled={submitting} className="btn-orange" style={{ opacity: submitting ? 0.7 : 1 }}>
                   {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                   {!submitting && (
-                    <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                    <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                   )}
                 </button>
               )}

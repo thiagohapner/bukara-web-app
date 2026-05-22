@@ -5,12 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { CheckIcon, ArrowRightIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { Check, ArrowRight, ExternalLink } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function AboutCheckIcon() {
-  return <CheckIcon className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
+function AboutCheck() {
+  return <Check className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
 }
 
 export default function HomeAboutSections() {
@@ -55,7 +55,7 @@ export default function HomeAboutSections() {
             </p>
             <Link href="/loesungen/sonderwerkzeug" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
               Sonderwerkzeuge anfragen
-              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
             </Link>
           </div>
         </div>
@@ -90,11 +90,11 @@ export default function HomeAboutSections() {
             <div className="flex flex-wrap gap-3">
               <Link href="/produkte" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Produkte entdecken
-                <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+                <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>
               <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Zum B2B Portal
-                <ArrowTopRightOnSquareIcon className="w-4 h-4" strokeWidth={2.5} />
+                <ExternalLink className="w-4 h-4" strokeWidth={2.5} />
               </a>
             </div>
           </div>
@@ -126,14 +126,14 @@ export default function HomeAboutSections() {
             <ul className="flex flex-col gap-2 mb-8">
               {["Faire Preise", "Schnelle Durchlaufzeit", "In der Regel innerhalb von 1–2 Wochen geschärft zurück"].map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-slate-900">
-                  <AboutCheckIcon />
+                  <AboutCheck />
                   {item}
                 </li>
               ))}
             </ul>
             <Link href="/loesungen/schaerfservice" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
               Schärfservice anfragen
-              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
             </Link>
           </div>
         </div>

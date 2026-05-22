@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRight } from "lucide-react";
 
 const TILES = [
   {
@@ -76,7 +76,7 @@ export default function PromoTiles() {
                 </h3>
                 <span className="inline-flex items-center gap-2 text-sm font-semibold underline-offset-2 group-hover:underline" style={{ color: "#044749" }}>
                   {tile.cta}
-                  <ArrowRightIcon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
                 </span>
               </div>
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRight } from "lucide-react";
 
 export default function ProductSpotlight() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -43,7 +43,7 @@ export default function ProductSpotlight() {
             </h2>
             <button className="btn-orange text-sm">
               Angebote entdecken
-              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.2} />
+              <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
             </button>
           </div>
 

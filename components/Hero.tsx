@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { ArrowRightIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { ArrowRight, ExternalLink } from "lucide-react";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -60,11 +60,11 @@ export default function Hero() {
           <div className="hero-cta flex flex-wrap gap-3 mb-8">
             <Link href="/loesungen/sonderwerkzeug" className="btn-orange text-sm" style={{ textDecoration: "none" }}>
               Sonderwerkzeug
-              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.2} />
+              <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
             </Link>
             <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline text-sm inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
               Zum B2B Portal
-              <ArrowTopRightOnSquareIcon className="w-4 h-4" strokeWidth={2.2} />
+              <ExternalLink className="w-4 h-4" strokeWidth={2.2} />
             </a>
           </div>
 

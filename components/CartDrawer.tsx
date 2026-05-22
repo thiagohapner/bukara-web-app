@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import { cartTotals, formatEur, FREE_SHIPPING_THRESHOLD, BULK_DISCOUNT_THRESHOLD } from "@/lib/pricing";
-import { XMarkIcon, ShoppingCartIcon, TrashIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { X, ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 
 function QtyButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
@@ -51,7 +51,7 @@ export default function CartDrawer() {
             className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
             aria-label="Schließen"
           >
-            <XMarkIcon className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-slate-500" />
           </button>
         </div>
 
@@ -59,7 +59,7 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-              <ShoppingCartIcon className="w-12 h-12 text-slate-200" strokeWidth={1.5} />
+              <ShoppingCart className="w-12 h-12 text-slate-200" strokeWidth={1.5} />
               <p className="text-slate-500 text-sm">Ihr Warenkorb ist leer.</p>
               <Link
                 href="/produkte"
@@ -106,7 +106,7 @@ export default function CartDrawer() {
                       <div className="flex items-center gap-2 mt-2">
                         <QtyButton onClick={() => item.quantity > 1 ? updateItem(item.id, item.quantity - 1) : removeCartItem(item.id)}>
                           {item.quantity === 1 ? (
-                            <TrashIcon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                            <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5} />
                           ) : "−"}
                         </QtyButton>
                         <span className="text-sm font-semibold text-slate-900 w-5 text-center">{item.quantity}</span>
@@ -175,7 +175,7 @@ export default function CartDrawer() {
               style={{ textDecoration: "none" }}
             >
               Zur Bestellung
-              <ArrowRightIcon className="w-4 h-4" strokeWidth={2.5} />
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
             </Link>
             <button
               type="button"

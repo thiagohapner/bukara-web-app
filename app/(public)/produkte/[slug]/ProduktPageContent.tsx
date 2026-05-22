@@ -7,7 +7,7 @@ import ProductAccordion from "@/components/ProductAccordion";
 import CustomSelect from "@/components/CustomSelect";
 import ProductAccessories, { type AccessoryItem } from "@/components/ProductAccessories";
 import OrderBenefits from "@/components/OrderBenefits";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/components/CartContext";
 import {
   type BukaraSku, type ProductSpec, type ProductMaterial, type ProductCuttingData, type ProductAccessory,
@@ -153,7 +153,7 @@ function PriceAndCart({
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
           >
-            <ChevronLeftIcon className="w-4 h-4" strokeWidth={2.5} />
+            <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
           </button>
           <span className="min-w-[1.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
           <button
@@ -161,7 +161,7 @@ function PriceAndCart({
             onClick={() => setQuantity((q) => q + 1)}
             className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
           >
-            <ChevronRightIcon className="w-4 h-4" strokeWidth={2.5} />
+            <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
           </button>
         </div>
         <button
