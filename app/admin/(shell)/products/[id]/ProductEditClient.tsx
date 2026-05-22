@@ -34,6 +34,7 @@ interface ProductDetails {
 
 interface ProductOption { id: string; name: string; }
 interface ImageRow { id: string; image_url: string; sort_order: number; }
+interface CategoryOption { id: string; name: string; parent_id: string | null; parent_name?: string; }
 
 const TABS = ["Details", "SKUs", "Produktdaten", "Zubehör", "Bilder"] as const;
 type Tab = typeof TABS[number];
@@ -55,6 +56,8 @@ export default function ProductEditClient({ productId }: { productId: string | n
   const [images, setImages] = useState<ImageRow[]>([]);
   const [materialTypes, setMaterialTypes] = useState<string[]>([]);
   const [allProducts, setAllProducts] = useState<ProductOption[]>([]);
+  const [allCategories, setAllCategories] = useState<CategoryOption[]>([]);
+  const [categoryIds, setCategoryIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,8 +71,25 @@ export default function ProductEditClient({ productId }: { productId: string | n
     const { data: prods } = await supabase.from("products").select("id, name").order("name");
     setAllProducts((prods ?? []) as ProductOption[]);
 
+    const { data: cats } = await supabase
+      .from("categories")
+      .select("id, name, parent_id")
+      .not("parent_id", "is", null)
+      .eq("is_active", true)
+      .order("sort_order");
+    const { data: parentCats } = await supabase
+      .from("categories")
+      .select("id, name")
+      .is("parent_id", null)
+      .order("sort_order");
+    const parentMap: Record<string, string> = {};
+    for (const p of (parentCats ?? []) as { id: string; name: string }[]) parentMap[p.id] = p.name;
+    setAllCategories(
+      ((cats ?? []) as CategoryOption[]).map((c) => ({ ...c, parent_name: parentMap[c.parent_id!] ?? "" }))
+    );
+
     if (!productId) return;
-    const [prodRes, skuRes, specRes, matRes, cutRes, accRes, imgRes] = await Promise.all([
+    const [prodRes, skuRes, specRes, matRes, cutRes, accRes, imgRes, catRes] = await Promise.all([
       supabase.from("products").select("*").eq("id", productId).single(),
       supabase.from("skus").select("*").eq("product_id", productId).order("sort_order"),
       supabase.from("product_specs").select("*").eq("product_id", productId).order("sort_order"),
@@ -77,6 +97,7 @@ export default function ProductEditClient({ productId }: { productId: string | n
       supabase.from("product_cutting_data").select("*").eq("product_id", productId).order("sort_order"),
       supabase.from("product_accessories").select("*").eq("product_id", productId).order("sort_order"),
       supabase.from("product_images").select("*").eq("product_id", productId).order("sort_order"),
+      supabase.from("product_categories").select("category_id").eq("product_id", productId),
     ]);
     if (prodRes.data) setProduct(prodRes.data as ProductDetails);
     setSkus((skuRes.data ?? []) as SkuRow[]);
@@ -85,6 +106,7 @@ export default function ProductEditClient({ productId }: { productId: string | n
     setCutting((cutRes.data ?? []) as CuttingRow[]);
     setAccessories((accRes.data ?? []) as AccessoryRow[]);
     setImages((imgRes.data ?? []) as ImageRow[]);
+    setCategoryIds(((catRes.data ?? []) as { category_id: string }[]).map((r) => r.category_id));
   }, [productId, loadMaterialTypes]);
 
   const addMaterialType = useCallback(async (name: string) => {
@@ -126,6 +148,7 @@ export default function ProductEditClient({ productId }: { productId: string | n
       await syncRows("product_materials", "product_id", id!, materials);
       await syncRows("product_cutting_data", "product_id", id!, cutting);
       await syncRows("product_accessories", "product_id", id!, accessories);
+      await syncProductCategories(id!, categoryIds);
 
       if (!productId) {
         router.push(`/admin/products/${id}`);
@@ -190,11 +213,51 @@ export default function ProductEditClient({ productId }: { productId: string | n
         )}
         {tab === "SKUs" && <SkuEditor skus={skus} onChange={setSkus} />}
         {tab === "Produktdaten" && (
-          <ProductDataEditor
-            specs={specs} materials={materials} cutting={cutting}
-            onSpecsChange={setSpecs} onMaterialsChange={setMaterials} onCuttingChange={setCutting}
-            materialTypes={materialTypes} onAddMaterialType={addMaterialType}
-          />
+          <>
+            <ProductDataEditor
+              specs={specs} materials={materials} cutting={cutting}
+              onSpecsChange={setSpecs} onMaterialsChange={setMaterials} onCuttingChange={setCutting}
+              materialTypes={materialTypes} onAddMaterialType={addMaterialType}
+            />
+            <div className="mt-8 pt-6 border-t border-slate-100">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">Kategorien</p>
+              {categoryIds.length === 0 && product.has_public_page && (
+                <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">
+                  Produkt hat keine Kategorie — es wird im gefilterten Katalog nicht erscheinen.
+                </p>
+              )}
+              {(() => {
+                const groups: Record<string, CategoryOption[]> = {};
+                for (const c of allCategories) {
+                  const g = c.parent_name ?? "Sonstige";
+                  if (!groups[g]) groups[g] = [];
+                  groups[g].push(c);
+                }
+                return Object.entries(groups).map(([group, cats]) => (
+                  <div key={group} className="mb-4">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">{group}</p>
+                    <div className="flex flex-col gap-1.5">
+                      {cats.map((c) => (
+                        <label key={c.id} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="rounded"
+                            checked={categoryIds.includes(c.id)}
+                            onChange={(e) => {
+                              setCategoryIds((prev) =>
+                                e.target.checked ? [...prev, c.id] : prev.filter((x) => x !== c.id)
+                              );
+                            }}
+                          />
+                          {c.name}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ));
+              })()}
+            </div>
+          </>
         )}
         {tab === "Zubehör" && productId && (
           <AccessoriesEditor
@@ -253,6 +316,15 @@ async function syncSkus(productId: string, skus: SkuRow[]) {
   }));
   if (toDelete.length) await supabase.from("skus").delete().in("id", toDelete);
   if (toUpsert.length) await supabase.from("skus").upsert(toUpsert, { onConflict: "id" });
+}
+
+async function syncProductCategories(productId: string, categoryIds: string[]) {
+  await supabase.from("product_categories").delete().eq("product_id", productId);
+  if (categoryIds.length > 0) {
+    await supabase.from("product_categories").insert(
+      categoryIds.map((cid) => ({ product_id: productId, category_id: cid }))
+    );
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

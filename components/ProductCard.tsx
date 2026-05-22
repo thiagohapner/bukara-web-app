@@ -22,20 +22,22 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
       <div className="product-card bg-white rounded-2xl overflow-hidden border border-slate-100 group">
 
         {/* Portrait image */}
-        <div className="relative aspect-[3/4] overflow-hidden" style={{ background: card.galleryBg }}>
+        <div className="relative aspect-[3/4] overflow-hidden" style={{ background: "#EEEEEE" }}>
           {card.badge && (
             <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
               {card.badge}
             </span>
           )}
           {card.image ? (
-            <Image
-              src={card.image}
-              alt={card.name}
-              fill
-              className="object-cover img-zoom"
-              sizes="(max-width: 768px) 50vw, 33vw"
-            />
+            <div className="absolute inset-6">
+              <Image
+                src={card.image}
+                alt={card.name}
+                fill
+                className="object-contain img-zoom"
+                sizes="(max-width: 768px) 50vw, 33vw"
+              />
+            </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <span className="text-4xl font-black tracking-tighter select-none" style={{ color: "rgba(0,165,151,0.18)" }}>

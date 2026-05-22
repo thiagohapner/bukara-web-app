@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CustomSelect from "@/components/CustomSelect";
 
 const STATUSES = [
   { value: "new", label: "Neu" },
@@ -26,16 +27,13 @@ export default function OrderStatusUpdater({ orderId, currentStatus }: { orderId
 
   return (
     <div className="flex items-center gap-2">
-      <select
-        value={status}
-        onChange={e => update(e.target.value)}
-        disabled={saving}
-        className="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:opacity-60"
-      >
-        {STATUSES.map(s => (
-          <option key={s.value} value={s.value}>{s.label}</option>
-        ))}
-      </select>
+      <div className="w-48">
+        <CustomSelect
+          value={status}
+          onChange={(v) => update(v)}
+          options={STATUSES.map((s) => ({ value: s.value, label: s.label }))}
+        />
+      </div>
       {saving && <span className="text-xs text-slate-400">Speichern...</span>}
     </div>
   );

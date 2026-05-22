@@ -7,10 +7,8 @@ import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 import { MapPinIcon, PhoneIcon, EnvelopeIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-
-function inputClass(extra = "") {
-  return `w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#00A597]/20 focus:border-[#00A597] transition-colors ${extra}`;
-}
+import CustomSelect from "@/components/CustomSelect";
+import { DS_INPUT } from "@/lib/ds";
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -62,6 +60,7 @@ export default function KontaktPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!form.subject) { setSubmitError("Bitte wählen Sie einen Betreff aus."); return; }
     setSubmitting(true);
     setSubmitError(null);
 
@@ -198,7 +197,7 @@ export default function KontaktPage() {
                       value={form.name}
                       onChange={field("name")}
                       placeholder="Max Mustermann"
-                      className={inputClass()}
+                      className={DS_INPUT}
                     />
                   </div>
                   <div className="flex-1">
@@ -210,7 +209,7 @@ export default function KontaktPage() {
                       value={form.company}
                       onChange={field("company")}
                       placeholder="Muster GmbH"
-                      className={inputClass()}
+                      className={DS_INPUT}
                     />
                   </div>
                 </div>
@@ -226,7 +225,7 @@ export default function KontaktPage() {
                       value={form.email}
                       onChange={field("email")}
                       placeholder="max@mustermann.de"
-                      className={inputClass()}
+                      className={DS_INPUT}
                     />
                   </div>
                   <div className="flex-1">
@@ -238,7 +237,7 @@ export default function KontaktPage() {
                       value={form.phone}
                       onChange={field("phone")}
                       placeholder="+49 123 456789"
-                      className={inputClass()}
+                      className={DS_INPUT}
                     />
                   </div>
                 </div>
@@ -248,17 +247,14 @@ export default function KontaktPage() {
                   <label className="block text-xs font-medium text-slate-500 mb-1.5">
                     Betreff <span className="text-[#00A597]">*</span>
                   </label>
-                  <select
-                    required
+                  <CustomSelect
                     value={form.subject}
-                    onChange={field("subject")}
-                    className={inputClass("appearance-none cursor-pointer")}
-                  >
-                    <option value="" disabled>Bitte wählen…</option>
-                    {SUBJECT_OPTIONS.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
+                    onChange={(v) => setForm((f) => ({ ...f, subject: v }))}
+                    options={[
+                      { value: "", label: "Bitte wählen…" },
+                      ...SUBJECT_OPTIONS.map((s) => ({ value: s, label: s })),
+                    ]}
+                  />
                 </div>
 
                 <div className="mb-8">
@@ -271,7 +267,7 @@ export default function KontaktPage() {
                     value={form.message}
                     onChange={field("message")}
                     placeholder="Wie können wir Ihnen helfen?"
-                    className={inputClass("resize-none")}
+                    className={DS_INPUT + " resize-none"}
                   />
                 </div>
 

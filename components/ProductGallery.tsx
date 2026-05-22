@@ -12,9 +12,9 @@ interface Props {
   badge?: string;
 }
 
-function PlaceholderBlock({ bg, label }: { bg: string; label: string }) {
+function PlaceholderBlock({ label }: { label: string }) {
   return (
-    <div className="w-full h-full flex items-center justify-center" style={{ background: bg }}>
+    <div className="w-full h-full flex items-center justify-center" style={{ background: "#EEEEEE" }}>
       <span className="font-black tracking-tighter select-none text-2xl" style={{ color: "rgba(0,165,151,0.18)" }}>
         {label}
       </span>
@@ -22,7 +22,7 @@ function PlaceholderBlock({ bg, label }: { bg: string; label: string }) {
   );
 }
 
-export default function ProductGallery({ images, placeholderBg, placeholderLabel, badge }: Props) {
+export default function ProductGallery({ images, placeholderLabel, badge }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Escape key to close
@@ -48,13 +48,16 @@ export default function ProductGallery({ images, placeholderBg, placeholderLabel
         {/* Main image */}
         <div
           className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden mb-2 cursor-zoom-in"
+          style={{ background: "#EEEEEE" }}
           onClick={() => mainImage && setLightboxIndex(0)}
         >
           {mainImage ? (
-            <Image src={mainImage} alt={placeholderLabel} fill className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 55vw" />
+            <div className="absolute inset-8">
+              <Image src={mainImage} alt={placeholderLabel} fill className="object-contain"
+                sizes="(max-width: 1024px) 100vw, 55vw" />
+            </div>
           ) : (
-            <PlaceholderBlock bg={placeholderBg} label={placeholderLabel} />
+            <PlaceholderBlock label={placeholderLabel} />
           )}
           {badge && (
             <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
@@ -70,9 +73,12 @@ export default function ProductGallery({ images, placeholderBg, placeholderLabel
               <div
                 key={idx}
                 className="relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-zoom-in"
+                style={{ background: "#EEEEEE" }}
                 onClick={() => setLightboxIndex(idx + 1)}
               >
-                <Image src={img} alt={`${placeholderLabel} ${idx + 2}`} fill className="object-cover" sizes="27vw" />
+                <div className="absolute inset-4">
+                  <Image src={img} alt={`${placeholderLabel} ${idx + 2}`} fill className="object-contain" sizes="27vw" />
+                </div>
               </div>
             ))}
           </div>
@@ -85,16 +91,19 @@ export default function ProductGallery({ images, placeholderBg, placeholderLabel
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
         {(images.length > 0 ? images : [null]).map((img, i) => (
-          <div key={i} className="flex-shrink-0 w-[82%] aspect-[3/4] snap-start rounded-2xl overflow-hidden relative">
+          <div key={i} className="flex-shrink-0 w-[82%] aspect-[3/4] snap-start rounded-2xl overflow-hidden relative"
+            style={{ background: "#EEEEEE" }}>
             {i === 0 && badge && (
               <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
                 {badge}
               </span>
             )}
             {img ? (
-              <Image src={img} alt={`${placeholderLabel} ${i + 1}`} fill className="object-cover" sizes="82vw" />
+              <div className="absolute inset-6">
+                <Image src={img} alt={`${placeholderLabel} ${i + 1}`} fill className="object-contain" sizes="82vw" />
+              </div>
             ) : (
-              <PlaceholderBlock bg={placeholderBg} label={placeholderLabel} />
+              <PlaceholderBlock label={placeholderLabel} />
             )}
           </div>
         ))}

@@ -87,6 +87,9 @@ Always show actual discount as **"-30%"** format (minus + number + percent). Nev
 | `deal_skus` | `(deal_id, sku_id) PK`, `quantity`, `is_variable` — `is_variable=true` means customer picks variant | anon read |
 | `orders` | `id uuid PK`, `cart_id FK→carts`, `firmenname`, `ust_idnr`, `ansprechpartner`, `email`, `telefon`, `nachricht`, `total_net`, `total_gross`, `status CHECK(new/confirmed/invoiced/shipped)`, `submitted_at` | anon insert |
 
+| `categories` | `id uuid PK`, `name`, `slug UNIQUE`, `parent_id FK→categories (self-ref)`, `sort_order`, `is_active` | anon read |
+| `product_categories` | `id uuid PK`, `product_id FK→products (CASCADE)`, `category_id FK→categories (CASCADE)`, UNIQUE(product_id,category_id) | anon read |
+
 ### cart_items FK disambiguation
 Two FKs from `cart_items` to `skus` require explicit PostgREST hint syntax in queries:
 - `sku:skus!cart_items_sku_id_fkey(...)` — the product SKU

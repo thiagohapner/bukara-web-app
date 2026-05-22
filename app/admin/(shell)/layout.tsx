@@ -22,6 +22,12 @@ export default function AdminShellLayout({ children }: { children: React.ReactNo
             Produkte
           </Link>
           <Link
+            href="/admin/categories"
+            className="flex items-center px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors"
+          >
+            Kategorien
+          </Link>
+          <Link
             href="/admin/deals"
             className="flex items-center px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors"
           >
