@@ -165,7 +165,7 @@ export default function FilterSidebar({
     onFilterApplied?.();
   }
 
-  const SectionLabel = ({ children }: { children: string }) => (
+  const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-3">{children}</p>
   );
 
