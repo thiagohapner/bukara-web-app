@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingBasket } from "lucide-react";
 
 const activeDealsCount: number = 3;
 
@@ -86,7 +86,7 @@ export default function Navbar() {
             onClick={openDrawer}
             className="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
           >
-            <ShoppingCart className="w-5 h-5 text-slate-700" strokeWidth={1.7} />
+            <ShoppingBasket className="w-5 h-5 text-slate-700" strokeWidth={1.7} />
             {cartCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold text-white px-1 leading-none" style={{ backgroundColor: "#9B242A" }}>
                 {cartCount}

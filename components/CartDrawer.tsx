@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import { cartTotals, formatEur, FREE_SHIPPING_THRESHOLD, BULK_DISCOUNT_THRESHOLD } from "@/lib/pricing";
-import { X, ShoppingCart, Trash2, ArrowRight } from "lucide-react";
+import { X, ShoppingBasket, Trash2, ArrowRight } from "lucide-react";
 
 function QtyButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
@@ -59,7 +59,7 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-              <ShoppingCart className="w-12 h-12 text-slate-200" strokeWidth={1.5} />
+              <ShoppingBasket className="w-12 h-12 text-slate-200" strokeWidth={1.5} />
               <p className="text-slate-500 text-sm">Ihr Warenkorb ist leer.</p>
               <Link
                 href="/produkte"
