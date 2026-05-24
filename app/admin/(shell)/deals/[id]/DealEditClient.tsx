@@ -188,8 +188,14 @@ async function syncItems(offerId: string, items: OfferItemRow[]) {
       is_anchor: item.is_anchor,
       sort_order: idx,
     }));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-  if (toDelete.length) await db.from("offer_items").delete().in("id", toDelete);
-  if (toUpsert.length) await db.from("offer_items").upsert(toUpsert, { onConflict: "id" });
+
+  const res = await fetch("/api/admin/sync-offer-items", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ toDelete, toUpsert }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error((body as { error?: string }).error ?? "Fehler beim Speichern der Produkte");
+  }
 }

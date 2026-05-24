@@ -134,14 +134,7 @@ export default function FilterSidebar({
   }
 
   function selectParent(cat: Category) {
-    if (expandedId === cat.id) {
-      setExpandedId(null);
-      router.push(buildUrl({ kategorie: null, sub: null }));
-    } else {
-      setExpandedId(cat.id);
-      router.push(buildUrl({ kategorie: cat.slug, sub: null }));
-    }
-    onFilterApplied?.();
+    setExpandedId(expandedId === cat.id ? null : cat.id);
   }
 
   function selectSub(parent: Category, sub: Category) {
