@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -62,10 +62,10 @@ export default function Hero() {
               Sonderwerkzeug
               <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
             </Link>
-            <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline text-sm inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
+            <Link href="/b2b-portal" className="btn-outline text-sm inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
               Zum B2B Portal
-              <ExternalLink className="w-4 h-4" strokeWidth={2.2} />
-            </a>
+              <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
+            </Link>
           </div>
 
 

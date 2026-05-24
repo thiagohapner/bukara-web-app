@@ -11,6 +11,7 @@ const MESSAGES: Record<string, string> = {
   order: "Wir haben Ihre Bestellung erhalten und melden uns in Kürze mit der Auftragsbestätigung.",
   schaerfen: "Wir haben Ihren Auftrag erhalten und melden uns in Kürze mit der Abholbestätigung.",
   sonderwerkzeug: "Wir haben Ihren Auftrag erhalten und melden uns in Kürze bei Ihnen.",
+  b2b: "Wir werden uns in Kürze mit Ihren Zugangsdaten bei Ihnen melden.",
 };
 const DEFAULT_MESSAGE = "Wir haben Ihre Anfrage erhalten und melden uns in Kürze mit Ihrem finalen Angebot.";
 

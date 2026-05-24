@@ -130,6 +130,18 @@ function buildSonderEmail(d: Record<string, unknown>) {
   return emailShell("Sonderwerkzeug-Anfrage", body);
 }
 
+function buildB2BEmail(d: Record<string, string>) {
+  const body = section("Kontakt", [
+    ["Ansprechpartner", d.name],
+    ["Firma", d.company],
+    ["E-Mail", d.email],
+    ["Telefon", d.phone || null],
+  ]) + section("Unternehmensdaten", [
+    ["Umsatzsteuer-ID", d.umsatzsteuer_id],
+  ]);
+  return emailShell("B2B-Portalzugang angefragt", body);
+}
+
 function buildOrderEmail(d: {
   order: Record<string, string>;
   items: Array<{ name: string; artikel_nr: string; variant_label: string | null; qty: number; unit_price: number; line_total: number }>;
@@ -220,6 +232,9 @@ export async function POST(request: NextRequest) {
     } else if (type === "order") {
       subject = `Neue Bestellanfrage von ${data.order.firmenname}`;
       html = buildOrderEmail(data);
+    } else if (type === "b2b") {
+      subject = `B2B-Portalzugang angefragt – ${data.name}${data.company ? ` (${data.company})` : ""}`;
+      html = buildB2BEmail(data);
     } else {
       return NextResponse.json({ error: "Unknown type" }, { status: 400 });
     }
