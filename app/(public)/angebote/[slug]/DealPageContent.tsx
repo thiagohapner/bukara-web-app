@@ -244,16 +244,21 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
       label: "Geeignet für",
       content: (
         <div className="grid grid-cols-2 gap-x-4 gap-y-5">
-          {materials.map((mat, idx) => {
-            const labels = ["Sehr gut geeignet", "Gut geeignet", "Geeignet"];
-            return (
-              <div key={mat.id} className="flex flex-col gap-1.5">
-                <p className="text-base text-slate-900 leading-snug">{mat.material_name}</p>
-                <Dots count={(idx % 3) + 1} />
-                <p className="text-sm text-slate-400">{labels[idx % 3]}</p>
-              </div>
-            );
-          })}
+          {materials
+            .filter(mat => mat.suitability !== "nicht geeignet")
+            .map((mat) => {
+              const dotCount =
+                mat.suitability === "sehr gut geeignet" ? 3 :
+                mat.suitability === "gut geeignet" ? 2 : 1;
+              const label = mat.suitability.charAt(0).toUpperCase() + mat.suitability.slice(1);
+              return (
+                <div key={mat.id} className="flex flex-col gap-1.5">
+                  <p className="text-base text-slate-900 leading-snug">{mat.material_name}</p>
+                  <Dots count={dotCount} />
+                  <p className="text-sm text-slate-400">{label}</p>
+                </div>
+              );
+            })}
         </div>
       ),
     });
