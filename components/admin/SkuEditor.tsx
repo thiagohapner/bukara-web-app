@@ -5,6 +5,7 @@ import { useState } from "react";
 export interface SkuRow {
   id?: string;
   artikel_nr: string;
+  lieferanten_nr: string | null;
   variant_label: string;
   price: number;
   campaign_price: number | null;
@@ -20,7 +21,7 @@ interface Props {
 }
 
 function emptysku(sort_order: number): SkuRow {
-  return { artikel_nr: "", variant_label: "", price: 0, campaign_price: null, stock_quantity: 999, sort_order, is_active: true };
+  return { artikel_nr: "", lieferanten_nr: null, variant_label: "", price: 0, campaign_price: null, stock_quantity: 999, sort_order, is_active: true };
 }
 
 export default function SkuEditor({ skus, onChange }: Props) {
@@ -57,6 +58,9 @@ export default function SkuEditor({ skus, onChange }: Props) {
             <div className="grid grid-cols-2 gap-3">
               <Field label="Artikel-Nr. *" value={sku.artikel_nr} onChange={(v) => update(realIndex, "artikel_nr", v)} />
               <Field label="Variante (optional)" value={sku.variant_label} onChange={(v) => update(realIndex, "variant_label", v)} />
+              <div className="col-span-2">
+                <Field label="Lieferanten-Bestellnummer" value={sku.lieferanten_nr ?? ""} onChange={(v) => update(realIndex, "lieferanten_nr", v || null)} />
+              </div>
               <NumField label="Preis (€) *" value={sku.price} onChange={(v) => update(realIndex, "price", v)} />
               <NumField label="Kampagnenpreis (€)" value={sku.campaign_price ?? ""} onChange={(v) => update(realIndex, "campaign_price", v === "" ? null : v)} nullable />
               <NumField label="Lagerbestand" value={sku.stock_quantity} onChange={(v) => update(realIndex, "stock_quantity", v)} />

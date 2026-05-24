@@ -119,11 +119,8 @@ export default function ProdukteCatalog() {
       for (const sku of (skus ?? []) as Array<{ product_id: string; price: number; campaign_price: number | null }>) {
         const c = sku.campaign_price ?? sku.price;
         const o = sku.price;
-        if (!minPrices[sku.product_id]) {
+        if (!minPrices[sku.product_id] || c < minPrices[sku.product_id].campaign) {
           minPrices[sku.product_id] = { campaign: c, original: o };
-        } else {
-          if (c < minPrices[sku.product_id].campaign) minPrices[sku.product_id].campaign = c;
-          if (o < minPrices[sku.product_id].original) minPrices[sku.product_id].original = o;
         }
       }
 

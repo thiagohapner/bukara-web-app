@@ -307,6 +307,7 @@ async function syncSkus(productId: string, skus: SkuRow[]) {
     ...(s.id ? { id: s.id } : {}),
     product_id: productId,
     artikel_nr: s.artikel_nr,
+    lieferanten_nr: s.lieferanten_nr || null,
     variant_label: s.variant_label || null,
     price: s.price,
     campaign_price: s.campaign_price,
