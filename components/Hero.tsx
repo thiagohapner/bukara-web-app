@@ -46,12 +46,12 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-white min-h-[580px] lg:min-h-[640px]"
+      className="relative overflow-hidden bg-white lg:min-h-[640px]"
     >
-      <div className="relative max-w-[1320px] mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-start pt-[75px] min-h-[580px] lg:min-h-[640px]">
+      <div className="relative max-w-[1320px] mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-start pt-[40px] lg:pt-[75px] lg:min-h-[640px]">
         {/* Left — text */}
-        <div className="w-full lg:w-[50%] py-16 lg:pt-0 lg:pb-0 z-10">
-          <h1 className="hero-title text-[56px] font-normal text-slate-900 leading-[1.06] mb-5 max-w-[560px]">
+        <div className="w-full lg:w-[50%] pt-0 pb-6 lg:pt-0 lg:pb-0 z-10">
+          <h1 className="hero-title text-[48px] font-normal text-slate-900 leading-[1.06] mb-5 max-w-[560px]">
             Ihr Werkzeugpartner für Holz und Kunststoff
           </h1>
           <p className="hero-desc text-slate-500 text-[22px] leading-snug max-w-[420px] mb-7">
@@ -69,11 +69,11 @@ export default function Hero() {
               </li>
             ))}
           </ul>
-          <div className="hero-cta flex flex-wrap gap-3">
-            <Link href="/loesungen/sonderwerkzeug" className="btn-orange" style={{ textDecoration: "none" }}>
+          <div className="hero-cta flex flex-col lg:flex-row gap-3">
+            <Link href="/loesungen/sonderwerkzeug" className="btn-orange w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>
               Sonderlösung anfragen
             </Link>
-            <Link href="/produkte" className="btn-outline" style={{ textDecoration: "none" }}>
+            <Link href="/produkte" className="btn-outline w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>
               Produkte entdecken
             </Link>
           </div>

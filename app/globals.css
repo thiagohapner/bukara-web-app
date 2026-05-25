@@ -192,6 +192,14 @@ body {
   color: var(--orange);
 }
 
+@media (max-width: 1023px) {
+  .hero-cta a.btn-orange,
+  .hero-cta a.btn-outline {
+    padding-top: 0.805rem;
+    padding-bottom: 0.805rem;
+  }
+}
+
 /* Section "View all" link */
 .view-all {
   font-size: 0.875rem;
