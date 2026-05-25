@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { ArrowRight } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -15,6 +15,7 @@ export default function Hero() {
 
       tl.from(".hero-title",   { opacity: 0, y: 40, duration: 0.8 })
         .from(".hero-desc",    { opacity: 0, y: 24, duration: 0.6 }, "-=0.4")
+        .from(".hero-checks",  { opacity: 0, y: 18, duration: 0.5 }, "-=0.3")
         .from(".hero-cta",     { opacity: 0, y: 20, duration: 0.5 }, "-=0.3")
         .from(".hero-keyboard",{ opacity: 0, x: 60, scale: 0.88, duration: 1, ease: "back.out(1.2)" }, "-=0.9")
         .from(".hero-phones",  { opacity: 0, x: -50, y: 30, scale: 0.88, duration: 1, ease: "back.out(1.2)" }, "-=0.8");
@@ -50,29 +51,36 @@ export default function Hero() {
       <div className="relative max-w-[1320px] mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-start pt-[75px] min-h-[580px] lg:min-h-[640px]">
         {/* Left — text */}
         <div className="w-full lg:w-[50%] py-16 lg:pt-0 lg:pb-0 z-10">
-          <h1 className="hero-title text-4xl sm:text-5xl xl:text-6xl font-semibold text-slate-900 leading-[1.08] mb-6 max-w-[540px]">
-            Das perfekte Werkzeug für Ihr Projekt
+          <h1 className="hero-title text-[56px] font-normal text-slate-900 leading-[1.06] mb-5 max-w-[560px]">
+            Ihr Werkzeugpartner für Holz und Kunststoff
           </h1>
-          <p className="hero-desc text-slate-500 text-[15px] leading-relaxed max-w-[440px] mb-8">
-            Ihr Rundumpartner bei Werkzeug für die Holz- und Kunstoffbearbeitung.
-            Schnell flexibel und ohne Mindeststückzahl
+          <p className="hero-desc text-slate-500 text-[22px] leading-snug max-w-[420px] mb-7">
+            Schnelle Lieferung, Sonderlösungen nach Maß, breites Standardsortiment
           </p>
-          <div className="hero-cta flex flex-wrap gap-3 mb-8">
-            <Link href="/loesungen/sonderwerkzeug" className="btn-orange text-sm" style={{ textDecoration: "none" }}>
-              Sonderwerkzeug
-              <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
+          <ul className="hero-checks flex flex-col gap-3 mb-9">
+            {[
+              "Sonderlösungen ohne Mindeststückzahl",
+              "Lieferung in 2–3 Wochen",
+              "Deutschlandweiter Schärfservice",
+            ].map((item) => (
+              <li key={item} className="flex items-center gap-2.5 text-slate-700 text-[18px]">
+                <CheckCircle className="w-5 h-5 text-slate-900 shrink-0" strokeWidth={1.8} />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div className="hero-cta flex flex-wrap gap-3">
+            <Link href="/loesungen/sonderwerkzeug" className="btn-orange" style={{ textDecoration: "none" }}>
+              Sonderlösung anfragen
             </Link>
-            <Link href="/b2b-portal" className="btn-outline text-sm inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
-              Zum B2B Portal
-              <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
+            <Link href="/produkte" className="btn-outline" style={{ textDecoration: "none" }}>
+              Produkte entdecken
             </Link>
           </div>
-
-
         </div>
 
         {/* Right — product images */}
-        <div className="w-full lg:w-[50%] flex items-start h-[360px] lg:h-[576px] gap-4">
+        <div className="hidden lg:flex w-full lg:w-[50%] items-start h-[360px] lg:h-[576px] gap-4">
           {/* Keyboard — 2/3 width of headphones via flex ratio */}
           <div
             className="hero-keyboard relative rounded-2xl overflow-hidden cursor-pointer"

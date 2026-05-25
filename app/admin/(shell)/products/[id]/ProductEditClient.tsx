@@ -74,18 +74,16 @@ export default function ProductEditClient({ productId }: { productId: string | n
     const { data: cats } = await supabase
       .from("categories")
       .select("id, name, parent_id")
-      .not("parent_id", "is", null)
       .eq("is_active", true)
       .order("sort_order");
-    const { data: parentCats } = await supabase
-      .from("categories")
-      .select("id, name")
-      .is("parent_id", null)
-      .order("sort_order");
+    const allCats = (cats ?? []) as CategoryOption[];
     const parentMap: Record<string, string> = {};
-    for (const p of (parentCats ?? []) as { id: string; name: string }[]) parentMap[p.id] = p.name;
+    for (const c of allCats) { if (!c.parent_id) parentMap[c.id] = c.name; }
+    const subcats = allCats.filter((c) => c.parent_id !== null);
     setAllCategories(
-      ((cats ?? []) as CategoryOption[]).map((c) => ({ ...c, parent_name: parentMap[c.parent_id!] ?? "" }))
+      (subcats.length > 0 ? subcats : allCats).map((c) => ({
+        ...c, parent_name: c.parent_id ? (parentMap[c.parent_id] ?? "") : undefined,
+      }))
     );
 
     if (!productId) return;
@@ -229,13 +227,13 @@ export default function ProductEditClient({ productId }: { productId: string | n
               {(() => {
                 const groups: Record<string, CategoryOption[]> = {};
                 for (const c of allCategories) {
-                  const g = c.parent_name ?? "Sonstige";
+                  const g = c.parent_name ?? "";
                   if (!groups[g]) groups[g] = [];
                   groups[g].push(c);
                 }
                 return Object.entries(groups).map(([group, cats]) => (
                   <div key={group} className="mb-4">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">{group}</p>
+                    {group && <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">{group}</p>}
                     <div className="flex flex-col gap-1.5">
                       {cats.map((c) => (
                         <label key={c.id} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">

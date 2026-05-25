@@ -25,6 +25,7 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
 
   const techSpecs = specs.filter(s => s.spec_section === "technische_details" || (!s.spec_section && !s._deleted));
   const anwendungSpecs = specs.filter(s => s.spec_section === "anwendung");
+  const maschinenSpecs = specs.filter(s => s.spec_section === "maschinen");
 
   function updateSpec(index: number, value: string) {
     onSpecsChange(specs.map((s, i) => i === index ? { ...s, spec_value: value } : s));
@@ -123,6 +124,26 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
           );
         })}
         <button type="button" onClick={() => addSpec("anwendung")} className="text-sm text-teal-600 hover:text-teal-700">
+          + Zeile
+        </button>
+      </Section>
+
+      <Section title="Geeignet für Maschinen">
+        {maschinenSpecs.filter(s => !s._deleted).map((row) => {
+          const ri = specs.indexOf(row);
+          return (
+            <div key={ri} className="flex gap-2 items-start">
+              <input
+                className="flex-1 border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+                placeholder="z.B. HOMAG OPTIMAT KAL 310"
+                value={row.spec_value}
+                onChange={e => updateSpec(ri, e.target.value)}
+              />
+              <button type="button" onClick={() => removeSpec(ri)} className="text-sm text-red-400 hover:text-red-600 pt-1.5">✕</button>
+            </div>
+          );
+        })}
+        <button type="button" onClick={() => addSpec("maschinen")} className="text-sm text-teal-600 hover:text-teal-700">
           + Zeile
         </button>
       </Section>

@@ -206,6 +206,7 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
   }
 
   const anwendungItems = specs.filter((s) => s.spec_section === "anwendung");
+  const maschinenItems = specs.filter((s) => s.spec_section === "maschinen");
   if (anwendungItems.length > 0) {
     accordionSections.push({
       id: "anwendung",
@@ -213,6 +214,19 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
       content: (
         <div className="flex flex-col gap-2">
           {anwendungItems.map((s) => (
+            <p key={s.id} className="text-base text-slate-700">{s.spec_value}</p>
+          ))}
+        </div>
+      ),
+    });
+  }
+  if (maschinenItems.length > 0) {
+    accordionSections.push({
+      id: "maschinen",
+      label: "Geeignet für Maschinen",
+      content: (
+        <div className="flex flex-col gap-2">
+          {maschinenItems.map((s) => (
             <p key={s.id} className="text-base text-slate-700">{s.spec_value}</p>
           ))}
         </div>
