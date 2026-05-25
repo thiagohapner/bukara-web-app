@@ -51,7 +51,7 @@ export default function Hero() {
       <div className="relative max-w-[1320px] mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-start pt-[40px] lg:pt-[75px] lg:min-h-[640px]">
         {/* Left — text */}
         <div className="w-full lg:w-[50%] pt-0 pb-6 lg:pt-0 lg:pb-0 z-10">
-          <h1 className="hero-title text-[48px] font-normal text-slate-900 leading-[1.06] mb-5 max-w-[560px]">
+          <h1 className="hero-title text-[48px] lg:text-[53px] font-normal text-slate-900 leading-[1.06] mb-5 max-w-[560px]">
             Ihr Werkzeugpartner für Holz und Kunststoff
           </h1>
           <p className="hero-desc text-slate-500 text-[22px] leading-snug max-w-[420px] mb-7">
