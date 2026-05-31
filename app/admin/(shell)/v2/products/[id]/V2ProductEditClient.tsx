@@ -9,7 +9,8 @@ import type { V2Category, V2MaterialType } from "@/lib/v2/types";
 
 const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  { db: { schema: "v2" } }
 );
 
 const TABS = ["Details", "Kategorien & Anwendungen", "Materialien", "SKUs"] as const;
@@ -83,8 +84,8 @@ export default function V2ProductEditClient({ productId }: { productId: string |
 
   const load = useCallback(async () => {
     const [catsRes, matsRes] = await Promise.all([
-      supabase.schema("v2").from("categories").select("id, name, slug, parent_id").order("name"),
-      supabase.schema("v2").from("material_types").select("name").order("name"),
+      supabase.from("categories").select("id, name, slug, parent_id").order("name"),
+      supabase.from("material_types").select("name").order("name"),
     ]);
     setAllCategories((catsRes.data ?? []) as V2Category[]);
     setMaterialTypes(((matsRes.data ?? []) as V2MaterialType[]).map((m) => m.name));
@@ -92,11 +93,11 @@ export default function V2ProductEditClient({ productId }: { productId: string |
     if (!productId) return;
 
     const [prodRes, catRes, appRes, matRes, skuRes] = await Promise.all([
-      supabase.schema("v2").from("products").select("*").eq("id", productId).single(),
-      supabase.schema("v2").from("product_categories").select("category_id").eq("product_id", productId),
-      supabase.schema("v2").from("product_applications").select("tag").eq("product_id", productId),
-      supabase.schema("v2").from("product_materials").select("*").eq("product_id", productId).order("sort_order"),
-      supabase.schema("v2").from("skus")
+      supabase.from("products").select("*").eq("id", productId).single(),
+      supabase.from("product_categories").select("category_id").eq("product_id", productId),
+      supabase.from("product_applications").select("tag").eq("product_id", productId),
+      supabase.from("product_materials").select("*").eq("product_id", productId).order("sort_order"),
+      supabase.from("skus")
         .select("id, identnummer, variant_label, diameter_mm, price_eur, campaign_price, is_active, sort_order")
         .eq("product_id", productId)
         .order("sort_order"),
@@ -199,35 +200,35 @@ export default function V2ProductEditClient({ productId }: { productId: string |
 
       let pid = form.id;
       if (!pid) {
-        const { data, error: insertErr } = await supabase.schema("v2").from("products")
+        const { data, error: insertErr } = await supabase.from("products")
           .insert(payload).select("id").single();
         if (insertErr) throw new Error(insertErr.message);
         pid = (data as { id: string }).id;
         setForm((prev) => ({ ...prev, id: pid }));
       } else {
-        const { error: updateErr } = await supabase.schema("v2").from("products")
+        const { error: updateErr } = await supabase.from("products")
           .update(payload).eq("id", pid);
         if (updateErr) throw new Error(updateErr.message);
       }
 
       // Sync categories: delete all + re-insert
-      await supabase.schema("v2").from("product_categories").delete().eq("product_id", pid);
+      await supabase.from("product_categories").delete().eq("product_id", pid);
       if (categoryIds.length > 0) {
-        await supabase.schema("v2").from("product_categories")
+        await supabase.from("product_categories")
           .insert(categoryIds.map((cid) => ({ product_id: pid, category_id: cid })));
       }
 
       // Sync applications: delete all + re-insert
-      await supabase.schema("v2").from("product_applications").delete().eq("product_id", pid);
+      await supabase.from("product_applications").delete().eq("product_id", pid);
       if (applicationTags.length > 0) {
-        await supabase.schema("v2").from("product_applications")
+        await supabase.from("product_applications")
           .insert(applicationTags.map((tag) => ({ product_id: pid, tag })));
       }
 
       // Sync materials: delete marked, upsert rest
       const toDelete = materials.filter((m) => m._deleted && m.id);
       if (toDelete.length > 0) {
-        await supabase.schema("v2").from("product_materials")
+        await supabase.from("product_materials")
           .delete().in("id", toDelete.map((m) => m.id!));
       }
 
@@ -242,7 +243,7 @@ export default function V2ProductEditClient({ productId }: { productId: string |
           sort_order: i,
         }));
       if (toUpsert.length > 0) {
-        await supabase.schema("v2").from("product_materials").upsert(toUpsert);
+        await supabase.from("product_materials").upsert(toUpsert);
       }
 
       setSuccess(true);

@@ -1,18 +1,16 @@
 import Link from "next/link";
-import { supabaseAdmin } from "@/lib/admin/supabaseAdmin";
+import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 
 export const dynamic = "force-dynamic";
 
 export default async function V2ProductsPage() {
-  const { data: products } = await supabaseAdmin
-    .schema("v2")
+  const { data: products } = await supabaseAdminV2
     .from("products")
     .select("id, slug, display_name, badge, is_active, has_public_page, sort_order")
     .order("sort_order");
 
   // SKU counts per product
-  const { data: skuCounts } = await supabaseAdmin
-    .schema("v2")
+  const { data: skuCounts } = await supabaseAdminV2
     .from("skus")
     .select("product_id")
     .not("product_id", "is", null);

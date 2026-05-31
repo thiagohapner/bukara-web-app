@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SlidersHorizontal, X } from "lucide-react";
 import Footer from "@/components/Footer";
-import { supabase } from "@/lib/supabase";
+import { supabaseV2 } from "@/lib/v2/supabase";
 import ProductCard, { type ProductCardData } from "@/components/ProductCard";
 import CustomSelect from "@/components/CustomSelect";
 import KatalogFilterSidebar from "./KatalogFilterSidebar";
@@ -88,8 +88,7 @@ export default function KatalogCatalog() {
   // ── Data load ────────────────────────────────────────────────────────────
   useEffect(() => {
     async function load() {
-      const { data: products } = await supabase
-        .schema("v2")
+      const { data: products } = await supabaseV2
         .from("products")
         .select("id, slug, display_name, badge, gallery_bg, default_image_url")
         .eq("is_active", true)
@@ -108,24 +107,24 @@ export default function KatalogCatalog() {
         { data: productMaterials },
         { data: categories },
       ] = await Promise.all([
-        supabase.schema("v2").from("skus")
+        supabaseV2.from("skus")
           .select("id, product_id, price_eur, campaign_price, diameter_mm, sort_order")
           .in("product_id", ids)
           .eq("is_active", true)
           .order("sort_order"),
-        supabase.schema("v2").from("sku_images")
+        supabaseV2.from("sku_images")
           .select("sku_id, image_url, sort_order")
           .order("sort_order"),
-        supabase.schema("v2").from("product_categories")
+        supabaseV2.from("product_categories")
           .select("product_id, category_id")
           .in("product_id", ids),
-        supabase.schema("v2").from("product_applications")
+        supabaseV2.from("product_applications")
           .select("product_id, tag")
           .in("product_id", ids),
-        supabase.schema("v2").from("product_materials")
+        supabaseV2.from("product_materials")
           .select("product_id, material_name, score")
           .in("product_id", ids),
-        supabase.schema("v2").from("categories")
+        supabaseV2.from("categories")
           .select("id, name, slug, parent_id"),
       ]);
 

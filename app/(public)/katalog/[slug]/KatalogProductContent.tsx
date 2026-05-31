@@ -8,7 +8,7 @@ import ProductAccordion from "@/components/ProductAccordion";
 import OrderBenefits from "@/components/OrderBenefits";
 import V2VariantPicker from "@/components/V2VariantPicker";
 import { useCart } from "@/components/CartContext";
-import { supabase } from "@/lib/supabase";
+import { supabaseV2 } from "@/lib/v2/supabase";
 import { formatEur } from "@/lib/pricing";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication } from "@/lib/v2/types";
 
@@ -54,8 +54,7 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
 
   useEffect(() => {
     async function load() {
-      const { data: prod } = await supabase
-        .schema("v2")
+      const { data: prod } = await supabaseV2
         .from("products")
         .select("*")
         .eq("slug", slug)
@@ -64,8 +63,7 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
       if (!prod) { setLoading(false); return; }
       setProduct(prod as V2Product);
 
-      const { data: skuData } = await supabase
-        .schema("v2")
+      const { data: skuData } = await supabaseV2
         .from("skus")
         .select("*")
         .eq("product_id", prod.id)
@@ -85,10 +83,10 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
         { data: mats },
         { data: apps },
       ] = await Promise.all([
-        supabase.schema("v2").from("sku_images").select("*").in("sku_id", skuIds).order("sort_order"),
-        supabase.schema("v2").from("sku_specs").select("*").in("sku_id", skuIds).order("sort_order"),
-        supabase.schema("v2").from("product_materials").select("*").eq("product_id", prod.id).order("sort_order"),
-        supabase.schema("v2").from("product_applications").select("tag").eq("product_id", prod.id),
+        supabaseV2.from("sku_images").select("*").in("sku_id", skuIds).order("sort_order"),
+        supabaseV2.from("sku_specs").select("*").in("sku_id", skuIds).order("sort_order"),
+        supabaseV2.from("product_materials").select("*").eq("product_id", prod.id).order("sort_order"),
+        supabaseV2.from("product_applications").select("tag").eq("product_id", prod.id),
       ]);
 
       setSkuImages((images ?? []) as V2SkuImage[]);

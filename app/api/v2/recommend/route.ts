@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/admin/supabaseAdmin";
+import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
   }
 
   // 1. Fetch all active products with public pages
-  const { data: allProducts } = await supabaseAdmin
-    .schema("v2")
+  const { data: allProducts } = await supabaseAdminV2
     .from("products")
     .select("id, slug, display_name, badge, gallery_bg, default_image_url")
     .eq("is_active", true)
@@ -40,8 +39,7 @@ export async function GET(request: NextRequest) {
   // 2. Filter by material + minScore (family-level)
   if (material) {
     const score = minScore ?? 1;
-    const { data: matMatches } = await supabaseAdmin
-      .schema("v2")
+    const { data: matMatches } = await supabaseAdminV2
       .from("product_materials")
       .select("product_id")
       .eq("material_name", material)
@@ -52,8 +50,7 @@ export async function GET(request: NextRequest) {
 
   // 3. Filter by application tag (family-level)
   if (application) {
-    const { data: appMatches } = await supabaseAdmin
-      .schema("v2")
+    const { data: appMatches } = await supabaseAdminV2
       .from("product_applications")
       .select("product_id")
       .eq("tag", application);
@@ -63,8 +60,7 @@ export async function GET(request: NextRequest) {
 
   // 4. Filter by category (family-level)
   if (categoryId) {
-    const { data: catMatches } = await supabaseAdmin
-      .schema("v2")
+    const { data: catMatches } = await supabaseAdminV2
       .from("product_categories")
       .select("product_id")
       .eq("category_id", categoryId);
@@ -77,8 +73,7 @@ export async function GET(request: NextRequest) {
   }
 
   // 5. Fetch SKUs for matching products + apply SKU-level filters
-  let skuQuery = supabaseAdmin
-    .schema("v2")
+  let skuQuery = supabaseAdminV2
     .from("skus")
     .select("id, product_id, variant_label, diameter_mm, price_eur, campaign_price")
     .in("product_id", [...productIds])
@@ -98,8 +93,7 @@ export async function GET(request: NextRequest) {
   // 6. Filter by machine (SKU-level)
   let filteredSkus = skuList;
   if (machineId) {
-    const { data: machineSkus } = await supabaseAdmin
-      .schema("v2")
+    const { data: machineSkus } = await supabaseAdminV2
       .from("sku_machines")
       .select("sku_id")
       .eq("machine_id", machineId);
@@ -124,8 +118,7 @@ export async function GET(request: NextRequest) {
   const bestSkuIds = matchedProductIds.map((pid) => bestSkuByProduct.get(pid)!.id);
 
   // 8. Fetch first image per best SKU
-  const { data: skuImages } = await supabaseAdmin
-    .schema("v2")
+  const { data: skuImages } = await supabaseAdminV2
     .from("sku_images")
     .select("sku_id, image_url, sort_order")
     .in("sku_id", bestSkuIds)

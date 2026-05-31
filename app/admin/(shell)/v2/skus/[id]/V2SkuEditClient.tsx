@@ -9,7 +9,8 @@ import type { V2Sku, V2SkuSpec, V2SkuImage } from "@/lib/v2/types";
 
 const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  { db: { schema: "v2" } }
 );
 
 const TABS = ["Details", "Specs", "Bilder"] as const;
@@ -39,10 +40,10 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
 
   const load = useCallback(async () => {
     const [skuRes, specRes, imgRes, prodRes] = await Promise.all([
-      supabase.schema("v2").from("skus").select("*").eq("id", skuId).single(),
-      supabase.schema("v2").from("sku_specs").select("*").eq("sku_id", skuId).order("sort_order"),
-      supabase.schema("v2").from("sku_images").select("*").eq("sku_id", skuId).order("sort_order"),
-      supabase.schema("v2").from("products").select("id, display_name").order("display_name"),
+      supabase.from("skus").select("*").eq("id", skuId).single(),
+      supabase.from("sku_specs").select("*").eq("sku_id", skuId).order("sort_order"),
+      supabase.from("sku_images").select("*").eq("sku_id", skuId).order("sort_order"),
+      supabase.from("products").select("id, display_name").order("display_name"),
     ]);
 
     const skuData = skuRes.data as V2Sku | null;
@@ -90,7 +91,7 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
 
     try {
       // Update SKU details
-      const { error: skuErr } = await supabase.schema("v2").from("skus").update({
+      const { error: skuErr } = await supabase.from("skus").update({
         product_id: form.product_id ?? null,
         merchant_sku: form.merchant_sku ?? null,
         variant_label: form.variant_label ?? null,
@@ -113,7 +114,7 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
       // Sync specs
       const toDelete = specs.filter((s) => s._deleted && !s.id.startsWith("new-"));
       if (toDelete.length > 0) {
-        await supabase.schema("v2").from("sku_specs").delete().in("id", toDelete.map((s) => s.id));
+        await supabase.from("sku_specs").delete().in("id", toDelete.map((s) => s.id));
       }
 
       const toUpsert = specs
@@ -127,7 +128,7 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
           sort_order: i,
         }));
       if (toUpsert.length > 0) {
-        await supabase.schema("v2").from("sku_specs").upsert(toUpsert);
+        await supabase.from("sku_specs").upsert(toUpsert);
       }
 
       setSuccess(true);

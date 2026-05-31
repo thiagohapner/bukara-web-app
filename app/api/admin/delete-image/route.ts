@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { supabaseAdmin } from "@/lib/admin/supabaseAdmin";
+import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 
 async function getSession(request: NextRequest) {
   const supabase = createServerClient(
@@ -29,8 +30,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   if (entityType === "v2-sku") {
-    const { data: row, error: fetchError } = await supabaseAdmin
-      .schema("v2")
+    const { data: row, error: fetchError } = await supabaseAdminV2
       .from("sku_images")
       .select("image_url")
       .eq("id", id)
@@ -38,7 +38,7 @@ export async function DELETE(request: NextRequest) {
     if (fetchError || !row) {
       return NextResponse.json({ error: "Image not found" }, { status: 404 });
     }
-    const { error: dbError } = await supabaseAdmin.schema("v2").from("sku_images").delete().eq("id", id);
+    const { error: dbError } = await supabaseAdminV2.from("sku_images").delete().eq("id", id);
     if (dbError) {
       return NextResponse.json({ error: dbError.message }, { status: 500 });
     }

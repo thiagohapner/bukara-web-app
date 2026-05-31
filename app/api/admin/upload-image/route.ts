@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { supabaseAdmin } from "@/lib/admin/supabaseAdmin";
+import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import { processImage } from "@/lib/admin/imageProcessing";
 
 async function getSession(request: NextRequest) {
@@ -52,8 +53,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: uploadError.message }, { status: 500 });
     }
     const { data: urlData } = supabaseAdmin.storage.from("artikelbilder").getPublicUrl(fileName);
-    const { data: row, error: dbError } = await supabaseAdmin
-      .schema("v2")
+    const { data: row, error: dbError } = await supabaseAdminV2
       .from("sku_images")
       .insert({ sku_id: entityId, image_url: urlData.publicUrl, sort_order: sortOrder })
       .select("id, image_url, sort_order")

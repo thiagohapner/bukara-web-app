@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { supabaseAdmin } from "@/lib/admin/supabaseAdmin";
+import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 
 async function getSession(request: NextRequest) {
   const supabase = createServerClient(
@@ -35,7 +36,7 @@ export async function PATCH(request: NextRequest) {
   if (entityType === "v2-sku") {
     await Promise.all(
       items.map(({ id, sort_order }) =>
-        supabaseAdmin.schema("v2").from("sku_images").update({ sort_order }).eq("id", id)
+        supabaseAdminV2.from("sku_images").update({ sort_order }).eq("id", id)
       )
     );
     return NextResponse.json({ success: true });

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { supabaseAdmin } from "@/lib/admin/supabaseAdmin";
+import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import V2ProductEditClient from "./V2ProductEditClient";
 
 export const dynamic = "force-dynamic";
@@ -11,8 +11,7 @@ export default async function V2ProductEditPage({
 }) {
   const { id } = await params;
 
-  const { data } = await supabaseAdmin
-    .schema("v2")
+  const { data } = await supabaseAdminV2
     .from("products")
     .select("id")
     .eq("id", id)
