@@ -2,7 +2,7 @@ export interface V2Product {
   id: string;
   slug: string;
   base_name: string;
-  display_name: string;
+  display_name: string | null;
   short_description: string | null;
   long_description: string | null;
   series: string | null;

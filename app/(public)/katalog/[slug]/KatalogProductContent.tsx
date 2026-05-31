@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductGallery from "@/components/ProductGallery";
@@ -8,7 +8,6 @@ import ProductAccordion from "@/components/ProductAccordion";
 import OrderBenefits from "@/components/OrderBenefits";
 import V2VariantPicker from "@/components/V2VariantPicker";
 import { useCart } from "@/components/CartContext";
-import { supabaseV2 } from "@/lib/v2/supabase";
 import { formatEur } from "@/lib/pricing";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication } from "@/lib/v2/types";
 
@@ -37,81 +36,42 @@ const SCORE_LABEL: Record<number, string> = {
   3: "Sehr gut geeignet",
 };
 
-export default function KatalogProductContent({ slug }: { slug: string }) {
+interface Props {
+  product: V2Product;
+  skus: V2Sku[];
+  skuImages: V2SkuImage[];
+  skuSpecs: V2SkuSpec[];
+  materials: V2ProductMaterial[];
+  applications: V2ProductApplication[];
+}
+
+export default function KatalogProductContent({
+  product,
+  skus,
+  skuImages,
+  skuSpecs,
+  materials,
+  applications,
+}: Props) {
   const { addItem, openDrawer } = useCart();
 
-  const [product, setProduct] = useState<V2Product | null>(null);
-  const [skus, setSkus] = useState<V2Sku[]>([]);
-  const [skuImages, setSkuImages] = useState<V2SkuImage[]>([]);
-  const [skuSpecs, setSkuSpecs] = useState<V2SkuSpec[]>([]);
-  const [materials, setMaterials] = useState<V2ProductMaterial[]>([]);
-  const [applications, setApplications] = useState<V2ProductApplication[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const [selectedSkuId, setSelectedSkuId] = useState<string>("");
+  const [selectedSkuId, setSelectedSkuId] = useState<string>(skus[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const [addedState, setAddedState] = useState<"idle" | "added">("idle");
 
-  useEffect(() => {
-    async function load() {
-      const { data: prod } = await supabaseV2
-        .from("products")
-        .select("*")
-        .eq("slug", slug)
-        .single();
-
-      if (!prod) { setLoading(false); return; }
-      setProduct(prod as V2Product);
-
-      const { data: skuData } = await supabaseV2
-        .from("skus")
-        .select("*")
-        .eq("product_id", prod.id)
-        .eq("is_active", true)
-        .order("sort_order");
-
-      const skuList = (skuData ?? []) as V2Sku[];
-      setSkus(skuList);
-      if (skuList.length > 0) setSelectedSkuId(skuList[0].id);
-
-      if (skuList.length === 0) { setLoading(false); return; }
-
-      const skuIds = skuList.map((s) => s.id);
-      const [
-        { data: images },
-        { data: specs },
-        { data: mats },
-        { data: apps },
-      ] = await Promise.all([
-        supabaseV2.from("sku_images").select("*").in("sku_id", skuIds).order("sort_order"),
-        supabaseV2.from("sku_specs").select("*").in("sku_id", skuIds).order("sort_order"),
-        supabaseV2.from("product_materials").select("*").eq("product_id", prod.id).order("sort_order"),
-        supabaseV2.from("product_applications").select("tag").eq("product_id", prod.id),
-      ]);
-
-      setSkuImages((images ?? []) as V2SkuImage[]);
-      setSkuSpecs((specs ?? []) as V2SkuSpec[]);
-      setMaterials((mats ?? []) as V2ProductMaterial[]);
-      setApplications((apps ?? []) as V2ProductApplication[]);
-      setLoading(false);
-    }
-    load();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
-
   const selectedSku = skus.find((s) => s.id === selectedSkuId) ?? skus[0] ?? null;
 
-  // Images for selected SKU
+  const productName = product.display_name ?? product.base_name ?? "";
+
   const currentImages = selectedSkuId
     ? skuImages.filter((img) => img.sku_id === selectedSkuId).map((img) => img.image_url)
     : [];
   const galleryImages = currentImages.length > 0
     ? currentImages
-    : product?.default_image_url
+    : product.default_image_url
       ? [product.default_image_url]
       : [];
 
-  // Price
   const unitPrice = selectedSku?.campaign_price ?? selectedSku?.price_eur ?? 0;
   const originalPrice = selectedSku?.price_eur ?? 0;
   const isCampaign = selectedSku?.campaign_price != null && selectedSku.campaign_price < originalPrice;
@@ -119,7 +79,6 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
   const outOfStock = stockQty === 0;
   const lowStock = stockQty > 0 && stockQty < 10;
 
-  // Specs for selected SKU
   const currentSpecs = selectedSkuId
     ? skuSpecs.filter((s) => s.sku_id === selectedSkuId)
     : skuSpecs.filter((s) => s.sku_id === skus[0]?.id);
@@ -132,7 +91,6 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
     setTimeout(() => setAddedState("idle"), 1500);
   }
 
-  // Accordion sections
   const accordionSections = [];
 
   const techItems = currentSpecs.filter((s) => s.spec_section === "technische_details");
@@ -208,22 +166,6 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
     });
   }
 
-  if (loading) {
-    return (
-      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-20 text-center">
-        <p className="text-slate-400 text-sm">Lädt…</p>
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-20 text-center">
-        <p className="text-slate-500">Produkt nicht gefunden.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
       {/* Breadcrumb */}
@@ -232,7 +174,7 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
         <span>/</span>
         <Link href="/katalog" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Katalog</Link>
         <span>/</span>
-        <span className="text-slate-700 font-medium">{product.display_name ?? product.base_name}</span>
+        <span className="text-slate-700 font-medium">{productName}</span>
       </nav>
 
       <div className="py-10 lg:grid lg:grid-cols-2 lg:gap-16">
@@ -241,14 +183,13 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
           <ProductGallery
             images={galleryImages}
             placeholderBg={product.gallery_bg ?? "#e6eff5"}
-            placeholderLabel={(product.display_name ?? product.base_name ?? "").substring(0, 3).toUpperCase()}
+            placeholderLabel={productName.substring(0, 3).toUpperCase()}
             badge={product.badge ?? undefined}
           />
         </div>
 
         {/* Right: info */}
         <div className="mt-8 lg:mt-0">
-          {/* Application tags */}
           {applications.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
               {applications.map((a) => (
@@ -260,21 +201,19 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
           )}
 
           <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight leading-snug mb-1">
-            {product.display_name ?? product.base_name}
+            {productName}
           </h1>
           {product.tagline && (
             <p className="text-slate-500 text-base mb-4">{product.tagline}</p>
           )}
 
-          {/* Article number */}
           {selectedSku && (
             <p className="text-sm text-slate-400 mb-4">
               Art.-Nr.: {selectedSku.identnummer}
             </p>
           )}
 
-          {/* Price */}
-          {!loading && selectedSku && (
+          {selectedSku && (
             <div className="mb-4">
               <div className="flex items-baseline gap-3 mb-1">
                 <span className={`text-2xl font-extrabold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
@@ -293,12 +232,10 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
             </div>
           )}
 
-          {/* Short description */}
           {product.short_description && (
             <p className="text-base text-slate-700 leading-relaxed mb-4">{product.short_description}</p>
           )}
 
-          {/* Variant picker */}
           {skus.length > 1 && (
             <div className="mb-6">
               <V2VariantPicker
@@ -309,14 +246,12 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
             </div>
           )}
 
-          {/* Stock warning */}
           {lowStock && (
             <p className="text-sm font-medium mb-3" style={{ color: "#D97706" }}>
               Nur noch {stockQty} auf Lager
             </p>
           )}
 
-          {/* Add to cart */}
           {selectedSku && (
             <div className="flex items-center gap-3 mb-8">
               <div className="flex items-center border border-slate-800 rounded-full select-none h-12">
@@ -339,9 +274,9 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                disabled={outOfStock || loading}
+                disabled={outOfStock}
                 className="btn-black flex-1 justify-center"
-                style={{ opacity: outOfStock || loading ? 0.6 : 1 }}
+                style={{ opacity: outOfStock ? 0.6 : 1 }}
               >
                 {outOfStock ? "Derzeit nicht verfügbar" : addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
               </button>
@@ -352,7 +287,6 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
         </div>
       </div>
 
-      {/* Accordion */}
       {accordionSections.length > 0 && (
         <div id="pdp-accordion" className="max-w-2xl pb-20">
           <ProductAccordion sections={accordionSections} defaultOpenIds={["technische-details"]} />
