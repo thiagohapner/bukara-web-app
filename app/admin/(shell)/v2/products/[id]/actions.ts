@@ -42,7 +42,7 @@ export async function upsertProduct(
   categoryIds: string[],
   applicationTags: string[],
   materials: MaterialInput[]
-): Promise<{ id: string } | { error: string }> {
+): Promise<{ id: string; product: Record<string, unknown> | null } | { error: string }> {
   try {
     const dbPayload = {
       slug: payload.slug,
