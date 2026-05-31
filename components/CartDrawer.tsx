@@ -62,7 +62,7 @@ export default function CartDrawer() {
               <ShoppingBasket className="w-12 h-12 text-slate-200" strokeWidth={1.5} />
               <p className="text-slate-500 text-sm">Ihr Warenkorb ist leer.</p>
               <Link
-                href="/produkte"
+                href="/katalog"
                 onClick={closeDrawer}
                 className="btn-orange text-sm"
                 style={{ textDecoration: "none" }}

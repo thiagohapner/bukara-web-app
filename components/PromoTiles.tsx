@@ -21,7 +21,7 @@ const TILES = [
     badge: "Standardsortiment",
     title: "Premium-Werkzeuge zu Top-Preisen",
     cta: "Produkte entdecken",
-    href: "/produkte",
+    href: "/katalog",
     image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/hero/main_image.png",
   },
   {

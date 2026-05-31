@@ -39,7 +39,7 @@ function OrderSummary() {
     return (
       <div className="text-center py-12">
         <p className="text-slate-500 text-sm mb-4">Ihr Warenkorb ist leer.</p>
-        <Link href="/produkte" className="btn-orange" style={{ textDecoration: "none" }}>
+        <Link href="/katalog" className="btn-orange" style={{ textDecoration: "none" }}>
           Produkte entdecken
         </Link>
       </div>

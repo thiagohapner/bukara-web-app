@@ -73,7 +73,7 @@ export default function Hero() {
             <Link href="/loesungen/sonderwerkzeug" className="btn-orange w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>
               Sonderlösung anfragen
             </Link>
-            <Link href="/produkte" className="btn-outline w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>
+            <Link href="/katalog" className="btn-outline w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>
               Produkte entdecken
             </Link>
           </div>

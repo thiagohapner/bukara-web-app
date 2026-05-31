@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/angebote/x99-only", destination: "/produkte/x99-fraeser", permanent: true },
+      { source: "/produkte", destination: "/katalog", permanent: true },
     ];
   },
   images: {

@@ -10,7 +10,7 @@ import { ShoppingBasket } from "lucide-react";
 const activeDealsCount: number = 3;
 
 const NAV_LINKS = [
-  { label: "Produkte", href: "/produkte" },
+  { label: "Produkte", href: "/katalog" },
   { label: "Angebote", href: "/angebote", badge: true },
   { label: "Lösungen", href: "/loesungen" },
   { label: "Über uns", href: "/ueber-uns" },

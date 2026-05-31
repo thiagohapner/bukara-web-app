@@ -2,7 +2,7 @@ import Link from "next/link";
 import BukaraLogo from "./BukaraLogo";
 
 const NAV_LINKS = [
-  { label: "Produkte",   href: "/produkte" },
+  { label: "Produkte",   href: "/katalog" },
   { label: "Lösungen",   href: "/loesungen" },
   { label: "Angebote",   href: "/angebote" },
   { label: "Über uns",   href: "/ueber-uns" },

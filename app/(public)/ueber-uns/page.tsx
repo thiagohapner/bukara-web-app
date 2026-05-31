@@ -132,7 +132,7 @@ export default function UeberUnsPage() {
                 Über unser B2B-Portal haben Sie jederzeit Zugriff auf Preise, Verfügbarkeit und Bestellinfos – ohne Umwege, ohne Warten.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/produkte" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
+                <Link href="/katalog" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                   Produkte entdecken
                   <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                 </Link>
