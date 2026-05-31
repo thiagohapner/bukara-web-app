@@ -71,11 +71,14 @@ export async function upsertProduct(
       if (insertErr) throw new Error(insertErr.message);
       pid = (data as { id: string }).id;
     } else {
-      const { error: updateErr } = await supabaseAdminV2
+      const { data: updated, error: updateErr } = await supabaseAdminV2
         .from("products")
         .update(dbPayload)
-        .eq("id", pid);
+        .eq("id", pid)
+        .select("*")
+        .single();
       if (updateErr) throw new Error(updateErr.message);
+      if (!updated) throw new Error("Update fehlgeschlagen – Produkt nicht gefunden");
     }
 
     await supabaseAdminV2.from("product_categories").delete().eq("product_id", pid);
@@ -116,7 +119,14 @@ export async function upsertProduct(
     revalidatePath("/admin/v2/products");
     if (pid) revalidatePath(`/admin/v2/products/${pid}`);
 
-    return { id: pid! };
+    // Re-fetch the saved product so the client can update state from DB truth
+    const { data: saved } = await supabaseAdminV2
+      .from("products")
+      .select("*")
+      .eq("id", pid!)
+      .single();
+
+    return { id: pid!, product: saved as Record<string, unknown> };
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Unbekannter Fehler" };
   }

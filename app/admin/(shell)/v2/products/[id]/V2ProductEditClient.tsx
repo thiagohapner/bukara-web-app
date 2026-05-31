@@ -179,6 +179,8 @@ export default function V2ProductEditClient({
       if (!productId) {
         router.push(`/admin/v2/products/${result.id}`);
       } else {
+        // Update form from actual DB values so state reflects what was saved
+        if (result.product) setForm(buildForm(result.product));
         router.refresh();
       }
     }
