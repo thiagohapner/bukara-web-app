@@ -1,38 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/ssr";
 import { DS_INPUT_ADMIN, DS_LABEL } from "@/lib/ds";
-import type { V2Category, V2MaterialType } from "@/lib/v2/types";
-
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  { db: { schema: "v2" } }
-);
+import { upsertProduct } from "./actions";
+import type { V2Category } from "@/lib/v2/types";
 
 const TABS = ["Details", "Kategorien & Anwendungen", "Materialien", "SKUs"] as const;
 type Tab = typeof TABS[number];
-
-interface ProductForm {
-  id: string;
-  slug: string;
-  base_name: string;
-  display_name: string;
-  tagline: string;
-  short_description: string;
-  long_description: string;
-  series: string;
-  product_type: string;
-  badge: string;
-  gallery_bg: string;
-  default_image_url: string;
-  sort_order: number;
-  is_active: boolean;
-  has_public_page: boolean;
-}
 
 interface MaterialRow {
   id?: string;
@@ -54,11 +30,33 @@ interface SkuSummary {
   sort_order: number;
 }
 
-const EMPTY: ProductForm = {
-  id: "", slug: "", base_name: "", display_name: "", tagline: "", short_description: "",
-  long_description: "", series: "", product_type: "", badge: "", gallery_bg: "#e6eff5",
-  default_image_url: "", sort_order: 0, is_active: true, has_public_page: false,
-};
+interface ProductForm {
+  id: string;
+  slug: string;
+  base_name: string;
+  display_name: string;
+  tagline: string;
+  short_description: string;
+  long_description: string;
+  series: string;
+  product_type: string;
+  badge: string;
+  gallery_bg: string;
+  default_image_url: string;
+  sort_order: number;
+  is_active: boolean;
+  has_public_page: boolean;
+}
+
+export interface InitialData {
+  product: Record<string, unknown> | null;
+  categoryIds: string[];
+  applicationTags: string[];
+  materials: MaterialRow[];
+  skus: SkuSummary[];
+  allCategories: V2Category[];
+  materialTypeNames: string[];
+}
 
 const SCORE_LABELS: Record<number, string> = {
   0: "Nicht geeignet",
@@ -67,72 +65,47 @@ const SCORE_LABELS: Record<number, string> = {
   3: "Sehr gut geeignet",
 };
 
-export default function V2ProductEditClient({ productId }: { productId: string | null }) {
+function buildForm(p: Record<string, unknown> | null): ProductForm {
+  const d = p ?? {};
+  return {
+    id: String(d.id ?? ""),
+    slug: String(d.slug ?? ""),
+    base_name: String(d.base_name ?? ""),
+    display_name: String(d.display_name ?? d.base_name ?? ""),
+    tagline: String(d.tagline ?? ""),
+    short_description: String(d.short_description ?? ""),
+    long_description: String(d.long_description ?? ""),
+    series: String(d.series ?? ""),
+    product_type: String(d.product_type ?? ""),
+    badge: String(d.badge ?? ""),
+    gallery_bg: String(d.gallery_bg ?? "#e6eff5"),
+    default_image_url: String(d.default_image_url ?? ""),
+    sort_order: Number(d.sort_order ?? 0),
+    is_active: d.is_active !== false,
+    has_public_page: Boolean(d.has_public_page),
+  };
+}
+
+export default function V2ProductEditClient({
+  productId,
+  initialData,
+}: {
+  productId: string | null;
+  initialData: InitialData;
+}) {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("Details");
-  const [form, setForm] = useState<ProductForm>(EMPTY);
-  const [categoryIds, setCategoryIds] = useState<string[]>([]);
-  const [applicationTags, setApplicationTags] = useState<string[]>([]);
+  const [form, setForm] = useState<ProductForm>(() => buildForm(initialData.product));
+  const [categoryIds, setCategoryIds] = useState<string[]>(initialData.categoryIds);
+  const [applicationTags, setApplicationTags] = useState<string[]>(initialData.applicationTags);
   const [newTag, setNewTag] = useState("");
-  const [materials, setMaterials] = useState<MaterialRow[]>([]);
-  const [skus, setSkus] = useState<SkuSummary[]>([]);
-  const [allCategories, setAllCategories] = useState<V2Category[]>([]);
-  const [materialTypes, setMaterialTypes] = useState<string[]>([]);
+  const [materials, setMaterials] = useState<MaterialRow[]>(initialData.materials);
+  const [skus] = useState<SkuSummary[]>(initialData.skus);
+  const [allCategories] = useState<V2Category[]>(initialData.allCategories);
+  const [materialTypes] = useState<string[]>(initialData.materialTypeNames);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
-  const load = useCallback(async () => {
-    const [catsRes, matsRes] = await Promise.all([
-      supabase.from("categories").select("id, name, slug, parent_id").order("name"),
-      supabase.from("material_types").select("name").order("name"),
-    ]);
-    setAllCategories((catsRes.data ?? []) as V2Category[]);
-    setMaterialTypes(((matsRes.data ?? []) as V2MaterialType[]).map((m) => m.name));
-
-    if (!productId) return;
-
-    const [prodRes, catRes, appRes, matRes, skuRes] = await Promise.all([
-      supabase.from("products").select("*").eq("id", productId).single(),
-      supabase.from("product_categories").select("category_id").eq("product_id", productId),
-      supabase.from("product_applications").select("tag").eq("product_id", productId),
-      supabase.from("product_materials").select("*").eq("product_id", productId).order("sort_order"),
-      supabase.from("skus")
-        .select("id, identnummer, variant_label, diameter_mm, price_eur, campaign_price, is_active, sort_order")
-        .eq("product_id", productId)
-        .order("sort_order"),
-    ]);
-
-    if (prodRes.data) {
-      const p = prodRes.data as Record<string, unknown>;
-      setForm({
-        id: String(p.id ?? ""),
-        slug: String(p.slug ?? ""),
-        base_name: String(p.base_name ?? ""),
-        display_name: String(p.display_name ?? p.base_name ?? ""),
-        tagline: String(p.tagline ?? ""),
-        short_description: String(p.short_description ?? ""),
-        long_description: String(p.long_description ?? ""),
-        series: String(p.series ?? ""),
-        product_type: String(p.product_type ?? ""),
-        badge: String(p.badge ?? ""),
-        gallery_bg: String(p.gallery_bg ?? "#e6eff5"),
-        default_image_url: String(p.default_image_url ?? ""),
-        sort_order: Number(p.sort_order ?? 0),
-        is_active: Boolean(p.is_active),
-        has_public_page: Boolean(p.has_public_page),
-      });
-    }
-    setCategoryIds(((catRes.data ?? []) as { category_id: string }[]).map((r) => r.category_id));
-    setApplicationTags(((appRes.data ?? []) as { tag: string }[]).map((r) => r.tag));
-    setMaterials(((matRes.data ?? []) as MaterialRow[]).map((m) => ({
-      id: m.id, material_name: m.material_name, score: m.score,
-      suitability: m.suitability, sort_order: m.sort_order,
-    })));
-    setSkus((skuRes.data ?? []) as SkuSummary[]);
-  }, [productId]);
-
-  useEffect(() => { load(); }, [load]);
 
   function field(key: keyof ProductForm, value: string | number | boolean) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -159,19 +132,16 @@ export default function V2ProductEditClient({ productId }: { productId: string |
   }
 
   function addMaterial() {
-    const newMat: MaterialRow = {
+    setMaterials((prev) => [...prev, {
       material_name: materialTypes[0] ?? "",
-      score: 1, suitability: SCORE_LABELS[1],
-      sort_order: materials.filter((m) => !m._deleted).length,
-    };
-    setMaterials((prev) => [...prev, newMat]);
+      score: 1,
+      suitability: SCORE_LABELS[1],
+      sort_order: prev.filter((m) => !m._deleted).length,
+    }]);
   }
 
   function deleteMaterial(index: number) {
-    setMaterials((prev) => prev.map((m, i) => {
-      if (i !== index) return m;
-      return m.id ? { ...m, _deleted: true } : { ...m, _deleted: true };
-    }));
+    setMaterials((prev) => prev.map((m, i) => i === index ? { ...m, _deleted: true } : m));
   }
 
   async function save() {
@@ -179,87 +149,43 @@ export default function V2ProductEditClient({ productId }: { productId: string |
     setError(null);
     setSuccess(false);
 
-    try {
-      // Upsert product
-      const payload = {
+    const result = await upsertProduct(
+      productId,
+      {
         slug: form.slug,
         base_name: form.base_name,
         display_name: form.display_name,
-        tagline: form.tagline || null,
-        short_description: form.short_description || null,
-        long_description: form.long_description || null,
-        series: form.series || null,
-        product_type: form.product_type || null,
-        badge: form.badge || null,
-        gallery_bg: form.gallery_bg || null,
-        default_image_url: form.default_image_url || null,
+        tagline: form.tagline,
+        short_description: form.short_description,
+        long_description: form.long_description,
+        series: form.series,
+        product_type: form.product_type,
+        badge: form.badge,
+        gallery_bg: form.gallery_bg,
+        default_image_url: form.default_image_url,
         sort_order: form.sort_order,
         is_active: form.is_active,
         has_public_page: form.has_public_page,
-      };
+      },
+      categoryIds,
+      applicationTags,
+      materials
+    );
 
-      let pid = form.id;
-      if (!pid) {
-        const { data, error: insertErr } = await supabase.from("products")
-          .insert(payload).select("id").single();
-        if (insertErr) throw new Error(insertErr.message);
-        pid = (data as { id: string }).id;
-        setForm((prev) => ({ ...prev, id: pid }));
-      } else {
-        const { error: updateErr } = await supabase.from("products")
-          .update(payload).eq("id", pid);
-        if (updateErr) throw new Error(updateErr.message);
-      }
-
-      // Sync categories: delete all + re-insert
-      await supabase.from("product_categories").delete().eq("product_id", pid);
-      if (categoryIds.length > 0) {
-        await supabase.from("product_categories")
-          .insert(categoryIds.map((cid) => ({ product_id: pid, category_id: cid })));
-      }
-
-      // Sync applications: delete all + re-insert
-      await supabase.from("product_applications").delete().eq("product_id", pid);
-      if (applicationTags.length > 0) {
-        await supabase.from("product_applications")
-          .insert(applicationTags.map((tag) => ({ product_id: pid, tag })));
-      }
-
-      // Sync materials: delete marked, upsert rest
-      const toDelete = materials.filter((m) => m._deleted && m.id);
-      if (toDelete.length > 0) {
-        await supabase.from("product_materials")
-          .delete().in("id", toDelete.map((m) => m.id!));
-      }
-
-      const toUpsert = materials
-        .filter((m) => !m._deleted)
-        .map((m, i) => ({
-          ...(m.id ? { id: m.id } : {}),
-          product_id: pid,
-          material_name: m.material_name,
-          score: m.score,
-          suitability: SCORE_LABELS[m.score] ?? m.suitability,
-          sort_order: i,
-        }));
-      if (toUpsert.length > 0) {
-        await supabase.from("product_materials").upsert(toUpsert);
-      }
-
+    if ("error" in result) {
+      setError(result.error);
+    } else {
       setSuccess(true);
-      if (!form.id) {
-        router.push(`/admin/v2/products/${pid}`);
+      if (!productId) {
+        router.push(`/admin/v2/products/${result.id}`);
       } else {
-        await load();
+        router.refresh();
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unbekannter Fehler");
-    } finally {
-      setSaving(false);
     }
+    setSaving(false);
   }
 
-  // Category tree rendering
+  // Category tree
   const topLevel = allCategories.filter((c) => c.parent_id === null);
   const subMap: Record<string, V2Category[]> = {};
   for (const c of allCategories.filter((c) => c.parent_id !== null)) {
@@ -389,7 +315,6 @@ export default function V2ProductEditClient({ productId }: { productId: string |
 
       {tab === "Kategorien & Anwendungen" && (
         <div className="max-w-xl space-y-8">
-          {/* Categories */}
           <div>
             <p className="text-sm font-medium text-slate-700 mb-3">Kategorien</p>
             <div className="space-y-3">
@@ -426,7 +351,6 @@ export default function V2ProductEditClient({ productId }: { productId: string |
             </div>
           </div>
 
-          {/* Application tags */}
           <div>
             <p className="text-sm font-medium text-slate-700 mb-3">Anwendungs-Tags</p>
             <div className="flex flex-wrap gap-2 mb-3">
@@ -544,9 +468,9 @@ export default function V2ProductEditClient({ productId }: { productId: string |
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <Link href={`/admin/v2/skus/${s.id}`} className="text-teal-600 hover:text-teal-700 text-sm font-medium">
-                        Bearbeiten
-                      </Link>
+                      <a href={`/admin/v2/skus/${s.id}`} className="text-teal-600 hover:text-teal-700 text-sm font-medium">
+                        Bearbeiten →
+                      </a>
                     </td>
                   </tr>
                 ))}

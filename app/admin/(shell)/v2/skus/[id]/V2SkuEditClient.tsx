@@ -1,25 +1,19 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/ssr";
 import ImageUploadManager from "@/components/admin/ImageUploadManager";
 import { DS_INPUT_ADMIN, DS_LABEL } from "@/lib/ds";
+import { updateSku } from "./actions";
 import type { V2Sku, V2SkuSpec, V2SkuImage } from "@/lib/v2/types";
-
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  { db: { schema: "v2" } }
-);
 
 const TABS = ["Details", "Specs", "Bilder"] as const;
 type Tab = typeof TABS[number];
 
 interface SpecRow extends V2SkuSpec { _deleted?: boolean }
 interface ImageRow { id: string; image_url: string; sort_order: number }
-
-interface ProductOption { id: string; display_name: string }
+interface ProductOption { id: string; display_name: string | null; base_name: string | null }
 
 const SPEC_SECTIONS = [
   { value: "technische_details", label: "Technische Details" },
@@ -27,36 +21,32 @@ const SPEC_SECTIONS = [
   { value: "maschinen", label: "Maschinen" },
 ] as const;
 
-export default function V2SkuEditClient({ skuId }: { skuId: string }) {
+interface InitialData {
+  sku: V2Sku;
+  specs: V2SkuSpec[];
+  images: V2SkuImage[];
+  allProducts: ProductOption[];
+}
+
+export default function V2SkuEditClient({
+  skuId,
+  initialData,
+}: {
+  skuId: string;
+  initialData: InitialData;
+}) {
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>("Details");
-  const [sku, setSku] = useState<V2Sku | null>(null);
-  const [form, setForm] = useState<Partial<V2Sku>>({});
-  const [specs, setSpecs] = useState<SpecRow[]>([]);
-  const [images, setImages] = useState<ImageRow[]>([]);
-  const [allProducts, setAllProducts] = useState<ProductOption[]>([]);
+  const [sku] = useState<V2Sku>(initialData.sku);
+  const [form, setForm] = useState<Partial<V2Sku>>(initialData.sku);
+  const [specs, setSpecs] = useState<SpecRow[]>(initialData.specs as SpecRow[]);
+  const [images, setImages] = useState<ImageRow[]>(
+    initialData.images.map((img) => ({ id: img.id, image_url: img.image_url, sort_order: img.sort_order }))
+  );
+  const [allProducts] = useState<ProductOption[]>(initialData.allProducts);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
-  const load = useCallback(async () => {
-    const [skuRes, specRes, imgRes, prodRes] = await Promise.all([
-      supabase.from("skus").select("*").eq("id", skuId).single(),
-      supabase.from("sku_specs").select("*").eq("sku_id", skuId).order("sort_order"),
-      supabase.from("sku_images").select("*").eq("sku_id", skuId).order("sort_order"),
-      supabase.from("products").select("id, display_name").order("display_name"),
-    ]);
-
-    const skuData = skuRes.data as V2Sku | null;
-    if (skuData) {
-      setSku(skuData);
-      setForm(skuData);
-    }
-    setSpecs((specRes.data ?? []) as SpecRow[]);
-    setImages((imgRes.data ?? []) as ImageRow[]);
-    setAllProducts((prodRes.data ?? []) as ProductOption[]);
-  }, [skuId]);
-
-  useEffect(() => { load(); }, [load]);
 
   function field(key: keyof V2Sku, value: unknown) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -79,9 +69,7 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
   }
 
   function deleteSpec(index: number) {
-    setSpecs((prev) => prev.map((s, i) =>
-      i === index ? { ...s, _deleted: true } : s
-    ));
+    setSpecs((prev) => prev.map((s, i) => i === index ? { ...s, _deleted: true } : s));
   }
 
   async function save() {
@@ -89,9 +77,9 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
     setError(null);
     setSuccess(false);
 
-    try {
-      // Update SKU details
-      const { error: skuErr } = await supabase.from("skus").update({
+    const result = await updateSku(
+      skuId,
+      {
         product_id: form.product_id ?? null,
         merchant_sku: form.merchant_sku ?? null,
         variant_label: form.variant_label ?? null,
@@ -107,37 +95,24 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
         stock_quantity: Number(form.stock_quantity ?? 0),
         is_active: Boolean(form.is_active),
         sort_order: Number(form.sort_order ?? 0),
-      }).eq("id", skuId);
+      },
+      specs.map((s) => ({
+        id: s.id,
+        spec_key: s.spec_key,
+        spec_value: s.spec_value,
+        spec_section: s.spec_section,
+        sort_order: s.sort_order,
+        _deleted: s._deleted,
+      }))
+    );
 
-      if (skuErr) throw new Error(skuErr.message);
-
-      // Sync specs
-      const toDelete = specs.filter((s) => s._deleted && !s.id.startsWith("new-"));
-      if (toDelete.length > 0) {
-        await supabase.from("sku_specs").delete().in("id", toDelete.map((s) => s.id));
-      }
-
-      const toUpsert = specs
-        .filter((s) => !s._deleted)
-        .map((s, i) => ({
-          ...(s.id && !s.id.startsWith("new-") ? { id: s.id } : {}),
-          sku_id: skuId,
-          spec_key: s.spec_key,
-          spec_value: s.spec_value,
-          spec_section: s.spec_section,
-          sort_order: i,
-        }));
-      if (toUpsert.length > 0) {
-        await supabase.from("sku_specs").upsert(toUpsert);
-      }
-
+    if (result.error) {
+      setError(result.error);
+    } else {
       setSuccess(true);
-      await load();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unbekannter Fehler");
-    } finally {
-      setSaving(false);
+      router.refresh();
     }
+    setSaving(false);
   }
 
   const visibleSpecs = specs.filter((s) => !s._deleted);
@@ -146,20 +121,19 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          {sku?.product_id && (
+          {sku.product_id ? (
             <Link href={`/admin/v2/products/${sku.product_id}`} className="text-sm text-teal-600 hover:text-teal-700">
               ← Zurück zum Produkt
             </Link>
-          )}
-          {!sku?.product_id && (
+          ) : (
             <Link href="/admin/v2/products" className="text-sm text-teal-600 hover:text-teal-700">
               ← v2 Produkte
             </Link>
           )}
           <h1 className="text-2xl font-semibold text-slate-800 mt-1">
-            SKU: {sku?.identnummer ?? skuId}
+            SKU: {sku.identnummer}
           </h1>
-          {sku?.bukara_article_number && (
+          {sku.bukara_article_number && (
             <p className="text-sm text-slate-400">Bukara-Nr.: {sku.bukara_article_number}</p>
           )}
         </div>
@@ -179,7 +153,6 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
         <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">Gespeichert</div>
       )}
 
-      {/* Tabs */}
       <div className="flex border-b border-slate-200 mb-6">
         {TABS.map((t) => (
           <button
@@ -199,15 +172,14 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
 
       {tab === "Details" && (
         <div className="max-w-xl space-y-4">
-          {/* Read-only identifiers */}
           <div className="grid grid-cols-2 gap-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
             <div>
               <label className={DS_LABEL}>Identnummer (read-only)</label>
-              <p className="font-mono text-sm text-slate-700">{sku?.identnummer}</p>
+              <p className="font-mono text-sm text-slate-700">{sku.identnummer}</p>
             </div>
             <div>
               <label className={DS_LABEL}>Bukara-Art.-Nr. (read-only)</label>
-              <p className="font-mono text-sm text-slate-700">{sku?.bukara_article_number}</p>
+              <p className="font-mono text-sm text-slate-700">{sku.bukara_article_number}</p>
             </div>
           </div>
 
@@ -220,7 +192,9 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
             >
               <option value="">— Kein Produkt (nicht zugeordnet) —</option>
               {allProducts.map((p) => (
-                <option key={p.id} value={p.id}>{p.display_name}</option>
+                <option key={p.id} value={p.id}>
+                  {p.display_name ?? p.base_name ?? p.id}
+                </option>
               ))}
             </select>
           </div>
@@ -360,9 +334,6 @@ export default function V2SkuEditClient({ skuId }: { skuId: string }) {
 
       {tab === "Bilder" && (
         <div className="max-w-xl">
-          <p className="text-sm text-slate-500 mb-4">
-            Bilder werden direkt im Bucket <code>artikelbilder</code> gespeichert.
-          </p>
           <ImageUploadManager
             entityType="v2-sku"
             entityId={skuId}
