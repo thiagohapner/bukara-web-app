@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+    },
+  },
   async redirects() {
     return [
       { source: "/angebote/x99-only", destination: "/produkte/x99-fraeser", permanent: true },
