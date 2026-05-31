@@ -16,6 +16,7 @@ export default async function KatalogPage() {
     .from("products")
     .select("id, slug, base_name, display_name, badge, gallery_bg, default_image_url")
     .eq("is_active", true)
+    .eq("has_public_page", true)
     .order("sort_order");
 
   if (!products || products.length === 0) {
