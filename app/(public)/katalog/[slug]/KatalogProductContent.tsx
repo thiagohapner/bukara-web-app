@@ -232,7 +232,7 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
         <span>/</span>
         <Link href="/katalog" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Katalog</Link>
         <span>/</span>
-        <span className="text-slate-700 font-medium">{product.display_name}</span>
+        <span className="text-slate-700 font-medium">{product.display_name ?? product.base_name}</span>
       </nav>
 
       <div className="py-10 lg:grid lg:grid-cols-2 lg:gap-16">
@@ -241,7 +241,7 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
           <ProductGallery
             images={galleryImages}
             placeholderBg={product.gallery_bg ?? "#e6eff5"}
-            placeholderLabel={product.display_name.substring(0, 3).toUpperCase()}
+            placeholderLabel={(product.display_name ?? product.base_name ?? "").substring(0, 3).toUpperCase()}
             badge={product.badge ?? undefined}
           />
         </div>
@@ -260,7 +260,7 @@ export default function KatalogProductContent({ slug }: { slug: string }) {
           )}
 
           <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight leading-snug mb-1">
-            {product.display_name}
+            {product.display_name ?? product.base_name}
           </h1>
           {product.tagline && (
             <p className="text-slate-500 text-base mb-4">{product.tagline}</p>

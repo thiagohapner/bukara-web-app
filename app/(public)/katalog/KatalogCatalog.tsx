@@ -90,9 +90,8 @@ export default function KatalogCatalog() {
     async function load() {
       const { data: products } = await supabaseV2
         .from("products")
-        .select("id, slug, display_name, badge, gallery_bg, default_image_url")
+        .select("id, slug, base_name, display_name, badge, gallery_bg, default_image_url")
         .eq("is_active", true)
-        .eq("has_public_page", true)
         .order("sort_order");
 
       if (!products || products.length === 0) { setLoaded(true); return; }
@@ -186,7 +185,7 @@ export default function KatalogCatalog() {
       }
 
       const cards: EnrichedCard[] = products.map((p: {
-        id: string; slug: string; display_name: string;
+        id: string; slug: string; base_name: string | null; display_name: string | null;
         badge: string | null; gallery_bg: string | null; default_image_url: string | null;
       }) => {
         const firstSkuId = firstSkuPerProduct[p.id];
@@ -197,7 +196,7 @@ export default function KatalogCatalog() {
         return {
           id: p.id,
           slug: p.slug,
-          name: p.display_name,
+          name: p.display_name ?? p.base_name ?? "",
           badge: p.badge ?? undefined,
           image,
           galleryBg: p.gallery_bg ?? "#e6eff5",
