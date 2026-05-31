@@ -9,13 +9,14 @@ interface ImageRow {
 }
 
 interface Props {
-  entityType: "product" | "offer";
+  entityType: "product" | "offer" | "v2-sku";
   entityId: string;
   images: ImageRow[];
   onChange: (images: ImageRow[]) => void;
+  maxImages?: number;
 }
 
-export default function ImageUploadManager({ entityType, entityId, images, onChange }: Props) {
+export default function ImageUploadManager({ entityType, entityId, images, onChange, maxImages = 4 }: Props) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
@@ -24,8 +25,8 @@ export default function ImageUploadManager({ entityType, entityId, images, onCha
 
   const uploadFile = useCallback(
     (file: File) => {
-      if (images.length >= 4) {
-        alert("Maximum 4 images allowed.");
+      if (images.length >= maxImages) {
+        alert(`Maximum ${maxImages} images allowed.`);
         return;
       }
       setUploading(true);
@@ -99,7 +100,7 @@ export default function ImageUploadManager({ entityType, entityId, images, onCha
       <div
         className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
           dragOver ? "border-teal-500 bg-teal-50" : "border-slate-200"
-        } ${images.length >= 4 ? "opacity-40 pointer-events-none" : "cursor-pointer"}`}
+        } ${images.length >= maxImages ? "opacity-40 pointer-events-none" : "cursor-pointer"}`}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
@@ -121,7 +122,7 @@ export default function ImageUploadManager({ entityType, entityId, images, onCha
           </div>
         ) : (
           <p className="text-sm text-slate-500">
-            {images.length >= 4 ? "Maximum 4 images reached" : "Drop image here or click to upload"}
+            {images.length >= maxImages ? `Maximum ${maxImages} images reached` : "Drop image here or click to upload"}
           </p>
         )}
       </div>

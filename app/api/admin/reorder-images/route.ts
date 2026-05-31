@@ -25,11 +25,20 @@ export async function PATCH(request: NextRequest) {
 
   const { items, entityType } = await request.json() as {
     items: { id: string; sort_order: number }[];
-    entityType: "product" | "offer";
+    entityType: "product" | "offer" | "v2-sku";
   };
 
   if (!items?.length || !entityType) {
     return NextResponse.json({ error: "Missing items or entityType" }, { status: 400 });
+  }
+
+  if (entityType === "v2-sku") {
+    await Promise.all(
+      items.map(({ id, sort_order }) =>
+        supabaseAdmin.schema("v2").from("sku_images").update({ sort_order }).eq("id", id)
+      )
+    );
+    return NextResponse.json({ success: true });
   }
 
   const table = entityType === "product" ? "product_images" : "offer_images";

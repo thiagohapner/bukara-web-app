@@ -11,6 +11,8 @@ export interface ProductCardData {
   hasVariants?: boolean;
   fromCampaignPrice?: number;
   fromOriginalPrice?: number;
+  categoryLabel?: string;
+  hrefPrefix?: string;
 }
 
 export default function ProductCard({ card }: { card: ProductCardData }) {
@@ -18,7 +20,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
   const isCampaign = card.fromCampaignPrice != null && card.fromOriginalPrice != null && card.fromCampaignPrice < card.fromOriginalPrice;
 
   return (
-    <Link href={`/produkte/${card.slug}`} style={{ textDecoration: "none", display: "block" }}>
+    <Link href={`${card.hrefPrefix ?? "/produkte"}/${card.slug}`} style={{ textDecoration: "none", display: "block" }}>
       <div className="product-card bg-white rounded-2xl overflow-hidden border border-slate-100 group">
 
         {/* Portrait image */}
@@ -50,7 +52,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
         {/* Info */}
         <div className="p-4">
           <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">
-            Zerspanungswerkzeug
+            {card.categoryLabel ?? "Zerspanungswerkzeug"}
           </p>
           <h3 className="text-sm font-semibold text-slate-900 mb-2 leading-snug line-clamp-2">
             {card.name}

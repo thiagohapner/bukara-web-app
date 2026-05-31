@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   if (!file || !entityType || !entityId) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
-  if (!["product", "offer"].includes(entityType)) {
+  if (!["product", "offer", "v2-sku"].includes(entityType)) {
     return NextResponse.json({ error: "Invalid entityType" }, { status: 400 });
   }
   if (file.size > 20 * 1024 * 1024) {
@@ -42,6 +42,28 @@ export async function POST(request: NextRequest) {
 
   const raw = Buffer.from(await file.arrayBuffer());
   const webp = await processImage(raw);
+
+  if (entityType === "v2-sku") {
+    const fileName = `v2-skus/${entityId}/${Date.now()}.webp`;
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from("artikelbilder")
+      .upload(fileName, webp, { contentType: "image/webp", upsert: false });
+    if (uploadError) {
+      return NextResponse.json({ error: uploadError.message }, { status: 500 });
+    }
+    const { data: urlData } = supabaseAdmin.storage.from("artikelbilder").getPublicUrl(fileName);
+    const { data: row, error: dbError } = await supabaseAdmin
+      .schema("v2")
+      .from("sku_images")
+      .insert({ sku_id: entityId, image_url: urlData.publicUrl, sort_order: sortOrder })
+      .select("id, image_url, sort_order")
+      .single();
+    if (dbError) {
+      await supabaseAdmin.storage.from("artikelbilder").remove([fileName]);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
+    }
+    return NextResponse.json(row);
+  }
 
   const fileName = `${entityType}s/${entityId}/${Date.now()}.webp`;
   const { error: uploadError } = await supabaseAdmin.storage

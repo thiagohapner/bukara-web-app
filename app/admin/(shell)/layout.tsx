@@ -39,6 +39,16 @@ export default function AdminShellLayout({ children }: { children: React.ReactNo
           >
             Bestellungen
           </Link>
+
+          <div className="px-3 pt-5 pb-1">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">V2 Katalog</span>
+          </div>
+          <Link
+            href="/admin/v2/products"
+            className="flex items-center px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors"
+          >
+            v2 Produkte
+          </Link>
         </nav>
         <div className="px-4 py-4 border-t border-slate-200">
           <AdminSignOut />

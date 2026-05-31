@@ -23,9 +23,31 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id, entityType } = await request.json() as { id: string; entityType: "product" | "offer" };
+  const { id, entityType } = await request.json() as { id: string; entityType: "product" | "offer" | "v2-sku" };
   if (!id || !entityType) {
     return NextResponse.json({ error: "Missing id or entityType" }, { status: 400 });
+  }
+
+  if (entityType === "v2-sku") {
+    const { data: row, error: fetchError } = await supabaseAdmin
+      .schema("v2")
+      .from("sku_images")
+      .select("image_url")
+      .eq("id", id)
+      .single();
+    if (fetchError || !row) {
+      return NextResponse.json({ error: "Image not found" }, { status: 404 });
+    }
+    const { error: dbError } = await supabaseAdmin.schema("v2").from("sku_images").delete().eq("id", id);
+    if (dbError) {
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
+    }
+    const url = new URL((row as { image_url: string }).image_url);
+    const storagePath = url.pathname.split("/object/public/artikelbilder/")[1];
+    if (storagePath) {
+      await supabaseAdmin.storage.from("artikelbilder").remove([storagePath]);
+    }
+    return NextResponse.json({ success: true });
   }
 
   const table = entityType === "product" ? "product_images" : "offer_images";
