@@ -109,7 +109,7 @@ export default function V2ProductEditClient({ productId }: { productId: string |
         id: String(p.id ?? ""),
         slug: String(p.slug ?? ""),
         base_name: String(p.base_name ?? ""),
-        display_name: String(p.display_name ?? ""),
+        display_name: String(p.display_name ?? p.base_name ?? ""),
         tagline: String(p.tagline ?? ""),
         short_description: String(p.short_description ?? ""),
         long_description: String(p.long_description ?? ""),
@@ -277,7 +277,7 @@ export default function V2ProductEditClient({ productId }: { productId: string |
             ← v2 Produkte
           </Link>
           <h1 className="text-2xl font-semibold text-slate-800 mt-1">
-            {productId ? (form.display_name || "Produkt bearbeiten") : "Neues Produkt"}
+            {productId ? (form.display_name || form.base_name || "Produkt bearbeiten") : "Neues Produkt"}
           </h1>
         </div>
         <button
@@ -309,7 +309,7 @@ export default function V2ProductEditClient({ productId }: { productId: string |
                 : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
           >
-            {t}
+            {t === "SKUs" && skus.length > 0 ? `SKUs (${skus.length})` : t}
           </button>
         ))}
       </div>
@@ -509,12 +509,8 @@ export default function V2ProductEditClient({ productId }: { productId: string |
 
       {tab === "SKUs" && (
         <div>
-          <p className="text-sm text-slate-500 mb-4">
-            SKUs werden über die einzelne SKU-Bearbeitungsseite editiert.
-          </p>
-
           {skus.length === 0 && (
-            <p className="text-sm text-slate-400 py-4">Keine SKUs zugeordnet</p>
+            <p className="text-sm text-slate-400 py-4">Noch keine SKUs für dieses Produkt.</p>
           )}
 
           <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">

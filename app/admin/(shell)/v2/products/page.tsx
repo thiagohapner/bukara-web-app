@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function V2ProductsPage() {
   const { data: products } = await supabaseAdminV2
     .from("products")
-    .select("id, slug, display_name, badge, is_active, has_public_page, sort_order")
+    .select("id, slug, display_name, base_name, badge, is_active, has_public_page, sort_order")
     .order("sort_order");
 
   // SKU counts per product
@@ -48,7 +48,7 @@ export default async function V2ProductsPage() {
           <tbody>
             {(products ?? []).map((p) => (
               <tr key={p.id} className="border-b border-slate-50 hover:bg-slate-50">
-                <td className="px-4 py-3 font-medium text-slate-800">{p.display_name}</td>
+                <td className="px-4 py-3 font-medium text-slate-800">{(p.display_name ?? p.base_name) || "—"}</td>
                 <td className="px-4 py-3 text-slate-500 font-mono text-xs">{p.slug}</td>
                 <td className="px-4 py-3 text-slate-500">{p.badge ?? "—"}</td>
                 <td className="px-4 py-3 text-slate-500">{countByProduct[p.id] ?? 0}</td>
