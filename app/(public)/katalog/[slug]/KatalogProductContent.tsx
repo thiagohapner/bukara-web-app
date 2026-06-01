@@ -123,11 +123,27 @@ export default function KatalogProductContent({
     });
   }
 
-  const anwendungItems = currentSpecs.filter((s) => s.spec_section === "anwendung");
-  if (anwendungItems.length > 0) {
+  if (applications.length > 0) {
     accordionSections.push({
       id: "anwendung",
       label: "Anwendung",
+      content: (
+        <div className="flex flex-wrap gap-2">
+          {applications.map((a) => (
+            <span key={a.tag} className="text-sm font-medium text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+              {a.tag}
+            </span>
+          ))}
+        </div>
+      ),
+    });
+  }
+
+  const anwendungItems = currentSpecs.filter((s) => s.spec_section === "anwendung");
+  if (anwendungItems.length > 0) {
+    accordionSections.push({
+      id: "anwendung-details",
+      label: "Anwendungsdetails",
       content: (
         <div className="flex flex-col gap-2">
           {anwendungItems.map((s) => <SpecRow key={s.id} s={s} />)}
@@ -195,16 +211,6 @@ export default function KatalogProductContent({
 
           {/* Right: info + accordions — 40% */}
           <div className="w-full lg:w-[40%] flex-shrink-0 min-w-0">
-
-            {applications.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                {applications.map((a) => (
-                  <span key={a.tag} className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest bg-slate-100 px-2.5 py-1 rounded-full">
-                    {a.tag}
-                  </span>
-                ))}
-              </div>
-            )}
 
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
               {productName}
