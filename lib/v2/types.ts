@@ -34,6 +34,7 @@ export interface V2Sku {
   price_eur: number;
   campaign_price: number | null;
   stock_quantity: number;
+  has_staffelpreis: boolean;
   is_active: boolean;
   sort_order: number;
 }

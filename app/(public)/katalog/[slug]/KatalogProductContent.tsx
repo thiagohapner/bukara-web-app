@@ -9,7 +9,7 @@ import OrderBenefits from "@/components/OrderBenefits";
 import V2VariantPicker from "@/components/V2VariantPicker";
 import ProductAccessories from "@/components/ProductAccessories";
 import { useCart } from "@/components/CartContext";
-import { formatEur } from "@/lib/pricing";
+import { formatEur, unitPriceForQuantity } from "@/lib/pricing";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
@@ -57,7 +57,7 @@ export default function KatalogProductContent({
   applications,
   accessories = [],
 }: Props) {
-  const { addItem, openDrawer } = useCart();
+  const { addV2Item, openDrawer } = useCart();
 
   const [selectedSkuId, setSelectedSkuId] = useState<string>(skus[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
@@ -76,9 +76,13 @@ export default function KatalogProductContent({
       ? [product.default_image_url]
       : [];
 
-  const unitPrice = selectedSku?.campaign_price ?? selectedSku?.price_eur ?? 0;
-  const originalPrice = selectedSku?.price_eur ?? 0;
-  const isCampaign = selectedSku?.campaign_price != null && selectedSku.campaign_price < originalPrice;
+  const isStaffel = !!selectedSku?.has_staffelpreis;
+  const basePrice = selectedSku?.price_eur ?? 0;
+  const unitPrice = isStaffel
+    ? unitPriceForQuantity(basePrice, true, quantity)
+    : (selectedSku?.campaign_price ?? basePrice);
+  const originalPrice = basePrice;
+  const isCampaign = !isStaffel && selectedSku?.campaign_price != null && selectedSku.campaign_price < originalPrice;
   const stockQty = selectedSku?.stock_quantity ?? 999;
   const outOfStock = stockQty === 0;
   const lowStock = stockQty > 0 && stockQty < 10;
@@ -89,7 +93,7 @@ export default function KatalogProductContent({
 
   async function handleAddToCart() {
     if (!selectedSku || outOfStock) return;
-    await addItem(selectedSku.id, quantity, unitPrice);
+    await addV2Item(selectedSku.id, quantity, unitPrice);
     setAddedState("added");
     openDrawer();
     setTimeout(() => setAddedState("idle"), 1500);
@@ -101,6 +105,32 @@ export default function KatalogProductContent({
   }
 
   const accordionSections = [];
+
+  function StaffelpreisTable({ qty }: { qty: number }) {
+    const tiers = [
+      { label: "1–4 Stück",   price: unitPriceForQuantity(basePrice, true, 1),  active: qty < 5 },
+      { label: "5–9 Stück",   price: unitPriceForQuantity(basePrice, true, 5),  active: qty >= 5 && qty < 10 },
+      { label: "ab 10 Stück", price: unitPriceForQuantity(basePrice, true, 10), active: qty >= 10 },
+    ];
+    return (
+      <div className="mb-6">
+        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-2">Staffelpreise</p>
+        <table className="w-full text-sm border border-slate-100 rounded-lg overflow-hidden">
+          <tbody>
+            {tiers.map(({ label, price, active }) => (
+              <tr key={label} className={active ? "bg-orange-50" : ""}>
+                <td className={`py-2 px-3 ${active ? "font-semibold text-slate-900" : "text-slate-500"}`}>{label}</td>
+                <td className={`py-2 px-3 text-right ${active ? "font-semibold text-slate-900" : "text-slate-500"}`}>{formatEur(price)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="text-[10px] text-slate-400 mt-1.5">
+          *1–4 Stück +20% Mindermengenzuschlag · 5–9 Stück Standardpreis · ab 10 Stück −10% Mengenrabatt
+        </p>
+      </div>
+    );
+  }
 
   function SpecRow({ s }: { s: { id: string; spec_key: string | null; spec_value: string } }) {
     if (s.spec_key && s.spec_key !== "details") {
@@ -247,6 +277,10 @@ export default function KatalogProductContent({
                 </div>
                 <p className="text-[11px] text-slate-400">zzgl. 19% MwSt.</p>
               </div>
+            )}
+
+            {isStaffel && selectedSku && (
+              <StaffelpreisTable qty={quantity} />
             )}
 
             {product.short_description && (

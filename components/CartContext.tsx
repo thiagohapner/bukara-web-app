@@ -7,11 +7,13 @@ import {
   getOrCreateCart,
   getCartItems,
   addToCart,
+  addV2SkuToCart,
   addDealToCart,
-  updateQuantity,
+  updateQuantityAndPrice,
   removeItem,
   type CartItem,
 } from "@/lib/cart";
+import { unitPriceForQuantity } from "@/lib/pricing";
 
 type CartContextValue = {
   cartId: string | null;
@@ -21,6 +23,7 @@ type CartContextValue = {
   openDrawer: () => void;
   closeDrawer: () => void;
   addItem: (skuId: string, qty: number, unitPrice: number) => Promise<void>;
+  addV2Item: (v2SkuId: string, qty: number, unitPrice: number) => Promise<void>;
   addDeal: (dealId: string, selectedSkuId: string | null, qty: number, unitPrice: number) => Promise<void>;
   updateItem: (itemId: string, qty: number) => Promise<void>;
   removeCartItem: (itemId: string) => Promise<void>;
@@ -43,6 +46,15 @@ async function fetchItems(id: string): Promise<CartItem[]> {
   }
 }
 
+function reprice(item: CartItem, qty: number): number | undefined {
+  const basePrice = item.sku?.price ?? item.v2Sku?.price_eur;
+  const hasStaffel = item.v2Sku?.has_staffelpreis ?? false;
+  if (hasStaffel && basePrice != null) {
+    return unitPriceForQuantity(basePrice, true, qty);
+  }
+  return undefined;
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartId, setCartId] = useState<string | null>(null);
   const [items, setItems] = useState<CartItem[]>([]);
@@ -50,7 +62,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Hydrate from localStorage on mount
   useEffect(() => {
     const stored = getStoredCartId();
     if (stored) {
@@ -73,6 +84,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems(updated);
   }, [ensureCart]);
 
+  const addV2Item = useCallback(async (v2SkuId: string, qty: number, unitPrice: number) => {
+    const id = await ensureCart();
+    await addV2SkuToCart(id, v2SkuId, qty, unitPrice);
+    const updated = await fetchItems(id);
+    // Fix unit_price for the merged line if tier changed
+    const merged = updated.find(i => i.v2_sku_id === v2SkuId && i.v2Sku?.has_staffelpreis);
+    if (merged) {
+      const tiered = unitPriceForQuantity(merged.v2Sku!.price_eur, true, merged.quantity);
+      if (Math.abs(tiered - merged.unit_price) > 0.001) {
+        await updateQuantityAndPrice(merged.id, merged.quantity, tiered);
+        const final = await fetchItems(id);
+        setItems(final);
+        return;
+      }
+    }
+    setItems(updated);
+  }, [ensureCart]);
+
   const addDeal = useCallback(async (dealId: string, selectedSkuId: string | null, qty: number, unitPrice: number) => {
     const id = await ensureCart();
     await addDealToCart(id, dealId, selectedSkuId, qty, unitPrice);
@@ -82,10 +111,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const updateItem = useCallback(async (itemId: string, qty: number) => {
     if (!cartId) return;
-    await updateQuantity(itemId, qty);
-    const updated = await fetchItems(cartId);
-    setItems(updated);
-  }, [cartId]);
+    const item = items.find(i => i.id === itemId);
+    const unitPrice = item ? reprice(item, qty) : undefined;
+    await updateQuantityAndPrice(itemId, qty, unitPrice);
+    setItems(await fetchItems(cartId));
+  }, [cartId, items]);
 
   const removeCartItem = useCallback(async (itemId: string) => {
     if (!cartId) return;
@@ -109,6 +139,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       openDrawer: () => setIsDrawerOpen(true),
       closeDrawer: () => setIsDrawerOpen(false),
       addItem,
+      addV2Item,
       addDeal,
       updateItem,
       removeCartItem,
