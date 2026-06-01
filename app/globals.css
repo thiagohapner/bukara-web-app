@@ -128,6 +128,13 @@ body {
   transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Hand cursor on all interactive elements */
+a, button, [role="button"], select,
+input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="reset"],
+label[for] {
+  cursor: pointer;
+}
+
 /* Primary CTA button (named "orange" for back-compat, uses brand green) */
 .btn-orange {
   background: var(--orange);
