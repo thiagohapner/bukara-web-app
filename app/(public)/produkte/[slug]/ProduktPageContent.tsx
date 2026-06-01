@@ -377,7 +377,9 @@ export default function ProduktPageContent({ slug }: { slug: string }) {
             slug: acc?.slug ?? "",
             name: acc?.name ?? "",
             images: accFirstImage[row.accessory_product_id] ? [accFirstImage[row.accessory_product_id]] : [],
-            skus: ((accSkuData ?? []) as BukaraSku[]).filter((s) => s.product_id === row.accessory_product_id),
+            skus: ((accSkuData ?? []) as BukaraSku[])
+              .filter((s) => s.product_id === row.accessory_product_id)
+              .map((s) => ({ id: s.id, variant_label: s.variant_label, price_eur: s.price, campaign_price: s.campaign_price })),
           };
         }));
       }

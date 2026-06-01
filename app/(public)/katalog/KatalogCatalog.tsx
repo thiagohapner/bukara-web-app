@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SlidersHorizontal, X, Search } from "lucide-react";
+import { X, Search } from "lucide-react";
 import Footer from "@/components/Footer";
 import ProductCard, { type ProductCardData } from "@/components/ProductCard";
 import CustomSelect from "@/components/CustomSelect";
@@ -22,6 +22,7 @@ export type EnrichedCard = ProductCardData & {
   materials: { material_name: string; score: number }[];
   minDiam: number | null;
   maxDiam: number | null;
+  merchantSkus: string[];
 };
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
@@ -128,7 +129,10 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter((c) => c.name.toLowerCase().includes(q));
+      result = result.filter((c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.merchantSkus.some((s) => s.toLowerCase().includes(q))
+      );
     }
 
     if (priceMin !== null) result = result.filter((c) => (c.fromCampaignPrice ?? 0) >= priceMin);
@@ -266,22 +270,20 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
             {/* Right column */}
             <div className="flex-1 min-w-0">
-              {/* Mobile filter button */}
-              <button
-                className="lg:hidden w-full flex items-center justify-center gap-2 btn-outline mb-5 text-sm"
-                onClick={() => setDrawerOpen(true)}
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-                Filter
-                {hasActiveFilters && (
-                  <span className="ml-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-bold">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </button>
-
-              {/* Search + Sort */}
+              {/* Sort + Search */}
               <div className="flex gap-3 mb-4">
+                <div className="w-52 flex-shrink-0">
+                  <CustomSelect
+                    value={sortParam}
+                    onChange={(v) => pushParam("sort", v)}
+                    options={[
+                      { value: "", label: "Sortieren nach" },
+                      { value: "preis-asc", label: "Preis aufsteigend" },
+                      { value: "preis-desc", label: "Preis absteigend" },
+                      { value: "name-az", label: "Name A–Z" },
+                    ]}
+                  />
+                </div>
                 <form
                   className="flex gap-2 flex-1"
                   onSubmit={(e) => { e.preventDefault(); commitSearch(localSearch); }}
@@ -304,24 +306,12 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   </div>
                   <button
                     type="submit"
-                    className="btn-outline flex-shrink-0 flex items-center gap-1.5 px-4"
+                    className="btn-orange flex-shrink-0 flex items-center gap-1.5 px-4"
                   >
                     <Search className="w-4 h-4" />
                     <span className="hidden sm:inline text-sm">Suchen</span>
                   </button>
                 </form>
-                <div className="w-52 flex-shrink-0">
-                  <CustomSelect
-                    value={sortParam}
-                    onChange={(v) => pushParam("sort", v)}
-                    options={[
-                      { value: "", label: "Sortieren nach" },
-                      { value: "preis-asc", label: "Preis aufsteigend" },
-                      { value: "preis-desc", label: "Preis absteigend" },
-                      { value: "name-az", label: "Name A–Z" },
-                    ]}
-                  />
-                </div>
               </div>
 
               {/* Result count */}

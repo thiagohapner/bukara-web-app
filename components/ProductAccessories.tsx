@@ -5,9 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomSelect from "@/components/CustomSelect";
 import { useCart } from "@/components/CartContext";
-import { type BukaraSku } from "@/lib/data";
 import { formatEur } from "@/lib/pricing";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
+interface AccessorySku {
+  id: string;
+  variant_label: string | null;
+  price_eur: number;
+  campaign_price: number | null;
+}
 
 export interface AccessoryItem {
   id: string;
@@ -16,10 +22,10 @@ export interface AccessoryItem {
   slug: string;
   name: string;
   images: string[];
-  skus: BukaraSku[];
+  skus: AccessorySku[];
 }
 
-function AccessoryRow({ accessory }: { accessory: AccessoryItem }) {
+function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkBase: string }) {
   const { addItem, openDrawer } = useCart();
   const [selectedSkuId, setSelectedSkuId] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
@@ -32,8 +38,8 @@ function AccessoryRow({ accessory }: { accessory: AccessoryItem }) {
   }, [accessory.skus, selectedSkuId]);
 
   const selectedSku = accessory.skus.find((s) => s.id === selectedSkuId) ?? accessory.skus[0] ?? null;
-  const unitPrice = selectedSku?.campaign_price ?? selectedSku?.price ?? 0;
-  const originalPrice = selectedSku?.price ?? 0;
+  const unitPrice = selectedSku?.campaign_price ?? selectedSku?.price_eur ?? 0;
+  const originalPrice = selectedSku?.price_eur ?? 0;
 
   async function handleAdd() {
     if (!selectedSku) return;
@@ -62,7 +68,7 @@ function AccessoryRow({ accessory }: { accessory: AccessoryItem }) {
       <div className="flex-1 min-w-0 flex flex-col gap-2">
         {/* Line 1: Name */}
         <Link
-          href={`/produkte/${accessory.slug}`}
+          href={`${linkBase}/${accessory.slug}`}
           className="text-sm font-semibold text-slate-900 hover:text-[#00A597] transition-colors leading-snug"
           style={{ textDecoration: "none" }}
         >
@@ -76,7 +82,7 @@ function AccessoryRow({ accessory }: { accessory: AccessoryItem }) {
             onChange={setSelectedSkuId}
             options={accessory.skus.map((s) => ({
               value: s.id,
-              label: `${s.variant_label} · ${formatEur(s.campaign_price ?? s.price)}`,
+              label: `${s.variant_label} · ${formatEur(s.campaign_price ?? s.price_eur)}`,
             }))}
           />
         )}
@@ -128,7 +134,13 @@ function AccessoryRow({ accessory }: { accessory: AccessoryItem }) {
   );
 }
 
-export default function ProductAccessories({ accessories }: { accessories: AccessoryItem[] }) {
+export default function ProductAccessories({
+  accessories,
+  linkBase = "/produkte",
+}: {
+  accessories: AccessoryItem[];
+  linkBase?: string;
+}) {
   if (accessories.length === 0) return null;
 
   return (
@@ -138,7 +150,7 @@ export default function ProductAccessories({ accessories }: { accessories: Acces
         {accessories.map((acc, idx) => (
           <div key={acc.id}>
             {idx > 0 && <div className="border-t border-slate-100 mt-4 mb-4" />}
-            <AccessoryRow accessory={acc} />
+            <AccessoryRow accessory={acc} linkBase={linkBase} />
           </div>
         ))}
       </div>

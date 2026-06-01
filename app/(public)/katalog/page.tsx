@@ -39,7 +39,7 @@ export default async function KatalogPage() {
   ] = await Promise.all([
     supabaseAdminV2
       .from("skus")
-      .select("id, product_id, price_eur, campaign_price, diameter_mm, sort_order")
+      .select("id, product_id, price_eur, campaign_price, diameter_mm, sort_order, merchant_sku")
       .in("product_id", ids)
       .eq("is_active", true)
       .order("sort_order"),
@@ -53,6 +53,7 @@ export default async function KatalogPage() {
   const skuList = (skus ?? []) as Array<{
     id: string; product_id: string; price_eur: number;
     campaign_price: number | null; diameter_mm: number | null; sort_order: number;
+    merchant_sku: string | null;
   }>;
   const skuImageList = (skuImages ?? []) as Array<{ sku_id: string; image_url: string; sort_order: number }>;
 
@@ -68,6 +69,7 @@ export default async function KatalogPage() {
 
   const priceMap: Record<string, { campaign: number; original: number }> = {};
   const diamRangeMap: Record<string, { min: number; max: number }> = {};
+  const merchantSkusMap: Record<string, string[]> = {};
   for (const sku of skuList) {
     const pid = sku.product_id;
     const eff = sku.campaign_price ?? sku.price_eur;
@@ -81,6 +83,10 @@ export default async function KatalogPage() {
         diamRangeMap[pid].min = Math.min(diamRangeMap[pid].min, sku.diameter_mm);
         diamRangeMap[pid].max = Math.max(diamRangeMap[pid].max, sku.diameter_mm);
       }
+    }
+    if (sku.merchant_sku) {
+      if (!merchantSkusMap[pid]) merchantSkusMap[pid] = [];
+      if (!merchantSkusMap[pid].includes(sku.merchant_sku)) merchantSkusMap[pid].push(sku.merchant_sku);
     }
   }
 
@@ -133,6 +139,7 @@ export default async function KatalogPage() {
       materials: (matMap[p.id] ?? []).map((m) => ({ material_name: m.material_name, score: m.score })),
       minDiam: diamRangeMap[p.id]?.min ?? null,
       maxDiam: diamRangeMap[p.id]?.max ?? null,
+      merchantSkus: merchantSkusMap[p.id] ?? [],
     };
   });
 

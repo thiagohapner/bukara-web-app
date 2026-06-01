@@ -29,6 +29,13 @@ interface MaterialInput {
   _deleted?: boolean;
 }
 
+interface AccessoryInput {
+  id?: string;
+  accessory_product_id: string;
+  sort_order: number;
+  _deleted?: boolean;
+}
+
 const SCORE_LABELS: Record<number, string> = {
   0: "Nicht geeignet",
   1: "Geeignet",
@@ -41,7 +48,8 @@ export async function upsertProduct(
   payload: ProductPayload,
   categoryIds: string[],
   applicationTags: string[],
-  materials: MaterialInput[]
+  materials: MaterialInput[],
+  accessories: AccessoryInput[] = []
 ): Promise<{ id: string; product: Record<string, unknown> | null } | { error: string }> {
   try {
     const dbPayload = {
@@ -114,6 +122,25 @@ export async function upsertProduct(
       }));
     if (toUpsert.length > 0) {
       await supabaseAdminV2.from("product_materials").upsert(toUpsert);
+    }
+
+    const accToDelete = accessories.filter((a) => a._deleted && a.id);
+    if (accToDelete.length > 0) {
+      await supabaseAdminV2
+        .from("product_accessories")
+        .delete()
+        .in("id", accToDelete.map((a) => a.id!));
+    }
+    const accToUpsert = accessories
+      .filter((a) => !a._deleted && a.accessory_product_id)
+      .map((a, i) => ({
+        ...(a.id ? { id: a.id } : {}),
+        product_id: pid,
+        accessory_product_id: a.accessory_product_id,
+        sort_order: i,
+      }));
+    if (accToUpsert.length > 0) {
+      await supabaseAdminV2.from("product_accessories").upsert(accToUpsert);
     }
 
     revalidatePath("/admin/v2/products");

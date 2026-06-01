@@ -12,7 +12,7 @@ export default async function V2ProductEditPage({
 }) {
   const { id } = await params;
 
-  const [prodRes, catRes, appRes, matRes, skuRes, allCatRes, matTypeRes] = await Promise.all([
+  const [prodRes, catRes, appRes, matRes, skuRes, allCatRes, matTypeRes, accRes, allProductsRes] = await Promise.all([
     supabaseAdminV2.from("products").select("*").eq("id", id).single(),
     supabaseAdminV2.from("product_categories").select("category_id").eq("product_id", id),
     supabaseAdminV2.from("product_applications").select("tag").eq("product_id", id),
@@ -24,6 +24,8 @@ export default async function V2ProductEditPage({
       .order("sort_order"),
     supabaseAdminV2.from("categories").select("id, name, slug, parent_id").order("name"),
     supabaseAdminV2.from("material_types").select("name").order("name"),
+    supabaseAdminV2.from("product_accessories").select("id, accessory_product_id, sort_order").eq("product_id", id).order("sort_order"),
+    supabaseAdminV2.from("products").select("id, base_name, display_name").eq("is_active", true).order("base_name"),
   ]);
 
   if (!prodRes.data) notFound();
@@ -46,6 +48,11 @@ export default async function V2ProductEditPage({
         }>,
         allCategories: (allCatRes.data ?? []) as V2Category[],
         materialTypeNames: ((matTypeRes.data ?? []) as { name: string }[]).map((m) => m.name),
+        accessories: (accRes.data ?? []) as Array<{ id: string; accessory_product_id: string; sort_order: number }>,
+        allProducts: ((allProductsRes.data ?? []) as Array<{ id: string; base_name: string | null; display_name: string | null }>).map((p) => ({
+          id: p.id,
+          name: p.display_name ?? p.base_name ?? p.id,
+        })),
       }}
     />
   );

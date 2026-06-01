@@ -7,9 +7,11 @@ import ProductGallery from "@/components/ProductGallery";
 import ProductAccordion from "@/components/ProductAccordion";
 import OrderBenefits from "@/components/OrderBenefits";
 import V2VariantPicker from "@/components/V2VariantPicker";
+import ProductAccessories from "@/components/ProductAccessories";
 import { useCart } from "@/components/CartContext";
 import { formatEur } from "@/lib/pricing";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication } from "@/lib/v2/types";
+import type { AccessoryItem } from "@/components/ProductAccessories";
 
 function Dots({ count }: { count: number }) {
   return (
@@ -43,6 +45,7 @@ interface Props {
   skuSpecs: V2SkuSpec[];
   materials: V2ProductMaterial[];
   applications: V2ProductApplication[];
+  accessories?: AccessoryItem[];
 }
 
 export default function KatalogProductContent({
@@ -52,6 +55,7 @@ export default function KatalogProductContent({
   skuSpecs,
   materials,
   applications,
+  accessories = [],
 }: Props) {
   const { addItem, openDrawer } = useCart();
 
@@ -222,7 +226,7 @@ export default function KatalogProductContent({
 
             {selectedSku && (
               <p className="text-sm text-slate-400 mb-4">
-                Artikel-Nr.: {selectedSku.identnummer}
+                Bukara-Art.-Nr.: {selectedSku.bukara_article_number}
               </p>
             )}
 
@@ -307,6 +311,8 @@ export default function KatalogProductContent({
             )}
 
             <OrderBenefits />
+
+            <ProductAccessories accessories={accessories} linkBase="/katalog" />
 
             {accordionSections.length > 0 && (
               <div id="pdp-accordion" className="mt-8 scroll-mt-24">

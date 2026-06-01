@@ -6,8 +6,9 @@ import Link from "next/link";
 import { DS_INPUT_ADMIN, DS_LABEL } from "@/lib/ds";
 import { upsertProduct } from "./actions";
 import type { V2Category } from "@/lib/v2/types";
+import AccessoriesEditor, { type AccessoryRow as AccessoryEditorRow } from "@/components/admin/AccessoriesEditor";
 
-const TABS = ["Details", "Kategorien & Anwendungen", "Materialien", "SKUs"] as const;
+const TABS = ["Details", "Kategorien & Anwendungen", "Materialien", "SKUs", "Zubehör"] as const;
 type Tab = typeof TABS[number];
 
 interface MaterialRow {
@@ -48,6 +49,11 @@ interface ProductForm {
   has_public_page: boolean;
 }
 
+interface ProductOption {
+  id: string;
+  name: string;
+}
+
 export interface InitialData {
   product: Record<string, unknown> | null;
   categoryIds: string[];
@@ -56,6 +62,8 @@ export interface InitialData {
   skus: SkuSummary[];
   allCategories: V2Category[];
   materialTypeNames: string[];
+  accessories: AccessoryEditorRow[];
+  allProducts: ProductOption[];
 }
 
 const SCORE_LABELS: Record<number, string> = {
@@ -103,6 +111,8 @@ export default function V2ProductEditClient({
   const [skus] = useState<SkuSummary[]>(initialData.skus);
   const [allCategories] = useState<V2Category[]>(initialData.allCategories);
   const [materialTypes] = useState<string[]>(initialData.materialTypeNames);
+  const [accessories, setAccessories] = useState<AccessoryEditorRow[]>(initialData.accessories);
+  const [allProducts] = useState<ProductOption[]>(initialData.allProducts);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -169,7 +179,8 @@ export default function V2ProductEditClient({
       },
       categoryIds,
       applicationTags,
-      materials
+      materials,
+      accessories
     );
 
     if ("error" in result) {
@@ -431,6 +442,15 @@ export default function V2ProductEditClient({
             })}
           </div>
         </div>
+      )}
+
+      {tab === "Zubehör" && productId && (
+        <AccessoriesEditor
+          accessories={accessories}
+          products={allProducts}
+          currentProductId={productId}
+          onChange={setAccessories}
+        />
       )}
 
       {tab === "SKUs" && (

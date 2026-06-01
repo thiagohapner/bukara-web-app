@@ -27,52 +27,20 @@ export default function V2VariantPicker({ skus, selectedSkuId, onSelect }: Props
 
   if (sorted.length <= 1) return null;
 
-  if (sorted.length > 12) {
-    return (
-      <div className="space-y-2">
-        <p className="text-sm font-medium text-slate-700">Variante wählen</p>
-        <CustomSelect
-          value={selectedSkuId}
-          onChange={(id) => {
-            const sku = sorted.find((s) => s.id === id);
-            if (sku) onSelect(sku);
-          }}
-          options={sorted.map((s) => ({
-            value: s.id,
-            label: `${skuLabel(s)} — ${formatEur(s.campaign_price ?? s.price_eur)}`,
-          }))}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-2">
       <p className="text-sm font-medium text-slate-700">Variante wählen</p>
-      <div className="flex flex-wrap gap-2">
-        {sorted.map((sku) => {
-          const isSelected = sku.id === selectedSkuId;
-          return (
-            <button
-              key={sku.id}
-              type="button"
-              onClick={() => onSelect(sku)}
-              className={`px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
-                isSelected
-                  ? "border-slate-900 bg-slate-900 text-white shadow-sm"
-                  : "border-slate-200 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"
-              }`}
-            >
-              {skuLabel(sku)}
-            </button>
-          );
-        })}
-      </div>
-      {selectedSkuId && (
-        <p className="text-xs text-slate-400 pt-1">
-          Art.-Nr.: {sorted.find((s) => s.id === selectedSkuId)?.identnummer}
-        </p>
-      )}
+      <CustomSelect
+        value={selectedSkuId}
+        onChange={(id) => {
+          const sku = sorted.find((s) => s.id === id);
+          if (sku) onSelect(sku);
+        }}
+        options={sorted.map((s) => ({
+          value: s.id,
+          label: `${skuLabel(s)} — ${formatEur(s.campaign_price ?? s.price_eur)}`,
+        }))}
+      />
     </div>
   );
 }
