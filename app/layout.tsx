@@ -14,7 +14,6 @@ const OG_IMAGE = "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/pub
 export const metadata: Metadata = {
   title: "Bukara GmbH",
   description: "Professionelle Fräswerkzeuge, Schärfservice und Sonderwerkzeuge — exklusiver ITA-Partner.",
-  icons: { icon: "/icon.svg" },
   openGraph: {
     title: "Bukara GmbH",
     description: "Professionelle Fräswerkzeuge, Schärfservice und Sonderwerkzeuge — exklusiver ITA-Partner.",
