@@ -107,21 +107,21 @@ export default function KatalogProductContent({
 
   const accordionSections = [];
 
-  function StaffelpreisTable({ qty }: { qty: number }) {
+  function StaffelpreisTable() {
     const tiers = [
-      { label: "1–4 Stück",   price: unitPriceForQuantity(basePrice, true, 1),  active: qty < 5 },
-      { label: "5–9 Stück",   price: unitPriceForQuantity(basePrice, true, 5),  active: qty >= 5 && qty < 10 },
-      { label: "ab 10 Stück", price: unitPriceForQuantity(basePrice, true, 10), active: qty >= 10 },
+      { label: "1–4 Stück",   price: unitPriceForQuantity(basePrice, true, 1) },
+      { label: "5–9 Stück",   price: unitPriceForQuantity(basePrice, true, 5) },
+      { label: "ab 10 Stück", price: unitPriceForQuantity(basePrice, true, 10) },
     ];
     return (
       <div className="mb-6">
         <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-2">Staffelpreise</p>
         <table className="w-full text-sm border border-slate-100 rounded-lg overflow-hidden">
           <tbody>
-            {tiers.map(({ label, price, active }) => (
-              <tr key={label} className={active ? "bg-orange-50" : ""}>
-                <td className={`py-2 px-3 ${active ? "font-semibold text-slate-900" : "text-slate-500"}`}>{label}</td>
-                <td className={`py-2 px-3 text-right ${active ? "font-semibold text-slate-900" : "text-slate-500"}`}>{formatEur(price)}</td>
+            {tiers.map(({ label, price }) => (
+              <tr key={label}>
+                <td className="py-2 px-3 text-slate-500">{label}</td>
+                <td className="py-2 px-3 text-right text-slate-500">{formatEur(price)} / Stk.</td>
               </tr>
             ))}
           </tbody>
@@ -281,7 +281,7 @@ export default function KatalogProductContent({
             )}
 
             {isStaffel && selectedSku && (
-              <StaffelpreisTable qty={quantity} />
+              <StaffelpreisTable />
             )}
 
             {product.short_description && (
