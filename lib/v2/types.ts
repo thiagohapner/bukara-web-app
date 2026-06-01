@@ -84,6 +84,7 @@ export interface V2Category {
   name: string;
   slug: string;
   parent_id: string | null;
+  sort_order?: number;
 }
 
 export interface V2MaterialType {

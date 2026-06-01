@@ -47,7 +47,7 @@ export default async function KatalogPage() {
     supabaseAdminV2.from("product_categories").select("product_id, category_id").in("product_id", ids),
     supabaseAdminV2.from("product_applications").select("product_id, tag").in("product_id", ids),
     supabaseAdminV2.from("product_materials").select("product_id, material_name, score").in("product_id", ids),
-    supabaseAdminV2.from("categories").select("id, name, slug, parent_id"),
+    supabaseAdminV2.from("categories").select("id, name, slug, parent_id, sort_order").order("sort_order"),
   ]);
 
   const skuList = (skus ?? []) as Array<{
