@@ -91,7 +91,24 @@ export default function KatalogProductContent({
     setTimeout(() => setAddedState("idle"), 1500);
   }
 
+  function scrollToAccordion(e: React.MouseEvent) {
+    e.preventDefault();
+    document.getElementById("pdp-accordion")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   const accordionSections = [];
+
+  function SpecRow({ s }: { s: { id: string; spec_key: string | null; spec_value: string } }) {
+    if (s.spec_key && s.spec_key !== "details") {
+      return (
+        <div className="flex gap-4 text-base">
+          <span className="text-slate-400 min-w-[140px] shrink-0">{s.spec_key}</span>
+          <span className="text-slate-900">{s.spec_value}</span>
+        </div>
+      );
+    }
+    return <p className="text-base text-slate-700 leading-snug">{s.spec_value}</p>;
+  }
 
   const techItems = currentSpecs.filter((s) => s.spec_section === "technische_details");
   if (techItems.length > 0) {
@@ -100,12 +117,7 @@ export default function KatalogProductContent({
       label: "Technische Details",
       content: (
         <div className="flex flex-col gap-2.5">
-          {techItems.map((s) => (
-            <div key={s.id} className="flex gap-4 text-base">
-              <span className="text-slate-400 min-w-[140px] shrink-0">{s.spec_key}</span>
-              <span className="text-slate-900">{s.spec_value}</span>
-            </div>
-          ))}
+          {techItems.map((s) => <SpecRow key={s.id} s={s} />)}
         </div>
       ),
     });
@@ -118,12 +130,7 @@ export default function KatalogProductContent({
       label: "Anwendung",
       content: (
         <div className="flex flex-col gap-2">
-          {anwendungItems.map((s) => (
-            <div key={s.id} className="flex gap-4 text-base">
-              <span className="text-slate-400 min-w-[140px] shrink-0">{s.spec_key}</span>
-              <span className="text-slate-900">{s.spec_value}</span>
-            </div>
-          ))}
+          {anwendungItems.map((s) => <SpecRow key={s.id} s={s} />)}
         </div>
       ),
     });
@@ -136,12 +143,7 @@ export default function KatalogProductContent({
       label: "Geeignet für Maschinen",
       content: (
         <div className="flex flex-col gap-2">
-          {maschinenItems.map((s) => (
-            <div key={s.id} className="flex gap-4 text-base">
-              <span className="text-slate-400 min-w-[140px] shrink-0">{s.spec_key}</span>
-              <span className="text-slate-900">{s.spec_value}</span>
-            </div>
-          ))}
+          {maschinenItems.map((s) => <SpecRow key={s.id} s={s} />)}
         </div>
       ),
     });
@@ -167,131 +169,148 @@ export default function KatalogProductContent({
   }
 
   return (
-    <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-xs text-slate-400 pt-5 pb-1">
-        <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
-        <span>/</span>
-        <Link href="/katalog" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Katalog</Link>
-        <span>/</span>
-        <span className="text-slate-700 font-medium">{productName}</span>
-      </nav>
-
-      <div className="py-10 lg:grid lg:grid-cols-2 lg:gap-16">
-        {/* Left: gallery */}
-        <div>
-          <ProductGallery
-            images={galleryImages}
-            placeholderBg={product.gallery_bg ?? "#e6eff5"}
-            placeholderLabel={productName.substring(0, 3).toUpperCase()}
-            badge={product.badge ?? undefined}
-          />
-        </div>
-
-        {/* Right: info */}
-        <div className="mt-8 lg:mt-0">
-          {applications.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {applications.map((a) => (
-                <span key={a.tag} className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest bg-slate-100 px-2.5 py-1 rounded-full">
-                  {a.tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight leading-snug mb-1">
-            {productName}
-          </h1>
-          {product.tagline && (
-            <p className="text-slate-500 text-base mb-4">{product.tagline}</p>
-          )}
-
-          {selectedSku && (
-            <p className="text-sm text-slate-400 mb-4">
-              Art.-Nr.: {selectedSku.identnummer}
-            </p>
-          )}
-
-          {selectedSku && (
-            <div className="mb-4">
-              <div className="flex items-baseline gap-3 mb-1">
-                <span className={`text-2xl font-extrabold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
-                  {formatEur(unitPrice)}
-                </span>
-                {isCampaign && (
-                  <span className="flex items-baseline gap-1">
-                    <span className="text-base text-slate-400 line-through">{formatEur(originalPrice)}</span>
-                    <span className="text-sm font-semibold text-[#9B242A]">
-                      -{Math.round((1 - unitPrice / originalPrice) * 100)}%
-                    </span>
-                  </span>
-                )}
-              </div>
-              <p className="text-[11px] text-slate-400">zzgl. 19% MwSt.</p>
-            </div>
-          )}
-
-          {product.short_description && (
-            <p className="text-base text-slate-700 leading-relaxed mb-4">{product.short_description}</p>
-          )}
-
-          {skus.length > 1 && (
-            <div className="mb-6">
-              <V2VariantPicker
-                skus={skus}
-                selectedSkuId={selectedSkuId}
-                onSelect={(sku) => setSelectedSkuId(sku.id)}
-              />
-            </div>
-          )}
-
-          {lowStock && (
-            <p className="text-sm font-medium mb-3" style={{ color: "#D97706" }}>
-              Nur noch {stockQty} auf Lager
-            </p>
-          )}
-
-          {selectedSku && (
-            <div className="flex items-center gap-3 mb-8">
-              <div className="flex items-center border border-slate-800 rounded-full select-none h-12">
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
-                </button>
-                <span className="min-w-[1.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => q + 1)}
-                  className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                disabled={outOfStock}
-                className="btn-black flex-1 justify-center"
-                style={{ opacity: outOfStock ? 0.6 : 1 }}
-              >
-                {outOfStock ? "Derzeit nicht verfügbar" : addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
-              </button>
-            </div>
-          )}
-
-          <OrderBenefits />
-        </div>
+    <>
+      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
+        <nav className="flex items-center gap-1.5 text-xs text-slate-400">
+          <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
+          <span>/</span>
+          <Link href="/katalog" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Katalog</Link>
+          <span>/</span>
+          <span className="text-slate-700 font-medium">{productName}</span>
+        </nav>
       </div>
 
-      {accordionSections.length > 0 && (
-        <div id="pdp-accordion" className="max-w-2xl pb-20">
-          <ProductAccordion sections={accordionSections} defaultOpenIds={["technische-details"]} />
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-20">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-[5%] items-start">
+
+          {/* Left: sticky gallery — 55% */}
+          <div className="w-full lg:w-[55%] flex-shrink-0 lg:sticky lg:top-[72px]">
+            <ProductGallery
+              images={galleryImages}
+              placeholderBg={product.gallery_bg ?? "#e6eff5"}
+              placeholderLabel={(productName).substring(0, 3).toUpperCase()}
+              badge={product.badge ?? undefined}
+            />
+          </div>
+
+          {/* Right: info + accordions — 40% */}
+          <div className="w-full lg:w-[40%] flex-shrink-0 min-w-0">
+
+            {applications.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {applications.map((a) => (
+                  <span key={a.tag} className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest bg-slate-100 px-2.5 py-1 rounded-full">
+                    {a.tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+              {productName}
+            </h1>
+
+            {product.tagline && (
+              <p className="text-slate-500 text-base mb-4">{product.tagline}</p>
+            )}
+
+            {selectedSku && (
+              <p className="text-sm text-slate-400 mb-4">
+                Artikel-Nr.: {selectedSku.identnummer}
+              </p>
+            )}
+
+            {selectedSku && (
+              <div className="mb-4">
+                <div className="flex items-baseline gap-3 mb-1">
+                  <span className={`text-2xl font-extrabold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+                    {formatEur(unitPrice)}
+                  </span>
+                  {isCampaign && (
+                    <span className="flex items-baseline gap-1">
+                      <span className="text-base text-slate-400 line-through">{formatEur(originalPrice)}</span>
+                      <span className="text-sm font-semibold text-[#9B242A]">
+                        -{Math.round((1 - unitPrice / originalPrice) * 100)}%
+                      </span>
+                    </span>
+                  )}
+                </div>
+                <p className="text-[11px] text-slate-400">zzgl. 19% MwSt.</p>
+              </div>
+            )}
+
+            {product.short_description && (
+              <p className="text-base text-slate-900 leading-relaxed mb-2">{product.short_description}</p>
+            )}
+
+            {accordionSections.length > 0 && (
+              <a
+                href="#pdp-accordion"
+                onClick={scrollToAccordion}
+                className="inline-block text-base text-slate-900 underline underline-offset-2 mb-8 cursor-pointer"
+              >
+                Technische Details
+              </a>
+            )}
+
+            {skus.length > 1 && (
+              <div className="mb-6">
+                <V2VariantPicker
+                  skus={skus}
+                  selectedSkuId={selectedSkuId}
+                  onSelect={(sku) => setSelectedSkuId(sku.id)}
+                />
+              </div>
+            )}
+
+            {lowStock && (
+              <p className="text-sm font-medium mb-3" style={{ color: "#D97706" }}>
+                Nur noch {stockQty} auf Lager
+              </p>
+            )}
+
+            {selectedSku && (
+              <div className="flex items-center gap-3 mb-8">
+                <div className="flex items-center border border-slate-800 rounded-full select-none h-12">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
+                  </button>
+                  <span className="min-w-[1.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => q + 1)}
+                    className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                  >
+                    <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  disabled={outOfStock}
+                  className="btn-black flex-1 justify-center"
+                  style={{ opacity: outOfStock ? 0.6 : 1 }}
+                >
+                  {outOfStock ? "Derzeit nicht verfügbar" : addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
+                </button>
+              </div>
+            )}
+
+            <OrderBenefits />
+
+            {accordionSections.length > 0 && (
+              <div id="pdp-accordion" className="mt-8 scroll-mt-24">
+                <ProductAccordion sections={accordionSections} defaultOpenIds={["technische-details"]} />
+              </div>
+            )}
+
+          </div>
         </div>
-      )}
-    </div>
+      </section>
+    </>
   );
 }

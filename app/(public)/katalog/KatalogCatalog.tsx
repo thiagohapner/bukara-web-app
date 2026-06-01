@@ -252,13 +252,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
           </nav>
         </div>
 
-        <section className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-8 pb-4">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">Produktkatalog</h1>
-          <p className="text-slate-500 mt-1 text-sm">{allCards.length} Produkte</p>
-        </section>
-
         {/* Two-column layout */}
-        <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6 pb-20">
+        <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10 pb-20">
           <div className="flex gap-10 items-start">
 
             {/* Sidebar — desktop */}
