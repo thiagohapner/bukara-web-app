@@ -52,7 +52,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
           onClick={() => mainImage && setLightboxIndex(0)}
         >
           {mainImage ? (
-            <div className="absolute inset-8">
+            <div className="absolute inset-2">
               <Image src={mainImage} alt={placeholderLabel} fill className="object-contain"
                 sizes="(max-width: 1024px) 100vw, 55vw" />
             </div>
@@ -76,7 +76,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
                 style={{ background: "#EEEEEE" }}
                 onClick={() => setLightboxIndex(idx + 1)}
               >
-                <div className="absolute inset-4">
+                <div className="absolute inset-2">
                   <Image src={img} alt={`${placeholderLabel} ${idx + 2}`} fill className="object-contain" sizes="27vw" />
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
               </span>
             )}
             {img ? (
-              <div className="absolute inset-6">
+              <div className="absolute inset-2">
                 <Image src={img} alt={`${placeholderLabel} ${i + 1}`} fill className="object-contain" sizes="82vw" />
               </div>
             ) : (

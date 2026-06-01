@@ -31,7 +31,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
             </span>
           )}
           {card.image ? (
-            <div className="absolute inset-2">
+            <div className="absolute inset-0">
               <Image
                 src={card.image}
                 alt={card.name}
