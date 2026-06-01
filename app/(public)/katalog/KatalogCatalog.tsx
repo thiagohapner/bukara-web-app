@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, Search } from "lucide-react";
 import Footer from "@/components/Footer";
 import ProductCard, { type ProductCardData } from "@/components/ProductCard";
 import CustomSelect from "@/components/CustomSelect";
@@ -50,7 +50,6 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   const searchParams = useSearchParams();
   const router = useRouter();
   const tilesRef = useRef<HTMLDivElement>(null);
-  const isFirstSearchRender = useRef(true);
 
   const [allCards] = useState<EnrichedCard[]>(initialCards);
 
@@ -75,16 +74,12 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
   const [localSearch, setLocalSearch] = useState(searchQuery);
   useEffect(() => { setLocalSearch(searchQuery); }, [searchQuery]);
-  useEffect(() => {
-    if (isFirstSearchRender.current) { isFirstSearchRender.current = false; return; }
-    const t = setTimeout(() => {
-      const p = new URLSearchParams(searchParams.toString());
-      if (localSearch) p.set("q", localSearch); else p.delete("q");
-      router.push(`/katalog?${p.toString()}`);
-    }, 350);
-    return () => clearTimeout(t);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localSearch]);
+
+  function commitSearch(value: string) {
+    const p = new URLSearchParams(searchParams.toString());
+    if (value.trim()) p.set("q", value.trim()); else p.delete("q");
+    router.push(`/katalog?${p.toString()}`);
+  }
 
   // ── Absolute bounds ───────────────────────────────────────────────────────
   const absoluteMinPrice = allCards.length > 0
@@ -287,22 +282,34 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
               {/* Search + Sort */}
               <div className="flex gap-3 mb-4">
-                <div className="relative flex-1">
-                  <input
-                    type="text"
-                    value={localSearch}
-                    onChange={(e) => setLocalSearch(e.target.value)}
-                    placeholder="Produkt suchen…"
-                    className={DS_INPUT}
-                  />
-                  {localSearch && (
-                    <button
-                      type="button"
-                      onClick={() => setLocalSearch("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg leading-none cursor-pointer"
-                    >×</button>
-                  )}
-                </div>
+                <form
+                  className="flex gap-2 flex-1"
+                  onSubmit={(e) => { e.preventDefault(); commitSearch(localSearch); }}
+                >
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      value={localSearch}
+                      onChange={(e) => setLocalSearch(e.target.value)}
+                      placeholder="Produkt suchen…"
+                      className={DS_INPUT}
+                    />
+                    {localSearch && (
+                      <button
+                        type="button"
+                        onClick={() => { setLocalSearch(""); commitSearch(""); }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg leading-none cursor-pointer"
+                      >×</button>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn-outline flex-shrink-0 flex items-center gap-1.5 px-4"
+                  >
+                    <Search className="w-4 h-4" />
+                    <span className="hidden sm:inline text-sm">Suchen</span>
+                  </button>
+                </form>
                 <div className="w-52 flex-shrink-0">
                   <CustomSelect
                     value={sortParam}
