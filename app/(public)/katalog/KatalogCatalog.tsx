@@ -59,6 +59,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   const subParam = searchParams.get("sub") ?? "";
   const materialParam = searchParams.get("material") ?? "";
   const anwendungParam = searchParams.get("anwendung") ?? "";
+  const selectedAnwendungen = anwendungParam ? anwendungParam.split(",").filter(Boolean) : [];
   const minScoreParam = searchParams.get("minScore");
   const sortParam = searchParams.get("sort") ?? "";
   const searchQuery = searchParams.get("q") ?? "";
@@ -115,8 +116,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
       }
     }
 
-    if (anwendungParam) {
-      result = result.filter((c) => c.applicationTags.includes(anwendungParam));
+    if (selectedAnwendungen.length > 0) {
+      result = result.filter((c) => selectedAnwendungen.some((tag) => c.applicationTags.includes(tag)));
     }
 
     if (selectedMaterials.length > 0) {
@@ -226,7 +227,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     (kategorieParam && !subParam ? 1 : 0) +
     (subParam ? 1 : 0) +
     selectedMaterials.length +
-    (anwendungParam ? 1 : 0) +
+    selectedAnwendungen.length +
     (searchQuery ? 1 : 0) +
     (priceMinParam || priceMaxParam ? 1 : 0) +
     (diamMinParam || diamMaxParam ? 1 : 0);
@@ -336,9 +337,16 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                       onRemove={resetFilters}
                     />
                   )}
-                  {anwendungParam && (
-                    <FilterChip label={anwendungParam} onRemove={() => pushParam("anwendung", "")} />
-                  )}
+                  {selectedAnwendungen.map((tag) => (
+                    <FilterChip
+                      key={tag}
+                      label={tag}
+                      onRemove={() => {
+                        const next = selectedAnwendungen.filter((t) => t !== tag);
+                        pushParam("anwendung", next.join(","));
+                      }}
+                    />
+                  ))}
                   {selectedMaterials.map((m) => (
                     <FilterChip
                       key={m}

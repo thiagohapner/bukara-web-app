@@ -86,7 +86,7 @@ export default function KatalogFilterSidebar({
   const params = useSearchParams();
   const currentKategorie = params.get("kategorie") ?? "";
   const currentSub = params.get("sub") ?? "";
-  const currentAnwendung = params.get("anwendung") ?? "";
+  const selectedAnwendungen = (params.get("anwendung") ?? "").split(",").filter(Boolean);
 
   const topLevel = allCategories.filter((c) => c.parent_id === null);
   const subMap: Record<string, V2Category[]> = {};
@@ -171,8 +171,11 @@ export default function KatalogFilterSidebar({
     onFilterApplied?.();
   }
 
-  function setAnwendung(tag: string) {
-    router.push(buildUrl({ anwendung: currentAnwendung === tag ? null : tag }));
+  function toggleAnwendung(tag: string) {
+    const next = selectedAnwendungen.includes(tag)
+      ? selectedAnwendungen.filter((t) => t !== tag)
+      : [...selectedAnwendungen, tag];
+    router.push(buildUrl({ anwendung: next.length > 0 ? next.join(",") : null }));
     onFilterApplied?.();
   }
 
@@ -244,20 +247,19 @@ export default function KatalogFilterSidebar({
             {applicationTags.map((tag) => (
               <label key={tag} className="flex items-center gap-2 text-base text-slate-900 cursor-pointer select-none">
                 <input
-                  type="radio"
-                  name="anwendung"
-                  checked={currentAnwendung === tag}
-                  onChange={() => setAnwendung(tag)}
-                  className="flex-shrink-0"
+                  type="checkbox"
+                  checked={selectedAnwendungen.includes(tag)}
+                  onChange={() => toggleAnwendung(tag)}
+                  className="rounded flex-shrink-0"
                   style={{ accentColor: "#0F172A" }}
                 />
-                <span className={currentAnwendung === tag ? "font-medium" : ""}>{tag}</span>
+                <span className={selectedAnwendungen.includes(tag) ? "font-medium" : ""}>{tag}</span>
               </label>
             ))}
-            {currentAnwendung && (
+            {selectedAnwendungen.length > 0 && (
               <button
                 type="button"
-                onClick={() => setAnwendung("")}
+                onClick={() => { router.push(buildUrl({ anwendung: null })); onFilterApplied?.(); }}
                 className="text-xs text-slate-400 hover:text-slate-600 text-left mt-0.5"
               >
                 Zurücksetzen
