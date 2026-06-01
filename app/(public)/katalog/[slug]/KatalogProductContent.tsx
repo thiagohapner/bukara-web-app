@@ -78,9 +78,10 @@ export default function KatalogProductContent({
 
   const isStaffel = !!selectedSku?.has_staffelpreis;
   const basePrice = selectedSku?.price_eur ?? 0;
-  const unitPrice = isStaffel
+  const displayPrice = selectedSku?.campaign_price ?? basePrice;
+  const cartPrice = isStaffel
     ? unitPriceForQuantity(basePrice, true, quantity)
-    : (selectedSku?.campaign_price ?? basePrice);
+    : displayPrice;
   const originalPrice = basePrice;
   const isCampaign = !isStaffel && selectedSku?.campaign_price != null && selectedSku.campaign_price < originalPrice;
   const stockQty = selectedSku?.stock_quantity ?? 999;
@@ -93,7 +94,7 @@ export default function KatalogProductContent({
 
   async function handleAddToCart() {
     if (!selectedSku || outOfStock) return;
-    await addV2Item(selectedSku.id, quantity, unitPrice);
+    await addV2Item(selectedSku.id, quantity, cartPrice);
     setAddedState("added");
     openDrawer();
     setTimeout(() => setAddedState("idle"), 1500);
@@ -264,13 +265,13 @@ export default function KatalogProductContent({
               <div className="mb-4">
                 <div className="flex items-baseline gap-3 mb-1">
                   <span className={`text-2xl font-extrabold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
-                    {formatEur(unitPrice)}
+                    {formatEur(displayPrice)}
                   </span>
                   {isCampaign && (
                     <span className="flex items-baseline gap-1">
                       <span className="text-base text-slate-400 line-through">{formatEur(originalPrice)}</span>
                       <span className="text-sm font-semibold text-[#9B242A]">
-                        -{Math.round((1 - unitPrice / originalPrice) * 100)}%
+                        -{Math.round((1 - displayPrice / originalPrice) * 100)}%
                       </span>
                     </span>
                   )}
