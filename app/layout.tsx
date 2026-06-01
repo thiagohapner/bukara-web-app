@@ -9,10 +9,23 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
+const OG_IMAGE = "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/hero/main_image.png";
+
 export const metadata: Metadata = {
   title: "Bukara GmbH",
   description: "Professionelle Fräswerkzeuge, Schärfservice und Sonderwerkzeuge — exklusiver ITA-Partner.",
-  icons: { icon: "/vercel.svg" },
+  icons: { icon: "/icon.svg" },
+  openGraph: {
+    title: "Bukara GmbH",
+    description: "Professionelle Fräswerkzeuge, Schärfservice und Sonderwerkzeuge — exklusiver ITA-Partner.",
+    images: [{ url: OG_IMAGE, width: 1200, height: 800, alt: "Bukara GmbH" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bukara GmbH",
+    description: "Professionelle Fräswerkzeuge, Schärfservice und Sonderwerkzeuge — exklusiver ITA-Partner.",
+    images: [OG_IMAGE],
+  },
 };
 
 export default function RootLayout({
