@@ -111,7 +111,11 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
       const parent = allCategories.find((c) => c.slug === kategorieParam && c.parent_id === null);
       if (parent) {
         const childIds = allCategories.filter((c) => c.parent_id === parent.id).map((c) => c.id);
-        result = result.filter((c) => c.categoryIds.some((id) => childIds.includes(id)));
+        if (childIds.length > 0) {
+          result = result.filter((c) => c.categoryIds.some((id) => childIds.includes(id)));
+        } else {
+          result = result.filter((c) => c.categoryIds.includes(parent.id));
+        }
       }
     }
 
@@ -155,7 +159,11 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
       const parent = allCategories.find((c) => c.slug === kategorieParam && c.parent_id === null);
       if (parent) {
         const childIds = allCategories.filter((c) => c.parent_id === parent.id).map((c) => c.id);
-        result = result.filter((c) => c.categoryIds.some((id) => childIds.includes(id)));
+        if (childIds.length > 0) {
+          result = result.filter((c) => c.categoryIds.some((id) => childIds.includes(id)));
+        } else {
+          result = result.filter((c) => c.categoryIds.includes(parent.id));
+        }
       }
     }
     return result;

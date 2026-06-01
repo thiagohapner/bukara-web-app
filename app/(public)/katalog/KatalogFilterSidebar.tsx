@@ -147,6 +147,12 @@ export default function KatalogFilterSidebar({
     onFilterApplied?.();
   }
 
+  function selectCategory(cat: V2Category) {
+    const isActive = currentKategorie === cat.slug && !currentSub;
+    router.push(buildUrl({ kategorie: isActive ? null : cat.slug, sub: null }));
+    onFilterApplied?.();
+  }
+
   function toggleMaterial(name: string) {
     const next = selectedMaterials.includes(name)
       ? selectedMaterials.filter((m) => m !== name)
@@ -194,6 +200,25 @@ export default function KatalogFilterSidebar({
         {topLevel.map((parent) => {
           const subs = subMap[parent.id] ?? [];
           const isExpanded = expandedId === parent.id;
+
+          if (subs.length === 0) {
+            const isActive = currentKategorie === parent.slug && !currentSub;
+            return (
+              <div key={parent.id} className="border-b border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => selectCategory(parent)}
+                  className={`w-full text-left py-4 cursor-pointer transition-colors ${
+                    isActive
+                      ? "font-semibold text-slate-900 border-l-2 border-slate-900 pl-[18px]"
+                      : "text-base text-slate-900 hover:text-slate-600"
+                  }`}
+                >
+                  {parent.name}
+                </button>
+              </div>
+            );
+          }
 
           return (
             <div key={parent.id} className="border-b border-slate-100">
