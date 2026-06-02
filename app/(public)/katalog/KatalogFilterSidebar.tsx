@@ -21,6 +21,8 @@ interface Props {
   absoluteMinDiam: number;
   absoluteMaxDiam: number;
   onFilterApplied?: () => void;
+  sort?: string;
+  onSortChange?: (v: string) => void;
 }
 
 function RangeSlider({
@@ -80,7 +82,7 @@ export default function KatalogFilterSidebar({
   allCategories, materialCounts, applicationTags, selectedMaterials, minScore,
   priceMin, priceMax, absoluteMinPrice, absoluteMaxPrice,
   diamMin, diamMax, absoluteMinDiam, absoluteMaxDiam,
-  onFilterApplied,
+  onFilterApplied, sort, onSortChange,
 }: Props) {
   const router = useRouter();
   const params = useSearchParams();
@@ -191,6 +193,33 @@ export default function KatalogFilterSidebar({
   return (
     <div>
       <p className="text-base font-semibold text-slate-900 mb-4">Kategorien & Filter</p>
+
+      {/* SORTIEREN — shown only in mobile drawer */}
+      {onSortChange && (
+        <div className="border-b border-slate-100 pb-4 mb-0">
+          <SectionLabel>Sortieren</SectionLabel>
+          <div className="flex flex-col gap-2">
+            {[
+              { value: "", label: "Standard" },
+              { value: "preis-asc", label: "Preis aufsteigend" },
+              { value: "preis-desc", label: "Preis absteigend" },
+              { value: "name-az", label: "Name A–Z" },
+            ].map(({ value, label }) => (
+              <label key={value} className="flex items-center gap-2 text-base text-slate-900 cursor-pointer select-none">
+                <input
+                  type="radio"
+                  name="sort"
+                  checked={(sort ?? "") === value}
+                  onChange={() => onSortChange(value)}
+                  className="flex-shrink-0"
+                  style={{ accentColor: "#0F172A" }}
+                />
+                <span className={(sort ?? "") === value ? "font-medium" : ""}>{label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* KATEGORIEN */}
       <div className="border-t border-slate-100">

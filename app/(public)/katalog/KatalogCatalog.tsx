@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { X, Search } from "lucide-react";
+import { X, Search, SlidersHorizontal } from "lucide-react";
 import Footer from "@/components/Footer";
 import ProductCard, { type ProductCardData } from "@/components/ProductCard";
 import CustomSelect from "@/components/CustomSelect";
@@ -271,8 +271,49 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
             {/* Right column */}
             <div className="flex-1 min-w-0">
-              {/* Sort + Search */}
-              <div className="flex gap-3 mb-4">
+              {/* Sort + Search — mobile */}
+              <div className="flex flex-col gap-2 mb-4 lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => setDrawerOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-slate-200 text-sm font-medium text-slate-700 w-fit"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filter / Sort
+                  {activeFilterCount > 0 && (
+                    <span className="bg-slate-900 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </button>
+                <form
+                  className="flex gap-2"
+                  onSubmit={(e) => { e.preventDefault(); commitSearch(localSearch); }}
+                >
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      value={localSearch}
+                      onChange={(e) => setLocalSearch(e.target.value)}
+                      placeholder="Produkt suchen…"
+                      className={DS_INPUT}
+                    />
+                    {localSearch && (
+                      <button
+                        type="button"
+                        onClick={() => { setLocalSearch(""); commitSearch(""); }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg leading-none cursor-pointer"
+                      >×</button>
+                    )}
+                  </div>
+                  <button type="submit" className="btn-orange flex-shrink-0 flex items-center gap-1.5 px-4">
+                    <Search className="w-4 h-4" />
+                  </button>
+                </form>
+              </div>
+
+              {/* Sort + Search — desktop */}
+              <div className="hidden lg:flex gap-3 mb-4">
                 <div className="w-52 flex-shrink-0">
                   <CustomSelect
                     value={sortParam}
@@ -310,7 +351,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                     className="btn-orange flex-shrink-0 flex items-center gap-1.5 px-4"
                   >
                     <Search className="w-4 h-4" />
-                    <span className="hidden sm:inline text-sm">Suchen</span>
+                    <span className="text-sm">Suchen</span>
                   </button>
                 </form>
               </div>
@@ -384,7 +425,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   </button>
                 </div>
               ) : (
-                <div ref={tilesRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div ref={tilesRef} className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                   {filtered.map((card) => (
                     <div key={card.slug} className="katalog-tile">
                       <ProductCard card={card} />
@@ -406,13 +447,13 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
           />
           <div className="fixed top-0 left-0 h-full w-72 bg-white z-50 overflow-y-auto shadow-xl lg:hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-              <span className="text-sm font-semibold text-slate-900">Filter</span>
+              <span className="text-sm font-semibold text-slate-900">Filter & Sort</span>
               <button onClick={() => setDrawerOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-5">
-              <KatalogFilterSidebar {...sidebarProps} onFilterApplied={() => setDrawerOpen(false)} />
+              <KatalogFilterSidebar {...sidebarProps} sort={sortParam} onSortChange={(v) => pushParam("sort", v)} onFilterApplied={() => setDrawerOpen(false)} />
             </div>
           </div>
         </>
