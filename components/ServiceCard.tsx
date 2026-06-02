@@ -27,7 +27,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
 
   if (variant === "panel") {
     return (
-      <div className="service-card rounded-3xl overflow-hidden bg-[#F5F5F7] flex flex-col h-full">
+      <div className="service-card rounded-lg overflow-hidden bg-[#F5F5F7] flex flex-col h-full">
         <div className="p-10 flex flex-col flex-1">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
             {service.name}
@@ -135,7 +135,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
   );
 
   return (
-    <div className="service-card border border-slate-100 rounded-2xl overflow-hidden bg-white w-full flex flex-col sm:flex-row">
+    <div className="service-card border border-slate-100 rounded-lg overflow-hidden bg-white w-full flex flex-col sm:flex-row">
       {imageBlock}
       {contentBlock}
     </div>

@@ -66,7 +66,7 @@ export default function OfferItemsEditor({ items, products, onChange }: Props) {
               <div>
                 <label className="block text-xs font-medium text-slate-600 mb-1">Produkt *</label>
                 <select
-                  className="w-full border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+                  className="w-full border border-slate-200 rounded-sm px-2 py-1.5 text-sm"
                   value={item.product_id}
                   onChange={e => update(realIndex, { product_id: e.target.value })}
                 >
@@ -79,7 +79,7 @@ export default function OfferItemsEditor({ items, products, onChange }: Props) {
                 <input
                   type="number"
                   min={1}
-                  className="w-full border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+                  className="w-full border border-slate-200 rounded-sm px-2 py-1.5 text-sm"
                   value={item.quantity}
                   onChange={e => update(realIndex, { quantity: Number(e.target.value) })}
                 />

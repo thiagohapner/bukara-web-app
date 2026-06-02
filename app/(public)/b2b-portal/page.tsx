@@ -106,7 +106,7 @@ export default function B2BPortalPage() {
           </p>
 
           {/* Existing customer login */}
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-6 mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <p className="text-sm font-semibold text-slate-700 mb-0.5">Bereits registriert?</p>
               <p className="text-sm text-slate-500">Melden Sie sich direkt in Ihrem B2B-Konto an.</p>
@@ -133,7 +133,7 @@ export default function B2BPortalPage() {
           </div>
 
           {/* Access request form */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <div className="rounded-lg border border-slate-200 bg-white p-6 sm:p-8">
             <h2 className="text-xl font-bold text-slate-900 mb-1">Zugang anfordern</h2>
             <p className="text-sm text-slate-500 mb-6">
               Füllen Sie das Formular aus — wir melden uns mit Ihren Zugangsdaten.

@@ -33,7 +33,7 @@ const EMPTY: CategoryData = {
   name: "", slug: "", parent_id: null, sort_order: 0, is_active: true,
 };
 
-const inp = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500";
+const inp = "w-full border border-slate-200 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500";
 
 export default function CategoryEditClient({
   categoryId,

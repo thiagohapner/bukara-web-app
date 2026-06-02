@@ -94,7 +94,7 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
           return (
             <div key={ri} className="flex gap-2 items-start">
               <input
-                className="flex-1 border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+                className="flex-1 border border-slate-200 rounded-sm px-2 py-1.5 text-sm"
                 placeholder="z.B. Kompressionsgeometrie: 2+6 Schneider"
                 value={row.spec_value}
                 onChange={e => updateSpec(ri, e.target.value)}
@@ -114,7 +114,7 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
           return (
             <div key={ri} className="flex gap-2 items-start">
               <input
-                className="flex-1 border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+                className="flex-1 border border-slate-200 rounded-sm px-2 py-1.5 text-sm"
                 placeholder="z.B. Fräsen"
                 value={row.spec_value}
                 onChange={e => updateSpec(ri, e.target.value)}
@@ -134,7 +134,7 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
           return (
             <div key={ri} className="flex gap-2 items-start">
               <input
-                className="flex-1 border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+                className="flex-1 border border-slate-200 rounded-sm px-2 py-1.5 text-sm"
                 placeholder="z.B. HOMAG OPTIMAT KAL 310"
                 value={row.spec_value}
                 onChange={e => updateSpec(ri, e.target.value)}
@@ -166,7 +166,7 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
                 </label>
                 {checked && row && (
                   <select
-                    className="border border-slate-200 rounded-md px-2 py-1 text-sm"
+                    className="border border-slate-200 rounded-sm px-2 py-1 text-sm"
                     value={row.suitability}
                     onChange={e => updateSuitability(name, e.target.value)}
                   >
@@ -179,7 +179,7 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
         </div>
         <div className="flex gap-2 items-center mt-4 pt-3 border-t border-slate-100">
           <input
-            className="border border-slate-200 rounded-md px-2 py-1.5 text-sm flex-1 max-w-xs"
+            className="border border-slate-200 rounded-sm px-2 py-1.5 text-sm flex-1 max-w-xs"
             placeholder="Neuer Materialtyp"
             value={newMaterialName}
             onChange={e => setNewMaterialName(e.target.value)}
@@ -207,7 +207,7 @@ export default function ProductDataEditor({ specs, materials, cutting, onSpecsCh
               {(["diameter", "feed_rate", "rpm_range"] as const).map(field => (
                 <input
                   key={field}
-                  className="flex-1 border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+                  className="flex-1 border border-slate-200 rounded-sm px-2 py-1.5 text-sm"
                   value={row[field]}
                   onChange={e => onCuttingChange(cutting.map((c, i) => i === ri ? { ...c, [field]: e.target.value } : c))}
                 />

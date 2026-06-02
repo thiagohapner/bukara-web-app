@@ -165,7 +165,7 @@ export default function KatalogProductContent({
       content: (
         <div className="flex flex-wrap gap-2">
           {applications.map((a) => (
-            <span key={a.tag} className="text-sm font-medium text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+            <span key={a.tag} className="text-sm font-medium text-slate-700 bg-slate-100 px-3 py-1.5 rounded-pill">
               {a.tag}
             </span>
           ))}

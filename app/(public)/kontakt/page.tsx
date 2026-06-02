@@ -131,7 +131,7 @@ export default function KontaktPage() {
                 </p>
 
                 {/* Image */}
-                <div className="relative w-full rounded-2xl overflow-hidden mb-8" style={{ aspectRatio: "16/9" }}>
+                <div className="relative w-full rounded-lg overflow-hidden mb-8" style={{ aspectRatio: "16/9" }}>
                   <Image
                     src="/main_image_small.png"
                     alt="Bukara Werkzeuge"

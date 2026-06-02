@@ -146,7 +146,7 @@ export default function ProductAccessories({
   return (
     <div className="mb-6">
       <p className="text-base font-bold text-slate-900 mb-2">Passend dazu</p>
-      <div className="border border-slate-800 rounded-2xl p-4">
+      <div className="border border-slate-800 rounded-lg p-4">
         {accessories.map((acc, idx) => (
           <div key={acc.id}>
             {idx > 0 && <div className="border-t border-slate-100 mt-4 mb-4" />}

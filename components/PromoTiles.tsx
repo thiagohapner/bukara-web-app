@@ -62,7 +62,7 @@ export default function PromoTiles() {
               key={tile.id}
               href={tile.href}
               style={{ textDecoration: "none" }}
-              className="promo-tile relative rounded-2xl overflow-hidden min-h-[200px] flex items-center justify-between px-7 py-7 group"
+              className="promo-tile relative rounded-lg overflow-hidden min-h-[200px] flex items-center justify-between px-7 py-7 group"
             >
               <div style={{ backgroundColor: "#F5F5F7" }} className="absolute inset-0" />
 
@@ -81,7 +81,7 @@ export default function PromoTiles() {
               </div>
 
               {/* Image */}
-              <div className="w-[42%] h-[160px] relative flex-shrink-0 z-10 rounded-xl overflow-hidden">
+              <div className="w-[42%] h-[160px] relative flex-shrink-0 z-10 rounded-lg overflow-hidden">
                 <Image
                   src={tile.image}
                   alt={tile.title}

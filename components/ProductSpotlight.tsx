@@ -32,7 +32,7 @@ export default function ProductSpotlight() {
   return (
     <section ref={sectionRef} className="py-6 bg-white">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-        <div className="spotlight-inner bg-slate-100 rounded-3xl overflow-hidden flex flex-col sm:flex-row items-center justify-between px-10 py-10 gap-8 min-h-[200px]">
+        <div className="spotlight-inner bg-slate-100 rounded-lg overflow-hidden flex flex-col sm:flex-row items-center justify-between px-10 py-10 gap-8 min-h-[200px]">
           {/* Text */}
           <div className="spotlight-text">
             <p className="text-[10px] font-bold tracking-widest uppercase text-orange-500 mb-2">

@@ -27,7 +27,7 @@ export type EnrichedCard = ProductCardData & {
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-medium">
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-slate-900 text-white text-xs font-medium">
       {label}
       <button
         type="button"
@@ -277,7 +277,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                 <button
                   type="button"
                   onClick={() => setDrawerOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-slate-200 text-sm font-medium text-slate-700 w-fit"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-medium text-slate-700 w-fit"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
                   Filtern & Sortieren

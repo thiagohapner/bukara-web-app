@@ -40,7 +40,7 @@ export default function NewsArticles() {
               key={article.id}
               className="article-card group cursor-pointer"
             >
-              <div className="rounded-2xl overflow-hidden mb-4 h-52 relative">
+              <div className="rounded-lg overflow-hidden mb-4 h-52 relative">
                 <Image
                   src={article.image}
                   alt={article.title}

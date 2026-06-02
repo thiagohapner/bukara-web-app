@@ -30,7 +30,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
     return (
       <Link
         href="/angebote"
-        className="group block rounded-2xl overflow-hidden"
+        className="group block rounded-lg overflow-hidden"
         style={{ textDecoration: "none", background: "linear-gradient(135deg, #00A597 0%, #007A70 100%)" }}
       >
         <div className="flex items-center gap-3 px-5 py-4">
@@ -51,7 +51,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
   return (
     <Link
       href="/angebote"
-      className="group block rounded-2xl overflow-hidden"
+      className="group block rounded-lg overflow-hidden"
       style={{
         textDecoration: "none",
         background: lightBg ? "#f1f5f9" : "linear-gradient(135deg, #00A597 0%, #007A70 100%)",
@@ -76,7 +76,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
           </div>
         </div>
         <span
-          className="flex-shrink-0 inline-flex items-center gap-2 font-semibold text-base rounded-full px-7 py-3.5 transition-colors whitespace-nowrap"
+          className="flex-shrink-0 inline-flex items-center gap-2 font-semibold text-base rounded-sm px-7 py-3.5 transition-colors whitespace-nowrap"
           style={lightBg ? { backgroundColor: "#00A597", color: "#ffffff" } : { backgroundColor: "#ffffff", color: "#00A597" }}
         >
           Angebote entdecken

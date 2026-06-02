@@ -164,7 +164,7 @@ export default function DealEditClient({ dealId }: { dealId: string | null }) {
   );
 }
 
-const inp = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500";
+const inp = "w-full border border-slate-200 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (

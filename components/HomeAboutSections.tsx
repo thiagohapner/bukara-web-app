@@ -34,7 +34,7 @@ export default function HomeAboutSections() {
       {/* ── Unser Anspruch ── */}
       <section className="home-about-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
         <div className="flex flex-col lg:flex-row gap-12 items-center">
-          <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
+          <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-lg overflow-hidden">
             <Image
               src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/sonderwerkzeug/Frame%2065%20(4).png"
               alt="Sonderwerkzeuge"
@@ -64,7 +64,7 @@ export default function HomeAboutSections() {
       {/* ── Unser Sortiment ── */}
       <section className="home-about-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
         <div className="flex flex-col lg:flex-row-reverse gap-12 items-center">
-          <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
+          <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-lg overflow-hidden">
             <Image
               src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/ueber-uns/assortment.png"
               alt="Schnell und digital bestellen"
@@ -104,7 +104,7 @@ export default function HomeAboutSections() {
       {/* ── Unser Service ── */}
       <section className="home-about-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
         <div className="flex flex-col lg:flex-row gap-12 items-center">
-          <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
+          <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-lg overflow-hidden">
             <Image
               src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/schaerfservice/A3679582.png"
               alt="Schärfservice"

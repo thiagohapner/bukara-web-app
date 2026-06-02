@@ -52,7 +52,7 @@ export default function Testimonials() {
           {TESTIMONIALS.map((t) => (
             <div
               key={t.id}
-              className="t-card bg-white rounded-2xl p-7 border border-slate-100 transition-transform duration-450 hover:scale-[1.02]"
+              className="t-card bg-white rounded-lg p-7 border border-slate-100 transition-transform duration-450 hover:scale-[1.02]"
             >
               {/* Stars */}
               <div className="stars text-lg mb-3">

@@ -83,7 +83,7 @@ export default function Hero() {
         <div className="hidden lg:flex w-full lg:w-[50%] items-start h-[360px] lg:h-[576px] gap-4">
           {/* Keyboard — 2/3 width of headphones via flex ratio */}
           <div
-            className="hero-keyboard relative rounded-2xl overflow-hidden cursor-pointer"
+            className="hero-keyboard relative rounded-lg overflow-hidden cursor-pointer"
             style={{ flex: 2, height: "65%", backgroundColor: "#e6eff5" }}
           >
             {/* <div className="absolute top-3 right-3 z-30 bg-white text-[#022221] text-[11px] font-bold px-2.5 py-1.5 rounded-full">
@@ -100,7 +100,7 @@ export default function Hero() {
 
           {/* Headphones — taller, fills remaining space */}
           <div
-            className="hero-phones relative rounded-2xl overflow-hidden cursor-pointer"
+            className="hero-phones relative rounded-lg overflow-hidden cursor-pointer"
             style={{ flex: 3, height: "90%", backgroundColor: "#f5ede8" }}
           >
             {/* <div className="absolute top-3 right-3 z-30 bg-white text-[#022221] text-[11px] font-bold px-2.5 py-1.5 rounded-full">

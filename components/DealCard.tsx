@@ -98,7 +98,7 @@ export default function DealCard({ deal, index }: Props) {
   );
 
   return (
-    <div className="deal-card border border-slate-100 rounded-2xl overflow-hidden bg-white w-full flex flex-col sm:flex-row">
+    <div className="deal-card border border-slate-100 rounded-md overflow-hidden bg-white w-full flex flex-col sm:flex-row">
       {imageBlock}
       {contentBlock}
     </div>

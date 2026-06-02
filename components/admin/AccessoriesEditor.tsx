@@ -49,7 +49,7 @@ export default function AccessoriesEditor({ accessories, products, currentProduc
         return (
           <div key={realIndex} className="flex gap-2 items-center">
             <select
-              className="flex-1 border border-slate-200 rounded-md px-2 py-1.5 text-sm"
+              className="flex-1 border border-slate-200 rounded-sm px-2 py-1.5 text-sm"
               value={row.accessory_product_id}
               onChange={e => update(realIndex, e.target.value)}
             >

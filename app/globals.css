@@ -13,6 +13,12 @@
 
   --color-slate-900: #022221;    /* Bukara dark — primary text      */
   --color-slate-800: #022221;    /* Bukara dark — secondary text    */
+
+  /* Radius scale — single source of truth */
+  --radius-sm:   4px;     /* buttons, inputs              */
+  --radius-md:   8px;     /* cards                        */
+  --radius-lg:   12px;    /* panels, containers, galleries */
+  --radius-pill: 9999px;  /* chips, badges, tags          */
 }
 
 /* ============================================================
@@ -139,7 +145,7 @@ label[for] {
 .btn-orange {
   background: var(--orange);
   color: white;
-  border-radius: 9999px;
+  border-radius: var(--radius-sm);
   padding: 0.7rem 1.75rem;
   font-weight: 600;
   font-size: 1rem;
@@ -160,7 +166,7 @@ label[for] {
 .btn-black {
   background: #0F172A;
   color: white;
-  border-radius: 9999px;
+  border-radius: var(--radius-sm);
   padding: 0.7rem 1.75rem;
   font-weight: 600;
   font-size: 1rem;
@@ -183,7 +189,7 @@ label[for] {
   background: transparent;
   color: #022221;
   border: 1.5px solid #CBD5E1;
-  border-radius: 9999px;
+  border-radius: var(--radius-sm);
   padding: 0.7rem 1.75rem;
   font-weight: 600;
   font-size: 1rem;

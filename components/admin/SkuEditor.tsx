@@ -93,7 +93,7 @@ function Field({ label, value, onChange }: { label: string; value: string; onCha
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full border border-slate-200 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="w-full border border-slate-200 rounded-sm px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
       />
     </div>
   );
@@ -112,7 +112,7 @@ function NumField({ label, value, onChange, nullable = false }: { label: string;
           if (nullable && raw === "") { onChange(""); return; }
           onChange(Number(raw));
         }}
-        className="w-full border border-slate-200 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="w-full border border-slate-200 rounded-sm px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
       />
     </div>
   );

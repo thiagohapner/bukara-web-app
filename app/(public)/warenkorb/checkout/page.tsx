@@ -10,7 +10,7 @@ import { submitOrder } from "@/app/actions/submitOrder";
 import { FileText, Clock, Check, Phone, Mail, ArrowRight } from "lucide-react";
 
 function inputClass(extra = "") {
-  return `w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#00A597]/20 focus:border-[#00A597] transition-colors ${extra}`;
+  return `w-full border border-slate-200 rounded-sm px-4 py-3 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#00A597]/20 focus:border-[#00A597] transition-colors ${extra}`;
 }
 
 type FormState = {
@@ -54,7 +54,7 @@ function OrderSummary() {
 
   return (
     <>
-      <div className="rounded-2xl border border-slate-100 bg-slate-50 p-6">
+      <div className="rounded-lg border border-slate-100 bg-slate-50 p-6">
         <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-5">
           Ihre Bestellung
         </p>
@@ -117,7 +117,7 @@ function OrderSummary() {
             </span>
           </div>
           {totalSavings > 0 && (
-            <div className="flex justify-between font-semibold rounded-xl px-3 py-2.5" style={{ background: "#e8f7f6", color: "#00A597" }}>
+            <div className="flex justify-between font-semibold rounded-lg px-3 py-2.5" style={{ background: "#e8f7f6", color: "#00A597" }}>
               <span>Ihr Ersparnis</span>
               <span>−{formatEur(totalSavings)}</span>
             </div>
@@ -131,7 +131,7 @@ function OrderSummary() {
       </div>
 
       {/* Contact block */}
-      <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-5">
+      <div className="mt-4 rounded-lg border border-slate-100 bg-slate-50 p-5">
         <p className="text-sm font-semibold text-slate-900 mb-1">Noch Fragen?</p>
         <p className="text-xs text-slate-500 mb-3">Wir beraten Sie gerne – persönlich und unverbindlich.</p>
         <a

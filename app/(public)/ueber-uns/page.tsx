@@ -17,7 +17,7 @@ function UeberCheck() {
 function Placeholder({ bg, label, className = "" }: { bg: string; label: string; className?: string }) {
   return (
     <div
-      className={`w-full rounded-2xl flex items-center justify-center ${className}`}
+      className={`w-full rounded-lg flex items-center justify-center ${className}`}
       style={{ background: bg }}
     >
       <span className="font-black tracking-tighter select-none text-4xl sm:text-5xl" style={{ color: "rgba(0,165,151,0.13)" }}>
@@ -78,7 +78,7 @@ export default function UeberUnsPage() {
         {/* ── 2. Identity ── */}
         <section className="ueber-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
-            <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
+            <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-lg overflow-hidden">
               <Image
                 src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/sonderwerkzeug/Frame%2065%20(4).png"
                 alt="Sonderwerkzeuge"
@@ -108,7 +108,7 @@ export default function UeberUnsPage() {
         {/* ── 3. B2B Portal ── */}
         <section className="ueber-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
           <div className="flex flex-col lg:flex-row-reverse gap-12 items-center">
-            <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
+            <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-lg overflow-hidden">
               <Image
                 src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/ueber-uns/assortment.png"
                 alt="Schnell und digital bestellen"
@@ -148,7 +148,7 @@ export default function UeberUnsPage() {
         {/* ── 5. Schärfservice ── */}
         <section className="ueber-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
-            <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-2xl overflow-hidden">
+            <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-lg overflow-hidden">
               <Image
                 src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/schaerfservice/main_image_small.png"
                 alt="Schärfservice"
@@ -205,7 +205,7 @@ export default function UeberUnsPage() {
             </div>
             <a
               href="mailto:info@bukara.de"
-              className="inline-flex items-center gap-2 bg-white font-semibold text-sm rounded-full px-6 py-3 hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center gap-2 bg-white font-semibold text-sm rounded-sm px-6 py-3 hover:bg-slate-50 transition-colors"
               style={{ textDecoration: "none", color: "#00A597" }}
             >
               E-Mail schreiben

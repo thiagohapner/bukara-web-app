@@ -2,7 +2,7 @@ import { Truck, Tag, ShieldCheck } from "lucide-react";
 
 export default function OrderBenefits() {
   return (
-    <div className="rounded-2xl overflow-hidden mt-5 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
+    <div className="rounded-lg overflow-hidden mt-5 mb-6" style={{ backgroundColor: "#F5F5F7" }}>
 
       <div className="flex items-center gap-3.5 px-4 py-3.5">
         <ShieldCheck className="w-5 h-5 flex-shrink-0" style={{ color: "#00A597" }} />
