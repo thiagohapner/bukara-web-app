@@ -358,10 +358,11 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
               </div>
 
               {/* Result count + desktop view toggle */}
-              <div className="mb-3 flex items-center justify-between">
+              <div className="mb-3 flex items-center gap-2">
                 <span className="text-sm text-slate-500">
                   {`${filtered.length} Produkt${filtered.length !== 1 ? "e" : ""}`}
                 </span>
+                <span className="hidden lg:block text-sm text-slate-300">|</span>
                 <button
                   type="button"
                   onClick={() => pushParam("view", viewParam === "list" ? "" : "list")}
