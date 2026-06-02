@@ -47,7 +47,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
       <div className="hidden lg:block">
         {/* Main image */}
         <div
-          className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden mb-2 cursor-zoom-in"
+          className="relative w-full aspect-[10/11] rounded-2xl overflow-hidden mb-2 cursor-zoom-in"
           style={{ background: "#EEEEEE" }}
           onClick={() => mainImage && setLightboxIndex(0)}
         >
@@ -72,7 +72,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
             {images.slice(1, 5).map((img, idx) => (
               <div
                 key={idx}
-                className="relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-zoom-in"
+                className="relative w-full aspect-[10/11] rounded-xl overflow-hidden cursor-zoom-in"
                 style={{ background: "#EEEEEE" }}
                 onClick={() => setLightboxIndex(idx + 1)}
               >
@@ -91,7 +91,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
         style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
         {(images.length > 0 ? images : [null]).map((img, i) => (
-          <div key={i} className="flex-shrink-0 w-[82%] aspect-[3/4] snap-start rounded-2xl overflow-hidden relative"
+          <div key={i} className="flex-shrink-0 w-[82%] aspect-[10/11] snap-start rounded-2xl overflow-hidden relative"
             style={{ background: "#EEEEEE" }}>
             {i === 0 && badge && (
               <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">

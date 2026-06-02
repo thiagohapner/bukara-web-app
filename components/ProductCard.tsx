@@ -24,7 +24,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
       <div className="product-card bg-white rounded-2xl overflow-hidden border border-slate-100 group">
 
         {/* Portrait image */}
-        <div className="relative aspect-[3/4] overflow-hidden" style={{ background: "#EEEEEE" }}>
+        <div className="relative aspect-[10/11] overflow-hidden" style={{ background: "#EEEEEE" }}>
           {card.badge && (
             <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
               {card.badge}
