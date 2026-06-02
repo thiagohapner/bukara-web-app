@@ -279,7 +279,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-slate-200 text-sm font-medium text-slate-700 w-fit"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
-                  Filter / Sort
+                  Filtern & Sortieren
                   {activeFilterCount > 0 && (
                     <span className="bg-slate-900 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                       {activeFilterCount}
@@ -447,7 +447,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
           />
           <div className="fixed top-0 left-0 h-full w-72 bg-white z-50 overflow-y-auto shadow-xl lg:hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-              <span className="text-sm font-semibold text-slate-900">Filter & Sort</span>
+              <span className="text-sm font-semibold text-slate-900">Filtern & Sortieren</span>
               <button onClick={() => setDrawerOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
