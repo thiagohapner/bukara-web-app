@@ -23,7 +23,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
   if (card.variant === "list") {
     return (
       <Link href={`${card.hrefPrefix ?? "/produkte"}/${card.slug}`} style={{ textDecoration: "none", display: "block" }}>
-        <div className="product-card bg-white rounded-xl overflow-hidden border border-slate-100 group flex items-center gap-4 p-3">
+        <div className="bg-white rounded-xl overflow-hidden border border-slate-100 group flex items-center gap-4 p-3">
           <div className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden" style={{ background: "#EEEEEE" }}>
             {card.badge && (
               <span className="absolute top-2 left-2 z-10 bg-[#9B242A] text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">

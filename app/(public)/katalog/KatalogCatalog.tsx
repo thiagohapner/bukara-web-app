@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { X, Search, SlidersHorizontal, LayoutGrid, LayoutList } from "lucide-react";
+import { X, Search, SlidersHorizontal } from "lucide-react";
 import Footer from "@/components/Footer";
 import ProductCard, { type ProductCardData } from "@/components/ProductCard";
 import CustomSelect from "@/components/CustomSelect";
@@ -362,24 +362,14 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                 <span className="text-sm text-slate-500">
                   {`${filtered.length} Produkt${filtered.length !== 1 ? "e" : ""}`}
                 </span>
-                <div className="hidden lg:flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => pushParam("view", "")}
-                    className={`p-1.5 rounded-md transition-colors ${viewParam !== "list" ? "bg-slate-900 text-white" : "text-slate-400 hover:text-slate-600"}`}
-                    aria-label="Rasteransicht"
-                  >
-                    <LayoutGrid className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => pushParam("view", "list")}
-                    className={`p-1.5 rounded-md transition-colors ${viewParam === "list" ? "bg-slate-900 text-white" : "text-slate-400 hover:text-slate-600"}`}
-                    aria-label="Listenansicht"
-                  >
-                    <LayoutList className="w-4 h-4" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => pushParam("view", viewParam === "list" ? "" : "list")}
+                  className="hidden lg:block text-sm text-slate-500 hover:text-slate-900 transition-colors underline underline-offset-2"
+                  aria-label={viewParam === "list" ? "In Kachelansicht wechseln" : "In Listenansicht wechseln"}
+                >
+                  {viewParam === "list" ? "Als Kacheln anzeigen" : "Als Liste anzeigen"}
+                </button>
               </div>
 
               {/* Active filter chips */}
