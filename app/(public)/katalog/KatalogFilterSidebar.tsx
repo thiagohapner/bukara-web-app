@@ -23,6 +23,8 @@ interface Props {
   onFilterApplied?: () => void;
   sort?: string;
   onSortChange?: (v: string) => void;
+  view?: string;
+  onViewChange?: (v: string) => void;
 }
 
 function RangeSlider({
@@ -82,7 +84,7 @@ export default function KatalogFilterSidebar({
   allCategories, materialCounts, applicationTags, selectedMaterials, minScore,
   priceMin, priceMax, absoluteMinPrice, absoluteMaxPrice,
   diamMin, diamMax, absoluteMinDiam, absoluteMaxDiam,
-  onFilterApplied, sort, onSortChange,
+  onFilterApplied, sort, onSortChange, view, onViewChange,
 }: Props) {
   const router = useRouter();
   const params = useSearchParams();
@@ -215,6 +217,31 @@ export default function KatalogFilterSidebar({
                   style={{ accentColor: "#0F172A" }}
                 />
                 <span className={(sort ?? "") === value ? "font-medium" : ""}>{label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ANSICHT */}
+      {onViewChange && (
+        <div className="border-b border-slate-100 pb-4 mb-0">
+          <SectionLabel>Ansicht</SectionLabel>
+          <div className="flex flex-col gap-2">
+            {[
+              { value: "", label: "Raster" },
+              { value: "list", label: "Liste" },
+            ].map(({ value, label }) => (
+              <label key={value} className="flex items-center gap-2 text-base text-slate-900 cursor-pointer select-none">
+                <input
+                  type="radio"
+                  name="view"
+                  checked={(view ?? "") === value}
+                  onChange={() => onViewChange(value)}
+                  className="flex-shrink-0"
+                  style={{ accentColor: "#0F172A" }}
+                />
+                <span className={(view ?? "") === value ? "font-medium" : ""}>{label}</span>
               </label>
             ))}
           </div>

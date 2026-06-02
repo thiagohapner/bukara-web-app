@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { X, Search, SlidersHorizontal } from "lucide-react";
+import { X, Search, SlidersHorizontal, LayoutGrid, LayoutList } from "lucide-react";
 import Footer from "@/components/Footer";
 import ProductCard, { type ProductCardData } from "@/components/ProductCard";
 import CustomSelect from "@/components/CustomSelect";
@@ -62,6 +62,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   const selectedAnwendungen = anwendungParam ? anwendungParam.split(",").filter(Boolean) : [];
   const minScoreParam = searchParams.get("minScore");
   const sortParam = searchParams.get("sort") ?? "";
+  const viewParam = searchParams.get("view") ?? "";
   const searchQuery = searchParams.get("q") ?? "";
   const priceMinParam = searchParams.get("priceMin");
   const priceMaxParam = searchParams.get("priceMax");
@@ -356,11 +357,29 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                 </form>
               </div>
 
-              {/* Result count */}
-              <div className="mb-3">
+              {/* Result count + desktop view toggle */}
+              <div className="mb-3 flex items-center justify-between">
                 <span className="text-sm text-slate-500">
                   {`${filtered.length} Produkt${filtered.length !== 1 ? "e" : ""}`}
                 </span>
+                <div className="hidden lg:flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => pushParam("view", "")}
+                    className={`p-1.5 rounded-md transition-colors ${viewParam !== "list" ? "bg-slate-900 text-white" : "text-slate-400 hover:text-slate-600"}`}
+                    aria-label="Rasteransicht"
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => pushParam("view", "list")}
+                    className={`p-1.5 rounded-md transition-colors ${viewParam === "list" ? "bg-slate-900 text-white" : "text-slate-400 hover:text-slate-600"}`}
+                    aria-label="Listenansicht"
+                  >
+                    <LayoutList className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
               {/* Active filter chips */}
@@ -425,10 +444,16 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   </button>
                 </div>
               ) : (
-                <div ref={tilesRef} className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+                <div
+                  ref={tilesRef}
+                  className={viewParam === "list"
+                    ? "flex flex-col gap-3"
+                    : "grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"
+                  }
+                >
                   {filtered.map((card) => (
                     <div key={card.slug} className="katalog-tile">
-                      <ProductCard card={card} />
+                      <ProductCard card={{ ...card, variant: viewParam === "list" ? "list" : "grid" }} />
                     </div>
                   ))}
                 </div>
@@ -453,7 +478,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
               </button>
             </div>
             <div className="p-5">
-              <KatalogFilterSidebar {...sidebarProps} sort={sortParam} onSortChange={(v) => pushParam("sort", v)} onFilterApplied={() => setDrawerOpen(false)} />
+              <KatalogFilterSidebar {...sidebarProps} sort={sortParam} onSortChange={(v) => pushParam("sort", v)} view={viewParam} onViewChange={(v) => pushParam("view", v)} onFilterApplied={() => setDrawerOpen(false)} />
             </div>
           </div>
         </>
