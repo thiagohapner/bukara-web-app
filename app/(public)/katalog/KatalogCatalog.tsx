@@ -379,13 +379,13 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   {kategorieParam && !subParam && (
                     <FilterChip
                       label={allCategories.find((c) => c.slug === kategorieParam)?.name ?? kategorieParam}
-                      onRemove={resetFilters}
+                      onRemove={() => pushParam("kategorie", "")}
                     />
                   )}
                   {subParam && (
                     <FilterChip
                       label={allCategories.find((c) => c.slug === subParam)?.name ?? subParam}
-                      onRemove={resetFilters}
+                      onRemove={() => pushParam("sub", "")}
                     />
                   )}
                   {selectedAnwendungen.map((tag) => (

@@ -316,7 +316,7 @@ export default function KatalogProductContent({
 
             {selectedSku && (
               <div className="flex items-center gap-3 mb-8">
-                <div className="flex items-center border border-slate-800 rounded-full select-none h-12">
+                <div className="flex items-center border border-slate-800 rounded-sm select-none h-12">
                   <button
                     type="button"
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
