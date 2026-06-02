@@ -54,9 +54,18 @@ export function clearStoredCartId(): void {
   if (typeof window !== "undefined") localStorage.removeItem(CART_KEY);
 }
 
+export async function cartExists(cartId: string): Promise<boolean> {
+  const { data } = await supabase.from("carts").select("id").eq("id", cartId).maybeSingle();
+  return data != null;
+}
+
 export async function getOrCreateCart(): Promise<string> {
   const stored = getStoredCartId();
-  if (stored) return stored;
+  if (stored) {
+    const { data } = await supabase.from("carts").select("id").eq("id", stored).maybeSingle();
+    if (data) return stored;
+    clearStoredCartId();
+  }
   const { data, error } = await supabase.from("carts").insert({}).select("id").single();
   if (error || !data) throw new Error("Failed to create cart");
   localStorage.setItem(CART_KEY, data.id);

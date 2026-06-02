@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from "rea
 import {
   getStoredCartId,
   clearStoredCartId,
+  cartExists,
   getOrCreateCart,
   getCartItems,
   addToCart,
@@ -64,10 +65,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const stored = getStoredCartId();
-    if (stored) {
+    if (!stored) return;
+    cartExists(stored).then((exists) => {
+      if (!exists) { clearStoredCartId(); return; }
       setCartId(stored);
       fetchItems(stored).then(setItems);
-    }
+    });
   }, []);
 
   const ensureCart = useCallback(async (): Promise<string> => {
