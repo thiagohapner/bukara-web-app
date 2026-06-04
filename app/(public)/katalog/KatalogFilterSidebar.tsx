@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import type { V2Category } from "@/lib/v2/types";
 
@@ -11,6 +10,9 @@ interface Props {
   materialCounts: MaterialCount[];
   applicationTags: string[];
   selectedMaterials: string[];
+  selectedAnwendungen: string[];
+  currentKategorie: string;
+  currentSub: string;
   minScore: number;
   priceMin: number | null;
   priceMax: number | null;
@@ -25,6 +27,13 @@ interface Props {
   onSortChange?: (v: string) => void;
   view?: string;
   onViewChange?: (v: string) => void;
+  onSelectCategory: (parentSlug: string, subSlug: string) => void;
+  onToggleMaterial: (name: string) => void;
+  onToggleAnwendung: (tag: string) => void;
+  onSetMinScore: (score: number) => void;
+  onCommitPrice: (min: number, max: number) => void;
+  onCommitDiam: (min: number, max: number) => void;
+  onResetAnwendung: () => void;
 }
 
 function RangeSlider({
@@ -81,17 +90,14 @@ function RangeSlider({
 }
 
 export default function KatalogFilterSidebar({
-  allCategories, materialCounts, applicationTags, selectedMaterials, minScore,
+  allCategories, materialCounts, applicationTags, selectedMaterials, selectedAnwendungen,
+  currentKategorie, currentSub, minScore,
   priceMin, priceMax, absoluteMinPrice, absoluteMaxPrice,
   diamMin, diamMax, absoluteMinDiam, absoluteMaxDiam,
   onFilterApplied, sort, onSortChange, view, onViewChange,
+  onSelectCategory, onToggleMaterial, onToggleAnwendung, onSetMinScore,
+  onCommitPrice, onCommitDiam, onResetAnwendung,
 }: Props) {
-  const router = useRouter();
-  const params = useSearchParams();
-  const currentKategorie = params.get("kategorie") ?? "";
-  const currentSub = params.get("sub") ?? "";
-  const selectedAnwendungen = (params.get("anwendung") ?? "").split(",").filter(Boolean);
-
   const topLevel = allCategories.filter((c) => c.parent_id === null);
   const subMap: Record<string, V2Category[]> = {};
   for (const c of allCategories.filter((c) => c.parent_id !== null)) {
@@ -136,57 +142,6 @@ export default function KatalogFilterSidebar({
     setLocalDiamMax(diamMax ?? absoluteMaxDiam);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diamMin, diamMax, absoluteMinDiam, absoluteMaxDiam]);
-
-  function buildUrl(newParams: Record<string, string | null>) {
-    const p = new URLSearchParams(params.toString());
-    for (const [k, v] of Object.entries(newParams)) {
-      if (v === null) p.delete(k);
-      else p.set(k, v);
-    }
-    return `/katalog?${p.toString()}`;
-  }
-
-  function selectSub(parent: V2Category, sub: V2Category) {
-    router.push(buildUrl({ kategorie: parent.slug, sub: sub.slug }));
-    onFilterApplied?.();
-  }
-
-  function toggleMaterial(name: string) {
-    const next = selectedMaterials.includes(name)
-      ? selectedMaterials.filter((m) => m !== name)
-      : [...selectedMaterials, name];
-    router.push(buildUrl({ material: next.length > 0 ? next.join(",") : null }));
-    onFilterApplied?.();
-  }
-
-  function commitPrice(min: number, max: number) {
-    const p = new URLSearchParams(params.toString());
-    if (min > absoluteMinPrice) p.set("priceMin", String(min)); else p.delete("priceMin");
-    if (max < absoluteMaxPrice) p.set("priceMax", String(max)); else p.delete("priceMax");
-    router.push(`/katalog?${p.toString()}`);
-    onFilterApplied?.();
-  }
-
-  function commitDiam(min: number, max: number) {
-    const p = new URLSearchParams(params.toString());
-    if (min > absoluteMinDiam) p.set("diamMin", String(min)); else p.delete("diamMin");
-    if (max < absoluteMaxDiam) p.set("diamMax", String(max)); else p.delete("diamMax");
-    router.push(`/katalog?${p.toString()}`);
-    onFilterApplied?.();
-  }
-
-  function toggleAnwendung(tag: string) {
-    const next = selectedAnwendungen.includes(tag)
-      ? selectedAnwendungen.filter((t) => t !== tag)
-      : [...selectedAnwendungen, tag];
-    router.push(buildUrl({ anwendung: next.length > 0 ? next.join(",") : null }));
-    onFilterApplied?.();
-  }
-
-  function setMinScore(score: number) {
-    router.push(buildUrl({ minScore: score > 0 ? String(score) : null }));
-    onFilterApplied?.();
-  }
 
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-3">{children}</p>
@@ -276,7 +231,7 @@ export default function KatalogFilterSidebar({
                         <button
                           key={sub.id}
                           type="button"
-                          onClick={() => selectSub(parent, sub)}
+                          onClick={() => { onSelectCategory(parent.slug, sub.slug); onFilterApplied?.(); }}
                           className={`w-full text-left py-2 text-sm cursor-pointer transition-colors ${
                             isActive
                               ? "font-semibold text-slate-900 border-l-2 border-slate-900 pl-[18px]"
@@ -305,7 +260,7 @@ export default function KatalogFilterSidebar({
                 <input
                   type="checkbox"
                   checked={selectedAnwendungen.includes(tag)}
-                  onChange={() => toggleAnwendung(tag)}
+                  onChange={() => { onToggleAnwendung(tag); onFilterApplied?.(); }}
                   className="rounded flex-shrink-0"
                   style={{ accentColor: "#0F172A" }}
                 />
@@ -315,7 +270,7 @@ export default function KatalogFilterSidebar({
             {selectedAnwendungen.length > 0 && (
               <button
                 type="button"
-                onClick={() => { router.push(buildUrl({ anwendung: null })); onFilterApplied?.(); }}
+                onClick={() => { onResetAnwendung(); onFilterApplied?.(); }}
                 className="text-xs text-slate-400 hover:text-slate-600 text-left mt-0.5"
               >
                 Zurücksetzen
@@ -337,7 +292,7 @@ export default function KatalogFilterSidebar({
             valueMin={localDiamMin}
             valueMax={localDiamMax}
             onChange={(min, max) => { setLocalDiamMin(min); setLocalDiamMax(max); }}
-            onCommit={commitDiam}
+            onCommit={(min, max) => { onCommitDiam(min, max); onFilterApplied?.(); }}
           />
         </div>
       )}
@@ -352,7 +307,7 @@ export default function KatalogFilterSidebar({
             valueMin={localPriceMin}
             valueMax={localPriceMax}
             onChange={(min, max) => { setLocalPriceMin(min); setLocalPriceMax(max); }}
-            onCommit={commitPrice}
+            onCommit={(min, max) => { onCommitPrice(min, max); onFilterApplied?.(); }}
           />
         </div>
       )}
@@ -367,7 +322,7 @@ export default function KatalogFilterSidebar({
                 <input
                   type="checkbox"
                   checked={selectedMaterials.includes(name)}
-                  onChange={() => toggleMaterial(name)}
+                  onChange={() => { onToggleMaterial(name); onFilterApplied?.(); }}
                   className="rounded flex-shrink-0"
                   style={{ accentColor: "#0F172A" }}
                 />
@@ -394,7 +349,7 @@ export default function KatalogFilterSidebar({
                   type="radio"
                   name="minScore"
                   checked={minScore === value}
-                  onChange={() => setMinScore(value)}
+                  onChange={() => { onSetMinScore(value); onFilterApplied?.(); }}
                   className="flex-shrink-0"
                   style={{ accentColor: "#0F172A" }}
                 />

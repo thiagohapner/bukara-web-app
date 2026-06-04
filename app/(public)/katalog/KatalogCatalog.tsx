@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useTransition } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
@@ -48,40 +48,77 @@ interface Props {
 }
 
 export default function KatalogCatalog({ initialCards, allCategories, allApplicationTags }: Props) {
-  const searchParams = useSearchParams();
+  const sp = useSearchParams();
   const router = useRouter();
   const tilesRef = useRef<HTMLDivElement>(null);
+  const [isPending, startTransition] = useTransition();
 
   const [allCards] = useState<EnrichedCard[]>(initialCards);
 
-  // URL params
-  const kategorieParam = searchParams.get("kategorie") ?? "";
-  const subParam = searchParams.get("sub") ?? "";
-  const materialParam = searchParams.get("material") ?? "";
-  const anwendungParam = searchParams.get("anwendung") ?? "";
-  const selectedAnwendungen = anwendungParam ? anwendungParam.split(",").filter(Boolean) : [];
-  const minScoreParam = searchParams.get("minScore");
-  const sortParam = searchParams.get("sort") ?? "";
-  const viewParam = searchParams.get("view") ?? "";
-  const searchQuery = searchParams.get("q") ?? "";
-  const priceMinParam = searchParams.get("priceMin");
-  const priceMaxParam = searchParams.get("priceMax");
-  const diamMinParam = searchParams.get("diamMin");
-  const diamMaxParam = searchParams.get("diamMax");
-  const priceMin = priceMinParam ? Number(priceMinParam) : null;
-  const priceMax = priceMaxParam ? Number(priceMaxParam) : null;
-  const diamMin = diamMinParam ? Number(diamMinParam) : null;
-  const diamMax = diamMaxParam ? Number(diamMaxParam) : null;
-  const minScore = minScoreParam ? Number(minScoreParam) : 1;
-  const selectedMaterials = materialParam ? materialParam.split(",").filter(Boolean) : [];
+  // Local filter state — initialized from URL once (supports deep links / refresh)
+  const [kategorieParam, setKategorieParam] = useState(sp.get("kategorie") ?? "");
+  const [subParam, setSubParam] = useState(sp.get("sub") ?? "");
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>(
+    (sp.get("material") ?? "").split(",").filter(Boolean)
+  );
+  const [selectedAnwendungen, setSelectedAnwendungen] = useState<string[]>(
+    (sp.get("anwendung") ?? "").split(",").filter(Boolean)
+  );
+  const [minScore, setMinScore] = useState(sp.get("minScore") ? Number(sp.get("minScore")) : 1);
+  const [sortParam, setSortParam] = useState(sp.get("sort") ?? "");
+  const [viewParam, setViewParam] = useState(sp.get("view") ?? "");
+  const [searchQuery, setSearchQuery] = useState(sp.get("q") ?? "");
+  const [priceMin, setPriceMin] = useState<number | null>(
+    sp.get("priceMin") ? Number(sp.get("priceMin")) : null
+  );
+  const [priceMax, setPriceMax] = useState<number | null>(
+    sp.get("priceMax") ? Number(sp.get("priceMax")) : null
+  );
+  const [diamMin, setDiamMin] = useState<number | null>(
+    sp.get("diamMin") ? Number(sp.get("diamMin")) : null
+  );
+  const [diamMax, setDiamMax] = useState<number | null>(
+    sp.get("diamMax") ? Number(sp.get("diamMax")) : null
+  );
 
   const [localSearch, setLocalSearch] = useState(searchQuery);
-  useEffect(() => { setLocalSearch(searchQuery); }, [searchQuery]);
 
-  function commitSearch(value: string) {
-    const p = new URLSearchParams(searchParams.toString());
-    if (value.trim()) p.set("q", value.trim()); else p.delete("q");
-    router.push(`/katalog?${p.toString()}`);
+  // ── URL builder ───────────────────────────────────────────────────────────
+  function makeUrl(overrides: {
+    kategorie?: string; sub?: string; materials?: string[]; anwendungen?: string[];
+    minScore?: number; sort?: string; view?: string; q?: string;
+    priceMin?: number | null; priceMax?: number | null;
+    diamMin?: number | null; diamMax?: number | null;
+  } = {}): string {
+    const s = {
+      kategorie: overrides.kategorie !== undefined ? overrides.kategorie : kategorieParam,
+      sub: overrides.sub !== undefined ? overrides.sub : subParam,
+      materials: overrides.materials !== undefined ? overrides.materials : selectedMaterials,
+      anwendungen: overrides.anwendungen !== undefined ? overrides.anwendungen : selectedAnwendungen,
+      minScore: overrides.minScore !== undefined ? overrides.minScore : minScore,
+      sort: overrides.sort !== undefined ? overrides.sort : sortParam,
+      view: overrides.view !== undefined ? overrides.view : viewParam,
+      q: overrides.q !== undefined ? overrides.q : searchQuery,
+      priceMin: overrides.priceMin !== undefined ? overrides.priceMin : priceMin,
+      priceMax: overrides.priceMax !== undefined ? overrides.priceMax : priceMax,
+      diamMin: overrides.diamMin !== undefined ? overrides.diamMin : diamMin,
+      diamMax: overrides.diamMax !== undefined ? overrides.diamMax : diamMax,
+    };
+    const p = new URLSearchParams();
+    if (s.kategorie) p.set("kategorie", s.kategorie);
+    if (s.sub) p.set("sub", s.sub);
+    if (s.materials.length) p.set("material", s.materials.join(","));
+    if (s.anwendungen.length) p.set("anwendung", s.anwendungen.join(","));
+    if (s.minScore > 1) p.set("minScore", String(s.minScore));
+    if (s.sort) p.set("sort", s.sort);
+    if (s.view) p.set("view", s.view);
+    if (s.q) p.set("q", s.q);
+    if (s.priceMin !== null) p.set("priceMin", String(s.priceMin));
+    if (s.priceMax !== null) p.set("priceMax", String(s.priceMax));
+    if (s.diamMin !== null) p.set("diamMin", String(s.diamMin));
+    if (s.diamMax !== null) p.set("diamMax", String(s.diamMax));
+    const qs = p.toString();
+    return qs ? `/katalog?${qs}` : "/katalog";
   }
 
   // ── Absolute bounds ───────────────────────────────────────────────────────
@@ -201,43 +238,147 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  function pushParam(key: string, value: string) {
-    const p = new URLSearchParams(searchParams.toString());
-    if (value) p.set(key, value); else p.delete(key);
-    router.push(`/katalog?${p.toString()}`);
+  // ── Filter handlers ───────────────────────────────────────────────────────
+  function handleToggleMaterial(name: string) {
+    const next = selectedMaterials.includes(name)
+      ? selectedMaterials.filter((m) => m !== name)
+      : [...selectedMaterials, name];
+    setSelectedMaterials(next);
+    startTransition(() => router.replace(makeUrl({ materials: next })));
+  }
+
+  function handleToggleAnwendung(tag: string) {
+    const next = selectedAnwendungen.includes(tag)
+      ? selectedAnwendungen.filter((t) => t !== tag)
+      : [...selectedAnwendungen, tag];
+    setSelectedAnwendungen(next);
+    startTransition(() => router.replace(makeUrl({ anwendungen: next })));
+  }
+
+  function handleSetMinScore(score: number) {
+    setMinScore(score);
+    startTransition(() => router.replace(makeUrl({ minScore: score })));
+  }
+
+  function handleSelectCategory(parentSlug: string, subSlug: string) {
+    setKategorieParam(parentSlug);
+    setSubParam(subSlug);
+    startTransition(() => router.replace(makeUrl({ kategorie: parentSlug, sub: subSlug })));
+  }
+
+  function handleCommitPrice(min: number, max: number) {
+    const newMin = min > absoluteMinPrice ? min : null;
+    const newMax = max < absoluteMaxPrice ? max : null;
+    setPriceMin(newMin);
+    setPriceMax(newMax);
+    startTransition(() => router.replace(makeUrl({ priceMin: newMin, priceMax: newMax })));
+  }
+
+  function handleCommitDiam(min: number, max: number) {
+    const newMin = min > absoluteMinDiam ? min : null;
+    const newMax = max < absoluteMaxDiam ? max : null;
+    setDiamMin(newMin);
+    setDiamMax(newMax);
+    startTransition(() => router.replace(makeUrl({ diamMin: newMin, diamMax: newMax })));
+  }
+
+  function handleResetAnwendung() {
+    setSelectedAnwendungen([]);
+    startTransition(() => router.replace(makeUrl({ anwendungen: [] })));
+  }
+
+  function handleSort(value: string) {
+    setSortParam(value);
+    startTransition(() => router.replace(makeUrl({ sort: value })));
+  }
+
+  function handleView(value: string) {
+    setViewParam(value);
+    startTransition(() => router.replace(makeUrl({ view: value })));
+  }
+
+  function commitSearch(value: string) {
+    const trimmed = value.trim();
+    setSearchQuery(trimmed);
+    startTransition(() => router.replace(makeUrl({ q: trimmed })));
   }
 
   function resetFilters() {
-    router.push("/katalog");
+    setKategorieParam("");
+    setSubParam("");
+    setSelectedMaterials([]);
+    setSelectedAnwendungen([]);
+    setMinScore(1);
+    setSortParam("");
+    setViewParam("");
+    setSearchQuery("");
+    setLocalSearch("");
+    setPriceMin(null);
+    setPriceMax(null);
+    setDiamMin(null);
+    setDiamMax(null);
+    startTransition(() => router.replace("/katalog"));
   }
 
   function resetPriceFilter() {
-    const p = new URLSearchParams(searchParams.toString());
-    p.delete("priceMin"); p.delete("priceMax");
-    router.push(`/katalog?${p.toString()}`);
+    setPriceMin(null);
+    setPriceMax(null);
+    startTransition(() => router.replace(makeUrl({ priceMin: null, priceMax: null })));
   }
 
   function resetDiamFilter() {
-    const p = new URLSearchParams(searchParams.toString());
-    p.delete("diamMin"); p.delete("diamMax");
-    router.push(`/katalog?${p.toString()}`);
+    setDiamMin(null);
+    setDiamMax(null);
+    startTransition(() => router.replace(makeUrl({ diamMin: null, diamMax: null })));
   }
 
-  const hasActiveFilters = !!(kategorieParam || subParam || materialParam || anwendungParam || searchQuery || priceMinParam || priceMaxParam || diamMinParam || diamMaxParam);
+  function removeKategorie() {
+    setKategorieParam("");
+    setSubParam("");
+    startTransition(() => router.replace(makeUrl({ kategorie: "", sub: "" })));
+  }
+
+  function removeSub() {
+    setSubParam("");
+    startTransition(() => router.replace(makeUrl({ sub: "" })));
+  }
+
+  function removeAnwendung(tag: string) {
+    const next = selectedAnwendungen.filter((t) => t !== tag);
+    setSelectedAnwendungen(next);
+    startTransition(() => router.replace(makeUrl({ anwendungen: next })));
+  }
+
+  function removeMaterial(m: string) {
+    const next = selectedMaterials.filter((x) => x !== m);
+    setSelectedMaterials(next);
+    startTransition(() => router.replace(makeUrl({ materials: next })));
+  }
+
+  function removeSearch() {
+    setSearchQuery("");
+    setLocalSearch("");
+    startTransition(() => router.replace(makeUrl({ q: "" })));
+  }
+
+  const hasActiveFilters = !!(kategorieParam || subParam || selectedMaterials.length || selectedAnwendungen.length || searchQuery || priceMin !== null || priceMax !== null || diamMin !== null || diamMax !== null);
   const activeFilterCount =
     (kategorieParam && !subParam ? 1 : 0) +
     (subParam ? 1 : 0) +
     selectedMaterials.length +
     selectedAnwendungen.length +
     (searchQuery ? 1 : 0) +
-    (priceMinParam || priceMaxParam ? 1 : 0) +
-    (diamMinParam || diamMaxParam ? 1 : 0);
+    (priceMin !== null || priceMax !== null ? 1 : 0) +
+    (diamMin !== null || diamMax !== null ? 1 : 0);
 
   const sidebarProps = {
     allCategories,
     materialCounts,
     applicationTags: allApplicationTags,
     selectedMaterials,
+    selectedAnwendungen,
+    currentKategorie: kategorieParam,
+    currentSub: subParam,
     minScore,
     priceMin,
     priceMax,
@@ -247,6 +388,13 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     diamMax,
     absoluteMinDiam,
     absoluteMaxDiam,
+    onSelectCategory: handleSelectCategory,
+    onToggleMaterial: handleToggleMaterial,
+    onToggleAnwendung: handleToggleAnwendung,
+    onSetMinScore: handleSetMinScore,
+    onCommitPrice: handleCommitPrice,
+    onCommitDiam: handleCommitDiam,
+    onResetAnwendung: handleResetAnwendung,
   };
 
   return (
@@ -318,7 +466,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                 <div className="w-52 flex-shrink-0">
                   <CustomSelect
                     value={sortParam}
-                    onChange={(v) => pushParam("sort", v)}
+                    onChange={handleSort}
                     options={[
                       { value: "", label: "Sortieren nach" },
                       { value: "preis-asc", label: "Preis aufsteigend" },
@@ -365,7 +513,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                 <span className="hidden lg:block text-sm text-slate-300">|</span>
                 <button
                   type="button"
-                  onClick={() => pushParam("view", viewParam === "list" ? "" : "list")}
+                  onClick={() => handleView(viewParam === "list" ? "" : "list")}
                   className="hidden lg:block text-sm text-slate-500 hover:text-slate-900 transition-colors underline underline-offset-2"
                   aria-label={viewParam === "list" ? "In Kachelansicht wechseln" : "In Listenansicht wechseln"}
                 >
@@ -379,45 +527,39 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   {kategorieParam && !subParam && (
                     <FilterChip
                       label={allCategories.find((c) => c.slug === kategorieParam)?.name ?? kategorieParam}
-                      onRemove={() => pushParam("kategorie", "")}
+                      onRemove={removeKategorie}
                     />
                   )}
                   {subParam && (
                     <FilterChip
                       label={allCategories.find((c) => c.slug === subParam)?.name ?? subParam}
-                      onRemove={() => pushParam("sub", "")}
+                      onRemove={removeSub}
                     />
                   )}
                   {selectedAnwendungen.map((tag) => (
                     <FilterChip
                       key={tag}
                       label={tag}
-                      onRemove={() => {
-                        const next = selectedAnwendungen.filter((t) => t !== tag);
-                        pushParam("anwendung", next.join(","));
-                      }}
+                      onRemove={() => removeAnwendung(tag)}
                     />
                   ))}
                   {selectedMaterials.map((m) => (
                     <FilterChip
                       key={m}
                       label={m}
-                      onRemove={() => {
-                        const next = selectedMaterials.filter((x) => x !== m);
-                        pushParam("material", next.join(","));
-                      }}
+                      onRemove={() => removeMaterial(m)}
                     />
                   ))}
                   {searchQuery && (
-                    <FilterChip label={`"${searchQuery}"`} onRemove={() => pushParam("q", "")} />
+                    <FilterChip label={`"${searchQuery}"`} onRemove={removeSearch} />
                   )}
-                  {(priceMinParam || priceMaxParam) && (
+                  {(priceMin !== null || priceMax !== null) && (
                     <FilterChip
                       label={`${priceMin ?? absoluteMinPrice}–${priceMax ?? absoluteMaxPrice} €`}
                       onRemove={resetPriceFilter}
                     />
                   )}
-                  {(diamMinParam || diamMaxParam) && (
+                  {(diamMin !== null || diamMax !== null) && (
                     <FilterChip
                       label={`${diamMin ?? absoluteMinDiam}–${diamMax ?? absoluteMaxDiam} mm`}
                       onRemove={resetDiamFilter}
@@ -437,10 +579,11 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
               ) : (
                 <div
                   ref={tilesRef}
-                  className={viewParam === "list"
-                    ? "flex flex-col gap-3"
-                    : "grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"
-                  }
+                  className={[
+                    viewParam === "list" ? "flex flex-col gap-3" : "grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6",
+                    "transition-opacity duration-150",
+                    isPending ? "opacity-60 pointer-events-none" : "",
+                  ].join(" ")}
                 >
                   {filtered.map((card) => (
                     <div key={card.slug} className="katalog-tile">
@@ -469,7 +612,14 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
               </button>
             </div>
             <div className="p-5">
-              <KatalogFilterSidebar {...sidebarProps} sort={sortParam} onSortChange={(v) => pushParam("sort", v)} view={viewParam} onViewChange={(v) => pushParam("view", v)} onFilterApplied={() => setDrawerOpen(false)} />
+              <KatalogFilterSidebar
+                {...sidebarProps}
+                sort={sortParam}
+                onSortChange={handleSort}
+                view={viewParam}
+                onViewChange={handleView}
+                onFilterApplied={() => setDrawerOpen(false)}
+              />
             </div>
           </div>
         </>
