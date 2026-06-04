@@ -31,7 +31,6 @@ export default async function KatalogPage() {
 
   const [
     { data: skus },
-    { data: skuImages },
     { data: productCategories },
     { data: productApplications },
     { data: productMaterials },
@@ -43,7 +42,6 @@ export default async function KatalogPage() {
       .in("product_id", ids)
       .eq("is_active", true)
       .order("sort_order"),
-    supabaseAdminV2.from("sku_images").select("sku_id, image_url, sort_order").order("sort_order"),
     supabaseAdminV2.from("product_categories").select("product_id, category_id").in("product_id", ids),
     supabaseAdminV2.from("product_applications").select("product_id, tag").in("product_id", ids),
     supabaseAdminV2.from("product_materials").select("product_id, material_name, score").in("product_id", ids),
@@ -55,6 +53,16 @@ export default async function KatalogPage() {
     campaign_price: number | null; diameter_mm: number | null; sort_order: number;
     merchant_sku: string | null;
   }>;
+
+  const skuIds = skuList.map((s) => s.id);
+  const { data: skuImages } = skuIds.length > 0
+    ? await supabaseAdminV2
+        .from("sku_images")
+        .select("sku_id, image_url, sort_order")
+        .in("sku_id", skuIds)
+        .order("sort_order")
+    : { data: [] };
+
   const skuImageList = (skuImages ?? []) as Array<{ sku_id: string; image_url: string; sort_order: number }>;
 
   const skuToProduct: Record<string, string> = {};
