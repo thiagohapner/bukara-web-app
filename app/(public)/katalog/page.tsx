@@ -57,14 +57,15 @@ export default async function KatalogPage() {
   }>;
   const skuImageList = (skuImages ?? []) as Array<{ sku_id: string; image_url: string; sort_order: number }>;
 
-  const firstSkuPerProduct: Record<string, string> = {};
+  const skuToProduct: Record<string, string> = {};
   for (const sku of skuList) {
-    if (!firstSkuPerProduct[sku.product_id]) firstSkuPerProduct[sku.product_id] = sku.id;
+    skuToProduct[sku.id] = sku.product_id;
   }
 
-  const firstImageBySku: Record<string, string> = {};
+  const firstImageByProduct: Record<string, string> = {};
   for (const img of skuImageList) {
-    if (!firstImageBySku[img.sku_id]) firstImageBySku[img.sku_id] = img.image_url;
+    const productId = skuToProduct[img.sku_id];
+    if (productId && !firstImageByProduct[productId]) firstImageByProduct[productId] = img.image_url;
   }
 
   const priceMap: Record<string, { campaign: number; original: number }> = {};
@@ -117,8 +118,7 @@ export default async function KatalogPage() {
     id: string; slug: string; base_name: string | null; display_name: string | null;
     badge: string | null; gallery_bg: string | null; default_image_url: string | null;
   }>).map((p) => {
-    const firstSkuId = firstSkuPerProduct[p.id];
-    const image = (firstSkuId && firstImageBySku[firstSkuId]) || p.default_image_url || undefined;
+    const image = firstImageByProduct[p.id] || p.default_image_url || undefined;
     const productCatIds = catMap[p.id] ?? [];
     const firstCatName = productCatIds.length > 0 ? categoryNameById[productCatIds[0]] : undefined;
 
