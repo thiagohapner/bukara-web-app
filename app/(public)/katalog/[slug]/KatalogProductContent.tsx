@@ -126,9 +126,6 @@ export default function KatalogProductContent({
             ))}
           </tbody>
         </table>
-        <p className="text-[10px] text-slate-400 mt-1.5">
-          *1–4 Stück +20% Mindermengenzuschlag · 5–9 Stück Standardpreis · ab 10 Stück −10% Mengenrabatt
-        </p>
       </div>
     );
   }
