@@ -11,13 +11,36 @@ export const metadata = {
   description: "Zerspanungswerkzeuge – alle Produkte und Varianten.",
 };
 
+// Page through a query in 1000-row windows so we never hit PostgREST's default
+// row cap (the catalog now has >1000 SKUs/images/materials).
+async function fetchAll<T>(
+  make: (from: number, to: number) => PromiseLike<{ data: unknown }>,
+): Promise<T[]> {
+  const out: T[] = [];
+  const SIZE = 1000;
+  for (let from = 0; ; from += SIZE) {
+    const { data } = await make(from, from + SIZE - 1);
+    const batch = ((data ?? []) as T[]);
+    out.push(...batch);
+    if (batch.length < SIZE) break;
+  }
+  return out;
+}
+
 export default async function KatalogPage() {
-  const { data: products } = await supabaseAdminV2
-    .from("products")
-    .select("id, slug, base_name, display_name, badge, gallery_bg, default_image_url")
-    .eq("is_active", true)
-    .eq("has_public_page", true)
-    .order("sort_order");
+  const products = await fetchAll<{
+    id: string; slug: string; base_name: string | null; display_name: string | null;
+    badge: string | null; gallery_bg: string | null; default_image_url: string | null;
+  }>((from, to) =>
+    supabaseAdminV2
+      .from("products")
+      .select("id, slug, base_name, display_name, badge, gallery_bg, default_image_url")
+      .eq("is_active", true)
+      .eq("has_public_page", true)
+      .order("sort_order")
+      .order("id")
+      .range(from, to),
+  );
 
   if (!products || products.length === 0) {
     return (
@@ -29,51 +52,64 @@ export default async function KatalogPage() {
 
   const ids = (products as Array<{ id: string }>).map((p) => p.id);
 
-  const [
-    { data: skus },
-    { data: productCategories },
-    { data: productApplications },
-    { data: productMaterials },
-    { data: categories },
-  ] = await Promise.all([
-    supabaseAdminV2
-      .from("skus")
-      .select("id, product_id, price_eur, campaign_price, diameter_mm, shank_mm, sort_order, merchant_sku, bukara_article_number")
-      .in("product_id", ids)
-      .eq("is_active", true)
-      .order("sort_order"),
-    supabaseAdminV2.from("product_categories").select("product_id, category_id").in("product_id", ids),
-    supabaseAdminV2.from("product_applications").select("product_id, tag").in("product_id", ids),
-    supabaseAdminV2.from("product_materials").select("product_id, material_name, score").in("product_id", ids),
-    supabaseAdminV2.from("categories").select("id, name, slug, parent_id, sort_order").order("sort_order"),
-  ]);
-
-  const skuList = (skus ?? []) as Array<{
-    id: string; product_id: string; price_eur: number;
-    campaign_price: number | null; diameter_mm: number | null; shank_mm: number | null; sort_order: number;
-    merchant_sku: string | null; bukara_article_number: string | null;
-  }>;
+  const [skuList, productCategories, productApplications, productMaterials, categories] =
+    await Promise.all([
+      fetchAll<{
+        id: string; product_id: string; price_eur: number;
+        campaign_price: number | null; diameter_mm: number | null; shank_mm: number | null; sort_order: number;
+        merchant_sku: string | null; bukara_article_number: string | null;
+      }>((from, to) =>
+        supabaseAdminV2
+          .from("skus")
+          .select("id, product_id, price_eur, campaign_price, diameter_mm, shank_mm, sort_order, merchant_sku, bukara_article_number")
+          .in("product_id", ids)
+          .eq("is_active", true)
+          .order("sort_order")
+          .order("id")
+          .range(from, to),
+      ),
+      fetchAll<{ product_id: string; category_id: string }>((from, to) =>
+        supabaseAdminV2.from("product_categories").select("product_id, category_id")
+          .in("product_id", ids).order("product_id").order("category_id").range(from, to),
+      ),
+      fetchAll<{ product_id: string; tag: string }>((from, to) =>
+        supabaseAdminV2.from("product_applications").select("product_id, tag")
+          .in("product_id", ids).order("product_id").order("tag").range(from, to),
+      ),
+      fetchAll<V2ProductMaterial>((from, to) =>
+        supabaseAdminV2.from("product_materials").select("product_id, material_name, score")
+          .in("product_id", ids).order("product_id").order("material_name").range(from, to),
+      ),
+      fetchAll<V2Category>((from, to) =>
+        supabaseAdminV2.from("categories").select("id, name, slug, parent_id, sort_order")
+          .order("sort_order").order("id").range(from, to),
+      ),
+    ]);
 
   const skuIds = skuList.map((s) => s.id);
-  const { data: skuImages } = skuIds.length > 0
-    ? await supabaseAdminV2
-        .from("sku_images")
-        .select("sku_id, image_url, sort_order")
-        .in("sku_id", skuIds)
-        .order("sort_order")
-    : { data: [] };
-
-  const skuImageList = (skuImages ?? []) as Array<{ sku_id: string; image_url: string; sort_order: number }>;
+  const skuImageList = skuIds.length > 0
+    ? await fetchAll<{ sku_id: string; image_url: string; sort_order: number }>((from, to) =>
+        supabaseAdminV2.from("sku_images").select("sku_id, image_url, sort_order")
+          .in("sku_id", skuIds).order("sku_id").order("sort_order").order("id").range(from, to),
+      )
+    : [];
 
   const skuToProduct: Record<string, string> = {};
   for (const sku of skuList) {
     skuToProduct[sku.id] = sku.product_id;
   }
 
+  // First image per product = the one with the lowest sort_order (order-independent,
+  // since paginated fetches aren't globally ordered by sort_order).
   const firstImageByProduct: Record<string, string> = {};
+  const firstImageSort: Record<string, number> = {};
   for (const img of skuImageList) {
     const productId = skuToProduct[img.sku_id];
-    if (productId && !firstImageByProduct[productId]) firstImageByProduct[productId] = img.image_url;
+    if (!productId) continue;
+    if (firstImageByProduct[productId] === undefined || img.sort_order < firstImageSort[productId]) {
+      firstImageByProduct[productId] = img.image_url;
+      firstImageSort[productId] = img.sort_order;
+    }
   }
 
   const priceMap: Record<string, { campaign: number; original: number }> = {};
