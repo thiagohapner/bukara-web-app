@@ -21,12 +21,113 @@ interface Props {
   categories: { id: string; name: string }[];
 }
 
-const COLUMNS: { key: SkuSortKey; label: string }[] = [
-  { key: "family_name", label: "Produktfamilie" },
-  { key: "bukara_article_number", label: "Bukara-Nr." },
-  { key: "price_eur", label: "Preis" },
-  { key: "stock_quantity", label: "Bestand" },
-  { key: "is_active", label: "Status" },
+// Single source of truth for columns: header label, optional sort key, and the
+// cell renderer all live together so the header row and body rows can never
+// drift out of alignment. Order matches the SKU-first spec:
+// thumbnail · Bukara-Nr. · Händler-Nr. · Preis · Bestand · Status · Variante · (Edit)
+interface Column {
+  id: string;
+  label: string;
+  sort?: SkuSortKey;
+  headClass?: string;
+  cell: (row: SkuOverviewRow) => React.ReactNode;
+}
+
+const COLUMNS: Column[] = [
+  {
+    id: "thumb",
+    label: "",
+    headClass: "w-14",
+    cell: (r) =>
+      r.thumbnail_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={r.thumbnail_url}
+          alt=""
+          className="w-10 h-10 rounded-md object-cover border border-slate-100"
+        />
+      ) : (
+        <div className="w-10 h-10 rounded-md bg-slate-100 border border-slate-100" />
+      ),
+  },
+  {
+    id: "bukara",
+    label: "Bukara-Nr.",
+    sort: "bukara_article_number",
+    cell: (r) => (
+      <>
+        <Link
+          href={`/admin/v2/variants/${r.sku_id}`}
+          className="font-mono text-xs text-slate-800 hover:text-teal-700"
+        >
+          {r.bukara_article_number}
+        </Link>
+        <div className="text-xs text-slate-400 truncate max-w-[220px]">
+          {r.family_name ?? "—"}
+        </div>
+      </>
+    ),
+  },
+  {
+    id: "haendler",
+    label: "Händler-Nr.",
+    cell: (r) => (
+      <span className="font-mono text-xs text-slate-500">{r.merchant_sku ?? "—"}</span>
+    ),
+  },
+  {
+    id: "preis",
+    label: "Preis",
+    sort: "price_eur",
+    cell: (r) => <PriceCell row={r} />,
+  },
+  {
+    id: "bestand",
+    label: "Bestand",
+    sort: "stock_quantity",
+    cell: (r) => <span className="text-slate-600">{r.stock_quantity}</span>,
+  },
+  {
+    id: "status",
+    label: "Status",
+    sort: "is_active",
+    cell: (r) => (
+      <span
+        className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+          r.is_active ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-500"
+        }`}
+      >
+        {r.is_active ? "Aktiv" : "Inaktiv"}
+      </span>
+    ),
+  },
+  {
+    id: "variante",
+    label: "Variante",
+    cell: (r) => (
+      <span
+        className="block text-slate-600 max-w-[240px] truncate"
+        title={r.variant_label ?? undefined}
+      >
+        {r.variant_label ?? "—"}
+      </span>
+    ),
+  },
+  {
+    id: "edit",
+    label: "",
+    headClass: "text-right",
+    cell: (r) => (
+      <div className="text-right">
+        <Link
+          href={`/admin/v2/variants/${r.sku_id}`}
+          className="text-teal-600 hover:text-teal-700 text-sm font-medium"
+        >
+          Bearbeiten
+        </Link>
+      </div>
+    ),
+  },
 ];
 
 /** Build a query string from the current params plus an overriding patch. */
@@ -168,85 +269,40 @@ export default function VariantTable({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-slate-100 text-left bg-slate-50/60">
-              <th className="px-4 py-2.5 w-14 font-medium text-slate-500"></th>
               {COLUMNS.map((col) => {
-                const active = params.sort === col.key;
+                const active = col.sort && params.sort === col.sort;
                 return (
-                  <th key={col.key} className="px-4 py-2.5 font-medium text-slate-500">
-                    <button
-                      type="button"
-                      onClick={() => toggleSort(col.key)}
-                      className="inline-flex items-center gap-1 hover:text-slate-700"
-                    >
-                      {col.label}
-                      <span className={active ? "text-teal-600" : "text-slate-300"}>
-                        {active ? (params.dir === "asc" ? "↑" : "↓") : "↕"}
-                      </span>
-                    </button>
+                  <th
+                    key={col.id}
+                    className={`px-4 py-2.5 font-medium text-slate-500 ${col.headClass ?? ""}`}
+                  >
+                    {col.sort ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleSort(col.sort!)}
+                        className="inline-flex items-center gap-1 hover:text-slate-700"
+                      >
+                        {col.label}
+                        <span className={active ? "text-teal-600" : "text-slate-300"}>
+                          {active ? (params.dir === "asc" ? "↑" : "↓") : "↕"}
+                        </span>
+                      </button>
+                    ) : (
+                      col.label
+                    )}
                   </th>
                 );
               })}
-              <th className="px-4 py-2.5 font-medium text-slate-500">Händler-Nr.</th>
-              <th className="px-4 py-2.5 font-medium text-slate-500">Variante</th>
-              <th className="px-4 py-2.5"></th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
               <tr key={r.sku_id} className="border-b border-slate-50 hover:bg-slate-50">
-                <td className="px-4 py-2.5">
-                  {r.thumbnail_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={r.thumbnail_url}
-                      alt=""
-                      className="w-10 h-10 rounded-md object-cover border border-slate-100"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-md bg-slate-100 border border-slate-100" />
-                  )}
-                </td>
-                <td className="px-4 py-2.5">
-                  <Link
-                    href={`/admin/v2/variants/${r.sku_id}`}
-                    className="font-mono text-xs text-slate-800 hover:text-teal-700"
-                  >
-                    {r.bukara_article_number}
-                  </Link>
-                  <div className="text-xs text-slate-400 truncate max-w-[200px]">
-                    {r.family_name ?? "—"}
-                  </div>
-                </td>
-                <td className="px-4 py-2.5">
-                  <PriceCell row={r} />
-                </td>
-                <td className="px-4 py-2.5 text-slate-600">{r.stock_quantity}</td>
-                <td className="px-4 py-2.5">
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                      r.is_active ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-500"
-                    }`}
-                  >
-                    {r.is_active ? "Aktiv" : "Inaktiv"}
-                  </span>
-                </td>
-                <td className="px-4 py-2.5 font-mono text-xs text-slate-500">
-                  {r.merchant_sku ?? "—"}
-                </td>
-                <td
-                  className="px-4 py-2.5 text-slate-600 max-w-[220px] truncate"
-                  title={r.variant_label ?? undefined}
-                >
-                  {r.variant_label ?? "—"}
-                </td>
-                <td className="px-4 py-2.5 text-right">
-                  <Link
-                    href={`/admin/v2/variants/${r.sku_id}`}
-                    className="text-teal-600 hover:text-teal-700 text-sm font-medium"
-                  >
-                    Bearbeiten
-                  </Link>
-                </td>
+                {COLUMNS.map((col) => (
+                  <td key={col.id} className="px-4 py-2.5 align-middle">
+                    {col.cell(r)}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
