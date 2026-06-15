@@ -22,7 +22,10 @@ export type EnrichedCard = ProductCardData & {
   materials: { material_name: string; score: number }[];
   minDiam: number | null;
   maxDiam: number | null;
+  minShank: number | null;
+  maxShank: number | null;
   merchantSkus: string[];
+  bukaraSkus: string[];
 };
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
@@ -80,6 +83,12 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   const [diamMax, setDiamMax] = useState<number | null>(
     sp.get("diamMax") ? Number(sp.get("diamMax")) : null
   );
+  const [shankMin, setShankMin] = useState<number | null>(
+    sp.get("shankMin") ? Number(sp.get("shankMin")) : null
+  );
+  const [shankMax, setShankMax] = useState<number | null>(
+    sp.get("shankMax") ? Number(sp.get("shankMax")) : null
+  );
 
   const [localSearch, setLocalSearch] = useState(searchQuery);
 
@@ -89,6 +98,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     minScore?: number; sort?: string; view?: string; q?: string;
     priceMin?: number | null; priceMax?: number | null;
     diamMin?: number | null; diamMax?: number | null;
+    shankMin?: number | null; shankMax?: number | null;
   } = {}): string {
     const s = {
       kategorie: overrides.kategorie !== undefined ? overrides.kategorie : kategorieParam,
@@ -103,6 +113,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
       priceMax: overrides.priceMax !== undefined ? overrides.priceMax : priceMax,
       diamMin: overrides.diamMin !== undefined ? overrides.diamMin : diamMin,
       diamMax: overrides.diamMax !== undefined ? overrides.diamMax : diamMax,
+      shankMin: overrides.shankMin !== undefined ? overrides.shankMin : shankMin,
+      shankMax: overrides.shankMax !== undefined ? overrides.shankMax : shankMax,
     };
     const p = new URLSearchParams();
     if (s.kategorie) p.set("kategorie", s.kategorie);
@@ -117,6 +129,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     if (s.priceMax !== null) p.set("priceMax", String(s.priceMax));
     if (s.diamMin !== null) p.set("diamMin", String(s.diamMin));
     if (s.diamMax !== null) p.set("diamMax", String(s.diamMax));
+    if (s.shankMin !== null) p.set("shankMin", String(s.shankMin));
+    if (s.shankMax !== null) p.set("shankMax", String(s.shankMax));
     const qs = p.toString();
     return qs ? `/katalog?${qs}` : "/katalog";
   }
@@ -134,6 +148,12 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   );
   const absoluteMinDiam = allDiams.length > 0 ? Math.floor(Math.min(...allDiams)) : 0;
   const absoluteMaxDiam = allDiams.length > 0 ? Math.ceil(Math.max(...allDiams)) : 100;
+
+  const allShanks = allCards.flatMap((c) =>
+    c.minShank !== null && c.maxShank !== null ? [c.minShank, c.maxShank] : []
+  );
+  const absoluteMinShank = allShanks.length > 0 ? Math.floor(Math.min(...allShanks)) : 0;
+  const absoluteMaxShank = allShanks.length > 0 ? Math.ceil(Math.max(...allShanks)) : 50;
 
   // ── Filtering ─────────────────────────────────────────────────────────────
   const filtered = (() => {
@@ -170,7 +190,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
       const q = searchQuery.toLowerCase();
       result = result.filter((c) =>
         c.name.toLowerCase().includes(q) ||
-        c.merchantSkus.some((s) => s.toLowerCase().includes(q))
+        c.merchantSkus.some((s) => s.toLowerCase().includes(q)) ||
+        c.bukaraSkus.some((s) => s.toLowerCase().includes(q))
       );
     }
 
@@ -179,6 +200,9 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
     if (diamMin !== null) result = result.filter((c) => c.maxDiam !== null && c.maxDiam >= diamMin);
     if (diamMax !== null) result = result.filter((c) => c.minDiam !== null && c.minDiam <= diamMax);
+
+    if (shankMin !== null) result = result.filter((c) => c.maxShank !== null && c.maxShank >= shankMin);
+    if (shankMax !== null) result = result.filter((c) => c.minShank !== null && c.minShank <= shankMax);
 
     if (sortParam === "preis-asc") result.sort((a, b) => (a.fromCampaignPrice ?? 0) - (b.fromCampaignPrice ?? 0));
     else if (sortParam === "preis-desc") result.sort((a, b) => (b.fromCampaignPrice ?? 0) - (a.fromCampaignPrice ?? 0));
@@ -228,8 +252,10 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     if (allCards.length === 0) return;
     const ctx = gsap.context(() => {
       const tiles = gsap.utils.toArray<HTMLElement>(".katalog-tile");
+      // Cap total stagger time so large result sets (100s of tiles) still
+      // appear promptly instead of animating in over ~40s.
       gsap.from(tiles, {
-        opacity: 0, y: 20, duration: 0.5, stagger: 0.07, ease: "power3.out",
+        opacity: 0, y: 20, duration: 0.5, stagger: { each: 0.04, amount: 0.6 }, ease: "power3.out",
         scrollTrigger: { trigger: tilesRef.current, start: "top 90%" },
       });
     });
@@ -282,6 +308,14 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     startTransition(() => router.replace(makeUrl({ diamMin: newMin, diamMax: newMax })));
   }
 
+  function handleCommitShank(min: number, max: number) {
+    const newMin = min > absoluteMinShank ? min : null;
+    const newMax = max < absoluteMaxShank ? max : null;
+    setShankMin(newMin);
+    setShankMax(newMax);
+    startTransition(() => router.replace(makeUrl({ shankMin: newMin, shankMax: newMax })));
+  }
+
   function handleResetAnwendung() {
     setSelectedAnwendungen([]);
     startTransition(() => router.replace(makeUrl({ anwendungen: [] })));
@@ -317,6 +351,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     setPriceMax(null);
     setDiamMin(null);
     setDiamMax(null);
+    setShankMin(null);
+    setShankMax(null);
     startTransition(() => router.replace("/katalog"));
   }
 
@@ -330,6 +366,12 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     setDiamMin(null);
     setDiamMax(null);
     startTransition(() => router.replace(makeUrl({ diamMin: null, diamMax: null })));
+  }
+
+  function resetShankFilter() {
+    setShankMin(null);
+    setShankMax(null);
+    startTransition(() => router.replace(makeUrl({ shankMin: null, shankMax: null })));
   }
 
   function removeKategorie() {
@@ -361,7 +403,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     startTransition(() => router.replace(makeUrl({ q: "" })));
   }
 
-  const hasActiveFilters = !!(kategorieParam || subParam || selectedMaterials.length || selectedAnwendungen.length || searchQuery || priceMin !== null || priceMax !== null || diamMin !== null || diamMax !== null);
+  const hasActiveFilters = !!(kategorieParam || subParam || selectedMaterials.length || selectedAnwendungen.length || searchQuery || priceMin !== null || priceMax !== null || diamMin !== null || diamMax !== null || shankMin !== null || shankMax !== null);
   const activeFilterCount =
     (kategorieParam && !subParam ? 1 : 0) +
     (subParam ? 1 : 0) +
@@ -369,7 +411,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     selectedAnwendungen.length +
     (searchQuery ? 1 : 0) +
     (priceMin !== null || priceMax !== null ? 1 : 0) +
-    (diamMin !== null || diamMax !== null ? 1 : 0);
+    (diamMin !== null || diamMax !== null ? 1 : 0) +
+    (shankMin !== null || shankMax !== null ? 1 : 0);
 
   const sidebarProps = {
     allCategories,
@@ -388,12 +431,17 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     diamMax,
     absoluteMinDiam,
     absoluteMaxDiam,
+    shankMin,
+    shankMax,
+    absoluteMinShank,
+    absoluteMaxShank,
     onSelectCategory: handleSelectCategory,
     onToggleMaterial: handleToggleMaterial,
     onToggleAnwendung: handleToggleAnwendung,
     onSetMinScore: handleSetMinScore,
     onCommitPrice: handleCommitPrice,
     onCommitDiam: handleCommitDiam,
+    onCommitShank: handleCommitShank,
     onResetAnwendung: handleResetAnwendung,
   };
 
@@ -561,8 +609,14 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   )}
                   {(diamMin !== null || diamMax !== null) && (
                     <FilterChip
-                      label={`${diamMin ?? absoluteMinDiam}–${diamMax ?? absoluteMaxDiam} mm`}
+                      label={`Ø ${diamMin ?? absoluteMinDiam}–${diamMax ?? absoluteMaxDiam} mm`}
                       onRemove={resetDiamFilter}
+                    />
+                  )}
+                  {(shankMin !== null || shankMax !== null) && (
+                    <FilterChip
+                      label={`Schaft ${shankMin ?? absoluteMinShank}–${shankMax ?? absoluteMaxShank} mm`}
+                      onRemove={resetShankFilter}
                     />
                   )}
                 </div>

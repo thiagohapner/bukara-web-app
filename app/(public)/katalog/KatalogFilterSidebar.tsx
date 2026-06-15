@@ -22,6 +22,10 @@ interface Props {
   diamMax: number | null;
   absoluteMinDiam: number;
   absoluteMaxDiam: number;
+  shankMin: number | null;
+  shankMax: number | null;
+  absoluteMinShank: number;
+  absoluteMaxShank: number;
   onFilterApplied?: () => void;
   sort?: string;
   onSortChange?: (v: string) => void;
@@ -33,6 +37,7 @@ interface Props {
   onSetMinScore: (score: number) => void;
   onCommitPrice: (min: number, max: number) => void;
   onCommitDiam: (min: number, max: number) => void;
+  onCommitShank: (min: number, max: number) => void;
   onResetAnwendung: () => void;
 }
 
@@ -94,9 +99,10 @@ export default function KatalogFilterSidebar({
   currentKategorie, currentSub, minScore,
   priceMin, priceMax, absoluteMinPrice, absoluteMaxPrice,
   diamMin, diamMax, absoluteMinDiam, absoluteMaxDiam,
+  shankMin, shankMax, absoluteMinShank, absoluteMaxShank,
   onFilterApplied, sort, onSortChange, view, onViewChange,
   onSelectCategory, onToggleMaterial, onToggleAnwendung, onSetMinScore,
-  onCommitPrice, onCommitDiam, onResetAnwendung,
+  onCommitPrice, onCommitDiam, onCommitShank, onResetAnwendung,
 }: Props) {
   const topLevel = allCategories.filter((c) => c.parent_id === null);
   const subMap: Record<string, V2Category[]> = {};
@@ -122,6 +128,8 @@ export default function KatalogFilterSidebar({
   const [localPriceMax, setLocalPriceMax] = useState(priceMax ?? absoluteMaxPrice);
   const [localDiamMin, setLocalDiamMin] = useState(diamMin ?? absoluteMinDiam);
   const [localDiamMax, setLocalDiamMax] = useState(diamMax ?? absoluteMaxDiam);
+  const [localShankMin, setLocalShankMin] = useState(shankMin ?? absoluteMinShank);
+  const [localShankMax, setLocalShankMax] = useState(shankMax ?? absoluteMaxShank);
 
   useEffect(() => {
     const sub = allCategories.find((c) => c.slug === currentSub);
@@ -142,6 +150,12 @@ export default function KatalogFilterSidebar({
     setLocalDiamMax(diamMax ?? absoluteMaxDiam);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diamMin, diamMax, absoluteMinDiam, absoluteMaxDiam]);
+
+  useEffect(() => {
+    setLocalShankMin(shankMin ?? absoluteMinShank);
+    setLocalShankMax(shankMax ?? absoluteMaxShank);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shankMin, shankMax, absoluteMinShank, absoluteMaxShank]);
 
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-3">{children}</p>
@@ -293,6 +307,23 @@ export default function KatalogFilterSidebar({
             valueMax={localDiamMax}
             onChange={(min, max) => { setLocalDiamMin(min); setLocalDiamMax(max); }}
             onCommit={(min, max) => { onCommitDiam(min, max); onFilterApplied?.(); }}
+          />
+        </div>
+      )}
+
+      {/* SCHAFTDURCHMESSER */}
+      {absoluteMaxShank > absoluteMinShank && (
+        <div className="border-b border-slate-100 py-4">
+          <SectionLabel>
+            Schaftdurchmesser: {localShankMin} – {localShankMax} mm
+          </SectionLabel>
+          <RangeSlider
+            min={absoluteMinShank}
+            max={absoluteMaxShank}
+            valueMin={localShankMin}
+            valueMax={localShankMax}
+            onChange={(min, max) => { setLocalShankMin(min); setLocalShankMax(max); }}
+            onCommit={(min, max) => { onCommitShank(min, max); onFilterApplied?.(); }}
           />
         </div>
       )}

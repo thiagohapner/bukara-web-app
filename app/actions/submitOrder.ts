@@ -49,8 +49,8 @@ export async function submitOrder(
 
   const [v2Result, pubResult] = await Promise.all([
     v2Ids.length
-      ? admin.schema("v2").from("skus").select("id, price_eur, has_staffelpreis, variant_label, bukara_article_number, product:products(base_name, display_name)").in("id", v2Ids)
-      : Promise.resolve({ data: [] as Array<{ id: string; price_eur: number; has_staffelpreis: boolean; variant_label: string | null; bukara_article_number: string; product: { base_name: string; display_name: string | null } | null }> }),
+      ? admin.schema("v2").from("skus").select("id, price_eur, campaign_price, has_staffelpreis, variant_label, bukara_article_number, product:products(base_name, display_name)").in("id", v2Ids)
+      : Promise.resolve({ data: [] as Array<{ id: string; price_eur: number; campaign_price: number | null; has_staffelpreis: boolean; variant_label: string | null; bukara_article_number: string; product: { base_name: string; display_name: string | null } | null }> }),
     publicIds.length
       ? admin.from("skus").select("id, price, variant_label, artikel_nr, product:products(name)").in("id", publicIds)
       : Promise.resolve({ data: [] as Array<{ id: string; price: number; variant_label: string | null; artikel_nr: string; product: { name: string } | null }> }),
@@ -62,7 +62,8 @@ export async function submitOrder(
   const pricedItems = rows.map((row) => {
     if (row.v2_sku_id) {
       const sku = v2Map[row.v2_sku_id];
-      const base = sku?.price_eur ?? 0;
+      // Honor an active campaign price as the base when present.
+      const base = sku?.campaign_price ?? sku?.price_eur ?? 0;
       const unit_price = unitPriceForQuantity(base, sku?.has_staffelpreis ?? false, row.quantity);
       return {
         unit_price,

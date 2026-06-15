@@ -47,7 +47,7 @@ function OrderSummary() {
   }
 
   const campaignSavings = items.reduce((sum, item) => {
-    const original = item.sku?.price ?? item.unit_price;
+    const original = item.sku?.price ?? item.v2Sku?.price_eur ?? item.unit_price;
     return sum + (original - item.unit_price) * item.quantity;
   }, 0);
   const totalSavings = Math.round((campaignSavings + totals.bulkDiscount) * 100) / 100;

@@ -38,7 +38,7 @@ export default async function KatalogPage() {
   ] = await Promise.all([
     supabaseAdminV2
       .from("skus")
-      .select("id, product_id, price_eur, campaign_price, diameter_mm, sort_order, merchant_sku")
+      .select("id, product_id, price_eur, campaign_price, diameter_mm, shank_mm, sort_order, merchant_sku, bukara_article_number")
       .in("product_id", ids)
       .eq("is_active", true)
       .order("sort_order"),
@@ -50,8 +50,8 @@ export default async function KatalogPage() {
 
   const skuList = (skus ?? []) as Array<{
     id: string; product_id: string; price_eur: number;
-    campaign_price: number | null; diameter_mm: number | null; sort_order: number;
-    merchant_sku: string | null;
+    campaign_price: number | null; diameter_mm: number | null; shank_mm: number | null; sort_order: number;
+    merchant_sku: string | null; bukara_article_number: string | null;
   }>;
 
   const skuIds = skuList.map((s) => s.id);
@@ -78,7 +78,9 @@ export default async function KatalogPage() {
 
   const priceMap: Record<string, { campaign: number; original: number }> = {};
   const diamRangeMap: Record<string, { min: number; max: number }> = {};
+  const shankRangeMap: Record<string, { min: number; max: number }> = {};
   const merchantSkusMap: Record<string, string[]> = {};
+  const bukaraSkusMap: Record<string, string[]> = {};
   for (const sku of skuList) {
     const pid = sku.product_id;
     const eff = sku.campaign_price ?? sku.price_eur;
@@ -93,9 +95,21 @@ export default async function KatalogPage() {
         diamRangeMap[pid].max = Math.max(diamRangeMap[pid].max, sku.diameter_mm);
       }
     }
+    if (sku.shank_mm !== null) {
+      if (!shankRangeMap[pid]) {
+        shankRangeMap[pid] = { min: sku.shank_mm, max: sku.shank_mm };
+      } else {
+        shankRangeMap[pid].min = Math.min(shankRangeMap[pid].min, sku.shank_mm);
+        shankRangeMap[pid].max = Math.max(shankRangeMap[pid].max, sku.shank_mm);
+      }
+    }
     if (sku.merchant_sku) {
       if (!merchantSkusMap[pid]) merchantSkusMap[pid] = [];
       if (!merchantSkusMap[pid].includes(sku.merchant_sku)) merchantSkusMap[pid].push(sku.merchant_sku);
+    }
+    if (sku.bukara_article_number) {
+      if (!bukaraSkusMap[pid]) bukaraSkusMap[pid] = [];
+      if (!bukaraSkusMap[pid].includes(sku.bukara_article_number)) bukaraSkusMap[pid].push(sku.bukara_article_number);
     }
   }
 
@@ -147,7 +161,10 @@ export default async function KatalogPage() {
       materials: (matMap[p.id] ?? []).map((m) => ({ material_name: m.material_name, score: m.score })),
       minDiam: diamRangeMap[p.id]?.min ?? null,
       maxDiam: diamRangeMap[p.id]?.max ?? null,
+      minShank: shankRangeMap[p.id]?.min ?? null,
+      maxShank: shankRangeMap[p.id]?.max ?? null,
       merchantSkus: merchantSkusMap[p.id] ?? [],
+      bukaraSkus: bukaraSkusMap[p.id] ?? [],
     };
   });
 
