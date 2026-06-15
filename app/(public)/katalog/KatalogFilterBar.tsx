@@ -32,8 +32,6 @@ interface Props {
   onApplyAnwendungen: (tags: string[]) => void;
   onApplyMaterials: (materials: string[], minScore: number) => void;
   onApplyPrice: (min: number, max: number) => void;
-  onApplyDiam: (min: number, max: number) => void;
-  onApplyShank: (min: number, max: number) => void;
   onApplySort: (value: string) => void;
 }
 
@@ -41,7 +39,7 @@ export default function KatalogFilterBar({
   state, allCategories, materialCounts, applicationTags, bounds,
   searchValue, onSearchInput, onSearchSubmit, countFor,
   onApplyKategorie, onApplyAnwendungen, onApplyMaterials,
-  onApplyPrice, onApplyDiam, onApplyShank, onApplySort,
+  onApplyPrice, onApplySort,
 }: Props) {
   const [openId, setOpenId] = useState<string | null>(null);
   const toggle = (id: string) => setOpenId((cur) => (cur === id ? null : id));
@@ -49,8 +47,6 @@ export default function KatalogFilterBar({
   const applyAnd = <T extends unknown[]>(fn: (...a: T) => void) => (...a: T) => { fn(...a); close(); };
 
   const priceActive = state.priceMin !== null || state.priceMax !== null;
-  const diamActive = state.diamMin !== null || state.diamMax !== null;
-  const shankActive = state.shankMin !== null || state.shankMax !== null;
   const katActive = !!(state.kategorie || state.sub);
   const sortLabel = SORT_OPTIONS.find((o) => o.value === state.sort)?.label ?? "Beliebtheit";
 
@@ -59,7 +55,7 @@ export default function KatalogFilterBar({
       {/* Search */}
       <form
         onSubmit={(e) => { e.preventDefault(); onSearchSubmit(); }}
-        className="relative w-full sm:w-60 flex-shrink-0"
+        className="relative w-full sm:w-60 flex-shrink-0 sm:mr-6"
       >
         <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
         <input
@@ -102,24 +98,6 @@ export default function KatalogFilterBar({
           options={materialCounts} appliedMaterials={state.materials} appliedMinScore={state.minScore}
           count={(materials, minScore) => countFor({ materials, minScore })}
           onApply={applyAnd(onApplyMaterials)}
-        />
-      </KatalogFilterPill>
-
-      <KatalogFilterPill label="Durchmesser" active={diamActive} open={openId === "durchmesser"} onToggle={() => toggle("durchmesser")} onClose={close}>
-        <KatalogRangePanel
-          absMin={bounds.diam[0]} absMax={bounds.diam[1]}
-          appliedMin={state.diamMin} appliedMax={state.diamMax} unit="mm"
-          count={(min, max) => countFor({ diamMin: min, diamMax: max })}
-          onApply={applyAnd(onApplyDiam)}
-        />
-      </KatalogFilterPill>
-
-      <KatalogFilterPill label="Schaftdurchmesser" active={shankActive} open={openId === "schaft"} onToggle={() => toggle("schaft")} onClose={close}>
-        <KatalogRangePanel
-          absMin={bounds.shank[0]} absMax={bounds.shank[1]}
-          appliedMin={state.shankMin} appliedMax={state.shankMax} unit="mm"
-          count={(min, max) => countFor({ shankMin: min, shankMax: max })}
-          onApply={applyAnd(onApplyShank)}
         />
       </KatalogFilterPill>
 

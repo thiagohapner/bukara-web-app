@@ -416,8 +416,6 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   onApplyAnwendungen={applyAnwendungen}
                   onApplyMaterials={applyMaterials}
                   onApplyPrice={handleCommitPrice}
-                  onApplyDiam={handleCommitDiam}
-                  onApplyShank={handleCommitShank}
                   onApplySort={handleSort}
                 />
               </div>
