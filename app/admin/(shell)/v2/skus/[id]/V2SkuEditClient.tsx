@@ -85,12 +85,14 @@ export default function V2SkuEditClient({
         variant_label: form.variant_label ?? null,
         diameter_mm: form.diameter_mm ?? null,
         nl_mm: form.nl_mm ?? null,
+        nl_1: form.nl_1 ?? null,
         gl_mm: form.gl_mm ?? null,
         shank_mm: form.shank_mm ?? null,
+        shank_length_mm: form.shank_length_mm ?? null,
         teeth: form.teeth ?? null,
         spin_direction: form.spin_direction ?? null,
         coating_or_type: form.coating_or_type ?? null,
-        price_eur: Number(form.price_eur ?? 0),
+        price_eur: form.price_eur != null ? Number(form.price_eur) : null,
         campaign_price: form.campaign_price != null ? Number(form.campaign_price) : null,
         stock_quantity: Number(form.stock_quantity ?? 0),
         is_active: Boolean(form.is_active),
@@ -220,16 +222,27 @@ export default function V2SkuEditClient({
               <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.nl_mm ?? ""} onChange={(e) => field("nl_mm", e.target.value ? Number(e.target.value) : null)} />
             </div>
             <div>
-              <label className={DS_LABEL}>GL (mm)</label>
-              <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.gl_mm ?? ""} onChange={(e) => field("gl_mm", e.target.value ? Number(e.target.value) : null)} />
+              <label className={DS_LABEL}>NL1 (mm)</label>
+              <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.nl_1 ?? ""} onChange={(e) => field("nl_1", e.target.value ? Number(e.target.value) : null)} placeholder="sek. Nutzlänge" />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
+              <label className={DS_LABEL}>GL (mm)</label>
+              <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.gl_mm ?? ""} onChange={(e) => field("gl_mm", e.target.value ? Number(e.target.value) : null)} />
+            </div>
+            <div>
               <label className={DS_LABEL}>Schaft (mm)</label>
               <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.shank_mm ?? ""} onChange={(e) => field("shank_mm", e.target.value ? Number(e.target.value) : null)} />
             </div>
+            <div>
+              <label className={DS_LABEL}>Schaftlänge (mm)</label>
+              <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.shank_length_mm ?? ""} onChange={(e) => field("shank_length_mm", e.target.value ? Number(e.target.value) : null)} placeholder="z.B. S10x27 → 27" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={DS_LABEL}>Zähne</label>
               <input type="number" className={DS_INPUT_ADMIN} value={form.teeth ?? ""} onChange={(e) => field("teeth", e.target.value ? Number(e.target.value) : null)} />
@@ -252,7 +265,7 @@ export default function V2SkuEditClient({
           <div className="grid grid-cols-3 gap-4">
             <div>
               <label className={DS_LABEL}>Preis (€)</label>
-              <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.price_eur ?? ""} onChange={(e) => field("price_eur", Number(e.target.value))} />
+              <input type="number" step="0.01" className={DS_INPUT_ADMIN} value={form.price_eur ?? ""} onChange={(e) => field("price_eur", e.target.value ? Number(e.target.value) : null)} placeholder="leer = kein Preis" />
             </div>
             <div>
               <label className={DS_LABEL}>Aktionspreis (€)</label>
