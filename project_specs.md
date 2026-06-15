@@ -308,3 +308,71 @@ Password-protected CMS for BuKaRa staff to manage products, deals, and orders wi
 
 - `sharp` + `@types/sharp` — server-side image processing in API routes
 - `@supabase/ssr` — SSR-safe Supabase client for auth in server components and API routes
+
+---
+
+## v2 Catalog CMS — Slice 1: Variants Overview + Read-Only Editor
+
+> Schema policy: **`v2` is the official schema.** The legacy `public` schema and all public-bound CMS
+> code (`/lib/admin/*`, `/app/api/admin/*`, `ProductEditClient`, etc.) are **off-limits** — 3 live
+> campaigns run on them. This slice reads `v2` only and adds no mutations.
+
+### What it does
+A **SKU-first**, **read-only** admin view of the `v2` catalog, in a dense Supabase-style tooling
+aesthetic. It **supersedes** the older product-first v2 CMS (`/admin/v2/products`): the new Variants
+overview becomes the v2 catalog home. The old v2 product/sku editor files stay on disk (reachable only by
+direct URL) for a later write slice; they are dropped from nav and not modified here.
+
+### Routes (live within the existing `app/admin/(shell)/` group, behind the `middleware.ts` auth guard)
+
+| Route | File | Purpose |
+|---|---|---|
+| `/admin/v2` | `app/admin/(shell)/v2/page.tsx` | Redirect → `/admin/v2/variants` (repointed from `/admin/v2/products`) |
+| `/admin/v2/variants` | `app/admin/(shell)/v2/variants/page.tsx` | SKU-first overview table (server-side paginate/sort/search/filter) |
+| `/admin/v2/variants` (loading) | `.../variants/loading.tsx` | Skeleton rows |
+| `/admin/v2/variants/[skuId]` | `.../variants/[skuId]/page.tsx` | Read-only product/variant editor, focused SKU |
+
+Sidebar (`app/admin/(shell)/layout.tsx`): under "V2 Katalog", **Varianten** is the functional entry;
+Produkte · Nicht zugeordnet · Kategorien · Aktionen · Stammdaten · Händler are inert placeholders.
+
+### Data read (server-side, `supabaseAdminV2` service-role client, `schema: "v2"`)
+
+- **View `v2.admin_sku_overview`** — flattened `skus` + `merchants` + `products` + lateral first image;
+  exposes `thumbnail_url = coalesce(first sku_image, products.default_image_url)`.
+- Trigram GIN indexes `skus_bukara_artnr_trgm`, `skus_merchant_sku_trgm` (extension `pg_trgm`) for fast
+  article-number search.
+- Editor reads: `skus`, family `products`, family `product_categories`/`product_applications`/
+  `product_materials`, and per-SKU `sku_images`, `sku_specs`, `sku_machines`→`machines(brand,model)`.
+- Cleanup: drop the unused `v2.sku_machine_fit` view (zero code references).
+
+### Overview table
+Columns: thumb (40px, placeholder if null) · Bukara-Nr. (mono, row → editor) · Händler-Nr. (mono, "—"
+if null) · Variante (truncate+title) · Preis (campaign struck-through + accent, "Staffel" pill, "—" if
+null) · Bestand (number) · Status (Aktiv/Inaktiv pill) · Bearbeiten. Server-side: 50/page; sort on
+family_name/bukara_article_number/price_eur/stock_quantity/is_active; search ilike Bukara OR Händler;
+filters merchant, category (via `product_categories` lookup), status, missing price, missing image,
+unassigned (`product_id is null`).
+
+### Read-only editor
+Family zone (base_name, display_name, slug, series, description, badge, tagline, has_public_page,
+is_active, default_image_url, categories, application tags, materials matrix with score labels) +
+variants sub-table (focused SKU highlighted) + 5 tabs: **Maße / Preis & Bestand / Bilder /
+Spezifikationen / Maschinen**. Orphan SKU (`product_id is null`) renders standalone with a
+"nicht zugeordnet" note.
+
+### Reuse vs new
+- **Reused:** `lib/v2/supabaseAdmin.ts`, `lib/ds.ts`, `lib/pricing.ts` (`formatEur`), `app/globals.css`
+  tokens (Inter, teal `#00A597`, slate), existing shell + `middleware.ts` auth.
+- **New (isolated):** `lib/v2/admin/{types,overview,editor}.ts`, `components/admin/v2/VariantTable.tsx`,
+  `components/admin/v2/VariantEditor.tsx`. `lib/v2/types.ts` is **not** touched (it is stale vs the live
+  DB; the sync was reverted in `b94820c`).
+
+### Definition of Done
+- `project_specs.md` updated (this section) and approved before coding.
+- `v2.admin_sku_overview` + trigram indexes applied; `v2.sku_machine_fit` dropped (SQL approved first).
+- Variants table loads real data with working server-side pagination, sort, search, all filters; column
+  rendering incl. campaign/Staffel/null handling.
+- Bearbeiten deep-links to the editor with the correct SKU focused; all 5 tabs show real data,
+  fully read-only; orphan SKU renders without error.
+- No mutations anywhere; no `public` table or legacy CMS code touched; existing v2 editor files unchanged.
+- `npm run build` clean; `service_role` never in the client bundle.

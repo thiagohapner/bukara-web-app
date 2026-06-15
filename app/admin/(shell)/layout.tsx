@@ -44,11 +44,24 @@ export default function AdminShellLayout({ children }: { children: React.ReactNo
             <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">V2 Katalog</span>
           </div>
           <Link
-            href="/admin/v2/products"
+            href="/admin/v2/variants"
             className="flex items-center px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors"
           >
-            v2 Produkte
+            Varianten
           </Link>
+          {/* Slice-2 entries — inert until the write layer lands. */}
+          {["Produkte", "Nicht zugeordnet", "Kategorien", "Aktionen", "Stammdaten", "Händler"].map(
+            (label) => (
+              <span
+                key={label}
+                aria-disabled="true"
+                className="flex items-center px-3 py-2 rounded-md text-slate-300 cursor-not-allowed select-none"
+                title="In Kürze verfügbar"
+              >
+                {label}
+              </span>
+            ),
+          )}
         </nav>
         <div className="px-4 py-4 border-t border-slate-200">
           <AdminSignOut />
