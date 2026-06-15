@@ -3,6 +3,7 @@
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import {
   PAGE_SIZE,
+  type CatalogStats,
   type OverviewParams,
   type OverviewResult,
   type SkuOverviewRow,
@@ -71,6 +72,9 @@ export async function getSkuOverview(params: OverviewParams): Promise<OverviewRe
   if (params.missingPrice) query = query.is("price_eur", null);
   if (params.missingImage) query = query.is("thumbnail_url", null);
   if (params.unassigned) query = query.is("product_id", null);
+  if (params.incomplete) {
+    query = query.or("thumbnail_url.is.null,price_eur.is.null,merchant_sku.is.null");
+  }
 
   // Stable, deterministic ordering: primary sort + sku_id tiebreaker.
   query = query
@@ -90,6 +94,35 @@ export async function getSkuOverview(params: OverviewParams): Promise<OverviewRe
     page,
     pageSize: PAGE_SIZE,
     pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)),
+  };
+}
+
+/** Headline catalog metrics for the dashboard KPI tiles (real data only). */
+export async function getCatalogStats(): Promise<CatalogStats> {
+  const [skusRes, productsRes, incompleteRes, priceRows] = await Promise.all([
+    supabaseAdminV2.from("skus").select("id", { count: "exact", head: true }),
+    supabaseAdminV2.from("products").select("id", { count: "exact", head: true }),
+    // Defects: missing image OR price OR merchant SKU. The view already exposes
+    // thumbnail_url, so one OR-filtered count covers all three.
+    supabaseAdminV2
+      .from("admin_sku_overview")
+      .select("sku_id", { count: "exact", head: true })
+      .or("thumbnail_url.is.null,price_eur.is.null,merchant_sku.is.null"),
+    supabaseAdminV2.from("skus").select("price_eur").not("price_eur", "is", null),
+  ]);
+
+  const prices = ((priceRows.data ?? []) as unknown as { price_eur: number | string }[]).map((r) =>
+    Number(r.price_eur),
+  );
+  const avgPrice = prices.length
+    ? Math.round((prices.reduce((s, n) => s + n, 0) / prices.length) * 100) / 100
+    : null;
+
+  return {
+    skus: skusRes.count ?? 0,
+    products: productsRes.count ?? 0,
+    avgPrice,
+    incomplete: incompleteRes.count ?? 0,
   };
 }
 

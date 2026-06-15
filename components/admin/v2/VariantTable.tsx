@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Search, ChevronsUpDown, ChevronUp, ChevronDown } from "lucide-react";
 import { formatEur } from "@/lib/pricing";
 import type {
   OverviewParams,
@@ -22,18 +23,23 @@ interface Props {
 }
 
 // Single source of truth for columns: header label, optional sort key, and the
-// cell renderer all live together so the header row and body rows can never
-// drift out of alignment. Order matches the SKU-first spec:
-// thumbnail · Bukara-Nr. · Händler-Nr. · Preis · Bestand · Status · Variante · (Edit)
+// cell renderer all live together so header and body can never drift out of
+// alignment. `n` is the 1-based row number across the whole result set.
 interface Column {
   id: string;
   label: string;
   sort?: SkuSortKey;
   headClass?: string;
-  cell: (row: SkuOverviewRow) => React.ReactNode;
+  cell: (row: SkuOverviewRow, n: number) => React.ReactNode;
 }
 
 const COLUMNS: Column[] = [
+  {
+    id: "no",
+    label: "#",
+    headClass: "w-10",
+    cell: (_r, n) => <span className="text-slate-400 tabular-nums">{n}</span>,
+  },
   {
     id: "thumb",
     label: "",
@@ -44,10 +50,10 @@ const COLUMNS: Column[] = [
         <img
           src={r.thumbnail_url}
           alt=""
-          className="w-10 h-10 rounded-md object-cover border border-slate-100"
+          className="w-9 h-9 rounded-lg object-cover border border-slate-200"
         />
       ) : (
-        <div className="w-10 h-10 rounded-md bg-slate-100 border border-slate-100" />
+        <div className="w-9 h-9 rounded-lg bg-slate-100 border border-slate-200" />
       ),
   },
   {
@@ -58,7 +64,7 @@ const COLUMNS: Column[] = [
       <>
         <Link
           href={`/admin/v2/variants/${r.sku_id}`}
-          className="font-mono text-xs text-slate-800 hover:text-teal-700"
+          className="font-mono text-xs font-medium text-slate-900 hover:text-slate-500"
         >
           {r.bukara_article_number}
         </Link>
@@ -85,19 +91,20 @@ const COLUMNS: Column[] = [
     id: "bestand",
     label: "Bestand",
     sort: "stock_quantity",
-    cell: (r) => <span className="text-slate-600">{r.stock_quantity}</span>,
+    cell: (r) => <span className="text-slate-600 tabular-nums">{r.stock_quantity}</span>,
   },
   {
     id: "status",
     label: "Status",
     sort: "is_active",
     cell: (r) => (
-      <span
-        className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-          r.is_active ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-500"
-        }`}
-      >
-        {r.is_active ? "Aktiv" : "Inaktiv"}
+      <span className="inline-flex items-center gap-1.5">
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${r.is_active ? "bg-green-500" : "bg-red-500"}`}
+        />
+        <span className={`text-sm ${r.is_active ? "text-green-700" : "text-red-600"}`}>
+          {r.is_active ? "Aktiv" : "Inaktiv"}
+        </span>
       </span>
     ),
   },
@@ -121,7 +128,7 @@ const COLUMNS: Column[] = [
       <div className="text-right">
         <Link
           href={`/admin/v2/variants/${r.sku_id}`}
-          className="text-teal-600 hover:text-teal-700 text-sm font-medium"
+          className="text-sm font-medium text-slate-700 hover:text-slate-900"
         >
           Bearbeiten
         </Link>
@@ -141,6 +148,7 @@ function buildQuery(params: OverviewParams, patch: Partial<OverviewParams>): str
   if (merged.missingPrice) sp.set("missingPrice", "1");
   if (merged.missingImage) sp.set("missingImage", "1");
   if (merged.unassigned) sp.set("unassigned", "1");
+  if (merged.incomplete) sp.set("incomplete", "1");
   if (merged.sort !== "family_name") sp.set("sort", merged.sort);
   if (merged.dir !== "asc") sp.set("dir", merged.dir);
   if (merged.page && merged.page > 1) sp.set("page", String(merged.page));
@@ -181,25 +189,28 @@ export default function VariantTable({
   };
 
   const selectCls =
-    "border border-slate-200 rounded-sm px-2.5 py-1.5 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500";
+    "border border-slate-200 rounded-lg px-2.5 py-2 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400";
   const chipCls = (on: boolean) =>
-    `px-2.5 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+    `px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
       on
-        ? "bg-teal-50 border-teal-200 text-teal-700"
-        : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+        ? "bg-slate-900 border-slate-900 text-white"
+        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
     }`;
+
+  const startIndex = (page - 1) * pageSize;
 
   return (
     <div>
       {/* Control bar */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <form onSubmit={onSearchSubmit} className="flex-1 min-w-[240px]">
+        <form onSubmit={onSearchSubmit} className="flex-1 min-w-[240px] relative">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="search"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Artikelnummer suchen…"
-            className="w-full border border-slate-200 rounded-sm px-3 py-2 text-sm text-slate-800 bg-white font-mono focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-800 bg-white font-mono focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
           />
         </form>
 
@@ -224,7 +235,7 @@ export default function VariantTable({
           <option value="">Alle Kategorien</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.depth > 0 ? `  – ${c.name}` : c.name}
+              {c.depth > 0 ? `  – ${c.name}` : c.name}
             </option>
           ))}
         </select>
@@ -262,30 +273,45 @@ export default function VariantTable({
         >
           nicht zugeordnet
         </button>
+        {params.incomplete && (
+          <button
+            type="button"
+            onClick={() => push({ incomplete: undefined })}
+            className={chipCls(true)}
+          >
+            unvollständig ✕
+          </button>
+        )}
       </div>
 
       {/* Table */}
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-100 text-left bg-slate-50/60">
+            <tr className="border-b border-slate-100 text-left">
               {COLUMNS.map((col) => {
                 const active = col.sort && params.sort === col.sort;
                 return (
                   <th
                     key={col.id}
-                    className={`px-4 py-2.5 font-medium text-slate-500 ${col.headClass ?? ""}`}
+                    className={`px-4 py-3 font-medium text-slate-500 text-xs ${col.headClass ?? ""}`}
                   >
                     {col.sort ? (
                       <button
                         type="button"
                         onClick={() => toggleSort(col.sort!)}
-                        className="inline-flex items-center gap-1 hover:text-slate-700"
+                        className="inline-flex items-center gap-1 hover:text-slate-800"
                       >
                         {col.label}
-                        <span className={active ? "text-teal-600" : "text-slate-300"}>
-                          {active ? (params.dir === "asc" ? "↑" : "↓") : "↕"}
-                        </span>
+                        {active ? (
+                          params.dir === "asc" ? (
+                            <ChevronUp className="w-3.5 h-3.5 text-slate-800" />
+                          ) : (
+                            <ChevronDown className="w-3.5 h-3.5 text-slate-800" />
+                          )
+                        ) : (
+                          <ChevronsUpDown className="w-3.5 h-3.5 text-slate-300" />
+                        )}
                       </button>
                     ) : (
                       col.label
@@ -296,11 +322,11 @@ export default function VariantTable({
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => (
-              <tr key={r.sku_id} className="border-b border-slate-50 hover:bg-slate-50">
+            {rows.map((r, i) => (
+              <tr key={r.sku_id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50">
                 {COLUMNS.map((col) => (
-                  <td key={col.id} className="px-4 py-2.5 align-middle">
-                    {col.cell(r)}
+                  <td key={col.id} className="px-4 py-3 align-middle">
+                    {col.cell(r, startIndex + i + 1)}
                   </td>
                 ))}
               </tr>
@@ -319,16 +345,19 @@ export default function VariantTable({
         <span>
           {total === 0
             ? "0 Varianten"
-            : `${(page - 1) * pageSize + 1}–${Math.min(page * pageSize, total)} von ${total}`}
+            : `${(startIndex + 1).toLocaleString("de-DE")}–${Math.min(
+                page * pageSize,
+                total,
+              ).toLocaleString("de-DE")} von ${total.toLocaleString("de-DE")}`}
         </span>
         <div className="flex items-center gap-2">
           <Link
             aria-disabled={page <= 1}
             href={`/admin/v2/variants${buildQuery(params, { page: page - 1 })}`}
-            className={`px-3 py-1.5 rounded-md border text-sm ${
+            className={`px-3 py-1.5 rounded-lg border text-sm ${
               page <= 1
                 ? "border-slate-100 text-slate-300 pointer-events-none"
-                : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                : "border-slate-200 text-slate-700 hover:bg-slate-50"
             }`}
           >
             Zurück
@@ -339,10 +368,10 @@ export default function VariantTable({
           <Link
             aria-disabled={page >= pageCount}
             href={`/admin/v2/variants${buildQuery(params, { page: page + 1 })}`}
-            className={`px-3 py-1.5 rounded-md border text-sm ${
+            className={`px-3 py-1.5 rounded-lg border text-sm ${
               page >= pageCount
                 ? "border-slate-100 text-slate-300 pointer-events-none"
-                : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                : "border-slate-200 text-slate-700 hover:bg-slate-50"
             }`}
           >
             Weiter
@@ -363,13 +392,13 @@ function PriceCell({ row }: { row: SkuOverviewRow }) {
       {hasCampaign ? (
         <>
           <span className="text-slate-400 line-through">{formatEur(row.price_eur)}</span>
-          <span className="text-teal-700 font-medium">{formatEur(row.campaign_price as number)}</span>
+          <span className="text-slate-900 font-medium">{formatEur(row.campaign_price as number)}</span>
         </>
       ) : (
-        <span className="text-slate-700">{formatEur(row.price_eur)}</span>
+        <span className="text-slate-900">{formatEur(row.price_eur)}</span>
       )}
       {row.has_staffelpreis && (
-        <span className="px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-medium">
+        <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium">
           Staffel
         </span>
       )}

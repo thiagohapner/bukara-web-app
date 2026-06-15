@@ -77,7 +77,7 @@ export default function VariantEditor({ data }: { data: VariantEditorData }) {
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2 text-sm text-slate-400">
-            <Link href="/admin/v2/variants" className="hover:text-teal-700">
+            <Link href="/admin/v2/variants" className="hover:text-slate-700">
               Varianten
             </Link>
             <span>/</span>
@@ -163,7 +163,7 @@ export default function VariantEditor({ data }: { data: VariantEditorData }) {
                   applications.map((t) => (
                     <span
                       key={t}
-                      className="px-2 py-0.5 rounded-pill bg-teal-50 text-teal-700 text-xs"
+                      className="px-2 py-0.5 rounded-pill bg-slate-100 text-slate-600 text-xs"
                     >
                       {t}
                     </span>
@@ -230,18 +230,18 @@ export default function VariantEditor({ data }: { data: VariantEditorData }) {
                   <tr
                     key={s.id}
                     className={`border-b border-slate-50 ${
-                      focused ? "bg-teal-50/60" : "hover:bg-slate-50"
+                      focused ? "bg-slate-100" : "hover:bg-slate-50"
                     }`}
                   >
                     <td className="px-4 py-2 font-mono text-xs">
                       {focused ? (
-                        <span className="text-teal-700 font-semibold">
+                        <span className="text-slate-900 font-semibold">
                           {s.bukara_article_number}
                         </span>
                       ) : (
                         <Link
                           href={`/admin/v2/variants/${s.id}`}
-                          className="text-slate-700 hover:text-teal-700"
+                          className="text-slate-700 hover:text-slate-900"
                         >
                           {s.bukara_article_number}
                         </Link>
@@ -283,7 +283,7 @@ export default function VariantEditor({ data }: { data: VariantEditorData }) {
               onClick={() => setTab(t)}
               className={`px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 tab === t
-                  ? "border-teal-500 text-teal-700"
+                  ? "border-slate-900 text-slate-900"
                   : "border-transparent text-slate-500 hover:text-slate-700"
               }`}
             >

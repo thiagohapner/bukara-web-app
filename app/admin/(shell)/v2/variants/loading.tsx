@@ -2,8 +2,17 @@ export default function Loading() {
   return (
     <div>
       <div className="mb-6">
-        <div className="h-7 w-40 bg-slate-200 rounded animate-pulse" />
-        <div className="h-4 w-52 bg-slate-100 rounded mt-2 animate-pulse" />
+        <div className="h-7 w-48 bg-slate-200 rounded animate-pulse" />
+        <div className="h-4 w-64 bg-slate-100 rounded mt-2 animate-pulse" />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-white rounded-xl border border-slate-200 p-5">
+            <div className="h-4 w-24 bg-slate-100 rounded animate-pulse" />
+            <div className="h-8 w-28 bg-slate-200 rounded mt-4 animate-pulse" />
+          </div>
+        ))}
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mb-4">

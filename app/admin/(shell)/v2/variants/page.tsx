@@ -1,5 +1,11 @@
 import VariantTable from "@/components/admin/v2/VariantTable";
-import { getCategories, getMerchants, getSkuOverview } from "@/lib/v2/admin/overview";
+import StatTiles from "@/components/admin/v2/StatTiles";
+import {
+  getCatalogStats,
+  getCategories,
+  getMerchants,
+  getSkuOverview,
+} from "@/lib/v2/admin/overview";
 import type { OverviewParams, SkuSortKey } from "@/lib/v2/admin/types";
 
 export const dynamic = "force-dynamic";
@@ -40,22 +46,26 @@ export default async function V2VariantsPage({
     missingPrice: first(sp.missingPrice) === "1",
     missingImage: first(sp.missingImage) === "1",
     unassigned: first(sp.unassigned) === "1",
+    incomplete: first(sp.incomplete) === "1",
   };
 
-  const [result, merchants, categories] = await Promise.all([
+  const [result, merchants, categories, stats] = await Promise.all([
     getSkuOverview(params),
     getMerchants(),
     getCategories(),
+    getCatalogStats(),
   ]);
 
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-800">Varianten</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Variantenkatalog</h1>
         <p className="text-sm text-slate-400 mt-0.5">
-          {result.total} Varianten im v2-Katalog
+          {result.total.toLocaleString("de-DE")} Varianten · zuletzt aktualisiert gerade eben
         </p>
       </div>
+
+      <StatTiles stats={stats} />
 
       <VariantTable
         rows={result.rows}

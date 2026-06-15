@@ -152,6 +152,8 @@ export interface OverviewParams {
   missingPrice?: boolean;
   missingImage?: boolean;
   unassigned?: boolean;
+  /** Any data-quality defect: missing image OR price OR merchant SKU. */
+  incomplete?: boolean;
 }
 
 export interface OverviewResult {
@@ -160,6 +162,15 @@ export interface OverviewResult {
   page: number;
   pageSize: number;
   pageCount: number;
+}
+
+/** Headline catalog metrics for the dashboard KPI tiles. */
+export interface CatalogStats {
+  skus: number;
+  products: number;
+  avgPrice: number | null;
+  /** SKUs missing an image, price, or merchant SKU (data-quality defects). */
+  incomplete: number;
 }
 
 export const PAGE_SIZE = 50;
