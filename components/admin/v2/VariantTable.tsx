@@ -18,7 +18,7 @@ interface Props {
   pageSize: number;
   params: OverviewParams;
   merchants: { id: string; name: string }[];
-  categories: { id: string; name: string }[];
+  categories: { id: string; name: string; depth: number }[];
 }
 
 // Single source of truth for columns: header label, optional sort key, and the
@@ -224,7 +224,7 @@ export default function VariantTable({
           <option value="">Alle Kategorien</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.name}
+              {c.depth > 0 ? `  – ${c.name}` : c.name}
             </option>
           ))}
         </select>

@@ -28,17 +28,27 @@ export async function getSkuOverview(params: OverviewParams): Promise<OverviewRe
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  // Category filter: a SKU's category comes via its family (product_categories).
-  // Resolve product_ids first, then constrain the view query.
+  // Category filter: a SKU's category comes via its family (product_categories),
+  // and products are only assigned to LEAF categories. So when a parent category
+  // is selected we must expand to it + its children (2-level tree), otherwise a
+  // parent would match zero products. Resolve product_ids first, then constrain.
   let categoryProductIds: string[] | null = null;
   if (params.categoryId) {
+    const { data: kids } = await supabaseAdminV2
+      .from("categories")
+      .select("id")
+      .eq("parent_id", params.categoryId);
+    const catIds = [
+      params.categoryId,
+      ...((kids ?? []) as unknown as { id: string }[]).map((k) => k.id),
+    ];
     const { data: pcs } = await supabaseAdminV2
       .from("product_categories")
       .select("product_id")
-      .eq("category_id", params.categoryId);
-    categoryProductIds = ((pcs ?? []) as unknown as { product_id: string }[]).map(
-      (r) => r.product_id,
-    );
+      .in("category_id", catIds);
+    categoryProductIds = [
+      ...new Set(((pcs ?? []) as unknown as { product_id: string }[]).map((r) => r.product_id)),
+    ];
     if (categoryProductIds.length === 0) {
       return { rows: [], total: 0, page, pageSize: PAGE_SIZE, pageCount: 0 };
     }
@@ -92,12 +102,33 @@ export async function getMerchants(): Promise<{ id: string; name: string }[]> {
   return (data ?? []) as unknown as { id: string; name: string }[];
 }
 
-/** Top-level categories for the filter dropdown. */
-export async function getCategories(): Promise<{ id: string; name: string }[]> {
+/**
+ * Categories for the filter dropdown, ordered as a tree: each parent followed
+ * by its children, with `depth` for indentation. Both parents and leaves are
+ * selectable — the overview query expands a parent to its children.
+ */
+export async function getCategories(): Promise<
+  { id: string; name: string; depth: number }[]
+> {
   const { data } = await supabaseAdminV2
     .from("categories")
-    .select("id, name")
+    .select("id, name, parent_id, sort_order")
     .order("sort_order")
     .order("name");
-  return (data ?? []) as unknown as { id: string; name: string }[];
+  const rows = (data ?? []) as unknown as {
+    id: string;
+    name: string;
+    parent_id: string | null;
+    sort_order: number;
+  }[];
+
+  const out: { id: string; name: string; depth: number }[] = [];
+  const byId = new Set(rows.map((r) => r.id));
+  for (const parent of rows.filter((r) => !r.parent_id || !byId.has(r.parent_id))) {
+    out.push({ id: parent.id, name: parent.name, depth: 0 });
+    for (const child of rows.filter((r) => r.parent_id === parent.id)) {
+      out.push({ id: child.id, name: child.name, depth: 1 });
+    }
+  }
+  return out;
 }
