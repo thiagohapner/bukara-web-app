@@ -9,14 +9,12 @@ interface SkuPayload {
   variant_label: string | null;
   diameter_mm: number | null;
   nl_mm: number | null;
-  nl_1: number | null;
   gl_mm: number | null;
   shank_mm: number | null;
-  shank_length_mm: number | null;
   teeth: number | null;
   spin_direction: string | null;
   coating_or_type: string | null;
-  price_eur: number | null;
+  price_eur: number;
   campaign_price: number | null;
   stock_quantity: number;
   is_active: boolean;

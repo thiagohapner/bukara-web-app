@@ -8,7 +8,8 @@ interface ProductPayload {
   base_name: string;
   display_name: string;
   tagline: string;
-  description: string;
+  short_description: string;
+  long_description: string;
   series: string;
   product_type: string;
   badge: string;
@@ -56,7 +57,8 @@ export async function upsertProduct(
       base_name: payload.base_name,
       display_name: payload.display_name || null,
       tagline: payload.tagline || null,
-      description: payload.description || null,
+      short_description: payload.short_description || null,
+      long_description: payload.long_description || null,
       series: payload.series || null,
       product_type: payload.product_type || null,
       badge: payload.badge || null,

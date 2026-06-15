@@ -25,7 +25,7 @@ interface SkuSummary {
   identnummer: string;
   variant_label: string | null;
   diameter_mm: number | null;
-  price_eur: number | null;
+  price_eur: number;
   campaign_price: number | null;
   is_active: boolean;
   sort_order: number;
@@ -37,7 +37,8 @@ interface ProductForm {
   base_name: string;
   display_name: string;
   tagline: string;
-  description: string;
+  short_description: string;
+  long_description: string;
   series: string;
   product_type: string;
   badge: string;
@@ -80,7 +81,8 @@ function buildForm(p: Record<string, unknown> | null): ProductForm {
     base_name: String(d.base_name ?? ""),
     display_name: String(d.display_name ?? d.base_name ?? ""),
     tagline: String(d.tagline ?? ""),
-    description: String(d.description ?? ""),
+    short_description: String(d.short_description ?? ""),
+    long_description: String(d.long_description ?? ""),
     series: String(d.series ?? ""),
     product_type: String(d.product_type ?? ""),
     badge: String(d.badge ?? ""),
@@ -164,7 +166,8 @@ export default function V2ProductEditClient({
         base_name: form.base_name,
         display_name: form.display_name,
         tagline: form.tagline,
-        description: form.description,
+        short_description: form.short_description,
+        long_description: form.long_description,
         series: form.series,
         product_type: form.product_type,
         badge: form.badge,
@@ -275,8 +278,12 @@ export default function V2ProductEditClient({
             <input className={DS_INPUT_ADMIN} value={form.tagline} onChange={(e) => field("tagline", e.target.value)} placeholder="Kurzbeschreibung / Untertitel" />
           </div>
           <div>
-            <label className={DS_LABEL}>Beschreibung</label>
-            <textarea className={DS_INPUT_ADMIN} rows={6} value={form.description} onChange={(e) => field("description", e.target.value)} />
+            <label className={DS_LABEL}>Kurzbeschreibung</label>
+            <textarea className={DS_INPUT_ADMIN} rows={3} value={form.short_description} onChange={(e) => field("short_description", e.target.value)} />
+          </div>
+          <div>
+            <label className={DS_LABEL}>Langbeschreibung</label>
+            <textarea className={DS_INPUT_ADMIN} rows={6} value={form.long_description} onChange={(e) => field("long_description", e.target.value)} />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -471,9 +478,7 @@ export default function V2ProductEditClient({
                     <td className="px-4 py-3 text-slate-600">{s.variant_label ?? "—"}</td>
                     <td className="px-4 py-3 text-slate-500">{s.diameter_mm ?? "—"}</td>
                     <td className="px-4 py-3 text-slate-700">
-                      {s.price_eur == null ? (
-                        <span className="text-slate-400">—</span>
-                      ) : s.campaign_price != null && s.campaign_price < s.price_eur ? (
+                      {s.campaign_price != null && s.campaign_price < s.price_eur ? (
                         <span className="text-red-600 font-medium">{s.campaign_price.toFixed(2)} €</span>
                       ) : (
                         <span>{s.price_eur.toFixed(2)} €</span>

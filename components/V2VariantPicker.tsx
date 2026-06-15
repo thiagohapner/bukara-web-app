@@ -36,13 +36,10 @@ export default function V2VariantPicker({ skus, selectedSkuId, onSelect }: Props
           const sku = sorted.find((s) => s.id === id);
           if (sku) onSelect(sku);
         }}
-        options={sorted.map((s) => {
-          const price = s.campaign_price ?? s.price_eur;
-          return {
-            value: s.id,
-            label: price != null ? `${skuLabel(s)} — ${formatEur(price)}` : skuLabel(s),
-          };
-        })}
+        options={sorted.map((s) => ({
+          value: s.id,
+          label: `${skuLabel(s)} — ${formatEur(s.campaign_price ?? s.price_eur)}`,
+        }))}
       />
     </div>
   );

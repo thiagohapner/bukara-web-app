@@ -281,8 +281,8 @@ export default function KatalogProductContent({
               <StaffelpreisTable />
             )}
 
-            {product.description && (
-              <p className="text-base text-slate-900 leading-relaxed mb-2">{product.description}</p>
+            {product.short_description && (
+              <p className="text-base text-slate-900 leading-relaxed mb-2">{product.short_description}</p>
             )}
 
             {accordionSections.length > 0 && (

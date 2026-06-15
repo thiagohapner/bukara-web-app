@@ -3,7 +3,8 @@ export interface V2Product {
   slug: string;
   base_name: string;
   display_name: string | null;
-  description: string | null;
+  short_description: string | null;
+  long_description: string | null;
   series: string | null;
   is_active: boolean;
   has_public_page: boolean;
@@ -12,7 +13,6 @@ export interface V2Product {
   product_type: string | null;
   tagline: string | null;
   gallery_bg: string | null;
-  gallery_label: string | null;
   sort_order: number;
 }
 
@@ -26,20 +26,12 @@ export interface V2Sku {
   variant_label: string | null;
   diameter_mm: number | null;
   nl_mm: number | null;
-  nl_1: number | null;
   gl_mm: number | null;
   shank_mm: number | null;
-  shank_length_mm: number | null;
   teeth: number | null;
-  tooth_form: string | null;
   spin_direction: "rechts" | "links" | null;
   coating_or_type: string | null;
-  h_mm: number | null;
-  bore_mm: number | null;
-  corner_radius_mm: number | null;
-  kerf_mm: number | null;
-  plate_mm: number | null;
-  price_eur: number | null;
+  price_eur: number;
   campaign_price: number | null;
   stock_quantity: number;
   has_staffelpreis: boolean;

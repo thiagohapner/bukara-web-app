@@ -43,7 +43,7 @@ export default async function V2ProductEditPage({
         }>,
         skus: (skuRes.data ?? []) as Array<{
           id: string; identnummer: string; variant_label: string | null;
-          diameter_mm: number | null; price_eur: number | null; campaign_price: number | null;
+          diameter_mm: number | null; price_eur: number; campaign_price: number | null;
           is_active: boolean; sort_order: number;
         }>,
         allCategories: (allCatRes.data ?? []) as V2Category[],
