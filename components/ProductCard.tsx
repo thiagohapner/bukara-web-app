@@ -11,7 +11,6 @@ export interface ProductCardData {
   hasVariants?: boolean;
   fromCampaignPrice?: number;
   fromOriginalPrice?: number;
-  categoryLabel?: string;
   hrefPrefix?: string;
   variant?: "grid" | "list";
 }
@@ -41,9 +40,6 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-0.5">
-              {card.categoryLabel ?? "Zerspanungswerkzeug"}
-            </p>
             <h3 className="text-sm font-semibold text-slate-900 mb-1 leading-snug">
               {card.name}
             </h3>
@@ -101,9 +97,6 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
 
         {/* Info */}
         <div className="p-4">
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">
-            {card.categoryLabel ?? "Zerspanungswerkzeug"}
-          </p>
           <h3 className="text-sm font-semibold text-slate-900 mb-2 leading-snug line-clamp-2">
             {card.name}
           </h3>

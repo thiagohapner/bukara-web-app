@@ -167,18 +167,12 @@ export default async function KatalogPage() {
     matMap[pm.product_id].push(pm);
   }
 
-  const categoryNameById: Record<string, string> = {};
-  for (const cat of (categories ?? []) as V2Category[]) {
-    categoryNameById[cat.id] = cat.name;
-  }
-
   const cards: EnrichedCard[] = (products as Array<{
     id: string; slug: string; base_name: string | null; display_name: string | null;
     badge: string | null; gallery_bg: string | null; default_image_url: string | null;
   }>).map((p) => {
     const image = firstImageByProduct[p.id] || p.default_image_url || undefined;
     const productCatIds = catMap[p.id] ?? [];
-    const firstCatName = productCatIds.length > 0 ? categoryNameById[productCatIds[0]] : undefined;
 
     return {
       id: p.id,
@@ -190,7 +184,6 @@ export default async function KatalogPage() {
       hasVariants: skuList.filter((s) => s.product_id === p.id).length > 1,
       fromCampaignPrice: priceMap[p.id]?.campaign,
       fromOriginalPrice: priceMap[p.id]?.original,
-      categoryLabel: firstCatName,
       hrefPrefix: "/katalog",
       categoryIds: productCatIds,
       applicationTags: appMap[p.id] ?? [],

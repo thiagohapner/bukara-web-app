@@ -7,26 +7,22 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { X, Search, SlidersHorizontal } from "lucide-react";
 import Footer from "@/components/Footer";
-import ProductCard, { type ProductCardData } from "@/components/ProductCard";
-import CustomSelect from "@/components/CustomSelect";
+import ProductCard from "@/components/ProductCard";
 import KatalogFilterSidebar from "./KatalogFilterSidebar";
+import KatalogFilterBar from "./KatalogFilterBar";
 import { DS_INPUT } from "@/lib/ds";
 import type { V2Category } from "@/lib/v2/types";
+import {
+  filterCards,
+  materialCountsFor,
+  countCards,
+  type EnrichedCard,
+  type KatalogFilterState,
+} from "@/lib/katalog/filter";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export type EnrichedCard = ProductCardData & {
-  id: string;
-  categoryIds: string[];
-  applicationTags: string[];
-  materials: { material_name: string; score: number }[];
-  minDiam: number | null;
-  maxDiam: number | null;
-  minShank: number | null;
-  maxShank: number | null;
-  merchantSkus: string[];
-  bukaraSkus: string[];
-};
+export type { EnrichedCard };
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
@@ -155,97 +151,24 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   const absoluteMinShank = allShanks.length > 0 ? Math.floor(Math.min(...allShanks)) : 0;
   const absoluteMaxShank = allShanks.length > 0 ? Math.ceil(Math.max(...allShanks)) : 50;
 
-  // ── Filtering ─────────────────────────────────────────────────────────────
-  const filtered = (() => {
-    let result = [...allCards];
+  // ── Filtering (logic lives in lib/katalog/filter) ──────────────────────────
+  const filterState: KatalogFilterState = {
+    kategorie: kategorieParam,
+    sub: subParam,
+    materials: selectedMaterials,
+    anwendungen: selectedAnwendungen,
+    minScore,
+    search: searchQuery,
+    priceMin, priceMax, diamMin, diamMax, shankMin, shankMax,
+    sort: sortParam,
+  };
+  const filtered = filterCards(allCards, filterState, allCategories);
 
-    if (subParam) {
-      const sub = allCategories.find((c) => c.slug === subParam);
-      if (sub) result = result.filter((c) => c.categoryIds.includes(sub.id));
-    } else if (kategorieParam) {
-      const parent = allCategories.find((c) => c.slug === kategorieParam && c.parent_id === null);
-      if (parent) {
-        const childIds = allCategories.filter((c) => c.parent_id === parent.id).map((c) => c.id);
-        if (childIds.length > 0) {
-          result = result.filter((c) => c.categoryIds.some((id) => childIds.includes(id)));
-        } else {
-          result = result.filter((c) => c.categoryIds.includes(parent.id));
-        }
-      }
-    }
+  // Live count for a hypothetical (pending) selection — used by the filter-bar panels.
+  const countFor = (patch: Partial<KatalogFilterState>) =>
+    countCards(allCards, { ...filterState, ...patch }, allCategories);
 
-    if (selectedAnwendungen.length > 0) {
-      result = result.filter((c) => selectedAnwendungen.some((tag) => c.applicationTags.includes(tag)));
-    }
-
-    if (selectedMaterials.length > 0) {
-      result = result.filter((c) =>
-        selectedMaterials.some((m) =>
-          c.materials.some((pm) => pm.material_name === m && pm.score >= minScore)
-        )
-      );
-    }
-
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter((c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.merchantSkus.some((s) => s.toLowerCase().includes(q)) ||
-        c.bukaraSkus.some((s) => s.toLowerCase().includes(q))
-      );
-    }
-
-    if (priceMin !== null) result = result.filter((c) => (c.fromCampaignPrice ?? 0) >= priceMin);
-    if (priceMax !== null) result = result.filter((c) => (c.fromCampaignPrice ?? 0) <= priceMax);
-
-    if (diamMin !== null) result = result.filter((c) => c.maxDiam !== null && c.maxDiam >= diamMin);
-    if (diamMax !== null) result = result.filter((c) => c.minDiam !== null && c.minDiam <= diamMax);
-
-    if (shankMin !== null) result = result.filter((c) => c.maxShank !== null && c.maxShank >= shankMin);
-    if (shankMax !== null) result = result.filter((c) => c.minShank !== null && c.minShank <= shankMax);
-
-    if (sortParam === "preis-asc") result.sort((a, b) => (a.fromCampaignPrice ?? 0) - (b.fromCampaignPrice ?? 0));
-    else if (sortParam === "preis-desc") result.sort((a, b) => (b.fromCampaignPrice ?? 0) - (a.fromCampaignPrice ?? 0));
-    else if (sortParam === "name-az") result.sort((a, b) => a.name.localeCompare(b.name, "de"));
-
-    return result;
-  })();
-
-  // ── Material counts ────────────────────────────────────────────────────────
-  const categoryFiltered = (() => {
-    let result = [...allCards];
-    if (subParam) {
-      const sub = allCategories.find((c) => c.slug === subParam);
-      if (sub) result = result.filter((c) => c.categoryIds.includes(sub.id));
-    } else if (kategorieParam) {
-      const parent = allCategories.find((c) => c.slug === kategorieParam && c.parent_id === null);
-      if (parent) {
-        const childIds = allCategories.filter((c) => c.parent_id === parent.id).map((c) => c.id);
-        if (childIds.length > 0) {
-          result = result.filter((c) => c.categoryIds.some((id) => childIds.includes(id)));
-        } else {
-          result = result.filter((c) => c.categoryIds.includes(parent.id));
-        }
-      }
-    }
-    return result;
-  })();
-
-  const materialCounts = (() => {
-    const counts: Record<string, number> = {};
-    for (const card of categoryFiltered) {
-      const seen = new Set<string>();
-      for (const pm of card.materials) {
-        if (pm.score > 0 && !seen.has(pm.material_name)) {
-          seen.add(pm.material_name);
-          counts[pm.material_name] = (counts[pm.material_name] ?? 0) + 1;
-        }
-      }
-    }
-    return Object.entries(counts)
-      .sort((a, b) => a[0].localeCompare(b[0], "de"))
-      .map(([name, count]) => ({ name, count }));
-  })();
+  const materialCounts = materialCountsFor(allCards, kategorieParam, subParam, allCategories);
 
   // ── GSAP animation ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -314,6 +237,18 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     setShankMin(newMin);
     setShankMax(newMax);
     startTransition(() => router.replace(makeUrl({ shankMin: newMin, shankMax: newMax })));
+  }
+
+  // Deferred set-all apply handlers used by the desktop filter-bar panels.
+  function applyAnwendungen(tags: string[]) {
+    setSelectedAnwendungen(tags);
+    startTransition(() => router.replace(makeUrl({ anwendungen: tags })));
+  }
+
+  function applyMaterials(materials: string[], score: number) {
+    setSelectedMaterials(materials);
+    setMinScore(score);
+    startTransition(() => router.replace(makeUrl({ materials, minScore: score })));
   }
 
   function handleResetAnwendung() {
@@ -459,16 +394,35 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
         {/* Two-column layout */}
         <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10 pb-20">
-          <div className="flex gap-10 items-start">
+          <div>
+            <div className="w-full min-w-0">
+              {/* Filter bar — desktop */}
+              <div className="hidden lg:block mb-3">
+                <KatalogFilterBar
+                  state={filterState}
+                  allCategories={allCategories}
+                  materialCounts={materialCounts}
+                  applicationTags={allApplicationTags}
+                  bounds={{
+                    price: [absoluteMinPrice, absoluteMaxPrice],
+                    diam: [absoluteMinDiam, absoluteMaxDiam],
+                    shank: [absoluteMinShank, absoluteMaxShank],
+                  }}
+                  searchValue={localSearch}
+                  onSearchInput={setLocalSearch}
+                  onSearchSubmit={() => commitSearch(localSearch)}
+                  countFor={countFor}
+                  onApplyKategorie={handleSelectCategory}
+                  onApplyAnwendungen={applyAnwendungen}
+                  onApplyMaterials={applyMaterials}
+                  onApplyPrice={handleCommitPrice}
+                  onApplyDiam={handleCommitDiam}
+                  onApplyShank={handleCommitShank}
+                  onApplySort={handleSort}
+                />
+              </div>
 
-            {/* Sidebar — desktop */}
-            <aside className="hidden lg:block w-56 flex-shrink-0 sticky top-20">
-              <KatalogFilterSidebar {...sidebarProps} />
-            </aside>
-
-            {/* Right column */}
-            <div className="flex-1 min-w-0">
-              {/* Sort + Search — mobile */}
+              {/* Filter & search — mobile */}
               <div className="flex flex-col gap-2 mb-4 lg:hidden">
                 <button
                   type="button"
@@ -505,50 +459,6 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   </div>
                   <button type="submit" className="btn-orange flex-shrink-0 flex items-center gap-1.5 px-4">
                     <Search className="w-4 h-4" />
-                  </button>
-                </form>
-              </div>
-
-              {/* Sort + Search — desktop */}
-              <div className="hidden lg:flex gap-3 mb-4">
-                <div className="w-52 flex-shrink-0">
-                  <CustomSelect
-                    value={sortParam}
-                    onChange={handleSort}
-                    options={[
-                      { value: "", label: "Sortieren nach" },
-                      { value: "preis-asc", label: "Preis aufsteigend" },
-                      { value: "preis-desc", label: "Preis absteigend" },
-                      { value: "name-az", label: "Name A–Z" },
-                    ]}
-                  />
-                </div>
-                <form
-                  className="flex gap-2 flex-1"
-                  onSubmit={(e) => { e.preventDefault(); commitSearch(localSearch); }}
-                >
-                  <div className="relative flex-1">
-                    <input
-                      type="text"
-                      value={localSearch}
-                      onChange={(e) => setLocalSearch(e.target.value)}
-                      placeholder="Produkt suchen…"
-                      className={DS_INPUT}
-                    />
-                    {localSearch && (
-                      <button
-                        type="button"
-                        onClick={() => { setLocalSearch(""); commitSearch(""); }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg leading-none cursor-pointer"
-                      >×</button>
-                    )}
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn-orange flex-shrink-0 flex items-center gap-1.5 px-4"
-                  >
-                    <Search className="w-4 h-4" />
-                    <span className="text-sm">Suchen</span>
                   </button>
                 </form>
               </div>
@@ -634,7 +544,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                 <div
                   ref={tilesRef}
                   className={[
-                    viewParam === "list" ? "flex flex-col gap-3" : "grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6",
+                    viewParam === "list" ? "flex flex-col gap-3" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6",
                     "transition-opacity duration-150",
                     isPending ? "opacity-60 pointer-events-none" : "",
                   ].join(" ")}
