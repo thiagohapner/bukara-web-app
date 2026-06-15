@@ -348,7 +348,7 @@ export default function KatalogProductContent({
 
             {accordionSections.length > 0 && (
               <div id="pdp-accordion" className="mt-8 scroll-mt-24">
-                <ProductAccordion sections={accordionSections} defaultOpenIds={["technische-details"]} />
+                <ProductAccordion sections={accordionSections} defaultOpenIds={accordionSections.map((s) => s.id)} />
               </div>
             )}
 
