@@ -8,6 +8,7 @@ import ProductAccordion from "@/components/ProductAccordion";
 import OrderBenefits from "@/components/OrderBenefits";
 import V2VariantPicker from "@/components/V2VariantPicker";
 import ProductAccessories from "@/components/ProductAccessories";
+import KatalogAbmessungenTable from "./KatalogAbmessungenTable";
 import { useCart } from "@/components/CartContext";
 import { formatEur, unitPriceForQuantity } from "@/lib/pricing";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication } from "@/lib/v2/types";
@@ -345,6 +346,8 @@ export default function KatalogProductContent({
             <OrderBenefits />
 
             <ProductAccessories accessories={accessories} linkBase="/katalog" />
+
+            <KatalogAbmessungenTable sku={selectedSku as unknown as Record<string, unknown> | null} />
 
             {accordionSections.length > 0 && (
               <div id="pdp-accordion" className="mt-8 scroll-mt-24">
