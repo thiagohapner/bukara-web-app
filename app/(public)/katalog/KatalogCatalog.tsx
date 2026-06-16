@@ -542,7 +542,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                 <div
                   ref={tilesRef}
                   className={[
-                    viewParam === "list" ? "flex flex-col gap-3" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6",
+                    viewParam === "list" ? "flex flex-col gap-3" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6",
                     "transition-opacity duration-150",
                     isPending ? "opacity-60 pointer-events-none" : "",
                   ].join(" ")}
