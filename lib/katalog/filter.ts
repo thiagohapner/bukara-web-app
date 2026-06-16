@@ -13,6 +13,7 @@ export type EnrichedCard = ProductCardData & {
   maxShank: number | null;
   merchantSkus: string[];
   bukaraSkus: string[];
+  variantLabels: string[];
 };
 
 /** All applied filter values (presentation `view`/`sort` excluded from filtering except sort). */
@@ -74,14 +75,16 @@ export function filterCards(
     );
   }
 
-  if (state.search) {
-    const q = state.search.toLowerCase();
-    result = result.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.merchantSkus.some((s) => s.toLowerCase().includes(q)) ||
-        c.bukaraSkus.some((s) => s.toLowerCase().includes(q)),
-    );
+  if (state.search.trim()) {
+    // Token-AND over a combined haystack so e.g. "D20 NL45" matches a variant
+    // label containing both tokens (and name / merchant / Bukara as before).
+    const tokens = state.search.toLowerCase().split(/\s+/).filter(Boolean);
+    result = result.filter((c) => {
+      const hay = [c.name, ...c.merchantSkus, ...c.bukaraSkus, ...c.variantLabels]
+        .join(" ")
+        .toLowerCase();
+      return tokens.every((t) => hay.includes(t));
+    });
   }
 
   if (state.priceMin !== null) result = result.filter((c) => (c.fromCampaignPrice ?? 0) >= state.priceMin!);

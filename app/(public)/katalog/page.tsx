@@ -57,11 +57,11 @@ export default async function KatalogPage() {
       fetchAll<{
         id: string; product_id: string; price_eur: number;
         campaign_price: number | null; diameter_mm: number | null; shank_mm: number | null; sort_order: number;
-        merchant_sku: string | null; bukara_article_number: string | null;
+        merchant_sku: string | null; bukara_article_number: string | null; variant_label: string | null;
       }>((from, to) =>
         supabaseAdminV2
           .from("skus")
-          .select("id, product_id, price_eur, campaign_price, diameter_mm, shank_mm, sort_order, merchant_sku, bukara_article_number")
+          .select("id, product_id, price_eur, campaign_price, diameter_mm, shank_mm, sort_order, merchant_sku, bukara_article_number, variant_label")
           .in("product_id", ids)
           .eq("is_active", true)
           .order("sort_order")
@@ -117,6 +117,7 @@ export default async function KatalogPage() {
   const shankRangeMap: Record<string, { min: number; max: number }> = {};
   const merchantSkusMap: Record<string, string[]> = {};
   const bukaraSkusMap: Record<string, string[]> = {};
+  const variantLabelsMap: Record<string, string[]> = {};
   for (const sku of skuList) {
     const pid = sku.product_id;
     const eff = sku.campaign_price ?? sku.price_eur;
@@ -146,6 +147,10 @@ export default async function KatalogPage() {
     if (sku.bukara_article_number) {
       if (!bukaraSkusMap[pid]) bukaraSkusMap[pid] = [];
       if (!bukaraSkusMap[pid].includes(sku.bukara_article_number)) bukaraSkusMap[pid].push(sku.bukara_article_number);
+    }
+    if (sku.variant_label) {
+      if (!variantLabelsMap[pid]) variantLabelsMap[pid] = [];
+      if (!variantLabelsMap[pid].includes(sku.variant_label)) variantLabelsMap[pid].push(sku.variant_label);
     }
   }
 
@@ -194,6 +199,7 @@ export default async function KatalogPage() {
       maxShank: shankRangeMap[p.id]?.max ?? null,
       merchantSkus: merchantSkusMap[p.id] ?? [],
       bukaraSkus: bukaraSkusMap[p.id] ?? [],
+      variantLabels: variantLabelsMap[p.id] ?? [],
     };
   });
 
