@@ -67,15 +67,6 @@ export default function KatalogFilterBar({
         />
       </form>
 
-      <KatalogFilterPill label="Preis" active={priceActive} open={openId === "preis"} onToggle={() => toggle("preis")} onClose={close}>
-        <KatalogRangePanel
-          absMin={bounds.price[0]} absMax={bounds.price[1]}
-          appliedMin={state.priceMin} appliedMax={state.priceMax} unit="€"
-          count={(min, max) => countFor({ priceMin: min, priceMax: max })}
-          onApply={applyAnd(onApplyPrice)}
-        />
-      </KatalogFilterPill>
-
       <KatalogFilterPill label="Kategorie" active={katActive} open={openId === "kategorie"} onToggle={() => toggle("kategorie")} onClose={close}>
         <KatalogCategoryPanel
           categories={allCategories}
@@ -98,6 +89,15 @@ export default function KatalogFilterBar({
           options={materialCounts} appliedMaterials={state.materials} appliedMinScore={state.minScore}
           count={(materials, minScore) => countFor({ materials, minScore })}
           onApply={applyAnd(onApplyMaterials)}
+        />
+      </KatalogFilterPill>
+
+      <KatalogFilterPill label="Preis" active={priceActive} open={openId === "preis"} onToggle={() => toggle("preis")} onClose={close}>
+        <KatalogRangePanel
+          absMin={bounds.price[0]} absMax={bounds.price[1]}
+          appliedMin={state.priceMin} appliedMax={state.priceMax} unit="€"
+          count={(min, max) => countFor({ priceMin: min, priceMax: max })}
+          onApply={applyAnd(onApplyPrice)}
         />
       </KatalogFilterPill>
 
