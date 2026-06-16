@@ -53,7 +53,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
         >
           {mainImage ? (
             <div className="absolute inset-2">
-              <Image src={mainImage} alt={placeholderLabel} fill className="object-contain"
+              <Image src={mainImage} alt={placeholderLabel} fill unoptimized className="object-contain"
                 sizes="(max-width: 1024px) 100vw, 55vw" />
             </div>
           ) : (
@@ -77,7 +77,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
                 onClick={() => setLightboxIndex(idx + 1)}
               >
                 <div className="absolute inset-2">
-                  <Image src={img} alt={`${placeholderLabel} ${idx + 2}`} fill className="object-contain" sizes="27vw" />
+                  <Image src={img} alt={`${placeholderLabel} ${idx + 2}`} fill unoptimized className="object-contain" sizes="27vw" />
                 </div>
               </div>
             ))}
@@ -100,7 +100,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
             )}
             {img ? (
               <div className="absolute inset-2">
-                <Image src={img} alt={`${placeholderLabel} ${i + 1}`} fill className="object-contain" sizes="82vw" />
+                <Image src={img} alt={`${placeholderLabel} ${i + 1}`} fill unoptimized className="object-contain" sizes="82vw" />
               </div>
             ) : (
               <PlaceholderBlock label={placeholderLabel} />
@@ -138,6 +138,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
                 src={images[lightboxIndex]}
                 alt={`${placeholderLabel} ${lightboxIndex + 1}`}
                 fill
+                unoptimized
                 className="object-contain"
                 sizes="85vw"
                 priority

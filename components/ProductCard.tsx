@@ -30,7 +30,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               </span>
             )}
             {card.image ? (
-              <Image src={card.image} alt={card.name} fill className="object-contain" sizes="80px" />
+              <Image src={card.image} alt={card.name} fill unoptimized className="object-contain" sizes="80px" />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <span className="text-sm font-black tracking-tighter select-none" style={{ color: "rgba(0,165,151,0.18)" }}>
@@ -82,6 +82,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
                 src={card.image}
                 alt={card.name}
                 fill
+                unoptimized
                 className="object-contain img-zoom"
                 sizes="(max-width: 768px) 50vw, 33vw"
               />

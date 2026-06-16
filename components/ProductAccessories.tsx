@@ -58,6 +58,7 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
             src={accessory.images[0]}
             alt={accessory.name}
             fill
+            unoptimized
             className="object-cover"
             sizes="80px"
           />
