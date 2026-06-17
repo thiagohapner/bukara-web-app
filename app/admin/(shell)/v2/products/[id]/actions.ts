@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 
 interface ProductPayload {
@@ -145,6 +145,8 @@ export async function upsertProduct(
 
     revalidatePath("/admin/v2/products");
     if (pid) revalidatePath(`/admin/v2/products/${pid}`);
+    updateTag("catalog");        // purge the cached catalog data
+    revalidatePath("/katalog");  // re-render the cached catalog page
 
     // Re-fetch the saved product so the client can update state from DB truth
     const { data: saved } = await supabaseAdminV2

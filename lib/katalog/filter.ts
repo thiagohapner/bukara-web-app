@@ -11,9 +11,8 @@ export type EnrichedCard = ProductCardData & {
   maxDiam: number | null;
   minShank: number | null;
   maxShank: number | null;
-  merchantSkus: string[];
-  bukaraSkus: string[];
-  variantLabels: string[];
+  /** Lowercased name + merchant/Bukara SKUs + variant labels, joined for token search. */
+  searchText: string;
 };
 
 /** All applied filter values (presentation `view`/`sort` excluded from filtering except sort). */
@@ -79,12 +78,7 @@ export function filterCards(
     // Token-AND over a combined haystack so e.g. "D20 NL45" matches a variant
     // label containing both tokens (and name / merchant / Bukara as before).
     const tokens = state.search.toLowerCase().split(/\s+/).filter(Boolean);
-    result = result.filter((c) => {
-      const hay = [c.name, ...c.merchantSkus, ...c.bukaraSkus, ...c.variantLabels]
-        .join(" ")
-        .toLowerCase();
-      return tokens.every((t) => hay.includes(t));
-    });
+    result = result.filter((c) => tokens.every((t) => c.searchText.includes(t)));
   }
 
   if (state.priceMin !== null) result = result.filter((c) => (c.fromCampaignPrice ?? 0) >= state.priceMin!);
