@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 
 interface SkuPayload {
@@ -65,6 +65,8 @@ export async function updateSku(
     }
 
     revalidatePath(`/admin/v2/skus/${skuId}`);
+    updateTag("catalog");        // purge the cached catalog data
+    revalidatePath("/katalog");  // re-render the cached catalog page
     return {};
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Unbekannter Fehler" };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useTransition } from "react";
+import { useState, useEffect, useRef, useTransition, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
@@ -131,25 +131,26 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     return qs ? `/katalog?${qs}` : "/katalog";
   }
 
-  // ── Absolute bounds ───────────────────────────────────────────────────────
-  const absoluteMinPrice = allCards.length > 0
-    ? Math.floor(Math.min(...allCards.map((c) => c.fromCampaignPrice ?? 0)))
-    : 0;
-  const absoluteMaxPrice = allCards.length > 0
-    ? Math.ceil(Math.max(...allCards.map((c) => c.fromCampaignPrice ?? 0)))
-    : 999;
-
-  const allDiams = allCards.flatMap((c) =>
-    c.minDiam !== null && c.maxDiam !== null ? [c.minDiam, c.maxDiam] : []
-  );
-  const absoluteMinDiam = allDiams.length > 0 ? Math.floor(Math.min(...allDiams)) : 0;
-  const absoluteMaxDiam = allDiams.length > 0 ? Math.ceil(Math.max(...allDiams)) : 100;
-
-  const allShanks = allCards.flatMap((c) =>
-    c.minShank !== null && c.maxShank !== null ? [c.minShank, c.maxShank] : []
-  );
-  const absoluteMinShank = allShanks.length > 0 ? Math.floor(Math.min(...allShanks)) : 0;
-  const absoluteMaxShank = allShanks.length > 0 ? Math.ceil(Math.max(...allShanks)) : 50;
+  // ── Absolute bounds (invariant for the loaded card set) ────────────────────
+  const {
+    absoluteMinPrice, absoluteMaxPrice,
+    absoluteMinDiam, absoluteMaxDiam,
+    absoluteMinShank, absoluteMaxShank,
+  } = useMemo(() => {
+    const prices = allCards.map((c) => c.fromCampaignPrice ?? 0);
+    const diams = allCards.flatMap((c) =>
+      c.minDiam !== null && c.maxDiam !== null ? [c.minDiam, c.maxDiam] : []);
+    const shanks = allCards.flatMap((c) =>
+      c.minShank !== null && c.maxShank !== null ? [c.minShank, c.maxShank] : []);
+    return {
+      absoluteMinPrice: prices.length > 0 ? Math.floor(Math.min(...prices)) : 0,
+      absoluteMaxPrice: prices.length > 0 ? Math.ceil(Math.max(...prices)) : 999,
+      absoluteMinDiam: diams.length > 0 ? Math.floor(Math.min(...diams)) : 0,
+      absoluteMaxDiam: diams.length > 0 ? Math.ceil(Math.max(...diams)) : 100,
+      absoluteMinShank: shanks.length > 0 ? Math.floor(Math.min(...shanks)) : 0,
+      absoluteMaxShank: shanks.length > 0 ? Math.ceil(Math.max(...shanks)) : 50,
+    };
+  }, [allCards]);
 
   // ── Filtering (logic lives in lib/katalog/filter) ──────────────────────────
   const filterState: KatalogFilterState = {
@@ -162,13 +163,24 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     priceMin, priceMax, diamMin, diamMax, shankMin, shankMax,
     sort: sortParam,
   };
-  const filtered = filterCards(allCards, filterState, allCategories);
+  const filtered = useMemo(
+    () => filterCards(allCards, filterState, allCategories),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [allCards, allCategories, kategorieParam, subParam, selectedMaterials, selectedAnwendungen, minScore, searchQuery, priceMin, priceMax, diamMin, diamMax, shankMin, shankMax, sortParam],
+  );
 
   // Live count for a hypothetical (pending) selection — used by the filter-bar panels.
-  const countFor = (patch: Partial<KatalogFilterState>) =>
-    countCards(allCards, { ...filterState, ...patch }, allCategories);
+  const countFor = useCallback(
+    (patch: Partial<KatalogFilterState>) =>
+      countCards(allCards, { ...filterState, ...patch }, allCategories),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [allCards, allCategories, kategorieParam, subParam, selectedMaterials, selectedAnwendungen, minScore, searchQuery, priceMin, priceMax, diamMin, diamMax, shankMin, shankMax, sortParam],
+  );
 
-  const materialCounts = materialCountsFor(allCards, kategorieParam, subParam, allCategories);
+  const materialCounts = useMemo(
+    () => materialCountsFor(allCards, kategorieParam, subParam, allCategories),
+    [allCards, kategorieParam, subParam, allCategories],
+  );
 
   // ── GSAP animation ────────────────────────────────────────────────────────
   useEffect(() => {
