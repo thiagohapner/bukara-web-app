@@ -3,7 +3,12 @@
     "allow": [
       "WebFetch(domain:api.anthropic.com)",
       "Bash(curl -s \"https://api.anthropic.com/v1/design/h/B_7HlNHKJFJ6Ov0UvOJzOA?open_file=index.html\")",
-      "Bash(curl -s --compressed \"https://api.anthropic.com/v1/design/h/B_7HlNHKJFJ6Ov0UvOJzOA?open_file=index.html\")"
+      "Bash(curl -s --compressed \"https://api.anthropic.com/v1/design/h/B_7HlNHKJFJ6Ov0UvOJzOA?open_file=index.html\")",
+      "Bash(git push *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(sed -n '/## GitHub authentication options/,/## The cloud environment/p' \"/root/.claude/projects/-home-user-bukara-web-app/50bee8b9-db6e-5081-a759-b193203510d3/tool-results/toolu_011K4fFwmuWLgQySXKEvsrBZ.txt\")",
+      "Bash(git add *)",
+      "Bash(git commit -q -m ' *)"
     ]
   }
 }
