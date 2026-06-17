@@ -8,7 +8,13 @@
       "Bash(echo \"EXIT=$?\")",
       "Bash(sed -n '/## GitHub authentication options/,/## The cloud environment/p' \"/root/.claude/projects/-home-user-bukara-web-app/50bee8b9-db6e-5081-a759-b193203510d3/tool-results/toolu_011K4fFwmuWLgQySXKEvsrBZ.txt\")",
       "Bash(git add *)",
-      "Bash(git commit -q -m ' *)"
+      "Bash(git commit -q -m ' *)",
+      "Bash(git fetch *)",
+      "Bash(echo \"FETCH_EXIT=$?\")",
+      "Bash(git ls-remote *)",
+      "Bash(echo \"LSREMOTE_EXIT=$?\")",
+      "Bash(echo \"LS_EXIT=$?\")",
+      "Bash(echo \"PUSH_EXIT=$?\")"
     ]
   }
 }
