@@ -42,7 +42,7 @@ export default function CustomSelect({ value, onChange, options }: Props) {
       </button>
 
       {open && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden max-h-[60vh] overflow-y-auto">
           {options.map((opt, idx) => (
             <button
               key={opt.value}

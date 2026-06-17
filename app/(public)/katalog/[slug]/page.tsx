@@ -2,17 +2,20 @@ import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import KatalogProductContent from "./KatalogProductContent";
-import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication } from "@/lib/v2/types";
+import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
 export const dynamic = "force-dynamic";
 
 export default async function KatalogDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ sku?: string }>;
 }) {
   const { slug } = await params;
+  const { sku: requestedSkuId } = await searchParams;
 
   const { data: product } = await supabaseAdminV2
     .from("products")
@@ -32,6 +35,92 @@ export default async function KatalogDetailPage({
 
   const skuList = (skuData ?? []) as V2Sku[];
   const skuIds = skuList.map((s) => s.id);
+
+  // Variant group: every active SKU across all public products sharing this
+  // product's `series` (the authoritative grouping key). The picker lists the
+  // whole group, even though the current product's images/specs/etc. below stay
+  // scoped to this product only.
+  let groupVariants: V2GroupVariant[] = [];
+  if (product.series) {
+    const { data: seriesProducts } = await supabaseAdminV2
+      .from("products")
+      .select("id, slug")
+      .eq("series", product.series)
+      .eq("has_public_page", true)
+      .eq("is_active", true);
+
+    const slugByProductId: Record<string, string> = {};
+    for (const p of (seriesProducts ?? []) as Array<{ id: string; slug: string }>) {
+      slugByProductId[p.id] = p.slug;
+    }
+    const seriesProductIds = Object.keys(slugByProductId);
+
+    if (seriesProductIds.length > 0) {
+      const { data: groupSkuData } = await supabaseAdminV2
+        .from("skus")
+        .select(
+          "id, product_id, diameter_mm, variant_label, coating_or_type, spin_direction, price_eur, campaign_price, merchant_sku, identnummer, sort_order",
+        )
+        .in("product_id", seriesProductIds)
+        .eq("is_active", true)
+        .order("sort_order");
+
+      type GroupSkuRow = {
+        id: string;
+        product_id: string;
+        diameter_mm: number | null;
+        variant_label: string | null;
+        coating_or_type: string | null;
+        spin_direction: "rechts" | "links" | null;
+        price_eur: number;
+        campaign_price: number | null;
+        merchant_sku: string | null;
+        identnummer: string;
+        sort_order: number;
+      };
+
+      groupVariants = ((groupSkuData ?? []) as GroupSkuRow[])
+        .filter((s) => slugByProductId[s.product_id] !== undefined)
+        .map((s) => ({
+          skuId: s.id,
+          productSlug: slugByProductId[s.product_id],
+          isCurrentProduct: s.product_id === product.id,
+          diameter_mm: s.diameter_mm,
+          variant_label: s.variant_label,
+          coating_or_type: s.coating_or_type,
+          spin_direction: s.spin_direction,
+          price_eur: s.price_eur,
+          campaign_price: s.campaign_price,
+          merchant_sku: s.merchant_sku,
+          identnummer: s.identnummer,
+          sort_order: s.sort_order,
+        }));
+    }
+  }
+
+  // Fallback when series is missing: build the group from this product's SKUs
+  // only, so the picker behaves like the old single-product selector.
+  if (groupVariants.length === 0) {
+    groupVariants = skuList.map((s) => ({
+      skuId: s.id,
+      productSlug: product.slug,
+      isCurrentProduct: true,
+      diameter_mm: s.diameter_mm,
+      variant_label: s.variant_label,
+      coating_or_type: s.coating_or_type,
+      spin_direction: s.spin_direction,
+      price_eur: s.price_eur,
+      campaign_price: s.campaign_price,
+      merchant_sku: s.merchant_sku,
+      identnummer: s.identnummer,
+      sort_order: s.sort_order,
+    }));
+  }
+
+  // Preselect from ?sku=, but only if it belongs to THIS product (images/specs
+  // were fetched for this product). A stale/foreign id falls back to skus[0].
+  const initialSkuId =
+    requestedSkuId && skuList.some((s) => s.id === requestedSkuId) ? requestedSkuId : undefined;
 
   const [{ data: images }, { data: specs }, { data: mats }, { data: apps }, { data: accRows }] =
     await Promise.all([
@@ -129,6 +218,8 @@ export default async function KatalogDetailPage({
           materials={(mats ?? []) as V2ProductMaterial[]}
           applications={(apps ?? []) as V2ProductApplication[]}
           accessories={accessories}
+          groupVariants={groupVariants}
+          initialSkuId={initialSkuId}
         />
       </main>
       <Footer />

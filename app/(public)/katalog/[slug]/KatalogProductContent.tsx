@@ -6,13 +6,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductGallery from "@/components/ProductGallery";
 import ProductAccordion from "@/components/ProductAccordion";
 import OrderBenefits from "@/components/OrderBenefits";
-import V2VariantPicker from "@/components/V2VariantPicker";
+import V2SeriesVariantPicker from "@/components/V2SeriesVariantPicker";
 import ProductAccessories from "@/components/ProductAccessories";
 import KatalogAbmessungenTable from "./KatalogAbmessungenTable";
 import { getDimensionRows } from "@/lib/v2/dimensions";
 import { useCart } from "@/components/CartContext";
 import { formatEur, unitPriceForQuantity } from "@/lib/pricing";
-import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication } from "@/lib/v2/types";
+import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
 function Dots({ count }: { count: number }) {
@@ -48,6 +48,8 @@ interface Props {
   materials: V2ProductMaterial[];
   applications: V2ProductApplication[];
   accessories?: AccessoryItem[];
+  groupVariants: V2GroupVariant[];
+  initialSkuId?: string;
 }
 
 export default function KatalogProductContent({
@@ -58,10 +60,12 @@ export default function KatalogProductContent({
   materials,
   applications,
   accessories = [],
+  groupVariants,
+  initialSkuId,
 }: Props) {
   const { addV2Item, openDrawer } = useCart();
 
-  const [selectedSkuId, setSelectedSkuId] = useState<string>(skus[0]?.id ?? "");
+  const [selectedSkuId, setSelectedSkuId] = useState<string>(initialSkuId ?? skus[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const [addedState, setAddedState] = useState<"idle" | "added">("idle");
 
@@ -307,12 +311,12 @@ export default function KatalogProductContent({
               </a>
             )}
 
-            {skus.length > 1 && (
+            {groupVariants.length > 1 && (
               <div className="mb-6">
-                <V2VariantPicker
-                  skus={skus}
+                <V2SeriesVariantPicker
+                  variants={groupVariants}
                   selectedSkuId={selectedSkuId}
-                  onSelect={(sku) => setSelectedSkuId(sku.id)}
+                  onSelectSameProduct={setSelectedSkuId}
                 />
               </div>
             )}

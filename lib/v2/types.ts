@@ -39,6 +39,21 @@ export interface V2Sku {
   sort_order: number;
 }
 
+export interface V2GroupVariant {
+  skuId: string;
+  productSlug: string;
+  isCurrentProduct: boolean;
+  diameter_mm: number | null;
+  variant_label: string | null;
+  coating_or_type: string | null;
+  spin_direction: "rechts" | "links" | null;
+  price_eur: number;
+  campaign_price: number | null;
+  merchant_sku: string | null;
+  identnummer: string;
+  sort_order: number;
+}
+
 export interface V2SkuImage {
   id: string;
   sku_id: string;
