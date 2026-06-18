@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { X, Search, SlidersHorizontal } from "lucide-react";
 import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 import ProductCard from "@/components/ProductCard";
 import KatalogFilterSidebar from "./KatalogFilterSidebar";
 import KatalogFilterBar from "./KatalogFilterBar";
@@ -598,6 +599,8 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
           </div>
         </>
       )}
+
+      <BackToTop />
 
       <Footer />
     </>
