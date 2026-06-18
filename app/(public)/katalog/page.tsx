@@ -38,7 +38,7 @@ type CatalogCardRow = {
 
 const getCatalogData = unstable_cache(
   async () => {
-    const [{ data: cardRows }, { data: categories }] = await Promise.all([
+    const [cardsRes, catsRes] = await Promise.all([
       supabaseAdminV2.from("catalog_cards").select("*").limit(2000),
       supabaseAdminV2
         .from("categories")
@@ -46,9 +46,14 @@ const getCatalogData = unstable_cache(
         .order("sort_order")
         .order("id"),
     ]);
+    // Throw on a real query error so the catalog never silently caches an empty
+    // result (e.g. a missing grant on the view). ISR keeps serving the last good
+    // render while a failed revalidation retries.
+    if (cardsRes.error) throw new Error(`catalog_cards query failed: ${cardsRes.error.message}`);
+    if (catsRes.error) throw new Error(`categories query failed: ${catsRes.error.message}`);
     return {
-      cardRows: (cardRows ?? []) as CatalogCardRow[],
-      categories: (categories ?? []) as V2Category[],
+      cardRows: (cardsRes.data ?? []) as CatalogCardRow[],
+      categories: (catsRes.data ?? []) as V2Category[],
     };
   },
   ["catalog-cards-v1"],
