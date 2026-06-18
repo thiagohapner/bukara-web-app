@@ -63,6 +63,7 @@ export type CartTotals = {
   subtotal: number;
   bulkDiscount: number;
   bulkDiscountApplied: boolean;
+  voucherDiscount: number;
   freeShippingApplied: boolean;
   net: number;
   vat: number;
@@ -70,14 +71,19 @@ export type CartTotals = {
   gross: number;
 };
 
-export function cartTotals(items: { unit_price: number; quantity: number }[]): CartTotals {
+export function cartTotals(
+  items: { unit_price: number; quantity: number }[],
+  voucherDiscount = 0,
+): CartTotals {
   const subtotal = round(items.reduce((s, i) => s + i.unit_price * i.quantity, 0));
   const freeShippingApplied = subtotal >= FREE_SHIPPING_THRESHOLD;
   const bulkDiscountApplied = subtotal >= BULK_DISCOUNT_THRESHOLD;
   const bulkDiscount = bulkDiscountApplied ? round(subtotal * BULK_DISCOUNT_PERCENT) : 0;
-  const net = round(subtotal - bulkDiscount);
+  // Voucher stacks after the automatic bulk discount; never drive net below zero.
+  const voucher = round(Math.min(Math.max(voucherDiscount, 0), Math.max(subtotal - bulkDiscount, 0)));
+  const net = round(subtotal - bulkDiscount - voucher);
   const shipping = freeShippingApplied ? 0 : BASE_SHIPPING_COST;
   const vat = round(net * 0.19);
   const gross = round(net + vat + shipping);
-  return { subtotal, bulkDiscount, bulkDiscountApplied, freeShippingApplied, net, vat, shipping, gross };
+  return { subtotal, bulkDiscount, bulkDiscountApplied, voucherDiscount: voucher, freeShippingApplied, net, vat, shipping, gross };
 }
