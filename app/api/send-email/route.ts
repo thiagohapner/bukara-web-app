@@ -144,8 +144,9 @@ function buildB2BEmail(d: Record<string, string>) {
 
 function buildOrderEmail(d: {
   order: Record<string, string>;
+  voucherCode?: string | null;
   items: Array<{ name: string; artikel_nr: string; variant_label: string | null; qty: number; unit_price: number; line_total: number }>;
-  totals: { subtotal: number; bulkDiscountApplied: boolean; bulkDiscount: number; net: number; vat: number; shipping: number; gross: number };
+  totals: { subtotal: number; bulkDiscountApplied: boolean; bulkDiscount: number; voucherDiscount?: number; net: number; vat: number; shipping: number; gross: number };
 }) {
   const itemRows = d.items.map(item => `
     <tr>
@@ -176,6 +177,11 @@ function buildOrderEmail(d: {
       <tr>
         <td colspan="3" style="padding:8px 12px;font-size:12px;color:#00A597;border-bottom:1px solid #e2e8f0;">Zusatzrabatt (10%)</td>
         <td style="padding:8px 12px;font-size:13px;color:#00A597;text-align:right;border-bottom:1px solid #e2e8f0;">−${formatEur(d.totals.bulkDiscount)}</td>
+      </tr>` : ""}
+      ${(d.totals.voucherDiscount ?? 0) > 0 ? `
+      <tr>
+        <td colspan="3" style="padding:8px 12px;font-size:12px;color:#00A597;border-bottom:1px solid #e2e8f0;">Gutschein${d.voucherCode ? ` ${d.voucherCode}` : ""}</td>
+        <td style="padding:8px 12px;font-size:13px;color:#00A597;text-align:right;border-bottom:1px solid #e2e8f0;">−${formatEur(d.totals.voucherDiscount ?? 0)}</td>
       </tr>` : ""}
       <tr>
         <td colspan="3" style="padding:8px 12px;font-size:12px;color:#64748b;border-bottom:1px solid #e2e8f0;">19% MwSt.</td>

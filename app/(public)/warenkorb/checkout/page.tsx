@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/components/CartContext";
 import { cartTotals, formatEur } from "@/lib/pricing";
 import { submitOrder } from "@/app/actions/submitOrder";
-import { FileText, Clock, Check, Phone, Mail, ArrowRight } from "lucide-react";
+import { applyVoucher } from "@/app/actions/applyVoucher";
+import { FileText, Clock, Check, Phone, Mail, ArrowRight, X } from "lucide-react";
 
 function inputClass(extra = "") {
   return `w-full border border-slate-200 rounded-sm px-4 py-3 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#00A597]/20 focus:border-[#00A597] transition-colors ${extra}`;
@@ -22,6 +23,8 @@ type FormState = {
   nachricht: string;
 };
 
+type AppliedVoucher = { code: string; discount: number };
+
 function TrustItem({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
     <div className="flex items-center gap-2 text-sm text-slate-600">
@@ -31,9 +34,25 @@ function TrustItem({ icon, text }: { icon: React.ReactNode; text: string }) {
   );
 }
 
-function OrderSummary() {
+function OrderSummary({
+  appliedVoucher,
+  voucherInput,
+  setVoucherInput,
+  onApplyVoucher,
+  onRemoveVoucher,
+  voucherError,
+  voucherApplying,
+}: {
+  appliedVoucher: AppliedVoucher | null;
+  voucherInput: string;
+  setVoucherInput: (v: string) => void;
+  onApplyVoucher: () => void;
+  onRemoveVoucher: () => void;
+  voucherError: string | null;
+  voucherApplying: boolean;
+}) {
   const { items } = useCart();
-  const totals = cartTotals(items);
+  const totals = cartTotals(items, appliedVoucher?.discount ?? 0);
 
   if (items.length === 0) {
     return (
@@ -50,7 +69,7 @@ function OrderSummary() {
     const original = item.sku?.price ?? item.v2Sku?.price_eur ?? item.unit_price;
     return sum + (original - item.unit_price) * item.quantity;
   }, 0);
-  const totalSavings = Math.round((campaignSavings + totals.bulkDiscount) * 100) / 100;
+  const totalSavings = Math.round((campaignSavings + totals.bulkDiscount + totals.voucherDiscount) * 100) / 100;
 
   return (
     <>
@@ -93,6 +112,47 @@ function OrderSummary() {
           })}
         </ul>
 
+        {/* Voucher code */}
+        <div className="mb-5">
+          {appliedVoucher ? (
+            <div className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm" style={{ background: "#e8f7f6", color: "#00A597" }}>
+              <span className="font-semibold">Gutschein {appliedVoucher.code} aktiv</span>
+              <button
+                type="button"
+                onClick={onRemoveVoucher}
+                className="flex items-center gap-1 text-xs font-medium hover:opacity-70 transition-opacity"
+                aria-label="Gutschein entfernen"
+              >
+                Entfernen <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <div>
+              <label className="block text-xs font-medium text-slate-500 mb-1.5">Gutscheincode</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={voucherInput}
+                  onChange={(e) => setVoucherInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); onApplyVoucher(); } }}
+                  placeholder="Code eingeben"
+                  className={inputClass("uppercase")}
+                />
+                <button
+                  type="button"
+                  onClick={onApplyVoucher}
+                  disabled={voucherApplying || !voucherInput.trim()}
+                  className="btn-black flex-shrink-0 px-4"
+                  style={{ opacity: voucherApplying || !voucherInput.trim() ? 0.6 : 1 }}
+                >
+                  {voucherApplying ? "…" : "Einlösen"}
+                </button>
+              </div>
+              {voucherError && <p className="text-xs text-red-500 mt-1.5">{voucherError}</p>}
+            </div>
+          )}
+        </div>
+
         <div className="border-t border-slate-200 pt-4 flex flex-col gap-2 text-sm">
           <div className="flex justify-between text-slate-500">
             <span>Zwischensumme</span>
@@ -102,6 +162,12 @@ function OrderSummary() {
             <div className="flex justify-between font-medium" style={{ color: "#00A597" }}>
               <span>Zusatzrabatt (10%)</span>
               <span>−{formatEur(totals.bulkDiscount)}</span>
+            </div>
+          )}
+          {appliedVoucher && totals.voucherDiscount > 0 && (
+            <div className="flex justify-between font-medium" style={{ color: "#00A597" }}>
+              <span>Gutschein {appliedVoucher.code}</span>
+              <span>−{formatEur(totals.voucherDiscount)}</span>
             </div>
           )}
           <div className="flex justify-between text-slate-500">
@@ -164,9 +230,35 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const [voucherInput, setVoucherInput] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState<AppliedVoucher | null>(null);
+  const [voucherError, setVoucherError] = useState<string | null>(null);
+  const [voucherApplying, setVoucherApplying] = useState(false);
+
   function field(key: keyof FormState) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
+  }
+
+  async function handleApplyVoucher() {
+    if (!cartId || !voucherInput.trim()) return;
+    setVoucherApplying(true);
+    setVoucherError(null);
+    const res = await applyVoucher(cartId, voucherInput, form.email || undefined);
+    setVoucherApplying(false);
+    if (!res.ok) {
+      setAppliedVoucher(null);
+      setVoucherError(res.reason);
+      return;
+    }
+    setAppliedVoucher({ code: res.code, discount: res.discount });
+    setVoucherInput(res.code);
+  }
+
+  function handleRemoveVoucher() {
+    setAppliedVoucher(null);
+    setVoucherError(null);
+    setVoucherInput("");
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -188,15 +280,17 @@ export default function CheckoutPage() {
       return;
     }
 
-    const result = await submitOrder(cartId, form);
+    const result = await submitOrder(cartId, form, appliedVoucher?.code);
 
     if ("error" in result) {
       setSubmitting(false);
-      setSubmitError(result.error + " Bitte versuchen Sie es erneut.");
+      // A voucher that failed re-validation at placement: surface it on the voucher field too.
+      setSubmitError(result.error);
+      if (appliedVoucher) { setVoucherError(result.error); setAppliedVoucher(null); }
       return;
     }
 
-    const { orderId, submitted_at: submittedAt, totals: serverTotals, emailItems } = result;
+    const { orderId, submitted_at: submittedAt, totals: serverTotals, emailItems, voucher } = result;
     const order = { id: orderId, submitted_at: submittedAt };
 
     try {
@@ -205,7 +299,12 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "order",
-          data: { order: { ...order, ...form }, items: emailItems, totals: serverTotals },
+          data: {
+            order: { ...order, ...form },
+            items: emailItems,
+            totals: serverTotals,
+            voucherCode: voucher?.code ?? null,
+          },
         }),
       });
     } catch (err) {
@@ -250,7 +349,15 @@ export default function CheckoutPage() {
 
             {/* Order summary + contact */}
             <div className="w-full lg:w-[42%] flex-shrink-0 lg:sticky lg:top-[72px]">
-              <OrderSummary />
+              <OrderSummary
+                appliedVoucher={appliedVoucher}
+                voucherInput={voucherInput}
+                setVoucherInput={setVoucherInput}
+                onApplyVoucher={handleApplyVoucher}
+                onRemoveVoucher={handleRemoveVoucher}
+                voucherError={voucherError}
+                voucherApplying={voucherApplying}
+              />
             </div>
 
             {/* Form */}
