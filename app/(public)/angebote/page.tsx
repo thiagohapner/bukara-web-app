@@ -117,7 +117,7 @@ export default function AngebotePage() {
           <nav className="flex items-center gap-1.5 text-xs text-slate-400">
             <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
             <span>/</span>
-            <Link href="/produkte" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Produkte</Link>
+            <Link href="/katalog" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Produkte</Link>
             <span>/</span>
             <span className="text-slate-700 font-medium">Angebote</span>
           </nav>

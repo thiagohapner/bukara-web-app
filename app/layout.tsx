@@ -12,6 +12,7 @@ const inter = Inter({
 const OG_IMAGE = "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/hero/main_image.png";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.bukara.de"),
   title: "Bukara GmbH",
   description: "Professionelle Fräswerkzeuge, Schärfservice und Sonderwerkzeuge — exklusiver ITA-Partner.",
   openGraph: {
