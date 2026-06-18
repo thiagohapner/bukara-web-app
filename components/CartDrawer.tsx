@@ -131,6 +131,13 @@ export default function CartDrawer() {
                         <span className="text-sm font-semibold text-slate-900 w-5 text-center">{item.quantity}</span>
                         <QtyButton onClick={() => updateItem(item.id, item.quantity + 1)}>+</QtyButton>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => removeCartItem(item.id)}
+                        className="text-xs text-slate-500 hover:text-slate-900 transition-colors mt-1.5 font-medium"
+                      >
+                        Vom Warenkorb entfernen
+                      </button>
                       {hasStaffel && item.quantity === 4 && (
                         <p className="text-[11px] mt-1" style={{ color: "#00A597" }}>
                           Noch 1 Stück bis zum Standardpreis
