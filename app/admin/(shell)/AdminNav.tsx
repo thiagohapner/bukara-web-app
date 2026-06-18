@@ -7,6 +7,7 @@ import {
   Package,
   FolderTree,
   Tag,
+  Ticket,
   ShoppingCart,
   Boxes,
   Inbox,
@@ -21,6 +22,7 @@ const NAV: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/admin/products", label: "Produkte", icon: Package },
   { href: "/admin/categories", label: "Kategorien", icon: FolderTree },
   { href: "/admin/deals", label: "Angebote", icon: Tag },
+  { href: "/admin/vouchers", label: "Gutscheine", icon: Ticket },
   { href: "/admin/orders", label: "Bestellungen", icon: ShoppingCart },
 ];
 
