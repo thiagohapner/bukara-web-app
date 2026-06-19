@@ -489,6 +489,7 @@ export default function KatalogCatalog({
                   onApplyKategorie={handleSelectCategory}
                   onApplyAnwendungen={applyAnwendungen}
                   onApplyMaterials={applyMaterials}
+                  onApplyDiam={handleCommitDiam}
                   onApplyPrice={handleCommitPrice}
                   onApplySort={handleSort}
                   hideCategory={!!lockedCategory}

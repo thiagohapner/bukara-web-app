@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { DS_INPUT } from "@/lib/ds";
 import type { V2Category } from "@/lib/v2/types";
-import type { EnrichedCard, KatalogFilterState } from "@/lib/katalog/filter";
+import type { KatalogFilterState } from "@/lib/katalog/filter";
 import KatalogFilterPill from "./KatalogFilterPill";
 import KatalogRangePanel from "./KatalogRangePanel";
 import KatalogMultiSelectPanel from "./KatalogMultiSelectPanel";
@@ -31,6 +31,7 @@ interface Props {
   onApplyKategorie: (kategorie: string, sub: string) => void;
   onApplyAnwendungen: (tags: string[]) => void;
   onApplyMaterials: (materials: string[], minScore: number) => void;
+  onApplyDiam: (min: number, max: number) => void;
   onApplyPrice: (min: number, max: number) => void;
   onApplySort: (value: string) => void;
   /** Hide the Kategorie pill (e.g. on /sortiment pages where category is fixed by the URL). */
@@ -41,7 +42,7 @@ export default function KatalogFilterBar({
   state, allCategories, materialCounts, applicationTags, bounds,
   searchValue, onSearchInput, onSearchSubmit, countFor,
   onApplyKategorie, onApplyAnwendungen, onApplyMaterials,
-  onApplyPrice, onApplySort, hideCategory = false,
+  onApplyDiam, onApplyPrice, onApplySort, hideCategory = false,
 }: Props) {
   const [openId, setOpenId] = useState<string | null>(null);
   const toggle = (id: string) => setOpenId((cur) => (cur === id ? null : id));
@@ -49,6 +50,7 @@ export default function KatalogFilterBar({
   const applyAnd = <T extends unknown[]>(fn: (...a: T) => void) => (...a: T) => { fn(...a); close(); };
 
   const priceActive = state.priceMin !== null || state.priceMax !== null;
+  const diamActive = state.diamMin !== null || state.diamMax !== null;
   const katActive = !!(state.kategorie || state.sub);
   const sortLabel = SORT_OPTIONS.find((o) => o.value === state.sort)?.label ?? "Beliebtheit";
 
@@ -79,6 +81,15 @@ export default function KatalogFilterBar({
           />
         </KatalogFilterPill>
       )}
+
+      <KatalogFilterPill label="Durchmesser" active={diamActive} open={openId === "durchmesser"} onToggle={() => toggle("durchmesser")} onClose={close}>
+        <KatalogRangePanel
+          absMin={bounds.diam[0]} absMax={bounds.diam[1]}
+          appliedMin={state.diamMin} appliedMax={state.diamMax} unit="mm"
+          count={(min, max) => countFor({ diamMin: min, diamMax: max })}
+          onApply={applyAnd(onApplyDiam)}
+        />
+      </KatalogFilterPill>
 
       <KatalogFilterPill label="Anwendung" active={state.anwendungen.length > 0} badge={state.anwendungen.length || undefined} open={openId === "anwendung"} onToggle={() => toggle("anwendung")} onClose={close}>
         <KatalogMultiSelectPanel
