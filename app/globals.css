@@ -234,3 +234,35 @@ label[for] {
   color: #FBBF24;
   letter-spacing: 0.05em;
 }
+
+/* Dual-handle range slider (catalog filters). The two <input type=range> overlap
+   the full track width, so their tracks must NOT capture pointer events — only the
+   thumbs do. Otherwise the top input blocks the lower handle and it can't be moved. */
+.katalog-range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+.katalog-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.katalog-range-input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.katalog-range-input::-moz-range-track {
+  background: transparent;
+}

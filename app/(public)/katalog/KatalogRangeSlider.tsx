@@ -28,7 +28,7 @@ export default function KatalogRangeSlider({
         }}
         onMouseUp={() => onCommit(valueMin, valueMax)}
         onTouchEnd={() => onCommit(valueMin, valueMax)}
-        className="absolute w-full h-full opacity-0 cursor-pointer"
+        className="katalog-range-input absolute w-full h-full opacity-0"
         style={{ zIndex: valueMin > max - 10 ? 5 : 3 }}
       />
       <input
@@ -39,7 +39,7 @@ export default function KatalogRangeSlider({
         }}
         onMouseUp={() => onCommit(valueMin, valueMax)}
         onTouchEnd={() => onCommit(valueMin, valueMax)}
-        className="absolute w-full h-full opacity-0 cursor-pointer"
+        className="katalog-range-input absolute w-full h-full opacity-0"
         style={{ zIndex: 4 }}
       />
       <div
