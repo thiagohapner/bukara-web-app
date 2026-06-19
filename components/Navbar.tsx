@@ -5,18 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
-import { ShoppingBasket } from "lucide-react";
+import { ShoppingBasket, ChevronDown } from "lucide-react";
 
 const activeDealsCount: number = 3;
 
 const NAV_LINKS = [
-  { label: "Produkte", href: "/katalog" },
+  { label: "Produkte", href: "/katalog", dropdown: true },
   { label: "Angebote", href: "/angebote", badge: true },
   { label: "Lösungen", href: "/loesungen" },
   { label: "Über uns", href: "/ueber-uns" },
   { label: "B2B Portal", href: "https://b2b.bukara.de/" },
   { label: "Kontakt", href: "/kontakt" },
 ];
+
+type ProductCategory = { name: string; slug: string };
 
 const AngeboteBadge = () => (
   <span
@@ -27,7 +29,71 @@ const AngeboteBadge = () => (
   </span>
 );
 
-export default function Navbar() {
+function ProdukteDropdown({
+  link,
+  productCategories,
+}: {
+  link: { label: string; href: string };
+  productCategories: ProductCategory[];
+}) {
+  return (
+    // Desktop hover/focus dropdown. The label itself stays a real link to /katalog;
+    // the panel opens on hover and on keyboard focus-within (no JS state needed).
+    <div className="group relative">
+      <Link
+        href={link.href}
+        className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap"
+        style={{ textDecoration: "none" }}
+        aria-haspopup="menu"
+      >
+        {link.label}
+        <ChevronDown
+          className="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180"
+          strokeWidth={2}
+        />
+      </Link>
+
+      {/* pt-2 acts as a hover bridge between the label and the panel */}
+      <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-150 absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
+        <ul
+          role="menu"
+          aria-label={link.label}
+          className="min-w-[260px] bg-white border border-slate-200 rounded-xl shadow-xl py-2"
+        >
+          <li role="none">
+            <Link
+              role="menuitem"
+              href="/katalog"
+              className="block px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50 transition-colors"
+              style={{ textDecoration: "none" }}
+            >
+              Alle Produkte
+            </Link>
+          </li>
+          <li role="separator" className="my-1 border-t border-slate-100" />
+          {productCategories.map((cat) => (
+            <li key={cat.slug} role="none">
+              <Link
+                role="menuitem"
+                href={`/sortiment/${cat.slug}`}
+                className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#00A597] transition-colors"
+                style={{ textDecoration: "none" }}
+              >
+                {cat.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export default function Navbar({
+  productCategories = [],
+}: {
+  productCategories?: ProductCategory[];
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { cartCount, openDrawer } = useCart();
 
@@ -47,7 +113,9 @@ export default function Navbar() {
             const isExternal = link.href.startsWith("http");
             return (
               <li key={link.label}>
-                {isExternal ? (
+                {link.dropdown ? (
+                  <ProdukteDropdown link={link} productCategories={productCategories} />
+                ) : isExternal ? (
                   <a
                     href={link.href}
                     target="_blank"
