@@ -15,6 +15,7 @@ type CatalogCardRow = {
   has_variants: boolean;
   from_campaign_price: number | null;
   from_original_price: number | null;
+  variant_label: string | null;
   min_diam: number | null;
   max_diam: number | null;
   min_shank: number | null;
@@ -74,6 +75,7 @@ export async function getCatalogData(): Promise<CatalogData> {
     hasVariants: r.has_variants,
     fromCampaignPrice: r.from_campaign_price ?? undefined,
     fromOriginalPrice: r.from_original_price ?? undefined,
+    variantLabel: r.variant_label ?? undefined,
     hrefPrefix: "/katalog",
     categoryIds: r.category_ids ?? [],
     applicationTags: r.application_tags ?? [],

@@ -9,6 +9,7 @@ export interface ProductCardData {
   image?: string;
   galleryBg: string;
   hasVariants?: boolean;
+  variantLabel?: string;
   fromCampaignPrice?: number;
   fromOriginalPrice?: number;
   hrefPrefix?: string;
@@ -43,6 +44,9 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
             <h3 className="text-sm font-semibold text-slate-900 mb-1 leading-snug">
               {card.name}
             </h3>
+            {card.variantLabel && (
+              <p className="text-sm text-slate-500 mb-1 leading-snug">{card.variantLabel}</p>
+            )}
             {showPrice && (
               <div className="flex items-center gap-2 flex-wrap">
                 <span className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
@@ -98,9 +102,12 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
 
         {/* Info */}
         <div className="p-4">
-          <h3 className="text-sm font-semibold text-slate-900 mb-2 leading-snug line-clamp-2">
+          <h3 className="text-sm font-semibold text-slate-900 mb-1 leading-snug line-clamp-2">
             {card.name}
           </h3>
+          {card.variantLabel && (
+            <p className="text-sm text-slate-500 mb-2 leading-snug">{card.variantLabel}</p>
+          )}
           {showPrice && (
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
