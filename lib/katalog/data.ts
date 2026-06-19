@@ -3,23 +3,30 @@ import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import type { V2Category } from "@/lib/v2/types";
 import type { EnrichedCard } from "@/lib/katalog/filter";
 
-// One row per public+active product, pre-aggregated by the v2.catalog_cards view
-// (price/diam/shank ranges, facets, search text) — replaces ~10 round-trips.
-type CatalogCardRow = {
+// One row per public+active SKU, pre-aggregated by the v2.catalog_sku_cards view.
+// Each catalog card is a single SKU with its own slug, exact price, and exact
+// diameter/shank — so clicking a card lands on exactly that variant's PDP, with
+// no "ab …" price (the card is the variant, not the product). Facets (category /
+// application / materials / search text) are inherited from the parent product.
+type SkuCardRow = {
   id: string;
   slug: string;
+  product_id: string;
+  product_slug: string;
+  series: string | null;
+  series_title: string | null;
   name: string;
+  variant_label: string | null;
   badge: string | null;
   image: string | null;
   gallery_bg: string;
-  has_variants: boolean;
-  from_campaign_price: number | null;
-  from_original_price: number | null;
-  variant_label: string | null;
-  min_diam: number | null;
-  max_diam: number | null;
-  min_shank: number | null;
-  max_shank: number | null;
+  price: number | null;
+  original_price: number | null;
+  campaign_price: number | null;
+  diameter_mm: number | null;
+  shank_mm: number | null;
+  sku_sort_order: number;
+  product_sort_order: number;
   category_ids: string[];
   application_tags: string[];
   materials: { material_name: string; score: number }[];
@@ -38,7 +45,13 @@ export interface CatalogData {
 const fetchCatalog = unstable_cache(
   async () => {
     const [cardsRes, catsRes] = await Promise.all([
-      supabaseAdminV2.from("catalog_cards").select("*").limit(2000),
+      supabaseAdminV2
+        .from("catalog_sku_cards")
+        .select("*")
+        .order("product_sort_order")
+        .order("product_slug")
+        .order("sku_sort_order")
+        .limit(5000),
       supabaseAdminV2
         .from("categories")
         .select(
@@ -50,14 +63,14 @@ const fetchCatalog = unstable_cache(
     // Throw on a real query error so the catalog never silently caches an empty
     // result (e.g. a missing grant on the view). ISR keeps serving the last good
     // render while a failed revalidation retries.
-    if (cardsRes.error) throw new Error(`catalog_cards query failed: ${cardsRes.error.message}`);
+    if (cardsRes.error) throw new Error(`catalog_sku_cards query failed: ${cardsRes.error.message}`);
     if (catsRes.error) throw new Error(`categories query failed: ${catsRes.error.message}`);
     return {
-      cardRows: (cardsRes.data ?? []) as CatalogCardRow[],
+      cardRows: (cardsRes.data ?? []) as SkuCardRow[],
       categories: (catsRes.data ?? []) as V2Category[],
     };
   },
-  ["catalog-cards-v1"],
+  ["catalog-sku-cards-v1"],
   { tags: ["catalog"], revalidate: 300 },
 );
 
@@ -65,27 +78,35 @@ const fetchCatalog = unstable_cache(
 export async function getCatalogData(): Promise<CatalogData> {
   const { cardRows, categories } = await fetchCatalog();
 
-  const cards: EnrichedCard[] = cardRows.map((r) => ({
-    id: r.id,
-    slug: r.slug,
-    name: r.name,
-    badge: r.badge ?? undefined,
-    image: r.image ?? undefined,
-    galleryBg: r.gallery_bg ?? "#e6eff5",
-    hasVariants: r.has_variants,
-    fromCampaignPrice: r.from_campaign_price ?? undefined,
-    fromOriginalPrice: r.from_original_price ?? undefined,
-    variantLabel: r.variant_label ?? undefined,
-    hrefPrefix: "/katalog",
-    categoryIds: r.category_ids ?? [],
-    applicationTags: r.application_tags ?? [],
-    materials: r.materials ?? [],
-    minDiam: r.min_diam,
-    maxDiam: r.max_diam,
-    minShank: r.min_shank,
-    maxShank: r.max_shank,
-    searchText: r.search_text ?? "",
-  }));
+  const cards: EnrichedCard[] = cardRows.map((r) => {
+    // A campaign card shows the campaign price with the original struck through.
+    const hasCampaign =
+      r.campaign_price != null && r.original_price != null && r.campaign_price < r.original_price;
+    return {
+      id: r.id,
+      slug: r.slug,
+      name: r.name,
+      badge: r.badge ?? undefined,
+      image: r.image ?? undefined,
+      galleryBg: r.gallery_bg ?? "#e6eff5",
+      // Each card is a single SKU — never "ab …".
+      hasVariants: false,
+      // r.price is COALESCE(campaign_price, price_eur): the effective price shown.
+      fromCampaignPrice: r.price ?? undefined,
+      fromOriginalPrice: hasCampaign ? r.original_price ?? undefined : undefined,
+      variantLabel: r.variant_label ?? undefined,
+      hrefPrefix: "/katalog",
+      categoryIds: r.category_ids ?? [],
+      applicationTags: r.application_tags ?? [],
+      materials: r.materials ?? [],
+      // Exact per-SKU dimensions — the range filters/sliders collapse to a point.
+      minDiam: r.diameter_mm,
+      maxDiam: r.diameter_mm,
+      minShank: r.shank_mm,
+      maxShank: r.shank_mm,
+      searchText: r.search_text ?? "",
+    };
+  });
 
   const tagSet = new Set<string>();
   for (const card of cards) for (const t of card.applicationTags) tagSet.add(t);

@@ -25,6 +25,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 export type { EnrichedCard };
 
+// Catalog renders one page of SKU cards at a time. The full server-side query
+// (filter + sort + LIMIT in Postgres) is a follow-up; for now the filtered set
+// is sliced in memory.
+const PAGE_SIZE = 120;
+
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-slate-900 text-white text-xs font-medium">
@@ -192,6 +197,32 @@ export default function KatalogCatalog({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [allCards, allCategories, kategorieParam, subParam, selectedMaterials, selectedAnwendungen, minScore, searchQuery, priceMin, priceMax, diamMin, diamMax, shankMin, shankMax, sortParam],
   );
+
+  // ── Pagination ─────────────────────────────────────────────────────────────
+  const [page, setPage] = useState(1);
+  // Any filter change collapses the result set — return to the first page. Done
+  // during render (not in an effect) so the new page renders in the same pass.
+  const filterSig = [
+    kategorieParam, subParam, selectedMaterials.join(","), selectedAnwendungen.join(","),
+    minScore, searchQuery, priceMin, priceMax, diamMin, diamMax, shankMin, shankMax, sortParam,
+  ].join("|");
+  const [prevFilterSig, setPrevFilterSig] = useState(filterSig);
+  if (prevFilterSig !== filterSig) {
+    setPrevFilterSig(filterSig);
+    setPage(1);
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageCards = useMemo(
+    () => filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [filtered, currentPage],
+  );
+
+  function goToPage(n: number) {
+    setPage(Math.min(Math.max(1, n), totalPages));
+    tilesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   // Live count for a hypothetical (pending) selection — used by the filter-bar panels.
   const countFor = useCallback(
@@ -509,6 +540,7 @@ export default function KatalogCatalog({
               <div className="mb-3 flex items-center gap-2">
                 <span className="text-sm text-slate-500">
                   {`${filtered.length} Produkt${filtered.length !== 1 ? "e" : ""}`}
+                  {totalPages > 1 && ` · Seite ${currentPage} von ${totalPages}`}
                 </span>
                 <span className="hidden lg:block text-sm text-slate-300">|</span>
                 <button
@@ -583,20 +615,46 @@ export default function KatalogCatalog({
                   </button>
                 </div>
               ) : (
-                <div
-                  ref={tilesRef}
-                  className={[
-                    viewParam === "list" ? "flex flex-col gap-3" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6",
-                    "transition-opacity duration-150",
-                    isPending ? "opacity-60 pointer-events-none" : "",
-                  ].join(" ")}
-                >
-                  {filtered.map((card) => (
-                    <div key={card.slug} className="katalog-tile">
-                      <ProductCard card={{ ...card, variant: viewParam === "list" ? "list" : "grid" }} />
-                    </div>
-                  ))}
-                </div>
+                <>
+                  <div
+                    ref={tilesRef}
+                    className={[
+                      viewParam === "list" ? "flex flex-col gap-3" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6",
+                      "transition-opacity duration-150",
+                      isPending ? "opacity-60 pointer-events-none" : "",
+                    ].join(" ")}
+                  >
+                    {pageCards.map((card) => (
+                      <div key={card.slug} className="katalog-tile">
+                        <ProductCard card={{ ...card, variant: viewParam === "list" ? "list" : "grid" }} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {totalPages > 1 && (
+                    <nav className="mt-10 flex items-center justify-center gap-3" aria-label="Seiten">
+                      <button
+                        type="button"
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage <= 1}
+                        className="btn-outline text-sm disabled:opacity-40 disabled:pointer-events-none"
+                      >
+                        Zurück
+                      </button>
+                      <span className="text-sm text-slate-500 tabular-nums">
+                        Seite {currentPage} von {totalPages}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage >= totalPages}
+                        className="btn-outline text-sm disabled:opacity-40 disabled:pointer-events-none"
+                      >
+                        Weiter
+                      </button>
+                    </nav>
+                  )}
+                </>
               )}
             </div>
           </div>

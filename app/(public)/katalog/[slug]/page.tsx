@@ -1,4 +1,5 @@
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { notFound, permanentRedirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import KatalogProductContent from "./KatalogProductContent";
@@ -6,6 +7,96 @@ import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2Prod
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
 export const dynamic = "force-dynamic";
+
+// Each catalog card links to a SKU slug. The canonical for the page is that very
+// slug, so every variant has its own indexable URL.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const { data: skuCard } = await supabaseAdminV2
+    .from("catalog_sku_cards")
+    .select("slug, name, variant_label")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (!skuCard) return {};
+
+  const title = [skuCard.name, skuCard.variant_label].filter(Boolean).join(" – ");
+  return {
+    title: `${title} | Bukara GmbH`,
+    alternates: { canonical: `/katalog/${skuCard.slug}` },
+  };
+}
+
+/**
+ * Resolve a /katalog/[slug] request:
+ *  - SKU slug → the parent product + that SKU preselected (the canonical link).
+ *  - Legacy product slug → 308 to the representative SKU slug (one per product),
+ *    honouring a legacy ?sku= deep link when it still resolves.
+ *  - Otherwise notFound().
+ */
+async function resolveKatalogTarget(
+  slug: string,
+  requestedSkuId: string | undefined,
+): Promise<{ product: V2Product; initialSkuId?: string }> {
+  const { data: skuRow } = await supabaseAdminV2
+    .from("skus")
+    .select("id, product_id")
+    .eq("slug", slug)
+    .eq("is_active", true)
+    .maybeSingle();
+
+  if (skuRow) {
+    const { data: p } = await supabaseAdminV2
+      .from("products")
+      .select("*")
+      .eq("id", skuRow.product_id)
+      .eq("has_public_page", true)
+      .maybeSingle();
+    if (p) return { product: p as V2Product, initialSkuId: skuRow.id };
+    notFound();
+  }
+
+  const { data: prod } = await supabaseAdminV2
+    .from("products")
+    .select("id")
+    .eq("slug", slug)
+    .eq("has_public_page", true)
+    .maybeSingle();
+
+  if (prod) {
+    let targetSlug: string | null = null;
+    if (requestedSkuId) {
+      const { data: s } = await supabaseAdminV2
+        .from("skus")
+        .select("slug")
+        .eq("product_id", prod.id)
+        .eq("id", requestedSkuId)
+        .eq("is_active", true)
+        .not("slug", "is", null)
+        .maybeSingle();
+      targetSlug = s?.slug ?? null;
+    }
+    if (!targetSlug) {
+      const { data: s } = await supabaseAdminV2
+        .from("skus")
+        .select("slug")
+        .eq("product_id", prod.id)
+        .eq("is_active", true)
+        .not("slug", "is", null)
+        .order("sort_order")
+        .limit(1)
+        .maybeSingle();
+      targetSlug = s?.slug ?? null;
+    }
+    if (targetSlug) permanentRedirect(`/katalog/${targetSlug}`);
+  }
+
+  notFound();
+}
 
 export default async function KatalogDetailPage({
   params,
@@ -17,14 +108,10 @@ export default async function KatalogDetailPage({
   const { slug } = await params;
   const { sku: requestedSkuId } = await searchParams;
 
-  const { data: product } = await supabaseAdminV2
-    .from("products")
-    .select("*")
-    .eq("slug", slug)
-    .eq("has_public_page", true)
-    .single();
-
-  if (!product) notFound();
+  // Resolve the URL slug to a product + the SKU it points at, or 308-redirect a
+  // legacy product-slug URL to its representative SKU (see resolveKatalogTarget).
+  const { product, initialSkuId: resolvedSkuId } = await resolveKatalogTarget(slug, requestedSkuId);
+  let initialSkuId = resolvedSkuId;
 
   const { data: skuData } = await supabaseAdminV2
     .from("skus")
@@ -117,10 +204,11 @@ export default async function KatalogDetailPage({
     }));
   }
 
-  // Preselect from ?sku=, but only if it belongs to THIS product (images/specs
-  // were fetched for this product). A stale/foreign id falls back to skus[0].
-  const initialSkuId =
-    requestedSkuId && skuList.some((s) => s.id === requestedSkuId) ? requestedSkuId : undefined;
+  // `initialSkuId` (the SKU resolved from the URL slug) is validated against this
+  // product's active SKUs; a stale id falls back to skus[0] inside the content.
+  if (initialSkuId && !skuList.some((s) => s.id === initialSkuId)) {
+    initialSkuId = undefined;
+  }
 
   const [{ data: images }, { data: specs }, { data: mats }, { data: apps }, { data: accRows }] =
     await Promise.all([
