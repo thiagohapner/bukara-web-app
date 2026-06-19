@@ -39,19 +39,35 @@ export interface CatalogData {
   allApplicationTags: string[];
 }
 
+// Fetch every SKU card, paging past PostgREST's 1000-row response cap (which
+// ignores a larger .limit()). A deterministic order makes the ranges stable.
+async function fetchAllSkuCards(): Promise<SkuCardRow[]> {
+  const CHUNK = 1000;
+  const all: SkuCardRow[] = [];
+  for (let from = 0; ; from += CHUNK) {
+    const { data, error } = await supabaseAdminV2
+      .from("catalog_sku_cards")
+      .select("*")
+      .order("product_sort_order")
+      .order("product_slug")
+      .order("sku_sort_order")
+      .order("id")
+      .range(from, from + CHUNK - 1);
+    if (error) throw new Error(`catalog_sku_cards query failed: ${error.message}`);
+    const rows = (data ?? []) as SkuCardRow[];
+    all.push(...rows);
+    if (rows.length < CHUNK) break;
+  }
+  return all;
+}
+
 // Cached raw fetch — shared by /katalog and /sortiment so both render from the
 // exact same product/category data. Refreshed every 5 min and on-demand from the
 // admin product/SKU save actions via revalidateTag("catalog").
 const fetchCatalog = unstable_cache(
   async () => {
-    const [cardsRes, catsRes] = await Promise.all([
-      supabaseAdminV2
-        .from("catalog_sku_cards")
-        .select("*")
-        .order("product_sort_order")
-        .order("product_slug")
-        .order("sku_sort_order")
-        .limit(5000),
+    const [cardRows, catsRes] = await Promise.all([
+      fetchAllSkuCards(),
       supabaseAdminV2
         .from("categories")
         .select(
@@ -63,10 +79,9 @@ const fetchCatalog = unstable_cache(
     // Throw on a real query error so the catalog never silently caches an empty
     // result (e.g. a missing grant on the view). ISR keeps serving the last good
     // render while a failed revalidation retries.
-    if (cardsRes.error) throw new Error(`catalog_sku_cards query failed: ${cardsRes.error.message}`);
     if (catsRes.error) throw new Error(`categories query failed: ${catsRes.error.message}`);
     return {
-      cardRows: (cardsRes.data ?? []) as SkuCardRow[],
+      cardRows,
       categories: (catsRes.data ?? []) as V2Category[],
     };
   },
