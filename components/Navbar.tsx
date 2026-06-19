@@ -36,12 +36,26 @@ function ProdukteDropdown({
   link: { label: string; href: string };
   productCategories: ProductCategory[];
 }) {
+  // The panel opens purely on hover / focus-within. After a click the cursor is
+  // still over the trigger (and the link keeps focus), so it would stay open
+  // through the navigation. `closed` suppresses it until the pointer leaves.
+  const [closed, setClosed] = useState(false);
+
+  const handleSelect = () => {
+    setClosed(true);
+    (document.activeElement as HTMLElement | null)?.blur();
+  };
+
+  const panelVisibility = closed
+    ? "invisible opacity-0 pointer-events-none"
+    : "invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100";
+
   return (
-    // Desktop hover/focus dropdown. The label itself stays a real link to /katalog;
-    // the panel opens on hover and on keyboard focus-within (no JS state needed).
-    <div className="group relative">
+    // Desktop hover/focus dropdown. The label itself stays a real link to /katalog.
+    <div className="group relative" onMouseLeave={() => setClosed(false)}>
       <Link
         href={link.href}
+        onClick={handleSelect}
         className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap"
         style={{ textDecoration: "none" }}
         aria-haspopup="menu"
@@ -54,7 +68,7 @@ function ProdukteDropdown({
       </Link>
 
       {/* pt-2 acts as a hover bridge between the label and the panel */}
-      <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-150 absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
+      <div className={`${panelVisibility} transition-opacity duration-150 absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50`}>
         <ul
           role="menu"
           aria-label={link.label}
@@ -64,6 +78,7 @@ function ProdukteDropdown({
             <Link
               role="menuitem"
               href="/katalog"
+              onClick={handleSelect}
               className="block px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50 transition-colors"
               style={{ textDecoration: "none" }}
             >
@@ -76,6 +91,7 @@ function ProdukteDropdown({
               <Link
                 role="menuitem"
                 href={`/sortiment/${cat.slug}`}
+                onClick={handleSelect}
                 className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#00A597] transition-colors"
                 style={{ textDecoration: "none" }}
               >
