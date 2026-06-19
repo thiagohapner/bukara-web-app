@@ -33,13 +33,15 @@ interface Props {
   onApplyMaterials: (materials: string[], minScore: number) => void;
   onApplyPrice: (min: number, max: number) => void;
   onApplySort: (value: string) => void;
+  /** Hide the Kategorie pill (e.g. on /sortiment pages where category is fixed by the URL). */
+  hideCategory?: boolean;
 }
 
 export default function KatalogFilterBar({
   state, allCategories, materialCounts, applicationTags, bounds,
   searchValue, onSearchInput, onSearchSubmit, countFor,
   onApplyKategorie, onApplyAnwendungen, onApplyMaterials,
-  onApplyPrice, onApplySort,
+  onApplyPrice, onApplySort, hideCategory = false,
 }: Props) {
   const [openId, setOpenId] = useState<string | null>(null);
   const toggle = (id: string) => setOpenId((cur) => (cur === id ? null : id));
@@ -67,14 +69,16 @@ export default function KatalogFilterBar({
         />
       </form>
 
-      <KatalogFilterPill label="Kategorie" active={katActive} open={openId === "kategorie"} onToggle={() => toggle("kategorie")} onClose={close}>
-        <KatalogCategoryPanel
-          categories={allCategories}
-          appliedKategorie={state.kategorie} appliedSub={state.sub}
-          count={(kat, sub) => countFor({ kategorie: kat, sub })}
-          onApply={applyAnd(onApplyKategorie)}
-        />
-      </KatalogFilterPill>
+      {!hideCategory && (
+        <KatalogFilterPill label="Kategorie" active={katActive} open={openId === "kategorie"} onToggle={() => toggle("kategorie")} onClose={close}>
+          <KatalogCategoryPanel
+            categories={allCategories}
+            appliedKategorie={state.kategorie} appliedSub={state.sub}
+            count={(kat, sub) => countFor({ kategorie: kat, sub })}
+            onApply={applyAnd(onApplyKategorie)}
+          />
+        </KatalogFilterPill>
+      )}
 
       <KatalogFilterPill label="Anwendung" active={state.anwendungen.length > 0} badge={state.anwendungen.length || undefined} open={openId === "anwendung"} onToggle={() => toggle("anwendung")} onClose={close}>
         <KatalogMultiSelectPanel

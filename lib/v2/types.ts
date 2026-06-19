@@ -101,6 +101,11 @@ export interface V2Category {
   slug: string;
   parent_id: string | null;
   sort_order?: number;
+  // Optional CMS fields for /sortiment landing pages (nullable in DB).
+  seo_title?: string | null;
+  seo_description?: string | null;
+  show_on_home?: boolean;
+  home_sort_order?: number | null;
 }
 
 export interface V2MaterialType {

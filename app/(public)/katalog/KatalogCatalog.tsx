@@ -45,9 +45,26 @@ interface Props {
   initialCards: EnrichedCard[];
   allCategories: V2Category[];
   allApplicationTags: string[];
+  /** Base path for URL sync. Defaults to "/katalog". /sortiment pages pass their clean path. */
+  basePath?: string;
+  /**
+   * Fixes the category and hides its pill/chips (used by /sortiment/[slug], where
+   * the category is determined by the URL). kategorie/sub are kept out of the query
+   * string so the base path stays clean (e.g. /sortiment/bohrer?material=hw).
+   */
+  lockedCategory?: { kategorie: string; sub: string };
+  /** Replaces the default "Home / Katalog" breadcrumb (breadcrumb + H1 + intro). */
+  header?: React.ReactNode;
 }
 
-export default function KatalogCatalog({ initialCards, allCategories, allApplicationTags }: Props) {
+export default function KatalogCatalog({
+  initialCards,
+  allCategories,
+  allApplicationTags,
+  basePath = "/katalog",
+  lockedCategory,
+  header,
+}: Props) {
   const sp = useSearchParams();
   const router = useRouter();
   const tilesRef = useRef<HTMLDivElement>(null);
@@ -55,9 +72,14 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
   const [allCards] = useState<EnrichedCard[]>(initialCards);
 
-  // Local filter state — initialized from URL once (supports deep links / refresh)
-  const [kategorieParam, setKategorieParam] = useState(sp.get("kategorie") ?? "");
-  const [subParam, setSubParam] = useState(sp.get("sub") ?? "");
+  // Local filter state — initialized from URL once (supports deep links / refresh).
+  // When a category is locked, it is fixed and never read from / written to the URL.
+  const [kategorieParam, setKategorieParam] = useState(
+    lockedCategory ? lockedCategory.kategorie : sp.get("kategorie") ?? "",
+  );
+  const [subParam, setSubParam] = useState(
+    lockedCategory ? lockedCategory.sub : sp.get("sub") ?? "",
+  );
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>(
     (sp.get("material") ?? "").split(",").filter(Boolean)
   );
@@ -114,8 +136,9 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
       shankMax: overrides.shankMax !== undefined ? overrides.shankMax : shankMax,
     };
     const p = new URLSearchParams();
-    if (s.kategorie) p.set("kategorie", s.kategorie);
-    if (s.sub) p.set("sub", s.sub);
+    // Locked category lives in the path, not the query string — keep base path clean.
+    if (!lockedCategory && s.kategorie) p.set("kategorie", s.kategorie);
+    if (!lockedCategory && s.sub) p.set("sub", s.sub);
     if (s.materials.length) p.set("material", s.materials.join(","));
     if (s.anwendungen.length) p.set("anwendung", s.anwendungen.join(","));
     if (s.minScore > 1) p.set("minScore", String(s.minScore));
@@ -129,7 +152,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     if (s.shankMin !== null) p.set("shankMin", String(s.shankMin));
     if (s.shankMax !== null) p.set("shankMax", String(s.shankMax));
     const qs = p.toString();
-    return qs ? `/katalog?${qs}` : "/katalog";
+    return qs ? `${basePath}?${qs}` : basePath;
   }
 
   // ── Absolute bounds (invariant for the loaded card set) ────────────────────
@@ -286,8 +309,9 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   }
 
   function resetFilters() {
-    setKategorieParam("");
-    setSubParam("");
+    // Keep the locked category fixed; only clear the secondary filters.
+    setKategorieParam(lockedCategory ? lockedCategory.kategorie : "");
+    setSubParam(lockedCategory ? lockedCategory.sub : "");
     setSelectedMaterials([]);
     setSelectedAnwendungen([]);
     setMinScore(1);
@@ -301,7 +325,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     setDiamMax(null);
     setShankMin(null);
     setShankMax(null);
-    startTransition(() => router.replace("/katalog"));
+    startTransition(() => router.replace(basePath));
   }
 
   function resetPriceFilter() {
@@ -351,10 +375,13 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
     startTransition(() => router.replace(makeUrl({ q: "" })));
   }
 
-  const hasActiveFilters = !!(kategorieParam || subParam || selectedMaterials.length || selectedAnwendungen.length || searchQuery || priceMin !== null || priceMax !== null || diamMin !== null || diamMax !== null || shankMin !== null || shankMax !== null);
+  // A locked category is fixed by the URL — it doesn't count as an active filter or chip.
+  const catKategorieActive = !lockedCategory && !!kategorieParam;
+  const catSubActive = !lockedCategory && !!subParam;
+  const hasActiveFilters = !!(catKategorieActive || catSubActive || selectedMaterials.length || selectedAnwendungen.length || searchQuery || priceMin !== null || priceMax !== null || diamMin !== null || diamMax !== null || shankMin !== null || shankMax !== null);
   const activeFilterCount =
-    (kategorieParam && !subParam ? 1 : 0) +
-    (subParam ? 1 : 0) +
+    (catKategorieActive && !catSubActive ? 1 : 0) +
+    (catSubActive ? 1 : 0) +
     selectedMaterials.length +
     selectedAnwendungen.length +
     (searchQuery ? 1 : 0) +
@@ -364,6 +391,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
 
   const sidebarProps = {
     allCategories,
+    hideCategory: !!lockedCategory,
     materialCounts,
     applicationTags: allApplicationTags,
     selectedMaterials,
@@ -396,14 +424,16 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
   return (
     <>
       <main className="min-h-screen bg-white">
-        {/* Breadcrumb */}
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
-          <nav className="flex items-center gap-1.5 text-xs text-slate-400">
-            <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
-            <span>/</span>
-            <span className="text-slate-700 font-medium">Katalog</span>
-          </nav>
-        </div>
+        {/* Page header — custom (breadcrumb + H1 + intro) on /sortiment, else default breadcrumb */}
+        {header ?? (
+          <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
+            <nav className="flex items-center gap-1.5 text-xs text-slate-400">
+              <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
+              <span>/</span>
+              <span className="text-slate-700 font-medium">Katalog</span>
+            </nav>
+          </div>
+        )}
 
         {/* Two-column layout */}
         <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10 pb-20">
@@ -430,6 +460,7 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
                   onApplyMaterials={applyMaterials}
                   onApplyPrice={handleCommitPrice}
                   onApplySort={handleSort}
+                  hideCategory={!!lockedCategory}
                 />
               </div>
 
@@ -493,13 +524,13 @@ export default function KatalogCatalog({ initialCards, allCategories, allApplica
               {/* Active filter chips */}
               {hasActiveFilters && (
                 <div className="flex flex-wrap gap-2 mb-5">
-                  {kategorieParam && !subParam && (
+                  {catKategorieActive && !catSubActive && (
                     <FilterChip
                       label={allCategories.find((c) => c.slug === kategorieParam)?.name ?? kategorieParam}
                       onRemove={removeKategorie}
                     />
                   )}
-                  {subParam && (
+                  {catSubActive && (
                     <FilterChip
                       label={allCategories.find((c) => c.slug === subParam)?.name ?? subParam}
                       onRemove={removeSub}

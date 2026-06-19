@@ -4,6 +4,7 @@ import BestSellers from "@/components/BestSellers";
 import HomeAboutSections from "@/components/HomeAboutSections";
 import FeatureBar from "@/components/FeatureBar";
 import Footer from "@/components/Footer";
+import SortimentTiles from "@/components/SortimentTiles";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         <section className="py-6 max-w-[1320px] mx-auto px-4 sm:px-6">
           <DealsPromo variant="full" lightBg />
         </section>
+        <SortimentTiles />
         <HomeAboutSections />
         <BestSellers />
         <FeatureBar />

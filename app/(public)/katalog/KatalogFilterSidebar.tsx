@@ -40,6 +40,8 @@ interface Props {
   onCommitDiam: (min: number, max: number) => void;
   onCommitShank: (min: number, max: number) => void;
   onResetAnwendung: () => void;
+  /** Hide the category selector (e.g. on /sortiment pages where category is fixed by the URL). */
+  hideCategory?: boolean;
 }
 
 export default function KatalogFilterSidebar({
@@ -51,6 +53,7 @@ export default function KatalogFilterSidebar({
   onFilterApplied, sort, onSortChange, view, onViewChange,
   onSelectCategory, onToggleMaterial, onToggleAnwendung, onSetMinScore,
   onCommitPrice, onCommitDiam, onCommitShank, onResetAnwendung,
+  hideCategory = false,
 }: Props) {
   const topLevel = allCategories.filter((c) => c.parent_id === null);
   const subMap: Record<string, V2Category[]> = {};
@@ -166,6 +169,7 @@ export default function KatalogFilterSidebar({
       )}
 
       {/* KATEGORIEN */}
+      {!hideCategory && (
       <div className="border-t border-slate-100">
         {topLevel.map((parent) => {
           const subs = subMap[parent.id] ?? [];
@@ -211,6 +215,7 @@ export default function KatalogFilterSidebar({
           );
         })}
       </div>
+      )}
 
       {/* ANWENDUNG */}
       {applicationTags.length > 0 && (
