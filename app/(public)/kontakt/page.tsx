@@ -60,6 +60,10 @@ export default function KontaktPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setSubmitError("Bitte füllen Sie alle Pflichtfelder aus.");
+      return;
+    }
     if (!form.subject) { setSubmitError("Bitte wählen Sie einen Betreff aus."); return; }
     setSubmitting(true);
     setSubmitError(null);

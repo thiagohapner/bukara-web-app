@@ -104,6 +104,16 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (
+      !form.company.trim() || !form.contact.trim() || !form.email.trim() ||
+      !form.pickupDate || !form.pickupTimes.trim() || !form.pickupLocation ||
+      !form.packageSize.trim() || !form.packageWeight.trim() ||
+      !form.carbideReplacement || !form.engraving ||
+      (form.pickupLocation === "Sonstiges" && !form.pickupLocationSonstiges.trim())
+    ) {
+      setSubmitError("Bitte füllen Sie alle Pflichtfelder aus.");
+      return;
+    }
     setSubmitting(true);
     setSubmitError(null);
     const { error } = await supabase.from("service_inquiries").insert({
