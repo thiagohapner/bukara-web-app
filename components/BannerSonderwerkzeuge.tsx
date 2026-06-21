@@ -161,17 +161,7 @@ export default function BannerSonderwerkzeuge() {
             className="text-4xl font-extrabold leading-tight tracking-tight m-0"
           >
             {slide.headline}{" "}
-            <span
-              className="inline"
-              style={{
-                backgroundImage: "linear-gradient(180deg,#D2F25E 0%,#D2F25E 100%)",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "100% 44%",
-                backgroundPosition: "0 80%",
-              }}
-            >
-              {slide.highlight}
-            </span>
+            {slide.highlight}
           </h2>
 
           <p
