@@ -144,17 +144,26 @@ const TOTAL_SLIDES = 3;
 
 export default function BannerSonderwerkzeuge() {
   const [active, setActive] = useState(0);
+  const [visible, setVisible] = useState(true);
 
-  const prev = () => setActive((a) => (a - 1 + TOTAL_SLIDES) % TOTAL_SLIDES);
-  const next = () => setActive((a) => (a + 1) % TOTAL_SLIDES);
+  const goTo = (index: number) => {
+    setVisible(false);
+    setTimeout(() => {
+      setActive(index);
+      setVisible(true);
+    }, 180);
+  };
+
+  const prev = () => goTo((active - 1 + TOTAL_SLIDES) % TOTAL_SLIDES);
+  const next = () => goTo((active + 1) % TOTAL_SLIDES);
 
   const slide = slides[active];
 
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
       <div
-        style={{ background: slide.bgColor }}
-        className="w-full h-auto md:h-[360px] rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
+        style={{ background: slide.bgColor, opacity: visible ? 1 : 0 }}
+        className="w-full h-auto md:h-[360px] rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)] transition-opacity duration-200"
       >
         {/* LEFT COLUMN */}
         <div className="flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
@@ -234,7 +243,7 @@ export default function BannerSonderwerkzeuge() {
               role="tab"
               aria-selected={i === active}
               aria-label={`Slide ${i + 1}`}
-              onClick={() => setActive(i)}
+              onClick={() => goTo(i)}
               className="p-0 appearance-none cursor-pointer w-[9px] h-[9px] rounded-full transition-colors"
               style={{
                 background: i === active ? "#0F172A" : "transparent",
