@@ -69,7 +69,7 @@ const slides: Slide[] = [
     headline: "Nachschliff,",
     highlight: "der Standzeit verlängert",
     subline:
-      "Wir schleifen HW-Profilmesser, HW-Kantenmesser, PCD-Werkzeuge und Bohrer auf spezialisierten Schleifmaschinen nach – für maximale Wirtschaftlichkeit und Lebensdauer Ihrer Hartmetallwerkzeuge.",
+      "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
     features: [
