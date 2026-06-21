@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display, Mulish } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -7,6 +7,19 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["600"],
+  style: ["normal", "italic"],
+});
+
+const mulish = Mulish({
+  variable: "--font-mulish",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 const OG_IMAGE = "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/hero/main_image.png";
@@ -32,7 +45,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="de" className={`${inter.variable}`}>
+    <html lang="de" className={`${inter.variable} ${playfair.variable} ${mulish.variable}`}>
       <body className="min-h-screen flex flex-col">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-0REYXM8F7G"
