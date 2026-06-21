@@ -44,7 +44,7 @@ const slides: Slide[] = [
     headline: "Sonderlösungen,",
     highlight: "geplant für Ihre Maschine",
     subline:
-      "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf – gestützt auf jahrzehntelange Erfahrung.",
+      "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf.",
     ctaLabel: "Sonderwerkzeug anfragen",
     ctaHref: "/loesungen/sonderwerkzeug",
     bgColor: "#e8eae3",
@@ -126,7 +126,7 @@ const slides: Slide[] = [
     headline: "X99 NeXcut VHW Highspeedfräser –",
     highlight: "Ab 55,72 €",
     subline:
-      "Jetzt bis 31. August auch im Set sparen. Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind.",
+      "Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind.",
     ctaLabel: "Angebote entdecken",
     ctaHref: "/angebote",
     bgColor: "#000000",
