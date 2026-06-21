@@ -123,8 +123,8 @@ const slides: Slide[] = [
     },
   },
   {
-    headline: "-30% auf den neuen",
-    highlight: "X99 NeXcut VHW Highspeedfräser",
+    headline: "X99 NeXcut VHW Highspeedfräser –",
+    highlight: "Ab 55,72 €",
     subline:
       "Jetzt bis 31. August auch im Set sparen. Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind.",
     ctaLabel: "Angebote entdecken",
