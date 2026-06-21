@@ -131,8 +131,7 @@ const slides: Slide[] = [
     ctaStyle: "white",
     rightPanel: {
       kind: "image",
-      // TODO: replace with actual product image URL
-      src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/x99-nexcut.png",
+      src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/products/angebote/nur-x99/x-99-deal.png",
       alt: "X99 NeXcut VHW Highspeedfräser",
     },
   },
