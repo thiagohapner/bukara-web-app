@@ -3,6 +3,16 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import {
+  PenLine,
+  PackageOpen,
+  Layers,
+  BarChart2,
+  MessageCircle,
+  Award,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 const ACCENT = "#2E1A40";
 
@@ -10,61 +20,28 @@ type Feature = { icon: ReactNode; text: ReactNode };
 
 const features: Feature[] = [
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none" }}>
-        <path d="M12 20h9" />
-        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-      </svg>
-    ),
-    text: <><strong>Made to your drawing</strong> or specification</>,
+    icon: <PenLine size={22} color={ACCENT} strokeWidth={1.5} style={{ flex: "none" }} />,
+    text: <><strong>Nach Ihrer Zeichnung</strong> oder Spezifikation gefertigt</>,
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none" }}>
-        <rect x="3" y="14" width="18" height="6" rx="1" />
-        <path d="M6 14V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v5" />
-        <line x1="4" y1="4" x2="20" y2="20" />
-      </svg>
-    ),
-    text: <><strong>No minimum</strong> order quantity</>,
+    icon: <PackageOpen size={22} color={ACCENT} strokeWidth={1.5} style={{ flex: "none" }} />,
+    text: <><strong>Keine Mindestbestellmenge</strong></>,
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none" }}>
-        <path d="M21 7.5 12 2 3 7.5v9L12 22l9-5.5v-9Z" />
-        <path d="m3 7.5 9 5.5 9-5.5" />
-        <path d="M12 22V13" />
-      </svg>
-    ),
-    text: <><strong>All common materials</strong></>,
+    icon: <Layers size={22} color={ACCENT} strokeWidth={1.5} style={{ flex: "none" }} />,
+    text: <><strong>Alle gängigen Materialien</strong></>,
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none" }}>
-        <rect x="3" y="13" width="7" height="8" rx="1" />
-        <rect x="14" y="9" width="7" height="12" rx="1" />
-        <path d="M6.5 13V8.5" />
-        <path d="M17.5 9V4.5" />
-      </svg>
-    ),
-    text: <><strong>Small and large batches</strong></>,
+    icon: <BarChart2 size={22} color={ACCENT} strokeWidth={1.5} style={{ flex: "none" }} />,
+    text: <><strong>Klein- und Großserien</strong></>,
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none" }}>
-        <path d="M21 11.5a8.38 8.38 0 0 1-9 8.34L4 21l1.16-4A8.5 8.5 0 1 1 21 11.5Z" />
-      </svg>
-    ),
-    text: <><strong>Technical consultation</strong> included</>,
+    icon: <MessageCircle size={22} color={ACCENT} strokeWidth={1.5} style={{ flex: "none" }} />,
+    text: <><strong>Technische Beratung</strong> inklusive</>,
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none" }}>
-        <circle cx="12" cy="9" r="6" />
-        <path d="M9 14.5 7.5 22 12 19.5 16.5 22 15 14.5" />
-      </svg>
-    ),
-    text: <><strong>Decades</strong> of tooling experience</>,
+    icon: <Award size={22} color={ACCENT} strokeWidth={1.5} style={{ flex: "none" }} />,
+    text: <><strong>Jahrzehntelange</strong> Werkzeug-Expertise</>,
   },
 ];
 
@@ -81,14 +58,14 @@ export default function BannerSonderwerkzeuge() {
       style={{
         background: "#F4F3F9",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "safe center",
-        padding: "56px",
+        padding: "56px 56px 32px",
         overflow: "auto",
         fontFamily: "var(--font-mulish), sans-serif",
       }}
     >
-      {/* Fixed 1180×492 banner card — matches design dimensions exactly */}
+      {/* Fixed 1180×492 banner card */}
       <div
         style={{
           flex: "none",
@@ -97,7 +74,6 @@ export default function BannerSonderwerkzeuge() {
           background: "#ECE5DA",
           borderRadius: "16px",
           overflow: "hidden",
-          position: "relative",
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
           boxShadow: "0 18px 50px -20px rgba(46,26,64,0.28)",
@@ -112,7 +88,7 @@ export default function BannerSonderwerkzeuge() {
             justifyContent: "center",
           }}
         >
-          <h1
+          <h2
             style={{
               margin: 0,
               fontFamily: "var(--font-playfair), serif",
@@ -123,7 +99,7 @@ export default function BannerSonderwerkzeuge() {
               fontWeight: 600,
             }}
           >
-            <span style={{ display: "block", fontStyle: "normal" }}>Custom tooling,</span>
+            <span style={{ display: "block", fontStyle: "normal" }}>Individuelle Werkzeuge,</span>
             <span
               style={{
                 display: "inline",
@@ -136,9 +112,9 @@ export default function BannerSonderwerkzeuge() {
                 padding: "0 2px",
               }}
             >
-              planned to your machine
+              geplant für Ihre Maschine
             </span>
-          </h1>
+          </h2>
 
           <p
             style={{
@@ -151,7 +127,7 @@ export default function BannerSonderwerkzeuge() {
               opacity: 0.86,
             }}
           >
-            We define your complete tooling scope together with you, backed by decades of hands-on experience.
+            Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf – gestützt auf jahrzehntelange Erfahrung.
           </p>
 
           <div style={{ marginTop: "24px" }}>
@@ -174,7 +150,7 @@ export default function BannerSonderwerkzeuge() {
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#3d2456")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = ACCENT)}
             >
-              Request a custom tool
+              Sonderwerkzeug anfragen
             </Link>
           </div>
         </div>
@@ -207,19 +183,23 @@ export default function BannerSonderwerkzeuge() {
             ))}
           </div>
         </div>
+      </div>
 
-        {/* CAROUSEL CHROME — pagination dots */}
+      {/* CONTROLS — dots left, arrows right, below the card */}
+      <div
+        style={{
+          width: "1180px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
+        {/* Pagination dots */}
         <div
           role="tablist"
           aria-label="Carousel slides"
-          style={{
-            position: "absolute",
-            left: "64px",
-            bottom: "28px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-          }}
+          style={{ display: "flex", alignItems: "center", gap: "10px" }}
         >
           {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
             <button
@@ -243,26 +223,13 @@ export default function BannerSonderwerkzeuge() {
           ))}
         </div>
 
-        {/* CAROUSEL CHROME — prev/next buttons */}
-        <div
-          style={{
-            position: "absolute",
-            right: "32px",
-            bottom: "24px",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          <NavBtn aria-label="Previous slide" onClick={prev}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+        {/* Prev / Next buttons */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <NavBtn aria-label="Vorherige Folie" onClick={prev}>
+            <ChevronLeft size={18} color="#ffffff" strokeWidth={2} />
           </NavBtn>
-          <NavBtn aria-label="Next slide" onClick={next}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+          <NavBtn aria-label="Nächste Folie" onClick={next}>
+            <ChevronRight size={18} color="#ffffff" strokeWidth={2} />
           </NavBtn>
         </div>
       </div>
@@ -270,7 +237,11 @@ export default function BannerSonderwerkzeuge() {
   );
 }
 
-function NavBtn({ children, onClick, "aria-label": label }: {
+function NavBtn({
+  children,
+  onClick,
+  "aria-label": label,
+}: {
   children: ReactNode;
   onClick: () => void;
   "aria-label": string;
