@@ -52,9 +52,9 @@ export default function BannerSonderwerkzeuge() {
   const next = () => setActive((a) => (a + 1) % TOTAL_SLIDES);
 
   return (
-    <section className="bg-[#F4F3F9] flex flex-col items-center px-14 pt-14 pb-8 overflow-auto">
+    <section className="bg-[#F4F3F9] flex flex-col items-center px-14 pt-6 pb-4 overflow-auto">
       {/* Fixed 1180×492 banner card */}
-      <div className="shrink-0 w-[1180px] h-[492px] bg-[#ECE5DA] rounded-2xl overflow-hidden grid grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]">
+      <div className="shrink-0 w-[1180px] h-[360px] bg-[#8fdbd6] rounded-2xl overflow-hidden grid grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]">
 
         {/* LEFT COLUMN */}
         <div className="flex flex-col justify-center px-14 py-10 pr-9">
