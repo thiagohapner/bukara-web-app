@@ -52,16 +52,16 @@ export default function BannerSonderwerkzeuge() {
   const next = () => setActive((a) => (a + 1) % TOTAL_SLIDES);
 
   return (
-    <section className="bg-[#F4F3F9] flex flex-col items-center px-14 pt-14 pb-8 overflow-auto font-body-alt">
+    <section className="bg-[#F4F3F9] flex flex-col items-center px-14 pt-14 pb-8 overflow-auto">
       {/* Fixed 1180×492 banner card */}
       <div className="shrink-0 w-[1180px] h-[492px] bg-[#ECE5DA] rounded-2xl overflow-hidden grid grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]">
 
         {/* LEFT COLUMN */}
         <div className="flex flex-col justify-center px-14 py-10 pr-9">
-          <h2 className="font-display text-[42px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#2E1A40] m-0">
-            <span className="block not-italic">Sonderwerkzeuge,</span>
+          <h2 className="text-4xl font-extrabold text-[#2E1A40] leading-tight tracking-tight m-0">
+            Sonderwerkzeuge,{" "}
             <span
-              className="inline italic font-semibold px-0.5"
+              className="inline"
               style={{
                 backgroundImage: "linear-gradient(180deg,#D2F25E 0%,#D2F25E 100%)",
                 backgroundRepeat: "no-repeat",
@@ -73,14 +73,14 @@ export default function BannerSonderwerkzeuge() {
             </span>
           </h2>
 
-          <p className="mt-[18px] max-w-[420px] text-[#2E1A40] text-base leading-relaxed font-medium opacity-85">
+          <p className="mt-4 max-w-[420px] text-[#2E1A40] text-base leading-relaxed font-medium opacity-80">
             Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf – gestützt auf jahrzehntelange Erfahrung.
           </p>
 
           <div className="mt-6">
             <Link
               href="/loesungen/sonderwerkzeug"
-              className="inline-block whitespace-nowrap bg-[#2E1A40] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-[4px] no-underline transition-colors duration-150 hover:bg-[#3d2456]"
+              className="inline-block whitespace-nowrap bg-[#2E1A40] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[#3d2456]"
             >
               Sonderwerkzeug anfragen
             </Link>
@@ -102,7 +102,6 @@ export default function BannerSonderwerkzeuge() {
 
       {/* CONTROLS — dots left, arrows right, below the card */}
       <div className="w-[1180px] flex items-center justify-between mt-5">
-        {/* Pagination dots */}
         <div role="tablist" aria-label="Carousel slides" className="flex items-center gap-2.5">
           {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
             <button
@@ -121,7 +120,6 @@ export default function BannerSonderwerkzeuge() {
           ))}
         </div>
 
-        {/* Prev / Next buttons */}
         <div className="flex items-center gap-3">
           <NavBtn aria-label="Vorherige Folie" onClick={prev}>
             <ChevronLeft size={18} strokeWidth={2} className="text-white" />

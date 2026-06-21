@@ -20,9 +20,6 @@
   --radius-lg:   12px;    /* panels, containers, galleries */
   --radius-pill: 9999px;  /* chips, badges, tags          */
 
-  /* Extended font stack — Playfair Display for display headings, Mulish for alt body */
-  --font-display: var(--font-playfair), Georgia, serif;
-  --font-body-alt: var(--font-mulish), system-ui, sans-serif;
 }
 
 /* ============================================================
