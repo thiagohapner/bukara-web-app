@@ -3,17 +3,22 @@ import type { V2Category } from "@/lib/v2/types";
 import type { EnrichedCard } from "@/lib/katalog/filter";
 import { filterCards } from "@/lib/katalog/filter";
 
+export type SortimentCategory = V2Category & { exampleImage: string | null };
+
 /**
  * Categories surfaced as /sortiment landing pages + home tiles
  * (v2.categories.show_on_home = true), ordered by home_sort_order.
- * Drives generateStaticParams and the home-page tiles — adding/removing a page
- * is a DB change, never a code change.
+ * Each category also carries the first available product image for display in the tile.
  */
-export async function getSortimentCategories(): Promise<V2Category[]> {
-  const { categories } = await getCatalogData();
+export async function getSortimentCategories(): Promise<SortimentCategory[]> {
+  const { categories, cards } = await getCatalogData();
   return categories
     .filter((c) => c.show_on_home)
-    .sort((a, b) => (a.home_sort_order ?? 0) - (b.home_sort_order ?? 0));
+    .sort((a, b) => (a.home_sort_order ?? 0) - (b.home_sort_order ?? 0))
+    .map((c) => {
+      const card = cards.find((card) => card.categoryIds.includes(c.id));
+      return { ...c, exampleImage: card?.image ?? null };
+    });
 }
 
 export interface SortimentPageData {
