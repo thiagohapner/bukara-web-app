@@ -35,6 +35,7 @@ type Slide = {
   bgColor: string;
   textColor: string;
   ctaStyle: "dark" | "white";
+  highlightColor: string;
   rightPanel: RightPanel;
 };
 
@@ -49,6 +50,7 @@ const slides: Slide[] = [
     bgColor: "#8fdbd6",
     textColor: "#0F172A",
     ctaStyle: "dark",
+    highlightColor: "#D2F25E",
     rightPanel: {
       kind: "features",
       features: [
@@ -89,6 +91,7 @@ const slides: Slide[] = [
     bgColor: "#8fdbd6",
     textColor: "#0F172A",
     ctaStyle: "dark",
+    highlightColor: "#D2F25E",
     rightPanel: {
       kind: "features",
       features: [
@@ -129,6 +132,7 @@ const slides: Slide[] = [
     bgColor: "#000000",
     textColor: "#ffffff",
     ctaStyle: "white",
+    highlightColor: "rgb(143, 219, 214)",
     rightPanel: {
       kind: "image",
       src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/banner/Frame%2013%20(7).png",
@@ -160,7 +164,17 @@ export default function BannerSonderwerkzeuge() {
             className="text-4xl font-extrabold leading-tight tracking-tight m-0"
           >
             {slide.headline}{" "}
-            {slide.highlight}
+            <span
+              className="inline"
+              style={{
+                backgroundImage: `linear-gradient(180deg,${slide.highlightColor} 0%,${slide.highlightColor} 100%)`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "100% 44%",
+                backgroundPosition: "0 80%",
+              }}
+            >
+              {slide.highlight}
+            </span>
           </h2>
 
           <p
