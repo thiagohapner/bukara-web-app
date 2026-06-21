@@ -18,27 +18,27 @@ type Feature = { icon: ReactNode; text: ReactNode };
 
 const features: Feature[] = [
   {
-    icon: <PenLine size={22} strokeWidth={1.5} className="shrink-0 text-[#2E1A40]" />,
+    icon: <PenLine size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
     text: <><strong>Nach Ihrer Zeichnung</strong> oder Spezifikation gefertigt</>,
   },
   {
-    icon: <PackageOpen size={22} strokeWidth={1.5} className="shrink-0 text-[#2E1A40]" />,
+    icon: <PackageOpen size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
     text: <><strong>Keine Mindestbestellmenge</strong></>,
   },
   {
-    icon: <Layers size={22} strokeWidth={1.5} className="shrink-0 text-[#2E1A40]" />,
+    icon: <Layers size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
     text: <><strong>Alle gängigen Materialien</strong></>,
   },
   {
-    icon: <BarChart2 size={22} strokeWidth={1.5} className="shrink-0 text-[#2E1A40]" />,
+    icon: <BarChart2 size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
     text: <><strong>Klein- und Großserien</strong></>,
   },
   {
-    icon: <MessageCircle size={22} strokeWidth={1.5} className="shrink-0 text-[#2E1A40]" />,
+    icon: <MessageCircle size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
     text: <><strong>Technische Beratung</strong> inklusive</>,
   },
   {
-    icon: <Award size={22} strokeWidth={1.5} className="shrink-0 text-[#2E1A40]" />,
+    icon: <Award size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
     text: <><strong>Jahrzehntelange</strong> Werkzeug-Expertise</>,
   },
 ];
@@ -57,7 +57,7 @@ export default function BannerSonderwerkzeuge() {
 
         {/* LEFT COLUMN */}
         <div className="flex flex-col justify-center px-14 py-10 pr-9">
-          <h2 className="text-4xl font-extrabold text-[#2E1A40] leading-tight tracking-tight m-0">
+          <h2 className="text-4xl font-extrabold text-[#0F172A] leading-tight tracking-tight m-0">
             Sonderwerkzeuge,{" "}
             <span
               className="inline"
@@ -72,14 +72,14 @@ export default function BannerSonderwerkzeuge() {
             </span>
           </h2>
 
-          <p className="mt-4 max-w-[420px] text-[#2E1A40] text-base leading-relaxed font-medium opacity-80">
+          <p className="mt-4 max-w-[420px] text-[#0F172A] text-base leading-relaxed font-medium opacity-80">
             Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf – gestützt auf jahrzehntelange Erfahrung.
           </p>
 
           <div className="mt-6">
             <Link
               href="/loesungen/sonderwerkzeug"
-              className="inline-block whitespace-nowrap bg-[#2E1A40] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[#3d2456]"
+              className="inline-block whitespace-nowrap bg-[#0F172A] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[#1e293b]"
             >
               Sonderwerkzeug anfragen
             </Link>
@@ -92,7 +92,7 @@ export default function BannerSonderwerkzeuge() {
             {features.map((f, i) => (
               <div key={i} className="flex items-center gap-4">
                 {f.icon}
-                <span className="text-[#2E1A40] text-[15px] leading-snug">{f.text}</span>
+                <span className="text-[#0F172A] text-[15px] leading-snug">{f.text}</span>
               </div>
             ))}
           </div>
@@ -111,8 +111,8 @@ export default function BannerSonderwerkzeuge() {
               onClick={() => setActive(i)}
               className="p-0 appearance-none cursor-pointer w-[9px] h-[9px] rounded-full transition-colors"
               style={{
-                background: i === active ? "#2E1A40" : "transparent",
-                border: i === active ? "none" : "1.5px solid #2E1A40",
+                background: i === active ? "#0F172A" : "transparent",
+                border: i === active ? "none" : "1.5px solid #0F172A",
                 opacity: i === active ? 1 : 0.45,
               }}
             />
@@ -145,7 +145,7 @@ function NavBtn({
     <button
       aria-label={label}
       onClick={onClick}
-      className="appearance-none border-none cursor-pointer w-10 h-10 rounded-full bg-[#2E1A40] flex items-center justify-center transition-colors duration-150 hover:bg-[#3d2456]"
+      className="appearance-none border-none cursor-pointer w-10 h-10 rounded-full bg-[#0F172A] flex items-center justify-center transition-colors duration-150 hover:bg-[#1e293b]"
     >
       {children}
     </button>
