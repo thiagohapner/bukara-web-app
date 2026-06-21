@@ -41,7 +41,7 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    headline: "Sonderwerkzeuge,",
+    headline: "Sonderlösungen,",
     highlight: "geplant für Ihre Maschine",
     subline:
       "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf – gestützt auf jahrzehntelange Erfahrung.",
