@@ -12,12 +12,12 @@ export default function Home() {
     <>
       <main>
         <Hero />
-        <BannerSonderwerkzeuge />
+        {/* <BannerSonderwerkzeuge /> */}
         {/* <CategoryRail /> */}
         <section className="py-6 max-w-[1320px] mx-auto px-4 sm:px-6">
           <DealsPromo variant="full" lightBg />
         </section>
-        <SortimentTiles />
+        {/* <SortimentTiles /> */}
         <HomeAboutSections />
         <BestSellers />
         <FeatureBar />
