@@ -52,9 +52,8 @@ export default function BannerSonderwerkzeuge() {
   const next = () => setActive((a) => (a + 1) % TOTAL_SLIDES);
 
   return (
-    <section className="bg-[#F4F3F9] flex flex-col items-center px-14 pt-6 pb-4 overflow-auto">
-      {/* Fixed 1180×492 banner card */}
-      <div className="shrink-0 w-[1180px] h-[360px] bg-[#8fdbd6] rounded-2xl overflow-hidden grid grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]">
+    <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
+      <div className="w-full h-[360px] bg-[#8fdbd6] rounded-2xl overflow-hidden grid grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]">
 
         {/* LEFT COLUMN */}
         <div className="flex flex-col justify-center px-14 py-10 pr-9">
@@ -101,7 +100,7 @@ export default function BannerSonderwerkzeuge() {
       </div>
 
       {/* CONTROLS — dots left, arrows right, below the card */}
-      <div className="w-[1180px] flex items-center justify-between mt-5">
+      <div className="flex items-center justify-between mt-4">
         <div role="tablist" aria-label="Carousel slides" className="flex items-center gap-2.5">
           {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
             <button
