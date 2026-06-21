@@ -155,13 +155,13 @@ export default function BannerSonderwerkzeuge() {
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
       <div
         style={{ background: slide.bgColor }}
-        className="w-full h-[360px] rounded-2xl overflow-hidden grid grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
+        className="w-full h-auto md:h-[360px] rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
       >
         {/* LEFT COLUMN */}
-        <div className="flex flex-col justify-center px-14 py-10 pr-9">
+        <div className="flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
           <h2
             style={{ color: slide.textColor }}
-            className="text-4xl font-extrabold leading-tight tracking-tight m-0"
+            className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight tracking-tight m-0"
           >
             {slide.headline}{" "}
             <span
@@ -199,7 +199,7 @@ export default function BannerSonderwerkzeuge() {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="flex items-center pr-14 pl-5 py-9">
+        <div className="hidden md:flex items-center pr-14 pl-5 py-9">
           {slide.rightPanel.kind === "features" ? (
             <div className="w-full bg-white rounded-xl shadow-[0_14px_36px_-16px_rgba(46,26,64,0.26)] px-[30px] py-[26px] flex flex-col gap-4">
               {slide.rightPanel.features.map((f, i) => (
