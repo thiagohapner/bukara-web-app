@@ -3,7 +3,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import KatalogProductContent from "./KatalogProductContent";
-import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant } from "@/lib/v2/types";
+import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant, V2ProductCuttingData } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
 export const dynamic = "force-dynamic";
@@ -210,7 +210,7 @@ export default async function KatalogDetailPage({
     initialSkuId = undefined;
   }
 
-  const [{ data: images }, { data: specs }, { data: mats }, { data: apps }, { data: accRows }] =
+  const [{ data: images }, { data: specs }, { data: mats }, { data: apps }, { data: accRows }, { data: cutting }] =
     await Promise.all([
       skuIds.length > 0
         ? supabaseAdminV2.from("sku_images").select("*").in("sku_id", skuIds).order("sort_order")
@@ -223,6 +223,11 @@ export default async function KatalogDetailPage({
       supabaseAdminV2
         .from("product_accessories")
         .select("id, accessory_product_id, sort_order")
+        .eq("product_id", product.id)
+        .order("sort_order"),
+      supabaseAdminV2
+        .from("product_cutting_data")
+        .select("*")
         .eq("product_id", product.id)
         .order("sort_order"),
     ]);
@@ -308,6 +313,7 @@ export default async function KatalogDetailPage({
           accessories={accessories}
           groupVariants={groupVariants}
           initialSkuId={initialSkuId}
+          cuttingData={(cutting ?? []) as V2ProductCuttingData[]}
         />
       </main>
       <Footer />

@@ -12,7 +12,7 @@ import KatalogAbmessungenTable from "./KatalogAbmessungenTable";
 import { getDimensionRows } from "@/lib/v2/dimensions";
 import { useCart } from "@/components/CartContext";
 import { formatEur, unitPriceForQuantity } from "@/lib/pricing";
-import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant } from "@/lib/v2/types";
+import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant, V2ProductCuttingData } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
 function Dots({ count }: { count: number }) {
@@ -50,6 +50,7 @@ interface Props {
   accessories?: AccessoryItem[];
   groupVariants: V2GroupVariant[];
   initialSkuId?: string;
+  cuttingData: V2ProductCuttingData[];
 }
 
 export default function KatalogProductContent({
@@ -62,6 +63,7 @@ export default function KatalogProductContent({
   accessories = [],
   groupVariants,
   initialSkuId,
+  cuttingData,
 }: Props) {
   const { addV2Item, openDrawer } = useCart();
 
@@ -167,6 +169,35 @@ export default function KatalogProductContent({
         <div className="flex flex-col gap-2.5">
           {techItems.map((s) => <SpecRow key={s.id} s={s} />)}
         </div>
+      ),
+    });
+  }
+
+  // Schnittdaten — shown only when this product has cutting-data rows (X99 today,
+  // any future series automatically). Rows arrive pre-ordered by sort_order.
+  if (cuttingData.length > 0) {
+    accordionSections.push({
+      id: "schnittdaten",
+      label: "Schnittdaten",
+      content: (
+        <table className="w-full text-base border border-slate-100 rounded-lg overflow-hidden">
+          <thead>
+            <tr className="border-b border-slate-100">
+              <th className="py-2.5 px-3 text-left font-normal text-slate-400">Durchmesser</th>
+              <th className="py-2.5 px-3 text-left font-normal text-slate-400">Vorschubgeschwindigkeit</th>
+              <th className="py-2.5 px-3 text-left font-normal text-slate-400">Drehzahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cuttingData.map((row) => (
+              <tr key={row.id} className="border-b border-slate-50 last:border-0">
+                <td className="py-2.5 px-3 text-slate-900">{row.diameter}</td>
+                <td className="py-2.5 px-3 text-slate-700">{row.feed_rate}</td>
+                <td className="py-2.5 px-3 text-slate-700">{row.rpm_range}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ),
     });
   }

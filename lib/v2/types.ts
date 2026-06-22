@@ -87,6 +87,15 @@ export interface V2ProductCategory {
   category_id: string;
 }
 
+export interface V2ProductCuttingData {
+  id: string;
+  product_id: string;
+  diameter: string;
+  feed_rate: string;
+  rpm_range: string;
+  sort_order: number;
+}
+
 export interface V2ProductMaterial {
   product_id: string;
   material_name: string;
