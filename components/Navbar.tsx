@@ -6,13 +6,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
-import { ShoppingBasket, Search, ShieldCheck } from "lucide-react";
+import { ShoppingBasket, Search, ShieldCheck, Gem } from "lucide-react";
 
-// Row 1 — non-clickable trust labels.
+// Row 1 — trust labels (one links to the Schärfservice page).
 const TOP_INFO = [
-  "Bequem und sicher bezahlen",
-  "Deutschlandweiter Schärfservice",
-  "Service & Reparatur",
+  { label: "Bequem und sicher bezahlen", Icon: ShieldCheck },
+  { label: "Deutschlandweiter Schärfservice", Icon: Gem, href: "/loesungen/schaerfservice" },
 ];
 
 // Row 2 — text action links (besides search, the Sonderlösung button and cart).
@@ -119,10 +118,23 @@ export default function Navbar({
             className="flex items-center gap-8 h-9 text-[11px] font-bold"
             style={{ color: "#2d4a47" }}
           >
-            {TOP_INFO.map((label, i) => (
-              <li key={label} className="inline-flex items-center gap-1">
-                {i === 0 && <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2.5} />}
-                {label}
+            {TOP_INFO.map(({ label, Icon, href }) => (
+              <li key={label} className="inline-flex items-center">
+                {href ? (
+                  <Link
+                    href={href}
+                    className="inline-flex items-center gap-1 hover:text-[#00A597] transition-colors"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Icon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                    {label}
+                  </Link>
+                ) : (
+                  <span className="inline-flex items-center gap-1">
+                    <Icon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                    {label}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
