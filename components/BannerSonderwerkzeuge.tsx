@@ -26,7 +26,10 @@ type RightPanel =
   | { kind: "features"; features: Feature[] }
   | { kind: "image"; src: string; alt: string };
 
+type SlideId = "x99" | "sonderloesungen" | "schaerfservice";
+
 type Slide = {
+  id: SlideId;
   headline: string;
   highlight: string;
   subline: string;
@@ -41,6 +44,24 @@ type Slide = {
 
 const slides: Slide[] = [
   {
+    id: "x99",
+    headline: "X99 NeXcut VHW Highspeedfräser –",
+    highlight: "Ab 55,72 €",
+    subline:
+      "Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind.",
+    ctaLabel: "Angebote entdecken",
+    ctaHref: "/angebote",
+    bgColor: "#000000",
+    textColor: "#ffffff",
+    ctaStyle: "white",
+    rightPanel: {
+      kind: "image",
+      src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/banner/Frame%2013%20(7).png",
+      alt: "X99 NeXcut VHW Highspeedfräser",
+    },
+  },
+  {
+    id: "sonderloesungen",
     headline: "Sonderlösungen,",
     highlight: "geplant für Ihre Maschine",
     subline:
@@ -82,6 +103,7 @@ const slides: Slide[] = [
     },
   },
   {
+    id: "schaerfservice",
     headline: "Nachschliff,",
     highlight: "der Standzeit verlängert",
     subline:
@@ -122,27 +144,13 @@ const slides: Slide[] = [
       ],
     },
   },
-  {
-    headline: "X99 NeXcut VHW Highspeedfräser –",
-    highlight: "Ab 55,72 €",
-    subline:
-      "Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind.",
-    ctaLabel: "Angebote entdecken",
-    ctaHref: "/angebote",
-    bgColor: "#000000",
-    textColor: "#ffffff",
-    ctaStyle: "white",
-    rightPanel: {
-      kind: "image",
-      src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/banner/Frame%2013%20(7).png",
-      alt: "X99 NeXcut VHW Highspeedfräser",
-    },
-  },
 ];
 
-const TOTAL_SLIDES = 3;
+export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {}) {
+  const shownSlides = only ? slides.filter((s) => s.id === only) : slides;
+  const total = shownSlides.length;
+  const showControls = total > 1;
 
-export default function BannerSonderwerkzeuge() {
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -154,10 +162,11 @@ export default function BannerSonderwerkzeuge() {
     }, 180);
   };
 
-  const prev = () => goTo((active - 1 + TOTAL_SLIDES) % TOTAL_SLIDES);
-  const next = () => goTo((active + 1) % TOTAL_SLIDES);
+  const prev = () => goTo((active - 1 + total) % total);
+  const next = () => goTo((active + 1) % total);
 
-  const slide = slides[active];
+  const slide = shownSlides[active] ?? shownSlides[0];
+  if (!slide) return null;
 
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
@@ -234,10 +243,11 @@ export default function BannerSonderwerkzeuge() {
         </div>
       </div>
 
-      {/* CONTROLS — dots left, arrows right, below the card */}
+      {/* CONTROLS — dots left, arrows right, below the card (hidden for single-slide banners) */}
+      {showControls && (
       <div className="flex items-center justify-between mt-4">
         <div role="tablist" aria-label="Carousel slides" className="flex items-center gap-2.5">
-          {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
+          {Array.from({ length: total }).map((_, i) => (
             <button
               key={i}
               role="tab"
@@ -263,6 +273,7 @@ export default function BannerSonderwerkzeuge() {
           </NavBtn>
         </div>
       </div>
+      )}
     </section>
   );
 }

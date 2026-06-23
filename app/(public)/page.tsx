@@ -15,7 +15,9 @@ export default function Home() {
         <BannerSonderwerkzeuge />
         {/* <SortimentTiles /> */}
         <SelectedProducts />
+        <BannerSonderwerkzeuge only="sonderloesungen" />
         <CategoryShowcase />
+        <BannerSonderwerkzeuge only="schaerfservice" />
         <HomeAboutSections />
         <FeatureBar />
       </main>
