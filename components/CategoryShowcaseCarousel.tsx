@@ -65,22 +65,15 @@ export default function CategoryShowcaseCarousel({
                 className="relative flex min-h-[600px] flex-col overflow-hidden rounded-[28px] p-8 sm:p-10"
                 style={{ background: "#EEEFEF" }}
               >
-                {/* Full-bleed background image (when provided) + legibility scrim,
-                    behind the text. Cards without an image stay plain #FAFAFC. */}
+                {/* Transparent product PNG, contained (not cropped), floating on the card. */}
                 {item.image && (
-                  <>
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      sizes="(max-width: 640px) 78vw, (max-width: 1280px) 30vw, 23vw"
-                      className="absolute inset-0 object-cover scale-[0.56]"
-                    />
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/40 to-transparent"
-                    />
-                  </>
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 640px) 78vw, (max-width: 1280px) 30vw, 23vw"
+                    className="absolute inset-0 object-contain scale-[0.56]"
+                  />
                 )}
 
                 <p className="relative z-10 text-sm font-medium text-slate-500">
