@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
-import { ShoppingBasket, Search, ShieldCheck, Gem, PencilRuler } from "lucide-react";
+import { ShoppingBasket, Search, ShieldCheck, Gem, PencilRuler, BadgePercent } from "lucide-react";
 
 // Row 1 — trust labels (one links to the Schärfservice page).
 const TOP_INFO = [
@@ -256,9 +256,12 @@ export default function Navbar({
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm font-medium text-slate-700 hover:text-[#00A597] transition-colors whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:text-[#00A597] transition-colors whitespace-nowrap"
                     style={{ textDecoration: "none" }}
                   >
+                    {link.href === "/angebote" && (
+                      <BadgePercent className="w-4 h-4" strokeWidth={2} />
+                    )}
                     {link.label}
                   </Link>
                 </li>
