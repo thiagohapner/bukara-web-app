@@ -74,25 +74,27 @@ export default function SelectedProductsCarousel({
             atEnd ? "opacity-0" : "opacity-100"
           }`}
         />
-      </div>
 
-      {/* Controls below, bottom-right */}
-      <div className="flex items-center justify-end gap-3 mt-6">
+        {/* Left arrow — only after scrolling, over the far-left card */}
         <button
           type="button"
           aria-label="Zurück"
           onClick={() => scroll(-1)}
-          disabled={atStart}
-          className="w-12 h-12 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center transition-colors hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed"
+          className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+            atStart ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
         >
           <ChevronLeft size={20} strokeWidth={2} />
         </button>
+
+        {/* Right arrow — over the peeking 5th card */}
         <button
           type="button"
           aria-label="Weiter"
           onClick={() => scroll(1)}
-          disabled={atEnd}
-          className="w-12 h-12 rounded-full bg-[#0F172A] text-white flex items-center justify-center transition-colors hover:bg-[#1e293b] disabled:opacity-40 disabled:cursor-not-allowed"
+          className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+            atEnd ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
         >
           <ChevronRight size={20} strokeWidth={2} />
         </button>
