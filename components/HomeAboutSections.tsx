@@ -31,36 +31,6 @@ export default function HomeAboutSections() {
 
   return (
     <>
-      {/* ── Unser Anspruch ── */}
-      <section className="home-about-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
-          <div className="relative w-full lg:w-[48%] flex-shrink-0 aspect-[4/3] rounded-lg overflow-hidden">
-            <Image
-              src="https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/sonderwerkzeug/Frame%2065%20(4).png"
-              alt="Sonderwerkzeuge"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="flex-1">
-            <p className="text-xs font-semibold text-[#00A597] uppercase tracking-widest mb-3">SONDERWERKZEUG</p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mb-5">
-              Präzision vom ersten Kontakt bis zur Lieferung
-            </h2>
-            <p className="text-slate-600 text-base leading-relaxed mb-4">
-              Dank unserer außergewöhnlich hohen Produktionstiefe realisieren wir Sonderlösungen besonders schnell und zuverlässig.
-            </p>
-            <p className="text-slate-600 text-base leading-relaxed mb-8">
-              Von Profilwechselmessern über VHM-Werkzeuge bis zu diamantbestückten Lösungen – wir entwickeln gemeinsam mit Ihnen die optimale Ausführung und liefern vom ersten Kontakt bis zum fertigen Werkzeug in kürzester Zeit.
-            </p>
-            <Link href="/loesungen/sonderwerkzeug" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
-              Sonderwerkzeuge anfragen
-              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* ── Unser Sortiment ── */}
       <section className="home-about-section max-w-[1320px] mx-auto px-4 sm:px-6 py-16">
         <div className="flex flex-col lg:flex-row-reverse gap-12 items-center">
