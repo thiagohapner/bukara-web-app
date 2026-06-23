@@ -13,12 +13,16 @@ export default function SelectedProductsCarousel({
   const trackRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+  // Vertical center (px) of a card's image ("gray") area, so the arrows align to it.
+  const [imgCenter, setImgCenter] = useState<number | null>(null);
 
   const update = () => {
     const el = trackRef.current;
     if (!el) return;
     setAtStart(el.scrollLeft <= 4);
     setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+    const imgEl = el.querySelector(".product-card")?.firstElementChild as HTMLElement | null;
+    if (imgEl) setImgCenter(imgEl.clientHeight / 2);
   };
 
   useEffect(() => {
@@ -80,7 +84,8 @@ export default function SelectedProductsCarousel({
           type="button"
           aria-label="Zurück"
           onClick={() => scroll(-1)}
-          className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+          style={{ top: imgCenter ?? "40%" }}
+          className={`absolute left-2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
             atStart ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
@@ -92,7 +97,8 @@ export default function SelectedProductsCarousel({
           type="button"
           aria-label="Weiter"
           onClick={() => scroll(1)}
-          className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+          style={{ top: imgCenter ?? "40%" }}
+          className={`absolute right-2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
             atEnd ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
