@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -53,6 +53,14 @@ function ItaBadge() {
   );
 }
 
+// Animated placeholder hint — fixed "Suchen nach " + a rotating trailing term.
+const SEARCH_HINTS = [
+  "Schaftfräser",
+  "DIA Scharnierbohrer",
+  "Schärfservice",
+  "Vollhartmetall",
+];
+
 function SearchBar({
   className = "",
   onSubmitted,
@@ -62,13 +70,39 @@ function SearchBar({
 }) {
   const router = useRouter();
   const [term, setTerm] = useState("");
+  const [hintIndex, setHintIndex] = useState(0);
+
+  // Rotate the hint only while the field is empty; respect reduced-motion (stay static).
+  useEffect(() => {
+    if (term) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+    const id = setInterval(() => {
+      setHintIndex((i) => (i + 1) % SEARCH_HINTS.length);
+    }, 2200);
+    return () => clearInterval(id);
+  }, [term]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const q = term.trim();
-    if (!q) return;
+    const raw = term.trim();
+    if (!raw) return;
+    const q = raw.toLowerCase();
     onSubmitted?.();
-    router.push(`/katalog?q=${encodeURIComponent(q)}`);
+    // Special-case routing — explicit equality only, all else goes to the catalog.
+    if (q === "schärfservice" || q === "schaerfservice") {
+      router.push("/loesungen/schaerfservice");
+      return;
+    }
+    if (q === "sonderwerkzeug") {
+      router.push("/loesungen/sonderwerkzeug");
+      return;
+    }
+    router.push(`/katalog?q=${encodeURIComponent(raw)}`);
   };
 
   return (
@@ -82,10 +116,21 @@ function SearchBar({
           type="search"
           value={term}
           onChange={(e) => setTerm(e.target.value)}
-          placeholder="Suchen"
           aria-label="Produkte suchen"
           className="w-full h-12 pl-12 pr-4 rounded-full bg-slate-100 text-[15px] text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-[#00A597]/40 transition"
         />
+        {/* Animated placeholder overlay — only while the input is empty */}
+        {!term && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-12 right-4 flex items-center overflow-hidden whitespace-nowrap text-[15px] text-slate-400"
+          >
+            <span>Suchen nach&nbsp;</span>
+            <span key={hintIndex} className="search-hint-word">
+              {SEARCH_HINTS[hintIndex]}
+            </span>
+          </div>
+        )}
       </div>
     </form>
   );
