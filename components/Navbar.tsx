@@ -33,7 +33,7 @@ const categoryLabel = (cat: ProductCategory) =>
 function ItaBadge() {
   return (
     <div
-      className="inline-flex items-center gap-1.5 bg-white rounded-xl px-3 py-1.5"
+      className="inline-flex items-center gap-1.5 bg-white rounded-sm px-3 py-1.5"
       style={{ border: "1px solid #e8e8e8" }}
     >
       <span
@@ -165,7 +165,7 @@ export default function Navbar({
           <div className="hidden lg:flex items-center gap-5">
             <Link
               href="/loesungen/sonderwerkzeug"
-              className="inline-flex items-center rounded-xl border border-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition-colors whitespace-nowrap"
+              className="inline-flex items-center rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition-colors whitespace-nowrap"
               style={{ textDecoration: "none" }}
             >
               Sonderlösung gestalten
