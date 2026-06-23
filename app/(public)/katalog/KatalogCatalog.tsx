@@ -5,13 +5,12 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { X, Search, SlidersHorizontal } from "lucide-react";
+import { X, SlidersHorizontal } from "lucide-react";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import ProductCard from "@/components/ProductCard";
 import KatalogFilterSidebar from "./KatalogFilterSidebar";
 import KatalogFilterBar from "./KatalogFilterBar";
-import { DS_INPUT } from "@/lib/ds";
 import type { V2Category } from "@/lib/v2/types";
 import {
   filterCards,
@@ -113,8 +112,6 @@ export default function KatalogCatalog({
   const [shankMax, setShankMax] = useState<number | null>(
     sp.get("shankMax") ? Number(sp.get("shankMax")) : null
   );
-
-  const [localSearch, setLocalSearch] = useState(searchQuery);
 
   // ── URL builder ───────────────────────────────────────────────────────────
   function makeUrl(overrides: {
@@ -333,12 +330,6 @@ export default function KatalogCatalog({
     startTransition(() => router.replace(makeUrl({ view: value })));
   }
 
-  function commitSearch(value: string) {
-    const trimmed = value.trim();
-    setSearchQuery(trimmed);
-    startTransition(() => router.replace(makeUrl({ q: trimmed })));
-  }
-
   function resetFilters() {
     // Keep the locked category fixed; only clear the secondary filters.
     setKategorieParam(lockedCategory ? lockedCategory.kategorie : "");
@@ -349,7 +340,6 @@ export default function KatalogCatalog({
     setSortParam("");
     setViewParam("");
     setSearchQuery("");
-    setLocalSearch("");
     setPriceMin(null);
     setPriceMax(null);
     setDiamMin(null);
@@ -402,7 +392,6 @@ export default function KatalogCatalog({
 
   function removeSearch() {
     setSearchQuery("");
-    setLocalSearch("");
     startTransition(() => router.replace(makeUrl({ q: "" })));
   }
 
@@ -482,9 +471,6 @@ export default function KatalogCatalog({
                     diam: [absoluteMinDiam, absoluteMaxDiam],
                     shank: [absoluteMinShank, absoluteMaxShank],
                   }}
-                  searchValue={localSearch}
-                  onSearchInput={setLocalSearch}
-                  onSearchSubmit={() => commitSearch(localSearch)}
                   countFor={countFor}
                   onApplyKategorie={handleSelectCategory}
                   onApplyAnwendungen={applyAnwendungen}
@@ -511,30 +497,6 @@ export default function KatalogCatalog({
                     </span>
                   )}
                 </button>
-                <form
-                  className="flex gap-2"
-                  onSubmit={(e) => { e.preventDefault(); commitSearch(localSearch); }}
-                >
-                  <div className="relative flex-1">
-                    <input
-                      type="text"
-                      value={localSearch}
-                      onChange={(e) => setLocalSearch(e.target.value)}
-                      placeholder="Produkt suchen…"
-                      className={DS_INPUT}
-                    />
-                    {localSearch && (
-                      <button
-                        type="button"
-                        onClick={() => { setLocalSearch(""); commitSearch(""); }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-lg leading-none cursor-pointer"
-                      >×</button>
-                    )}
-                  </div>
-                  <button type="submit" className="btn-orange flex-shrink-0 flex items-center gap-1.5 px-4">
-                    <Search className="w-4 h-4" />
-                  </button>
-                </form>
               </div>
 
               {/* Result count + desktop view toggle */}

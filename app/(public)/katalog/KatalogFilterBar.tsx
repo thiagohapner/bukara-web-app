@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
-import { DS_INPUT } from "@/lib/ds";
 import type { V2Category } from "@/lib/v2/types";
 import type { KatalogFilterState } from "@/lib/katalog/filter";
 import KatalogFilterPill from "./KatalogFilterPill";
@@ -24,9 +22,6 @@ interface Props {
   materialCounts: { name: string; count: number }[];
   applicationTags: string[];
   bounds: Bounds;
-  searchValue: string;
-  onSearchInput: (v: string) => void;
-  onSearchSubmit: () => void;
   countFor: (patch: Partial<KatalogFilterState>) => number;
   onApplyKategorie: (kategorie: string, sub: string) => void;
   onApplyAnwendungen: (tags: string[]) => void;
@@ -40,7 +35,7 @@ interface Props {
 
 export default function KatalogFilterBar({
   state, allCategories, materialCounts, applicationTags, bounds,
-  searchValue, onSearchInput, onSearchSubmit, countFor,
+  countFor,
   onApplyKategorie, onApplyAnwendungen, onApplyMaterials,
   onApplyDiam, onApplyPrice, onApplySort, hideCategory = false,
 }: Props) {
@@ -56,21 +51,6 @@ export default function KatalogFilterBar({
 
   return (
     <div className="flex flex-wrap items-center gap-2 mb-3">
-      {/* Search */}
-      <form
-        onSubmit={(e) => { e.preventDefault(); onSearchSubmit(); }}
-        className="relative w-full sm:w-60 flex-shrink-0 sm:mr-6"
-      >
-        <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-        <input
-          type="text"
-          value={searchValue}
-          onChange={(e) => onSearchInput(e.target.value)}
-          placeholder="Suchen…"
-          className={`${DS_INPUT} !pl-9 !py-2.5`}
-        />
-      </form>
-
       {!hideCategory && (
         <KatalogFilterPill label="Kategorie" active={katActive} open={openId === "kategorie"} onToggle={() => toggle("kategorie")} onClose={close}>
           <KatalogCategoryPanel
