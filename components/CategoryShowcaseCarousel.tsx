@@ -83,7 +83,7 @@ export default function CategoryShowcaseCarousel({
                   {item.name}
                 </p>
                 {item.blurb && (
-                  <h3 className="relative z-10 mt-2 max-w-[16ch] break-words text-2xl sm:text-3xl font-semibold leading-tight text-slate-900">
+                  <h3 className="relative z-10 mt-2 break-words text-lg sm:text-xl font-semibold leading-tight text-slate-900">
                     {item.blurb}
                   </h3>
                 )}
