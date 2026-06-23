@@ -34,7 +34,7 @@ const categoryLabel = (cat: ProductCategory) =>
 function ItaBadge() {
   return (
     <div
-      className="inline-flex items-center gap-1.5 bg-white rounded-full px-3 py-1.5"
+      className="inline-flex items-center gap-1.5 bg-white rounded-xl px-3 py-1.5"
       style={{ border: "1px solid #e8e8e8" }}
     >
       <span
