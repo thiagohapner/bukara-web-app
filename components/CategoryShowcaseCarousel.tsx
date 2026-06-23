@@ -63,7 +63,7 @@ export default function CategoryShowcaseCarousel({
             >
               <div
                 className="relative flex min-h-[600px] flex-col overflow-hidden rounded-[28px] p-8 sm:p-10"
-                style={{ background: "#FAFAFC" }}
+                style={{ background: "#EEEFEF" }}
               >
                 {/* Full-bleed background image (when provided) + legibility scrim,
                     behind the text. Cards without an image stay plain #FAFAFC. */}
@@ -74,7 +74,7 @@ export default function CategoryShowcaseCarousel({
                       alt={item.name}
                       fill
                       sizes="(max-width: 640px) 78vw, (max-width: 1280px) 30vw, 23vw"
-                      className="absolute inset-0 object-cover"
+                      className="absolute inset-0 object-cover scale-[0.7]"
                     />
                     <div
                       aria-hidden
