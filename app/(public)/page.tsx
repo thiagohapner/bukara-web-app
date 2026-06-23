@@ -5,6 +5,7 @@ import FeatureBar from "@/components/FeatureBar";
 import Footer from "@/components/Footer";
 // import SortimentTiles from "@/components/SortimentTiles";
 import SelectedProducts from "@/components/SelectedProducts";
+import CategoryShowcase from "@/components/CategoryShowcase";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         <BannerSonderwerkzeuge />
         {/* <SortimentTiles /> */}
         <SelectedProducts />
+        <CategoryShowcase />
         <HomeAboutSections />
         <FeatureBar />
       </main>
