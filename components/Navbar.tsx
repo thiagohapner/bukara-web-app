@@ -123,8 +123,8 @@ export default function Navbar({
                 {href ? (
                   <Link
                     href={href}
-                    className="inline-flex items-center gap-1 hover:text-[#00A597] transition-colors"
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    className="inline-flex items-center gap-1 no-underline hover:underline hover:text-[#00A597] transition-colors"
+                    style={{ color: "inherit" }}
                   >
                     <Icon className="w-3.5 h-3.5" strokeWidth={2.5} />
                     {label}
