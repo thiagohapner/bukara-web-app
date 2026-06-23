@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -72,21 +72,6 @@ function SearchBar({
   const [term, setTerm] = useState("");
   const [hintIndex, setHintIndex] = useState(0);
 
-  // Rotate the hint only while the field is empty; respect reduced-motion (stay static).
-  useEffect(() => {
-    if (term) return;
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
-    const id = setInterval(() => {
-      setHintIndex((i) => (i + 1) % SEARCH_HINTS.length);
-    }, 2200);
-    return () => clearInterval(id);
-  }, [term]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const raw = term.trim();
@@ -126,7 +111,12 @@ function SearchBar({
             className="pointer-events-none absolute left-12 right-4 flex items-center overflow-hidden whitespace-nowrap text-[15px] text-slate-400"
           >
             <span>Suchen nach&nbsp;</span>
-            <span key={hintIndex} className="search-hint-word">
+            <span
+              className="search-hint-word"
+              onAnimationIteration={() =>
+                setHintIndex((i) => (i + 1) % SEARCH_HINTS.length)
+              }
+            >
               {SEARCH_HINTS[hintIndex]}
             </span>
           </div>

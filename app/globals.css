@@ -118,20 +118,25 @@ body {
   animation-play-state: paused;
 }
 
-/* Animated search placeholder hint — the trailing term fades/slides in on change */
-@keyframes searchHintIn {
-  0%   { opacity: 0; transform: translateY(0.45em); }
-  100% { opacity: 1; transform: translateY(0); }
+/* Animated search placeholder hint — the trailing term wipes in left→right,
+   holds, then erases right→left (typewriter-style horizontal reveal) */
+@keyframes searchHintReveal {
+  0%   { clip-path: inset(0 100% 0 0); }  /* hidden, clipped to the left edge */
+  15%  { clip-path: inset(0 0 0 0); }     /* revealed left → right */
+  85%  { clip-path: inset(0 0 0 0); }     /* hold */
+  100% { clip-path: inset(0 100% 0 0); }  /* erased right → left */
 }
 
 .search-hint-word {
   display: inline-block;
-  animation: searchHintIn 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  clip-path: inset(0 0 0 0);
+  animation: searchHintReveal 4s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .search-hint-word {
     animation: none;
+    clip-path: none;
   }
 }
 
