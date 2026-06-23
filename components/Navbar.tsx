@@ -116,7 +116,7 @@ export default function Navbar({
       <div className="hidden md:block" style={{ backgroundColor: "#F5F5F7" }}>
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
           <ul
-            className="flex items-center gap-8 h-9 text-[12px] font-bold"
+            className="flex items-center gap-8 h-9 text-[11px] font-bold"
             style={{ color: "#2d4a47" }}
           >
             {TOP_INFO.map((label) => (
