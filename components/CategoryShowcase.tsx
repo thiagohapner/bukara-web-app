@@ -22,15 +22,15 @@ const BLURBS: Record<string, string> = {
 // under the same name — bump the number on each re-upload.
 const CATEGORY_IMAGES: Record<string, string> = {
   bohrer:
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/bohrer.PNG?v=2",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/bohrer.PNG?v=3",
   "dp-hw-werkzeuge":
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&HW%20Werkzeuge.PNG?v=2",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&HW%20Werkzeuge.PNG?v=3",
   "vollhartmetall-fraeser":
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/Vollhartmetall%20Fraeser.PNG?v=2",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/Vollhartmetall%20Fraeser.PNG?v=3",
   "dp-vhw-werkzeuge-verbundwerkstoffe":
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&VHW_Werkzeuge.PNG?v=2",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&VHW_Werkzeuge.PNG?v=3",
   kreissaegeblaetter:
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/kreissaegeblaetter.PNG?v=2",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/kreissaegeblaetter.PNG?v=3",
 };
 
 export default async function CategoryShowcase() {
