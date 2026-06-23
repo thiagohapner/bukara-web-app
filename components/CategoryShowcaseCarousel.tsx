@@ -65,15 +65,18 @@ export default function CategoryShowcaseCarousel({
                 className="relative flex min-h-[600px] flex-col overflow-hidden rounded-[28px] p-8 sm:p-10"
                 style={{ background: "#EEEFEF" }}
               >
-                {/* Transparent product PNG, contained and anchored to the bottom of the card. */}
+                {/* Transparent product PNG in a fixed-height strip anchored to the bottom,
+                    so every tool renders to the same height (widths vary by tool thickness). */}
                 {item.image && (
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    sizes="(max-width: 640px) 78vw, (max-width: 1280px) 30vw, 23vw"
-                    className="absolute inset-0 object-contain object-bottom scale-[0.56] origin-bottom"
-                  />
+                  <div className="absolute inset-x-0 bottom-8 h-[42%]">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      sizes="(max-width: 640px) 78vw, (max-width: 1280px) 30vw, 23vw"
+                      className="object-contain object-bottom"
+                    />
+                  </div>
                 )}
 
                 <p className="relative z-10 text-sm font-medium text-slate-500">
