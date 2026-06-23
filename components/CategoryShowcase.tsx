@@ -21,6 +21,14 @@ const BLURBS: Record<string, string> = {
 const CATEGORY_IMAGES: Record<string, string> = {
   bohrer:
     "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/bohrer.PNG",
+  "dp-hw-werkzeuge":
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&HW%20Werkzeuge.PNG",
+  "vollhartmetall-fraeser":
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/Vollhartmetall%20Fraeser.PNG",
+  "dp-vhw-werkzeuge-verbundwerkstoffe":
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&VHW_Werkzeuge.PNG",
+  kreissaegeblaetter:
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/kreissaegeblaetter.PNG",
 };
 
 export default async function CategoryShowcase() {
