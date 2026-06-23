@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
-import { ShoppingBasket, Search, ShieldCheck, Gem } from "lucide-react";
+import { ShoppingBasket, Search, ShieldCheck, Gem, PencilRuler } from "lucide-react";
 
 // Row 1 — trust labels (one links to the Schärfservice page).
 const TOP_INFO = [
@@ -165,9 +165,10 @@ export default function Navbar({
           <div className="hidden lg:flex items-center gap-5">
             <Link
               href="/loesungen/sonderwerkzeug"
-              className="inline-flex items-center rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition-colors whitespace-nowrap"
               style={{ textDecoration: "none" }}
             >
+              <PencilRuler className="w-4 h-4" strokeWidth={2} />
               Sonderlösung gestalten
             </Link>
             {MAIN_LINKS.map((link) => (
@@ -243,9 +244,10 @@ export default function Navbar({
                 <Link
                   href="/loesungen/sonderwerkzeug"
                   onClick={() => setMenuOpen(false)}
-                  className="block py-2 text-sm font-semibold text-slate-900"
+                  className="inline-flex items-center gap-2 py-2 text-sm font-semibold text-slate-900"
                   style={{ textDecoration: "none" }}
                 >
+                  <PencilRuler className="w-4 h-4" strokeWidth={2} />
                   Sonderlösung gestalten
                 </Link>
               </li>
