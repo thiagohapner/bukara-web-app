@@ -156,7 +156,7 @@ export default function Navbar({
           </Link>
 
           {/* Search (desktop/tablet) */}
-          <SearchBar className="hidden md:block flex-1 max-w-[560px]" />
+          <SearchBar className="hidden md:block w-[448px] max-w-full" />
 
           {/* Spacer to push the cart/hamburger right on mobile (no inline search) */}
           <div className="flex-1 md:hidden" />
@@ -188,7 +188,7 @@ export default function Navbar({
             type="button"
             aria-label="Warenkorb"
             onClick={openDrawer}
-            className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors flex-shrink-0"
+            className="relative ml-auto w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors flex-shrink-0"
           >
             <ShoppingBasket className="w-5 h-5 text-slate-700" strokeWidth={1.7} />
             {cartCount > 0 && (
