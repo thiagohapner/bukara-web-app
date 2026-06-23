@@ -68,7 +68,7 @@ export default function CategoryShowcaseCarousel({
                 {/* Transparent product PNG in a fixed-height strip anchored to the bottom,
                     so every tool renders to the same height (widths vary by tool thickness). */}
                 {item.image && (
-                  <div className="absolute inset-x-0 bottom-8 h-[42%]">
+                  <div className="absolute inset-x-0 bottom-[132px] h-[42%]">
                     <Image
                       src={item.image}
                       alt={item.name}
