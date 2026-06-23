@@ -3,105 +3,92 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
-import { ShoppingBasket, ChevronDown } from "lucide-react";
+import { ShoppingBasket, Search } from "lucide-react";
 
-const activeDealsCount: number = 3;
+// Row 1 — non-clickable trust labels.
+const TOP_INFO = [
+  "Bequem und sicher bezahlen",
+  "Deutschlandweiter Schärfservice",
+  "Service & Reparatur",
+];
 
-const NAV_LINKS = [
-  { label: "Produkte", href: "/katalog", dropdown: true },
-  { label: "Angebote", href: "/angebote", badge: true },
-  { label: "Lösungen", href: "/loesungen" },
+// Row 2 — text action links (besides search, the Sonderlösung button and cart).
+const MAIN_LINKS = [
+  { label: "Kontakt & Support", href: "/kontakt" },
   { label: "Über uns", href: "/ueber-uns" },
-  { label: "B2B Portal", href: "https://b2b.bukara.de/" },
-  { label: "Kontakt", href: "/kontakt" },
 ];
 
 type ProductCategory = { name: string; slug: string };
 
-const AngeboteBadge = () => (
-  <span
-    className="inline-flex items-center justify-center rounded-full text-[10px] font-bold text-white leading-none px-1.5 py-0.5"
-    style={{ backgroundColor: "#9B242A" }}
-  >
-    {activeDealsCount}
-  </span>
-);
+// Short display labels for over-long DB category names — still link to the real slug.
+const CATEGORY_LABEL_OVERRIDES: Record<string, string> = {
+  "dp-vhw-werkzeuge-verbundwerkstoffe": "DP & VHW Werkzeuge",
+};
 
-function ProdukteDropdown({
-  link,
-  productCategories,
+const categoryLabel = (cat: ProductCategory) =>
+  CATEGORY_LABEL_OVERRIDES[cat.slug] ?? cat.name;
+
+function ItaBadge() {
+  return (
+    <div
+      className="inline-flex items-center gap-1.5 bg-white rounded-full px-3 py-1.5"
+      style={{ border: "1px solid #e8e8e8" }}
+    >
+      <span
+        className="text-[11px] font-medium whitespace-nowrap"
+        style={{ color: "#022221" }}
+      >
+        Exklusiver Partner von
+      </span>
+      <Image
+        src="/ITA_Logo.png"
+        alt="ITA Tools"
+        width={44}
+        height={14}
+        className="object-contain"
+      />
+    </div>
+  );
+}
+
+function SearchBar({
+  className = "",
+  onSubmitted,
 }: {
-  link: { label: string; href: string };
-  productCategories: ProductCategory[];
+  className?: string;
+  onSubmitted?: () => void;
 }) {
-  // The panel opens purely on hover / focus-within. After a click the cursor is
-  // still over the trigger (and the link keeps focus), so it would stay open
-  // through the navigation. `closed` suppresses it until the pointer leaves.
-  const [closed, setClosed] = useState(false);
+  const router = useRouter();
+  const [term, setTerm] = useState("");
 
-  const handleSelect = () => {
-    setClosed(true);
-    (document.activeElement as HTMLElement | null)?.blur();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = term.trim();
+    if (!q) return;
+    onSubmitted?.();
+    router.push(`/katalog?q=${encodeURIComponent(q)}`);
   };
 
-  const panelVisibility = closed
-    ? "invisible opacity-0 pointer-events-none"
-    : "invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100";
-
   return (
-    // Desktop hover/focus dropdown. The label itself stays a real link to /katalog.
-    <div className="group relative" onMouseLeave={() => setClosed(false)}>
-      <Link
-        href={link.href}
-        onClick={handleSelect}
-        className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap"
-        style={{ textDecoration: "none" }}
-        aria-haspopup="menu"
-      >
-        {link.label}
-        <ChevronDown
-          className="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180"
+    <form onSubmit={handleSubmit} role="search" className={className}>
+      <div className="relative flex items-center">
+        <Search
+          className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none"
           strokeWidth={2}
         />
-      </Link>
-
-      {/* pt-2 acts as a hover bridge between the label and the panel */}
-      <div className={`${panelVisibility} transition-opacity duration-150 absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50`}>
-        <ul
-          role="menu"
-          aria-label={link.label}
-          className="min-w-[260px] bg-white border border-slate-200 rounded-xl shadow-xl py-2"
-        >
-          <li role="none">
-            <Link
-              role="menuitem"
-              href="/katalog"
-              onClick={handleSelect}
-              className="block px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50 transition-colors"
-              style={{ textDecoration: "none" }}
-            >
-              Alle Produkte
-            </Link>
-          </li>
-          <li role="separator" className="my-1 border-t border-slate-100" />
-          {productCategories.map((cat) => (
-            <li key={cat.slug} role="none">
-              <Link
-                role="menuitem"
-                href={`/sortiment/${cat.slug}`}
-                onClick={handleSelect}
-                className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#00A597] transition-colors"
-                style={{ textDecoration: "none" }}
-              >
-                {cat.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <input
+          type="search"
+          value={term}
+          onChange={(e) => setTerm(e.target.value)}
+          placeholder="Suchen"
+          aria-label="Produkte suchen"
+          className="w-full h-12 pl-12 pr-4 rounded-full bg-slate-100 text-[15px] text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-[#00A597]/40 transition"
+        />
       </div>
-    </div>
+    </form>
   );
 }
 
@@ -113,118 +100,171 @@ export default function Navbar({
   const [menuOpen, setMenuOpen] = useState(false);
   const { cartCount, openDrawer } = useCart();
 
+  // Row 3 — Top-Angebote · DB categories · Mehr.
+  const categoryLinks = [
+    { label: "Top-Angebote", href: "/angebote" },
+    ...productCategories.map((cat) => ({
+      label: categoryLabel(cat),
+      href: `/sortiment/${cat.slug}`,
+    })),
+    { label: "Mehr", href: "/katalog" },
+  ];
+
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-slate-200">
-      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 flex items-center justify-between h-16 gap-6">
+    <header>
+      {/* Row 1 — top info strip (desktop/tablet only) */}
+      <div className="hidden md:block" style={{ backgroundColor: "#F5F5F7" }}>
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
+          <ul
+            className="flex items-center gap-8 h-9 text-[13px] font-medium"
+            style={{ color: "#2d4a47" }}
+          >
+            {TOP_INFO.map((label) => (
+              <li key={label}>{label}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
-        {/* Logo */}
-        <Link href="/" className="flex-shrink-0 flex items-center" style={{ textDecoration: "none", color: "#00A597" }}>
-          <BukaraLogo height={29} />
-        </Link>
+      {/* Sticky: main row + category row */}
+      <div className="sticky top-0 z-50 bg-white border-b border-slate-200">
+        {/* Row 2 — main bar */}
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 flex items-center gap-4 lg:gap-6 h-[72px]">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex-shrink-0 flex items-center"
+            style={{ textDecoration: "none", color: "#00A597" }}
+            aria-label="Bukara — Startseite"
+          >
+            <BukaraLogo height={30} />
+          </Link>
 
-        {/* Desktop nav links */}
-        <ul className="hidden lg:flex items-center gap-8 flex-1 justify-center">
-          {NAV_LINKS.map((link) => {
-            if (link.badge && activeDealsCount === 0) return null;
-            const isExternal = link.href.startsWith("http");
-            return (
-              <li key={link.label}>
-                {link.dropdown ? (
-                  <ProdukteDropdown link={link} productCategories={productCategories} />
-                ) : isExternal ? (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap"
-                    style={{ textDecoration: "none" }}
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    href={link.href}
-                    className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors duration-200 whitespace-nowrap"
-                    style={{ textDecoration: "none" }}
-                  >
-                    {link.label}
-                    {link.badge && <AngeboteBadge />}
-                  </Link>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+          {/* Search (desktop/tablet) */}
+          <SearchBar className="hidden md:block flex-1 max-w-[560px]" />
 
-        {/* Right — partnership badge + cart + hamburger */}
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="hidden lg:inline-flex items-center gap-1.5 bg-white rounded-lg px-3 py-1.5" style={{ border: "1px solid #e8e8e8" }}>
-            <span className="text-[11px] font-medium whitespace-nowrap" style={{ color: "#022221" }}>Exklusiver Partner von</span>
-            <Image src="/ITA_Logo.png" alt="ITA Tools" width={44} height={14} className="object-contain" />
+          {/* Spacer to push the cart/hamburger right on mobile (no inline search) */}
+          <div className="flex-1 md:hidden" />
+
+          {/* Desktop actions */}
+          <div className="hidden lg:flex items-center gap-5">
+            <Link
+              href="/loesungen/sonderwerkzeug"
+              className="inline-flex items-center rounded-xl border border-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition-colors whitespace-nowrap"
+              style={{ textDecoration: "none" }}
+            >
+              Sonderlösung gestalten
+            </Link>
+            {MAIN_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors whitespace-nowrap"
+                style={{ textDecoration: "none" }}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          {/* Cart icon */}
+          {/* Cart */}
           <button
             type="button"
             aria-label="Warenkorb"
             onClick={openDrawer}
-            className="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+            className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors flex-shrink-0"
           >
             <ShoppingBasket className="w-5 h-5 text-slate-700" strokeWidth={1.7} />
             {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold text-white px-1 leading-none" style={{ backgroundColor: "#9B242A" }}>
+              <span
+                className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold text-white px-1 leading-none"
+                style={{ backgroundColor: "#9B242A" }}
+              >
                 {cartCount}
               </span>
             )}
           </button>
 
+          {/* Hamburger (mobile) */}
           <button
             aria-label="Menu"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5 rounded-full hover:bg-slate-100 transition-colors"
+            className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-full hover:bg-slate-100 transition-colors flex-shrink-0"
           >
             <span className={`block w-5 h-0.5 bg-slate-700 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
             <span className={`block w-5 h-0.5 bg-slate-700 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
             <span className={`block w-5 h-0.5 bg-slate-700 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
           </button>
         </div>
-      </div>
 
-      {/* Mobile menu */}
-      <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-96 border-t border-slate-100" : "max-h-0"}`}>
-        <ul className="flex flex-col px-6 py-4 gap-4 bg-white">
-          {NAV_LINKS.map((link) => {
-            if (link.badge && activeDealsCount === 0) return null;
-            const isExternal = link.href.startsWith("http");
-            return (
-              <li key={link.label}>
-                {isExternal ? (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-medium text-slate-700 hover:text-orange-500 transition-colors"
-                    style={{ textDecoration: "none" }}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                ) : (
+        {/* Row 3 — category nav (desktop) */}
+        <div className="hidden lg:block border-t border-slate-100">
+          <div className="max-w-[1320px] mx-auto px-4 sm:px-6 flex items-center justify-between h-12 gap-6">
+            <ul className="flex items-center gap-7">
+              {categoryLinks.map((link) => (
+                <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-orange-500 transition-colors"
+                    className="text-sm font-medium text-slate-700 hover:text-[#00A597] transition-colors whitespace-nowrap"
                     style={{ textDecoration: "none" }}
-                    onClick={() => setMenuOpen(false)}
                   >
                     {link.label}
-                    {link.badge && <AngeboteBadge />}
                   </Link>
-                )}
+                </li>
+              ))}
+            </ul>
+            <div className="flex-shrink-0">
+              <ItaBadge />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[680px] border-t border-slate-100" : "max-h-0"}`}>
+          <div className="px-4 sm:px-6 py-4 bg-white">
+            <SearchBar className="md:hidden mb-4" onSubmitted={() => setMenuOpen(false)} />
+            <ul className="flex flex-col gap-1">
+              <li>
+                <Link
+                  href="/loesungen/sonderwerkzeug"
+                  onClick={() => setMenuOpen(false)}
+                  className="block py-2 text-sm font-semibold text-slate-900"
+                  style={{ textDecoration: "none" }}
+                >
+                  Sonderlösung gestalten
+                </Link>
               </li>
-            );
-          })}
-        </ul>
+              {categoryLinks.map((link) => (
+                <li key={`m-${link.label}`}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="block py-2 text-sm font-medium text-slate-700 hover:text-[#00A597]"
+                    style={{ textDecoration: "none" }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              {MAIN_LINKS.map((link) => (
+                <li key={`m-${link.href}`}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="block py-2 text-sm font-medium text-slate-700 hover:text-[#00A597]"
+                    style={{ textDecoration: "none" }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4">
+              <ItaBadge />
+            </div>
+          </div>
+        </div>
       </div>
-    </nav>
+    </header>
   );
 }
