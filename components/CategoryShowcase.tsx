@@ -17,6 +17,12 @@ const BLURBS: Record<string, string> = {
   kreissaegeblaetter: "Sägeblätter für Holz & Platten.",
 };
 
+// Curated full-bleed background image per category (added as artwork is provided).
+const CATEGORY_IMAGES: Record<string, string> = {
+  bohrer:
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/bohrer.PNG",
+};
+
 export default async function CategoryShowcase() {
   const categories = await getSortimentCategories();
   if (categories.length === 0) return null;
@@ -25,7 +31,7 @@ export default async function CategoryShowcase() {
     slug: category.slug,
     name: LABEL_OVERRIDES[category.slug] ?? category.name,
     blurb: BLURBS[category.slug] ?? null,
-    image: category.exampleImage,
+    image: CATEGORY_IMAGES[category.slug] ?? null,
   }));
 
   return <CategoryShowcaseCarousel items={items} />;

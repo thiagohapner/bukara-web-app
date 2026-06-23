@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 
@@ -64,8 +65,23 @@ export default function CategoryShowcaseCarousel({
                 className="relative flex min-h-[600px] flex-col overflow-hidden rounded-[28px] p-8 sm:p-10"
                 style={{ background: "#FAFAFC" }}
               >
-                {/* Background image slot — plain color for now, images may be added later.
-                    When provided, render here with absolute inset-0 behind the text. */}
+                {/* Full-bleed background image (when provided) + legibility scrim,
+                    behind the text. Cards without an image stay plain #FAFAFC. */}
+                {item.image && (
+                  <>
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      sizes="(max-width: 1024px) 85vw, 31vw"
+                      className="absolute inset-0 object-cover"
+                    />
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/40 to-transparent"
+                    />
+                  </>
+                )}
 
                 <p className="relative z-10 text-sm font-medium text-slate-500">
                   {item.name}
