@@ -22,8 +22,8 @@ export default async function CategoryShowcase() {
 
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-12">
-      <h2 className="text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight mb-8">
-        Entdecke unsere Kategorien.
+      <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight mb-8">
+        Unser Standardsortiment
       </h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
@@ -36,7 +36,7 @@ export default async function CategoryShowcase() {
           >
             <div
               className="relative aspect-[4/3] rounded-2xl overflow-hidden"
-              style={{ background: "#F1F3F5" }}
+              style={{ background: "#BDF2EF" }}
             >
               {category.exampleImage && (
                 <Image
