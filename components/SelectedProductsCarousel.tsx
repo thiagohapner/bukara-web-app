@@ -62,7 +62,7 @@ export default function SelectedProductsCarousel({
           {cards.map((c) => (
             <div
               key={c.slug}
-              className="shrink-0 snap-start basis-[78%] sm:basis-[44%] lg:basis-[30%] xl:basis-[23%]"
+              className="shrink-0 snap-start basis-[78%] sm:basis-[44%] lg:basis-[30%] xl:basis-[21%]"
             >
               <ProductCard card={{ ...c, variant: "grid" }} />
             </div>
@@ -70,7 +70,7 @@ export default function SelectedProductsCarousel({
         </div>
         <div
           aria-hidden
-          className={`pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-white to-transparent transition-opacity duration-200 ${
+          className={`pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-white to-transparent transition-opacity duration-200 ${
             atEnd ? "opacity-0" : "opacity-100"
           }`}
         />
