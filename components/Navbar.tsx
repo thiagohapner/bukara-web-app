@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
-import { ShoppingBasket, Search } from "lucide-react";
+import { ShoppingBasket, Search, ShieldCheck } from "lucide-react";
 
 // Row 1 — non-clickable trust labels.
 const TOP_INFO = [
@@ -119,8 +119,11 @@ export default function Navbar({
             className="flex items-center gap-8 h-9 text-[11px] font-bold"
             style={{ color: "#2d4a47" }}
           >
-            {TOP_INFO.map((label) => (
-              <li key={label}>{label}</li>
+            {TOP_INFO.map((label, i) => (
+              <li key={label} className="inline-flex items-center gap-1">
+                {i === 0 && <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2.5} />}
+                {label}
+              </li>
             ))}
           </ul>
         </div>
