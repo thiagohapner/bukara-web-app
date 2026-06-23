@@ -18,17 +18,19 @@ const BLURBS: Record<string, string> = {
 };
 
 // Curated full-bleed background image per category (added as artwork is provided).
+// ?v=N busts the Next.js image-optimizer/browser cache when a file is re-uploaded
+// under the same name — bump the number on each re-upload.
 const CATEGORY_IMAGES: Record<string, string> = {
   bohrer:
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/bohrer.PNG",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/bohrer.PNG?v=2",
   "dp-hw-werkzeuge":
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&HW%20Werkzeuge.PNG",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&HW%20Werkzeuge.PNG?v=2",
   "vollhartmetall-fraeser":
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/Vollhartmetall%20Fraeser.PNG",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/Vollhartmetall%20Fraeser.PNG?v=2",
   "dp-vhw-werkzeuge-verbundwerkstoffe":
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&VHW_Werkzeuge.PNG",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/DP&VHW_Werkzeuge.PNG?v=2",
   kreissaegeblaetter:
-    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/kreissaegeblaetter.PNG",
+    "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/categories/kreissaegeblaetter.PNG?v=2",
 };
 
 export default async function CategoryShowcase() {
