@@ -74,7 +74,7 @@ export default function CategoryShowcaseCarousel({
                       alt={item.name}
                       fill
                       sizes="(max-width: 640px) 78vw, (max-width: 1280px) 30vw, 23vw"
-                      className="absolute inset-0 object-cover scale-[0.56]"
+                      className="absolute inset-0 object-cover scale-[0.56] mix-blend-multiply"
                     />
                     <div
                       aria-hidden
