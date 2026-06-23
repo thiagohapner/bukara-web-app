@@ -51,14 +51,14 @@ export default function CategoryShowcaseCarousel({
         <div
           ref={trackRef}
           onScroll={update}
-          className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
+          className="flex gap-3 sm:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
           style={{ scrollbarWidth: "none" }}
         >
           {items.map((item) => (
             <Link
               key={item.slug}
               href={`/sortiment/${item.slug}`}
-              className="group shrink-0 snap-start basis-[85%] sm:basis-[48%] lg:basis-[31.5%]"
+              className="group shrink-0 snap-start basis-[78%] sm:basis-[44%] lg:basis-[30%] xl:basis-[23%]"
               style={{ textDecoration: "none" }}
             >
               <div
@@ -73,7 +73,7 @@ export default function CategoryShowcaseCarousel({
                       src={item.image}
                       alt={item.name}
                       fill
-                      sizes="(max-width: 1024px) 85vw, 31vw"
+                      sizes="(max-width: 640px) 78vw, (max-width: 1280px) 30vw, 23vw"
                       className="absolute inset-0 object-cover"
                     />
                     <div
