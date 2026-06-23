@@ -58,7 +58,7 @@ export default function CategoryShowcaseCarousel({
             <Link
               key={item.slug}
               href={`/sortiment/${item.slug}`}
-              className="group shrink-0 snap-start basis-[78%] sm:basis-[44%] lg:basis-[30%] xl:basis-[23%]"
+              className="group min-w-0 shrink-0 snap-start basis-[78%] sm:basis-[44%] lg:basis-[30%] xl:basis-[23%]"
               style={{ textDecoration: "none" }}
             >
               <div
@@ -83,7 +83,7 @@ export default function CategoryShowcaseCarousel({
                   {item.name}
                 </p>
                 {item.blurb && (
-                  <h3 className="relative z-10 mt-2 max-w-[16ch] text-2xl sm:text-3xl font-semibold leading-tight text-slate-900">
+                  <h3 className="relative z-10 mt-2 max-w-[16ch] break-words text-2xl sm:text-3xl font-semibold leading-tight text-slate-900">
                     {item.blurb}
                   </h3>
                 )}
