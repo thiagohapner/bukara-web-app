@@ -16,16 +16,6 @@ const BLURBS: Record<string, string> = {
   kreissaegeblaetter: "Sägeblätter für Holz & Platten.",
 };
 
-// Soft pastel gradients cycled per tile — gives the section an Apple-style look that's
-// clearly distinct from the white product cards in the carousel above.
-const GRADIENTS = [
-  "linear-gradient(160deg,#eef2f6,#e2e8f0)",
-  "linear-gradient(160deg,#ecfdf5,#d1fae5)",
-  "linear-gradient(160deg,#eff6ff,#dbeafe)",
-  "linear-gradient(160deg,#faf5ff,#f3e8ff)",
-  "linear-gradient(160deg,#fff7ed,#ffedd5)",
-];
-
 export default async function CategoryShowcase() {
   const categories = await getSortimentCategories();
   if (categories.length === 0) return null;
@@ -37,7 +27,7 @@ export default async function CategoryShowcase() {
       </h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
-        {categories.map((category, i) => (
+        {categories.map((category) => (
           <Link
             key={category.id}
             href={`/sortiment/${category.slug}`}
@@ -45,8 +35,8 @@ export default async function CategoryShowcase() {
             style={{ textDecoration: "none" }}
           >
             <div
-              className="relative aspect-[4/5] rounded-2xl overflow-hidden"
-              style={{ background: GRADIENTS[i % GRADIENTS.length] }}
+              className="relative aspect-[4/3] rounded-2xl overflow-hidden"
+              style={{ background: "#F1F3F5" }}
             >
               {category.exampleImage && (
                 <Image
