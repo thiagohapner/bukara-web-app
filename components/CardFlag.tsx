@@ -7,8 +7,8 @@ export type CardFlagTone = "neutral" | "deal";
 type Size = "grid" | "list";
 
 const TONES: Record<CardFlagTone, string> = {
-  neutral: "bg-white text-slate-900 ring-1 ring-black/5",
-  deal: "bg-[#A8E6C3] text-[#256C49]",
+  neutral: "bg-white text-slate-900",
+  deal: "bg-[#93F5BC] text-[#006C40]",
 };
 
 export default function CardFlag({
@@ -22,7 +22,7 @@ export default function CardFlag({
 }) {
   const sized = size === "list" ? "text-[10px] px-2 py-1" : "text-[12px] px-3 py-1.5";
   return (
-    <span className={`font-semibold rounded-sm shadow-sm ${TONES[tone]} ${sized}`}>
+    <span className={`font-semibold rounded-sm ${TONES[tone]} ${sized}`}>
       {label}
     </span>
   );
