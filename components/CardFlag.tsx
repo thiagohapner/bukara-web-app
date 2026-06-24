@@ -22,7 +22,7 @@ export default function CardFlag({
 }) {
   const sized = size === "list" ? "text-[10px] px-2 py-1" : "text-[12px] px-3 py-1.5";
   return (
-    <span className={`font-semibold rounded-sm ${TONES[tone]} ${sized}`}>
+    <span className={`font-bold rounded-sm ${TONES[tone]} ${sized}`}>
       {label}
     </span>
   );
