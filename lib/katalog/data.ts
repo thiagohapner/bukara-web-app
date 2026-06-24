@@ -62,8 +62,9 @@ async function fetchAllSkuCards(): Promise<SkuCardRow[]> {
 }
 
 // Cached raw fetch — shared by /katalog and /sortiment so both render from the
-// exact same product/category data. Refreshed every 5 min and on-demand from the
-// admin product/SKU save actions via revalidateTag("catalog").
+// exact same product/category data. Refreshed daily and on-demand from the
+// admin product/SKU save actions via revalidateTag("catalog"). The on-demand
+// purge keeps content fresh; the long timer is a fallback to minimize ISR writes.
 const fetchCatalog = unstable_cache(
   async () => {
     const [cardRows, catsRes] = await Promise.all([
@@ -86,7 +87,7 @@ const fetchCatalog = unstable_cache(
     };
   },
   ["catalog-sku-cards-v1"],
-  { tags: ["catalog"], revalidate: 300 },
+  { tags: ["catalog"], revalidate: 86400 },
 );
 
 /** Enriched catalog cards + category tree + application-tag facet, for client filtering. */

@@ -7,8 +7,9 @@ import { getSortimentCategories, getSortimentPageData } from "@/lib/sortiment/da
 
 const SITE_URL = "https://www.bukara.de";
 
-// Cached static render, refreshed every 5 min and on-demand via revalidateTag("catalog").
-export const revalidate = 300;
+// Cached static render, refreshed daily and on-demand via revalidateTag("catalog").
+// The on-demand purge keeps content fresh; the long timer is a fallback to minimize ISR writes.
+export const revalidate = 86400;
 
 // Pre-render only the approved sub-catalog categories (show_on_home = true).
 // Unknown slugs are still resolved on-demand and 404 via notFound().

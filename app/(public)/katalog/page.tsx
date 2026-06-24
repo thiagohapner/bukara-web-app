@@ -2,9 +2,10 @@ import { Suspense } from "react";
 import { getCatalogData } from "@/lib/katalog/data";
 import KatalogCatalog from "./KatalogCatalog";
 
-// Cached static render, refreshed every 5 min and on-demand from the admin
-// product/SKU save actions via revalidateTag("catalog").
-export const revalidate = 300;
+// Cached static render, refreshed daily and on-demand from the admin
+// product/SKU save actions via revalidateTag("catalog"). The on-demand purge
+// keeps content fresh; the long timer is just a fallback to minimize ISR writes.
+export const revalidate = 86400;
 
 export const metadata = {
   title: "Produktkatalog | Bukara GmbH",
