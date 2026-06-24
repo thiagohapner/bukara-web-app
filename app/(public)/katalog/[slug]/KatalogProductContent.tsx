@@ -307,19 +307,17 @@ export default function KatalogProductContent({
 
             {selectedSku && (
               <div className="mb-4">
-                <div className="flex items-baseline gap-3 mb-1">
-                  <span className={`text-2xl font-extrabold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
-                    {formatEur(displayPrice)}
-                  </span>
-                  {isCampaign && (
-                    <span className="flex items-baseline gap-1">
-                      <span className="text-base text-slate-400 line-through">{formatEur(originalPrice)}</span>
-                      <span className="text-sm font-semibold text-[#9B242A]">
-                        -{Math.round((1 - displayPrice / originalPrice) * 100)}%
-                      </span>
-                    </span>
-                  )}
+                <div className={`text-2xl font-extrabold mb-1 ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+                  {formatEur(displayPrice)}
                 </div>
+                {isCampaign && (
+                  <div className="text-sm text-slate-400 mb-1">
+                    Statt <span className="line-through">{formatEur(originalPrice)}</span>{" "}
+                    <span className="font-semibold text-[#9B242A]">
+                      -{Math.round((1 - displayPrice / originalPrice) * 100)}%
+                    </span>
+                  </div>
+                )}
                 <p className="text-[11px] text-slate-400">zzgl. 19% MwSt.</p>
               </div>
             )}

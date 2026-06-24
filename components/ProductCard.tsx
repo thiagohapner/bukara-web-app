@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatEur } from "@/lib/pricing";
-import CardFlag from "@/components/CardFlag";
+import CardFlag, { CardFlagStack } from "@/components/CardFlag";
 
 export interface ProductCardData {
   slug: string;
@@ -41,7 +41,12 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
                 </span>
               </div>
             )}
-            {card.hasStaffelpreis && <CardFlag label="Staffelpreise" size="list" />}
+            {(isCampaign || card.hasStaffelpreis) && (
+              <CardFlagStack size="list">
+                {isCampaign && <CardFlag label="Deal" tone="deal" size="list" />}
+                {card.hasStaffelpreis && <CardFlag label="Staffelpreise" size="list" />}
+              </CardFlagStack>
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-slate-900 mb-1 leading-snug">
@@ -51,18 +56,18 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               <p className="text-sm text-slate-500 mb-1 leading-snug">{card.variantLabel}</p>
             )}
             {showPrice && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+              <div>
+                <div className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
                   {card.hasVariants ? "ab " : ""}
                   {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}
-                </span>
+                </div>
                 {isCampaign && (
-                  <span className="flex items-baseline gap-1">
-                    <span className="text-xs text-slate-500 line-through">{formatEur(card.fromOriginalPrice!)}</span>
-                    <span className="text-xs font-semibold text-[#9B242A]">
+                  <div className="text-xs text-slate-500 mt-0.5">
+                    Statt <span className="line-through">{formatEur(card.fromOriginalPrice!)}</span>{" "}
+                    <span className="font-semibold text-[#9B242A]">
                       -{Math.round((1 - card.fromCampaignPrice! / card.fromOriginalPrice!) * 100)}%
                     </span>
-                  </span>
+                  </div>
                 )}
               </div>
             )}
@@ -101,7 +106,12 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               </span>
             </div>
           )}
-          {card.hasStaffelpreis && <CardFlag label="Staffelpreise" />}
+          {(isCampaign || card.hasStaffelpreis) && (
+            <CardFlagStack>
+              {isCampaign && <CardFlag label="Deal" tone="deal" />}
+              {card.hasStaffelpreis && <CardFlag label="Staffelpreise" />}
+            </CardFlagStack>
+          )}
         </div>
 
         {/* Info */}
@@ -113,18 +123,18 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
             <p className="text-sm text-slate-500 mb-2 leading-snug">{card.variantLabel}</p>
           )}
           {showPrice && (
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+            <div>
+              <div className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
                 {card.hasVariants ? "ab " : ""}
                 {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}
-              </span>
+              </div>
               {isCampaign && (
-                <span className="flex items-baseline gap-1">
-                  <span className="text-xs text-slate-500 line-through">{formatEur(card.fromOriginalPrice!)}</span>
-                  <span className="text-xs font-semibold text-[#9B242A]">
+                <div className="text-xs text-slate-500 mt-0.5">
+                  Statt <span className="line-through">{formatEur(card.fromOriginalPrice!)}</span>{" "}
+                  <span className="font-semibold text-[#9B242A]">
                     -{Math.round((1 - card.fromCampaignPrice! / card.fromOriginalPrice!) * 100)}%
                   </span>
-                </span>
+                </div>
               )}
             </div>
           )}
