@@ -9,10 +9,10 @@ export default function CardFlag({
   size?: "grid" | "list";
 }) {
   const base =
-    "absolute z-10 bg-white text-slate-900 font-semibold rounded-lg shadow-sm ring-1 ring-black/5";
+    "absolute z-10 bg-white text-slate-900 font-semibold rounded-sm shadow-sm ring-1 ring-black/5";
   const sized =
     size === "list"
-      ? "bottom-2 left-2 text-[10px] px-2 py-1 rounded-md"
+      ? "bottom-2 left-2 text-[10px] px-2 py-1"
       : "bottom-3 left-3 text-[12px] px-3 py-1.5";
   return <span className={`${base} ${sized}`}>{label}</span>;
 }
