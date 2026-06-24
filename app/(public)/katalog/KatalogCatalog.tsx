@@ -113,6 +113,18 @@ export default function KatalogCatalog({
     sp.get("shankMax") ? Number(sp.get("shankMax")) : null
   );
 
+  // Keep the search query in sync when the URL ?q= changes from outside (e.g. a
+  // navbar search) while the catalog is already mounted. Without this, a second
+  // search just updates the URL while the stale state keeps the old results.
+  // Adjust state during render (same pattern as prevFilterSig below) instead of
+  // an effect, to avoid a cascading-render setState-in-effect.
+  const qParam = sp.get("q") ?? "";
+  const [prevQParam, setPrevQParam] = useState(qParam);
+  if (prevQParam !== qParam) {
+    setPrevQParam(qParam);
+    setSearchQuery(qParam);
+  }
+
   // ── URL builder ───────────────────────────────────────────────────────────
   function makeUrl(overrides: {
     kategorie?: string; sub?: string; materials?: string[]; anwendungen?: string[];
