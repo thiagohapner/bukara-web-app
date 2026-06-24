@@ -8,7 +8,7 @@ type Size = "grid" | "list";
 
 const TONES: Record<CardFlagTone, string> = {
   neutral: "bg-white text-slate-900",
-  deal: "bg-[#93F5BC] text-[#006C40]",
+  deal: "bg-[#9A252B] text-white",
 };
 
 export default function CardFlag({
