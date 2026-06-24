@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatEur } from "@/lib/pricing";
+import CardFlag from "@/components/CardFlag";
 
 export interface ProductCardData {
   slug: string;
@@ -12,6 +13,7 @@ export interface ProductCardData {
   variantLabel?: string;
   fromCampaignPrice?: number;
   fromOriginalPrice?: number;
+  hasStaffelpreis?: boolean;
   hrefPrefix?: string;
   variant?: "grid" | "list";
 }
@@ -39,6 +41,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
                 </span>
               </div>
             )}
+            {card.hasStaffelpreis && <CardFlag label="Staffelpreise" size="list" />}
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-slate-900 mb-1 leading-snug">
@@ -98,6 +101,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               </span>
             </div>
           )}
+          {card.hasStaffelpreis && <CardFlag label="Staffelpreise" />}
         </div>
 
         {/* Info */}

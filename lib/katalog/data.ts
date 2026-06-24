@@ -31,6 +31,7 @@ type SkuCardRow = {
   application_tags: string[];
   materials: { material_name: string; score: number }[];
   search_text: string;
+  has_staffelpreis: boolean;
 };
 
 export interface CatalogData {
@@ -121,6 +122,7 @@ export async function getCatalogData(): Promise<CatalogData> {
       minShank: r.shank_mm,
       maxShank: r.shank_mm,
       searchText: r.search_text ?? "",
+      hasStaffelpreis: r.has_staffelpreis ?? false,
     };
   });
 
