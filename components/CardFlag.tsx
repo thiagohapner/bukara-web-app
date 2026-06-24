@@ -20,9 +20,9 @@ export default function CardFlag({
   tone?: CardFlagTone;
   size?: Size;
 }) {
-  const sized = size === "list" ? "text-[10px] px-2 py-1" : "text-[12px] px-3 py-1.5";
+  const sized = size === "list" ? "h-[22px] text-[10px] px-2" : "h-[26px] text-[12px] px-3";
   return (
-    <span className={`font-bold rounded-sm ${TONES[tone]} ${sized}`}>
+    <span className={`inline-flex items-center font-bold rounded-sm ${TONES[tone]} ${sized}`}>
       {label}
     </span>
   );
