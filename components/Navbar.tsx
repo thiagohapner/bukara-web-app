@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
+import { useHeaderChrome } from "./HeaderChrome";
 import { ShoppingBasket, Search, ShieldCheck, Gem, PencilRuler } from "lucide-react";
 
 // Row 1 — trust labels (one links to the Schärfservice page).
@@ -133,6 +134,9 @@ export default function Navbar({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { cartCount, openDrawer } = useCart();
+  const { hidden } = useHeaderChrome();
+  // Don't hide the sticky chrome while the mobile menu is open.
+  const navHidden = hidden && !menuOpen;
 
   // Row 3 — Top-Angebote · DB categories · Mehr.
   const categoryLinks = [
@@ -177,7 +181,7 @@ export default function Navbar({
       </div>
 
       {/* Sticky: main row + category row */}
-      <div className="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <div className={`sticky top-0 z-50 bg-white border-b border-slate-200 transition-transform duration-300 will-change-transform ${navHidden ? "-translate-y-full" : "translate-y-0"}`}>
         {/* Row 2 — main bar */}
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 flex items-center gap-4 lg:gap-6 h-[72px]">
           {/* Logo */}

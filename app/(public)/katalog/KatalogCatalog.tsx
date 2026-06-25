@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { X, SlidersHorizontal } from "lucide-react";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
+import { useHeaderChrome } from "@/components/HeaderChrome";
 import ProductCard from "@/components/ProductCard";
 import KatalogFilterSidebar from "./KatalogFilterSidebar";
 import KatalogFilterBar from "./KatalogFilterBar";
@@ -71,6 +72,7 @@ export default function KatalogCatalog({
 }: Props) {
   const sp = useSearchParams();
   const router = useRouter();
+  const { hidden } = useHeaderChrome();
   const tilesRef = useRef<HTMLDivElement>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -471,8 +473,11 @@ export default function KatalogCatalog({
         <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10 pb-20">
           <div>
             <div className="w-full min-w-0">
+              {/* Filters — sticky so they stay pinned while the navbar hides on
+                  scroll-down; they slide up to the top in sync with the navbar. */}
+              <div className={`sticky z-30 bg-white transition-[top] duration-300 ${hidden ? "top-0" : "top-[72px] lg:top-[120px]"}`}>
               {/* Filter bar — desktop */}
-              <div className="hidden lg:block mb-3">
+              <div className="hidden lg:block py-3">
                 <KatalogFilterBar
                   state={filterState}
                   allCategories={allCategories}
@@ -495,7 +500,7 @@ export default function KatalogCatalog({
               </div>
 
               {/* Filter & search — mobile */}
-              <div className="flex flex-col gap-2 mb-4 lg:hidden">
+              <div className="flex flex-col gap-2 py-2 lg:hidden">
                 <button
                   type="button"
                   onClick={() => setDrawerOpen(true)}
@@ -510,8 +515,11 @@ export default function KatalogCatalog({
                   )}
                 </button>
               </div>
+              </div>
+              {/* end sticky filters */}
 
               {/* Result count + desktop view toggle */}
+
               <div className="mb-3 flex items-center gap-2">
                 <span className="text-sm text-slate-500">
                   {`${filtered.length} Produkt${filtered.length !== 1 ? "e" : ""}`}
