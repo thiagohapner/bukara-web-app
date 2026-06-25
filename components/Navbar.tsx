@@ -224,7 +224,7 @@ export default function Navbar({
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors whitespace-nowrap"
+                className="text-sm font-semibold text-slate-900 hover:text-slate-600 transition-colors whitespace-nowrap"
                 style={{ textDecoration: "none" }}
               >
                 {link.label}
