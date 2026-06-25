@@ -270,16 +270,16 @@ label[for] {
 .katalog-range-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
   border-radius: 9999px;
   background: transparent;
   cursor: pointer;
   pointer-events: auto;
 }
 .katalog-range-input::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
   border: none;
   border-radius: 9999px;
   background: transparent;
@@ -288,4 +288,12 @@ label[for] {
 }
 .katalog-range-input::-moz-range-track {
   background: transparent;
+}
+
+/* Touch feedback for the range thumbs */
+.katalog-range-input:active::-webkit-slider-thumb { transform: scale(1.15); }
+
+/* Prevent iOS Safari from auto-zooming form fields on focus: keep text >= 16px on phones */
+@media (max-width: 640px) {
+  input, select, textarea { font-size: 16px; }
 }

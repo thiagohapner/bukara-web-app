@@ -285,8 +285,8 @@ export default function Navbar({
         </div>
 
         {/* Mobile menu */}
-        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[680px] border-t border-slate-100" : "max-h-0"}`}>
-          <div className="px-4 sm:px-6 py-4 bg-white">
+        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[calc(100dvh-72px)] border-t border-slate-100" : "max-h-0"}`}>
+          <div className="px-4 sm:px-6 py-4 bg-white max-h-[calc(100dvh-72px)] overflow-y-auto">
             <SearchBar className="md:hidden mb-4" onSubmitted={() => setMenuOpen(false)} />
             <ul className="flex flex-col gap-1">
               <li>

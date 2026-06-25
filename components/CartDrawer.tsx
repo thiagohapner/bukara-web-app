@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import { cartTotals, formatEur, unitPriceForQuantity, FREE_SHIPPING_THRESHOLD, BULK_DISCOUNT_THRESHOLD } from "@/lib/pricing";
@@ -11,7 +12,7 @@ function QtyButton({ onClick, children }: { onClick: () => void; children: React
     <button
       type="button"
       onClick={onClick}
-      className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:border-[#00A597] hover:text-[#00A597] transition-colors text-base font-semibold select-none"
+      className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:border-[#00A597] hover:text-[#00A597] transition-colors text-base font-semibold select-none"
     >
       {children}
     </button>
@@ -47,6 +48,13 @@ export default function CartDrawer() {
   const { items, isDrawerOpen, closeDrawer, updateItem, removeCartItem } = useCart();
   const totals = cartTotals(items);
 
+  // Lock background scroll while the drawer is open.
+  useEffect(() => {
+    if (!isDrawerOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, [isDrawerOpen]);
+
   if (!isDrawerOpen) return null;
 
   return (
@@ -74,7 +82,7 @@ export default function CartDrawer() {
           <button
             type="button"
             onClick={closeDrawer}
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
             aria-label="Schließen"
           >
             <X className="w-5 h-5 text-slate-500" />

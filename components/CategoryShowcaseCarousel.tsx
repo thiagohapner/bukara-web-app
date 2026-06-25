@@ -62,13 +62,13 @@ export default function CategoryShowcaseCarousel({
               style={{ textDecoration: "none" }}
             >
               <div
-                className="relative flex min-h-[600px] flex-col overflow-hidden rounded-[28px] p-8 sm:p-10"
+                className="relative flex min-h-[380px] sm:min-h-[480px] lg:min-h-[600px] flex-col overflow-hidden rounded-[28px] p-8 sm:p-10"
                 style={{ background: "#EEEFEF" }}
               >
                 {/* Transparent product PNG in a fixed-height strip anchored to the bottom,
                     so every tool renders to the same height (widths vary by tool thickness). */}
                 {item.image && (
-                  <div className="absolute inset-x-0 bottom-[132px] h-[42%]">
+                  <div className="absolute inset-x-0 bottom-[88px] sm:bottom-[110px] lg:bottom-[132px] h-[42%]">
                     <Image
                       src={item.image}
                       alt={item.name}

@@ -513,7 +513,7 @@ export default function KatalogCatalog({
                 <button
                   type="button"
                   onClick={() => setDrawerOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-sm border border-slate-200 text-sm font-medium text-slate-700 w-fit"
+                  className="flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-sm border border-slate-200 text-sm font-medium text-slate-700 w-fit"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
                   Filtern & Sortieren
@@ -629,7 +629,7 @@ export default function KatalogCatalog({
                         type="button"
                         onClick={() => goToPage(currentPage - 1)}
                         disabled={currentPage <= 1}
-                        className="btn-outline text-sm disabled:opacity-40 disabled:pointer-events-none"
+                        className="btn-outline text-sm min-h-[44px] disabled:opacity-40 disabled:pointer-events-none"
                       >
                         Zurück
                       </button>
@@ -640,7 +640,7 @@ export default function KatalogCatalog({
                         type="button"
                         onClick={() => goToPage(currentPage + 1)}
                         disabled={currentPage >= totalPages}
-                        className="btn-outline text-sm disabled:opacity-40 disabled:pointer-events-none"
+                        className="btn-outline text-sm min-h-[44px] disabled:opacity-40 disabled:pointer-events-none"
                       >
                         Weiter
                       </button>

@@ -180,7 +180,8 @@ export default function KatalogProductContent({
       id: "schnittdaten",
       label: "Schnittdaten",
       content: (
-        <table className="w-full text-base border border-slate-100 rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[460px] text-base border border-slate-100 rounded-lg overflow-hidden">
           <thead>
             <tr className="border-b border-slate-100">
               <th className="py-2.5 px-3 text-left font-normal text-slate-400">Durchmesser</th>
@@ -198,6 +199,7 @@ export default function KatalogProductContent({
             ))}
           </tbody>
         </table>
+        </div>
       ),
     });
   }
