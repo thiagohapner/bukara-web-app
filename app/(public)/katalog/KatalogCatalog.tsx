@@ -473,11 +473,14 @@ export default function KatalogCatalog({
         <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10 pb-20">
           <div>
             <div className="w-full min-w-0">
-              {/* Filters — sticky so they stay pinned while the navbar hides on
-                  scroll-down. The top offset SNAPS between the navbar height and 0
-                  (no `top` transition: animating the stick-threshold of a sticky
-                  element makes it float mid-screen while scrolling). */}
-              <div className={`sticky z-30 bg-white ${hidden ? "top-0" : "top-[72px] lg:top-[120px]"}`}>
+              {/* Filters — sticky so they stay pinned while the header hides on
+                  scroll-down. The top offset SNAPS between the full header height
+                  (strip 36 + main 72 + nav 48) and 0; no `top` transition because
+                  animating the stick-threshold of a sticky element makes it float. */}
+              <div
+                data-filterbar
+                className={`sticky z-30 bg-white ${hidden ? "top-0" : "top-[72px] md:top-[108px] lg:top-[156px]"}`}
+              >
               {/* Filter bar — desktop */}
               <div className="hidden lg:block py-3">
                 <KatalogFilterBar

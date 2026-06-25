@@ -134,8 +134,8 @@ export default function Navbar({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { cartCount, openDrawer } = useCart();
-  const { hidden } = useHeaderChrome();
-  // Don't hide the sticky chrome while the mobile menu is open.
+  const { hidden, enabled } = useHeaderChrome();
+  // Don't hide the chrome while the mobile menu is open.
   const navHidden = hidden && !menuOpen;
 
   // Row 3 — Top-Angebote · DB categories · Mehr.
@@ -149,7 +149,15 @@ export default function Navbar({
   ];
 
   return (
-    <header>
+    <header
+      className={
+        enabled
+          ? `sticky top-0 z-50 transition-transform duration-300 will-change-transform ${
+              navHidden ? "-translate-y-full" : "translate-y-0"
+            }`
+          : undefined
+      }
+    >
       {/* Row 1 — top info strip (desktop/tablet only) */}
       <div className="hidden md:block" style={{ backgroundColor: "#F5F5F7" }}>
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
@@ -180,8 +188,10 @@ export default function Navbar({
         </div>
       </div>
 
-      {/* Sticky: main row + category row */}
-      <div className={`sticky top-0 z-50 bg-white border-b border-slate-200 transition-transform duration-300 will-change-transform ${navHidden ? "-translate-y-full" : "translate-y-0"}`}>
+      {/* Main row + category row. On catalog views the whole <header> is the
+          sticky/translating element (so it reappears on scroll-up); elsewhere
+          this inner block stays sticky as before. */}
+      <div className={enabled ? "bg-white border-b border-slate-200" : "sticky top-0 z-50 bg-white border-b border-slate-200"}>
         {/* Row 2 — main bar */}
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 flex items-center gap-4 lg:gap-6 h-[72px]">
           {/* Logo */}

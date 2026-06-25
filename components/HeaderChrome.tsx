@@ -7,7 +7,10 @@ import { usePathname } from "next/navigation";
 // (one scroll listener) so the global Navbar and the catalog filter bar stay in
 // sync: navbar hides on scroll-down and reveals on scroll-up, the filter bar
 // stays pinned. Scoped to catalog views only.
-const HeaderChromeContext = createContext<{ hidden: boolean }>({ hidden: false });
+const HeaderChromeContext = createContext<{ hidden: boolean; enabled: boolean }>({
+  hidden: false,
+  enabled: false,
+});
 
 export function useHeaderChrome() {
   return useContext(HeaderChromeContext);
@@ -62,7 +65,7 @@ export function HeaderChromeProvider({ children }: { children: React.ReactNode }
   // On non-catalog routes the header is always shown, regardless of any leftover
   // internal state from a previous catalog view.
   return (
-    <HeaderChromeContext.Provider value={{ hidden: enabled ? hidden : false }}>
+    <HeaderChromeContext.Provider value={{ hidden: enabled ? hidden : false, enabled }}>
       {children}
     </HeaderChromeContext.Provider>
   );
