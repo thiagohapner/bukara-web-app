@@ -474,12 +474,16 @@ export default function KatalogCatalog({
           <div>
             <div className="w-full min-w-0">
               {/* Filters — sticky so they stay pinned while the header hides on
-                  scroll-down. The top offset SNAPS between the full header height
-                  (strip 36 + main 72 + nav 48) and 0; no `top` transition because
-                  animating the stick-threshold of a sticky element makes it float. */}
+                  scroll-down. Anchored at the full header height (strip 36 + main
+                  72 + nav 48) and slid up via TRANSFORM (not animated `top`, which
+                  recomputes the sticky threshold and floats) so it glides in sync
+                  with the header's 300ms transition. */}
               <div
-                data-filterbar
-                className={`sticky z-30 bg-white ${hidden ? "top-0" : "top-[72px] md:top-[108px] lg:top-[156px]"}`}
+                className={`sticky z-30 bg-white top-[72px] md:top-[108px] lg:top-[156px] transition-transform duration-300 will-change-transform ${
+                  hidden
+                    ? "-translate-y-[72px] md:-translate-y-[108px] lg:-translate-y-[156px]"
+                    : "translate-y-0"
+                }`}
               >
               {/* Filter bar — desktop */}
               <div className="hidden lg:block py-3">
