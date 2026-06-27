@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 
 export type CategoryCardItem = {
   slug: string;
@@ -92,7 +92,7 @@ export default function CategoryShowcaseCarousel({
                   aria-hidden
                   className="absolute bottom-6 right-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white transition-transform duration-300 group-hover:scale-110"
                 >
-                  <Plus size={20} strokeWidth={2.5} />
+                  <ArrowUpRight size={20} strokeWidth={2.5} />
                 </span>
               </div>
             </Link>
