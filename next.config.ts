@@ -21,6 +21,10 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // Serve images straight from source (Supabase CDN) instead of Vercel's image
+    // optimizer. Avoids Vercel's Image Optimization meter (Transformations +
+    // Cache Writes); the high-volume catalog/gallery images were already unoptimized.
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "i.pravatar.cc" },
