@@ -36,6 +36,18 @@
   --color-slate-900: #022221;    /* Bukara dark — primary text      */
   --color-slate-800: #022221;    /* Bukara dark — secondary text    */
 
+  /* Green-tinted neutral ramp — for borders/icons/quiet text that must
+     stay off-brand-hue but on-DS (rule: never warm greys or blue-grey). */
+  --color-neutral-25:  #F7FBFA;
+  --color-neutral-50:  #E2EFED;
+  --color-neutral-100: #D0E1DE;
+  --color-neutral-200: #B2CDC9;
+  --color-neutral-300: #8AABA6;
+  --color-neutral-400: #6F938E;
+  --color-neutral-500: #567C76;
+  --color-neutral-600: #416963;
+  --color-neutral-700: #2B5751;
+
   /* Radius scale — single source of truth */
   --radius-sm:   4px;     /* buttons, inputs              */
   --radius-md:   8px;     /* cards                        */
