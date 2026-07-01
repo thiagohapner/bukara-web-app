@@ -78,12 +78,15 @@ shadow guidance.
 Reference scale:
 
 ```
-Display XXL   56px / 400 / lh 1.03 / ls -0.025em   — stat/hero numbers
-Display XL    48px / 400 / lh 1.03 / ls -0.02em    — big promo banner headlines (§4)
-H1            40px / 400 / lh 1.2  / ls -0.02em    — rare; a page's single top-level title
-H2            32px / 400 / lh 1.1  / ls -0.02em    — reserved for larger/hero-adjacent headings, used sparingly
-H3            26px / 400 / lh 1.12 / ls -0.01em    — DEFAULT for section headers, PDP product names, page titles
-H4            22px / 400 / lh 1.1  / ls -0.01em
+Display XXL   56px / 400 / lh 1.03  / ls -0.025em   — stat/hero numbers
+Display XL    48px / 400 / lh 1.03  / ls -0.02em    — reserved, not currently used on any live page
+Display L     44px / 400 / lh 1.05  / ls -0.02em    — big promo banner headlines (§4). Bukara-specific
+                                                        rung, doesn't exist in the Stripe reference —
+                                                        sits between Display XL and H1/H2.
+H1            40px / 400 / lh 1.2   / ls -0.02em    — rare; a page's single top-level title
+H2            32px / 400 / lh 1.1   / ls -0.02em    — reserved for larger/hero-adjacent headings, used sparingly
+H3            26px / 400 / lh 1.12  / ls -0.01em    — DEFAULT for section headers, PDP product names, page titles
+H4            22px / 400 / lh 1.1   / ls -0.01em
 Body          16px / 400 / lh 1.4
 Nav links     14px / 400
 Eyebrow       14px / 400, no uppercase, no letter-spacing
@@ -96,10 +99,11 @@ etc. — use `.heading-h3`. Reach for H2/H1/Display sizes only for headings
 that are explicitly called out as larger (hero sections, big promo banners).
 
 **Use the utility classes, don't hand-roll the combo.** `app/globals.css`
-defines `.heading-xxl`, `.heading-xl`, `.heading-h1`, `.heading-h2`,
+defines `.heading-xxl`, `.heading-xl`, `.heading-l`, `.heading-h1`, `.heading-h2`,
 `.heading-h3`, `.eyebrow`, `.body-text` / `.body-text--subdued` — each sets
 size + weight + line-height + letter-spacing + color together, mirroring
-the Stripe reference's own class names. Apply the class instead of
+the Stripe reference's own class names (except `.heading-l`, a Bukara
+addition — see above). Apply the class instead of
 composing `text-*`/`font-*`/`tracking-*` Tailwind utilities by hand; that's
 exactly how heading weight/letter-spacing drift happens (see §10).
 
@@ -130,8 +134,12 @@ Radius (`app/globals.css`, single source of truth):
 somewhat interchangeably for what should be the same "card" radius — pick one.
 
 **Big promo banners** (`components/BannerSonderwerkzeuge.tsx`, the homepage
-carousel banners): headline is `.heading-xl` (Display XL), outer container
-corner radius is `md` (`rounded-md`, 8px) — not `rounded-2xl`.
+carousel banners): outer container corner radius is `md` (`rounded-md`,
+8px) — not `rounded-2xl`. Headline size differs by slide: the two
+`sidebarStyle` slides (Sonderlösungen, Schärfservice) use `.heading-l`
+(Display L); the X99 slide keeps `.heading-xl` (Display XL) and its own
+distinct look (dark bg, image panel, drop shadow) — it's intentionally
+not part of this restyle.
 
 ## 5. Shadows
 
@@ -357,6 +365,13 @@ heading weights per template (homepage hero first, highest visibility).
   `gsap.matchMedia()` — animation is skipped entirely rather than just
   slowed down. Atmosphere only, one cluster, monochrome brand color, per
   the Stripe reference's gradient rule (§1 of the original package).
+- ✅ Added a new type-scale rung, **Display L** (`--fs-display-l: 2.75rem`
+  / 44px, `.heading-l`) — a Bukara addition that doesn't exist in the
+  Stripe reference, sitting between Display XL (48px) and H1/H2. Used for
+  the two `sidebarStyle` banner headlines instead of Display XL, which is
+  now reserved/unused elsewhere. The 44px value matches `--hero-fs-md`
+  from the original Stripe token package, so it's not an arbitrary
+  in-between number.
 
 ## 11. Where to look
 

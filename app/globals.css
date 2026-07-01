@@ -119,9 +119,11 @@
   --fs-h3:          1.625rem;
   --fs-h2:          2rem;
   --fs-h1:          2.5rem;
+  --fs-display-l:   2.75rem;  /* sits between H1 (2.5rem) and Display XL (3rem) */
   --fs-display-xl:  3rem;
   --fs-display-xxl: 3.5rem;
 
+  --lh-display-l:  1.05;
   --lh-display:    1.03;
   --lh-heading:    1.1;
   --lh-heading-md: 1.12;
@@ -202,6 +204,13 @@
   font-size: var(--fs-display-xl);
   font-weight: var(--fw-regular);
   line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-l {
+  font-size: var(--fs-display-l);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-display-l);
   letter-spacing: var(--ls-display);
   color: var(--color-ink);
 }

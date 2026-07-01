@@ -157,7 +157,11 @@ export default function DesignSystemPage() {
           </div>
           <div>
             <div className="heading-xl">Display XL / 48 / 400</div>
-            <p className="text-xs text-neutral-500 mt-1">.heading-xl — big promo banner headlines</p>
+            <p className="text-xs text-neutral-500 mt-1">.heading-xl — reserved, not currently used on any live page</p>
+          </div>
+          <div>
+            <div className="heading-l">Display L / 44 / 400</div>
+            <p className="text-xs text-neutral-500 mt-1">.heading-l — big promo banner headlines. Bukara addition, doesn&apos;t exist in the Stripe reference — sits between Display XL and H1/H2.</p>
           </div>
           <div>
             <div className="heading-h2">H2 / 32 / 400</div>
@@ -243,10 +247,10 @@ export default function DesignSystemPage() {
 
       <Block
         title="Promo banner headline"
-        description="Big homepage promo banners (components/BannerSonderwerkzeuge.tsx): headline is .heading-xl (Display XL), container corner radius is md."
+        description="Sonderlösungen/Schärfservice homepage banners (components/BannerSonderwerkzeuge.tsx, sidebarStyle slides): headline is .heading-l (Display L), no shadow, container corner radius is md, animated aurora background (components/BannerAurora.tsx, not shown in this static mock). The X99 banner is untouched — still .heading-xl, dark bg, drop shadow."
       >
-        <div className="rounded-md overflow-hidden bg-brand-900 px-10 py-12 max-w-2xl">
-          <h3 className="heading-xl m-0" style={{ color: "#ffffff" }}>
+        <div className="rounded-md overflow-hidden bg-brand-25 border border-neutral-100 px-10 py-12 max-w-2xl">
+          <h3 className="heading-l m-0">
             Nachschliff, der Standzeit verlängert
           </h3>
         </div>

@@ -140,7 +140,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
           <h2
             style={{ color: slide.textColor }}
-            className="heading-xl m-0"
+            className={`m-0 ${slide.sidebarStyle ? "heading-l" : "heading-xl"}`}
           >
             {slide.headline}{" "}
             {slide.highlightColor ? (
