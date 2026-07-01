@@ -28,9 +28,13 @@ type Slide = {
   ctaStyle: "dark" | "white" | "brand";
   highlightColor?: string;
   /** Dark-hero treatment: deep brand-teal surface, glowing aurora, eyebrow +
-   *  light headline + subdued-teal body + two-tier CTA + checklist on dark.
+   *  light headline + subdued-teal body + CTA + checklist on dark.
    *  (X99 slide leaves this off and keeps its own dark-image look.) */
   darkHero?: boolean;
+  /** Full-bleed background photo (in /public) for a darkHero slide, blended
+   *  into the surface via a left→right gradient so the left stays dark for
+   *  text. Replaces the aurora + checklist for that slide. */
+  bgImage?: string;
   rightPanel: RightPanel;
 };
 
@@ -90,6 +94,7 @@ const slides: Slide[] = [
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
+    bgImage: "/service2_banner.png",
     rightPanel: {
       kind: "features",
       features: [
@@ -138,7 +143,30 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           slide.darkHero ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
         }`}
       >
-        {slide.darkHero && <BannerAurora />}
+        {slide.darkHero && slide.bgImage && (
+          <>
+            {/* Full-bleed background photo, anchored right */}
+            <div className="absolute inset-0 z-0">
+              <Image
+                src={slide.bgImage}
+                alt=""
+                fill
+                aria-hidden
+                className="object-cover object-right"
+              />
+            </div>
+            {/* Blend it into the dark surface: solid on the left for text
+                legibility, revealing the photo toward the right. */}
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                background:
+                  "linear-gradient(90deg, #041A19 0%, #041A19 32%, rgba(4,26,25,0.85) 48%, rgba(4,26,25,0.35) 72%, rgba(4,26,25,0.1) 100%)",
+              }}
+            />
+          </>
+        )}
+        {slide.darkHero && !slide.bgImage && <BannerAurora />}
 
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
@@ -192,7 +220,8 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
+        {/* RIGHT COLUMN — hidden when a background photo is the visual */}
+        {!slide.bgImage && (
         <div className="relative z-10 hidden md:flex items-center pr-14 pl-5 py-9">
           {slide.rightPanel.kind === "features" ? (
             <div className="checklist checklist--on-dark w-full">
@@ -214,6 +243,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             </div>
           )}
         </div>
+        )}
       </div>
 
       {/* CONTROLS — dots left, arrows right, below the card (hidden for single-slide banners) */}

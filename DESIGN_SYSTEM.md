@@ -152,6 +152,13 @@ carousel banners): outer container corner radius is `md` (`rounded-md`,
 distinct look (dark bg, image panel, drop shadow) — it's intentionally
 not part of this restyle.
 
+A `darkHero` slide can optionally take a full-bleed background photo via
+the `bgImage` field (a path in `/public`). The photo is anchored right and
+blended into `--color-surface-dark` with a left→right gradient (solid on
+the left ~32% for text legibility, revealing the photo toward the right);
+this replaces that slide's aurora and checklist. Schärfservice uses this
+(`/service2_banner.png`); Sonderlösungen keeps the aurora + checklist.
+
 ## 5. Shadows
 
 Brand-teal-tinted (not grey, not Stripe's blue) double-layer shadows:
