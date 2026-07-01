@@ -23,8 +23,6 @@ type Slide = {
   subline: string;
   ctaLabel: string;
   ctaHref: string;
-  secondaryCtaLabel?: string;
-  secondaryCtaHref?: string;
   bgColor: string;
   textColor: string;
   ctaStyle: "dark" | "white" | "brand";
@@ -63,8 +61,6 @@ const slides: Slide[] = [
       "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf.",
     ctaLabel: "Sonderwerkzeug anfragen",
     ctaHref: "/loesungen/sonderwerkzeug",
-    secondaryCtaLabel: "Mehr erfahren",
-    secondaryCtaHref: "/loesungen/sonderwerkzeug",
     bgColor: "var(--color-surface-dark)",
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
@@ -90,8 +86,6 @@ const slides: Slide[] = [
       "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
-    secondaryCtaLabel: "Mehr erfahren",
-    secondaryCtaHref: "/loesungen/schaerfservice",
     bgColor: "var(--color-surface-dark)",
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
@@ -149,7 +143,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
           {slide.eyebrow && (
-            <p className="eyebrow text-brand-300 mb-3">{slide.eyebrow}</p>
+            <p className="eyebrow eyebrow--on-dark mb-3">{slide.eyebrow}</p>
           )}
           <h2
             style={{ color: slide.textColor }}
@@ -182,7 +176,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             {slide.subline}
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="mt-6">
             <Link
               href={slide.ctaHref}
               className={
@@ -195,16 +189,6 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             >
               {slide.ctaLabel}
             </Link>
-            {slide.secondaryCtaLabel && slide.secondaryCtaHref && (
-              <Link
-                href={slide.secondaryCtaHref}
-                className="inline-flex items-center gap-1 text-sm font-normal no-underline whitespace-nowrap transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] hover:opacity-80"
-                style={{ color: "var(--color-text-dark-link)" }}
-              >
-                {slide.secondaryCtaLabel}
-                <ChevronRight className="w-4 h-4" strokeWidth={2} />
-              </Link>
-            )}
           </div>
         </div>
 

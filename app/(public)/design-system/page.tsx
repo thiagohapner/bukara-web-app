@@ -255,18 +255,15 @@ export default function DesignSystemPage() {
           style={{ background: "var(--color-surface-dark)", borderColor: "var(--color-border-dark)" }}
         >
           <div>
-            <p className="eyebrow text-brand-300 mb-3">Schärfservice</p>
+            <p className="eyebrow eyebrow--on-dark mb-3">Schärfservice</p>
             <h3 className="heading-l m-0" style={{ color: "var(--color-text-dark-heading)" }}>
               Nachschliff, der Standzeit verlängert
             </h3>
             <p className="body-text body-text--on-dark mt-4 max-w-[420px]">
               Präzise, schnell, bundesweit.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <div className="mt-6">
               <span className="btn-brand">Schärfauftrag starten</span>
-              <span className="inline-flex items-center gap-1 text-sm" style={{ color: "var(--color-text-dark-link)" }}>
-                Mehr erfahren <ChevronRight className="w-4 h-4" strokeWidth={2} />
-              </span>
             </div>
           </div>
           <div className="checklist checklist--on-dark">

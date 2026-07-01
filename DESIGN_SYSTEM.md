@@ -49,8 +49,10 @@ with type weight) over time; see §10.
 homepage promo banners today), use `--color-surface-dark` with the
 `--color-text-dark-*` tokens for text/links, `--color-border-dark` for a
 subtle hairline, and pair with an aurora glow (§5) — glow only reads on dark.
-Body copy uses `.body-text--on-dark`; a checklist uses `.checklist--on-dark`
-(§8). Keep it monochrome brand teal; the flat `--color-brand-500` button is
+Body copy uses `.body-text--on-dark`, an eyebrow uses `.eyebrow--on-dark`
+(the plain `.eyebrow` hardcodes dark ink and is invisible on dark), and a
+checklist uses `.checklist--on-dark` (§8). Keep it monochrome brand teal;
+the flat `--color-brand-500` button is
 the focal CTA since it pops against the dark field.
 
 **Rule: neutrals are always green-tinted.** Never use Tailwind's default
@@ -385,10 +387,11 @@ heading weights per template (homepage hero first, highest visibility).
   in-between number.
 - ✅ **Banner reconceived as a dark aurora hero** (supersedes the light
   "sidebar panel" look from the entries above). The two promo slides now
-  use a deep brand-teal surface with a glowing aurora, eyebrow → white
-  `.heading-l` → `.body-text--on-dark` → two-tier CTA (flat `.btn-brand`
-  + arrow text-link), and `.checklist--on-dark`. The `sidebarStyle` flag
-  was renamed `darkHero` to match. Added dark-section tokens
+  use a deep brand-teal surface with a glowing aurora, eyebrow (light-teal
+  `.eyebrow.eyebrow--on-dark`) → white `.heading-l` → `.body-text--on-dark`
+  → a single flat `.btn-brand` CTA, and `.checklist--on-dark`. The
+  `sidebarStyle` flag was renamed `darkHero` to match. Added dark-section
+  tokens
   (`--color-surface-dark`, `--color-text-dark-{heading,body,link}`,
   `--color-border-dark`) — these existed in the original Stripe reference
   but had never been ported in — plus `--grad-aura-brand-core` (a brighter
