@@ -4,23 +4,9 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  PenLine,
-  PackageOpen,
-  Layers,
-  BarChart2,
-  MessageCircle,
-  Award,
-  Wrench,
-  Scissors,
-  Truck,
-  Clock,
-  RefreshCw,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 
-type Feature = { icon: ReactNode; text: ReactNode };
+type Feature = { text: ReactNode };
 
 type RightPanel =
   | { kind: "features"; features: Feature[] }
@@ -37,8 +23,11 @@ type Slide = {
   ctaHref: string;
   bgColor: string;
   textColor: string;
-  ctaStyle: "dark" | "white";
+  ctaStyle: "dark" | "white" | "brand";
   highlightColor?: string;
+  /** Matches the Schärfservice form's sidebar panel: brand-25 bg, neutral
+   *  border, checklist-style feature list instead of a floating white card. */
+  sidebarStyle?: boolean;
   rightPanel: RightPanel;
 };
 
@@ -68,37 +57,19 @@ const slides: Slide[] = [
       "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf.",
     ctaLabel: "Sonderwerkzeug anfragen",
     ctaHref: "/loesungen/sonderwerkzeug",
-    bgColor: "#e8eae3",
-    textColor: "#0F172A",
-    ctaStyle: "dark",
-    highlightColor: "#D2F25E",
+    bgColor: "#F5FAFA",
+    textColor: "#022221",
+    ctaStyle: "brand",
+    sidebarStyle: true,
     rightPanel: {
       kind: "features",
       features: [
-        {
-          icon: <PenLine size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Nach Ihrer Zeichnung</strong> oder Spezifikation gefertigt</>,
-        },
-        {
-          icon: <PackageOpen size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Keine Mindestbestellmenge</strong></>,
-        },
-        {
-          icon: <Layers size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Alle gängigen Materialien</strong></>,
-        },
-        {
-          icon: <BarChart2 size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Klein- und Großserien</strong></>,
-        },
-        {
-          icon: <MessageCircle size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Technische Beratung</strong> inklusive</>,
-        },
-        {
-          icon: <Award size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Jahrzehntelange</strong> Werkzeug-Expertise</>,
-        },
+        { text: <>Nach Ihrer Zeichnung oder Spezifikation gefertigt</> },
+        { text: <>Keine Mindestbestellmenge</> },
+        { text: <>Alle gängigen Materialien</> },
+        { text: <>Klein- und Großserien</> },
+        { text: <>Technische Beratung inklusive</> },
+        { text: <>Jahrzehntelange Werkzeug-Expertise</> },
       ],
     },
   },
@@ -110,37 +81,19 @@ const slides: Slide[] = [
       "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
-    bgColor: "#e8eae3",
-    textColor: "#0F172A",
-    ctaStyle: "dark",
-    highlightColor: "#D2F25E",
+    bgColor: "#F5FAFA",
+    textColor: "#022221",
+    ctaStyle: "brand",
+    sidebarStyle: true,
     rightPanel: {
       kind: "features",
       features: [
-        {
-          icon: <Wrench size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Bukara</strong>- und Fremdwerkzeuge</>,
-        },
-        {
-          icon: <Scissors size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <>Für <strong>HW-Messer</strong>, PCD-Werkzeuge & Bohrer</>,
-        },
-        {
-          icon: <Truck size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Bundesweite</strong> Abholung & Rücksendung</>,
-        },
-        {
-          icon: <Clock size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <>Rücklauf in <strong>1 bis 2 Wochen</strong></>,
-        },
-        {
-          icon: <RefreshCw size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Nachschliff</strong>, Reparatur & Aufbereitung</>,
-        },
-        {
-          icon: <PackageOpen size={22} strokeWidth={1.5} className="shrink-0 text-[#0F172A]" />,
-          text: <><strong>Keine</strong> Mindestmenge</>,
-        },
+        { text: <>Bukara- und Fremdwerkzeuge</> },
+        { text: <>Für HW-Messer, PCD-Werkzeuge &amp; Bohrer</> },
+        { text: <>Bundesweite Abholung &amp; Rücksendung</> },
+        { text: <>Rücklauf in 1 bis 2 Wochen</> },
+        { text: <>Nachschliff, Reparatur &amp; Aufbereitung</> },
+        { text: <>Keine Mindestmenge</> },
       ],
     },
   },
@@ -171,7 +124,11 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
       <div
-        style={{ background: slide.bgColor, opacity: visible ? 1 : 0 }}
+        style={{
+          background: slide.bgColor,
+          opacity: visible ? 1 : 0,
+          border: slide.sidebarStyle ? "1px solid #D0E1DE" : "none",
+        }}
         className="w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)] transition-opacity duration-200"
       >
         {/* LEFT COLUMN */}
@@ -199,8 +156,8 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </h2>
 
           <p
-            style={{ color: slide.textColor }}
-            className="mt-4 max-w-[420px] text-base leading-relaxed font-medium opacity-80"
+            style={{ color: slide.sidebarStyle ? "#567C76" : slide.textColor }}
+            className={`mt-4 max-w-[420px] text-base leading-relaxed ${slide.sidebarStyle ? "font-normal" : "font-medium opacity-80"}`}
           >
             {slide.subline}
           </p>
@@ -211,6 +168,8 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               className={
                 slide.ctaStyle === "white"
                   ? "inline-block whitespace-nowrap bg-white text-[#0F172A] text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-gray-100"
+                  : slide.ctaStyle === "brand"
+                  ? "btn-brand no-underline"
                   : "inline-block whitespace-nowrap bg-[#0F172A] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[#1e293b]"
               }
             >
@@ -222,11 +181,11 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         {/* RIGHT COLUMN */}
         <div className="hidden md:flex items-center pr-14 pl-5 py-9">
           {slide.rightPanel.kind === "features" ? (
-            <div className="w-full bg-white rounded-xl shadow-[0_14px_36px_-16px_rgba(46,26,64,0.26)] px-[30px] py-[26px] flex flex-col gap-4">
+            <div className="checklist w-full">
               {slide.rightPanel.features.map((f, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  {f.icon}
-                  <span className="text-[#0F172A] text-[15px] leading-snug">{f.text}</span>
+                <div key={i} className="checklist-item">
+                  <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
+                  {f.text}
                 </div>
               ))}
             </div>

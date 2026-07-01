@@ -337,6 +337,16 @@ heading weights per template (homepage hero first, highest visibility).
   already existed on `service_inquiries` but the old form never wrote to.
   `.form-dropdown`/`.form-calendar-*` classes added to support the
   calendar + time-picker pattern.
+- ✅ `components/BannerSonderwerkzeuge.tsx`: the "Sonderlösungen" and
+  "Schärfservice" homepage promo slides (2nd/3rd in the carousel)
+  restyled to match the Schärfservice form's sidebar panel — brand-25
+  background, `neutral-100` border, ink heading with no lime highlight
+  underline, `.checklist` feature list directly on the panel (no more
+  floating white card with per-item Lucide icons), `.btn-brand` CTA
+  instead of the bespoke dark/light button styles. Added a
+  `sidebarStyle?: boolean` flag to the slide data so this could be
+  scoped to just those two slides. The X99 slide (1st) is explicitly
+  unchanged — still black bg, image panel, white CTA button.
 
 ## 11. Where to look
 
