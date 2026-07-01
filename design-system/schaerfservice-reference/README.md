@@ -7,7 +7,8 @@ Design (claude.ai/design) and handed off here.
 runs this design as a real 6-step wizard (tool type → pickup date/time →
 pickup location → package size/weight → service options → contact →
 success), wired to the existing `service_inquiries` Supabase table and
-`/api/send-email` route — same backend as before, extended with new fields.
+`/api/send-email` route — same backend as before, extended with new fields
+(including `tool_type`, an existing column the old form never populated).
 
 - `form-prototype.html` — the exported HTML/CSS/JS prototype (uses a
   proprietary templating syntax from the design tool — read it for layout,
@@ -16,27 +17,6 @@ success), wired to the existing `service_inquiries` Supabase table and
   behavior was reimplemented in React, not the prototype's script).
 - `screenshots/` — reference screenshots of individual steps/states from
   the prototype.
-
-## Known gap: tool types aren't a real DB column yet
-
-The prototype's step 1 ("Welche Werkzeuge senden Sie ein?") collects tool
-type(s), which the existing `service_inquiries` table has no column for.
-Rather than risk breaking submissions with an insert against a
-nonexistent column, the live form currently:
-
-- shows the tool-type selection in the UI and requires it,
-- includes it as its own labeled row in the notification email
-  (`buildSchaerfEmail` in `app/api/send-email/route.ts`),
-- but persists it to Supabase by folding it into the free-text
-  `pickup_address_deviation` column (alongside the optional "anything else"
-  note from step 2) rather than a dedicated column.
-
-**To fix properly**: add a `tool_types` (text[] or text) column to
-`service_inquiries`, then update the `insert(...)` call in
-`app/(public)/sonder-schaerfservice/page.tsx` to write to it directly
-instead of folding it into remarks. This wasn't done as part of this
-change because there was no database access available to run the
-migration — someone with Supabase access needs to add the column.
 
 ## Component classes used
 

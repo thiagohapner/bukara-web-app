@@ -167,21 +167,15 @@ function SchaerfPage() {
     const carbideReplacement = data.zahn ? CARBIDE_LABELS[data.zahn] : null;
     const engraving = data.gravur === "bukara" ? "Bukara Gravur" : data.gravur === "neutral" ? "Neutrale Gravur" : null;
 
-    // There's no dedicated "tool types" column on service_inquiries yet, so
-    // it's folded into the free-text remarks column alongside the optional
-    // note — visible in the DB and broken out as its own row in the email
-    // (see buildSchaerfEmail in app/api/send-email/route.ts).
-    const remarksParts: string[] = [];
-    if (data.werkzeuge.length) remarksParts.push(`Werkzeugarten: ${data.werkzeuge.join(", ")}`);
-    if (data.bemerkung.trim()) remarksParts.push(data.bemerkung.trim());
-    const remarks = remarksParts.join("\n") || null;
+    const toolType = data.werkzeuge.join(", ");
 
     const { error } = await supabase.from("service_inquiries").insert({
       service_type: "schaerfen",
       company_name: data.firma,
       contact_name: data.kontakt,
       email: data.email,
-      pickup_address_deviation: remarks,
+      tool_type: toolType || null,
+      pickup_address_deviation: data.bemerkung.trim() || null,
       preferred_pickup_date: data.datum || null,
       pickup_times: pickupTimes,
       pickup_location: pickupLocation || null,
@@ -207,8 +201,8 @@ function SchaerfPage() {
             company: data.firma,
             contact: data.kontakt,
             email: data.email,
-            toolTypes: data.werkzeuge.join(", "),
-            pickupAddressDeviation: remarks,
+            toolTypes: toolType,
+            pickupAddressDeviation: data.bemerkung.trim() || null,
             pickupDate: formatDisplayDate(data.datum),
             pickupTimes,
             pickupLocation,

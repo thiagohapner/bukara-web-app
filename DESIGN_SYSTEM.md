@@ -213,11 +213,6 @@ should reuse these classes rather than inventing new ad-hoc styling.
   multi-step progress bar ("Schritt 2 von 6")
 - `.kbd` — small keyboard-shortcut hint chip (e.g. "Enter ↵")
 
-**Known gap**: the prototype's tool-type selection has no corresponding
-column on `service_inquiries` yet — the live form currently folds it into
-the free-text remarks column instead of a dedicated one. See that folder's
-README for what a proper fix (a DB migration) looks like.
-
 ## 10. Known inconsistencies (migration backlog)
 
 Audited via grep across `app/` and `components/` on 2026-07-01. Ranked by
@@ -320,9 +315,10 @@ heading weights per template (homepage hero first, highest visibility).
   → pickup date/time → location → package size/weight → service options →
   contact → success), replacing the old single-page form. Same backend
   (`service_inquiries` insert + `/api/send-email`), extended with the new
-  fields the redesign collects. `.form-dropdown`/`.form-calendar-*` classes
-  added to support the calendar + time-picker pattern. One open gap: tool
-  types have no dedicated DB column yet — see that folder's README.
+  fields the redesign collects — including `tool_type`, a column that
+  already existed on `service_inquiries` but the old form never wrote to.
+  `.form-dropdown`/`.form-calendar-*` classes added to support the
+  calendar + time-picker pattern.
 
 ## 11. Where to look
 
