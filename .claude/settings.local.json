@@ -3,7 +3,12 @@
     "allow": [
       "WebFetch(domain:api.anthropic.com)",
       "Bash(curl -s \"https://api.anthropic.com/v1/design/h/B_7HlNHKJFJ6Ov0UvOJzOA?open_file=index.html\")",
-      "Bash(curl -s --compressed \"https://api.anthropic.com/v1/design/h/B_7HlNHKJFJ6Ov0UvOJzOA?open_file=index.html\")"
+      "Bash(curl -s --compressed \"https://api.anthropic.com/v1/design/h/B_7HlNHKJFJ6Ov0UvOJzOA?open_file=index.html\")",
+      "Bash(cp \"/root/.claude/uploads/29555aaf-31dd-591e-872b-45aee78cc607/c6dd2445-claude_2.md\" \"/home/user/bukara-web-app/design-system/stripe-reference/stripe-marketing-ds.md\")",
+      "Bash(cp \"/root/.claude/uploads/29555aaf-31dd-591e-872b-45aee78cc607/5cb411b0-components_2.css\" \"/home/user/bukara-web-app/design-system/stripe-reference/components.css\")",
+      "Bash(cp \"/root/.claude/uploads/29555aaf-31dd-591e-872b-45aee78cc607/66ac2f6a-tailwind.config_3.js\" \"/home/user/bukara-web-app/design-system/stripe-reference/tailwind.config.js\")",
+      "Bash(cp \"/root/.claude/uploads/29555aaf-31dd-591e-872b-45aee78cc607/3afd8132-tokens_2.json\" \"/home/user/bukara-web-app/design-system/stripe-reference/tokens.json\")",
+      "Bash(cp \"/root/.claude/uploads/29555aaf-31dd-591e-872b-45aee78cc607/82f3a72d-tokens_3.css\" \"/home/user/bukara-web-app/design-system/stripe-reference/tokens.css\")"
     ]
   }
 }
