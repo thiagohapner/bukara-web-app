@@ -115,7 +115,7 @@ export default function B2BPortalPage() {
               href="https://b2b.bukara.de/"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-orange inline-flex items-center gap-2 whitespace-nowrap shrink-0"
+              className="btn-brand inline-flex items-center gap-2 whitespace-nowrap shrink-0"
               style={{ textDecoration: "none" }}
             >
               Login
@@ -201,7 +201,7 @@ export default function B2BPortalPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn-orange w-full sm:w-auto inline-flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="btn-brand w-full sm:w-auto inline-flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   {submitting ? "Wird gesendet…" : "Zugang anfordern"}
                   {!submitting && <ArrowRight className="w-4 h-4" strokeWidth={2.2} />}

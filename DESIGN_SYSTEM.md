@@ -19,7 +19,7 @@ This is a **style system**, not a component-behavior spec: it governs
 color, type, spacing, radius, shadow, and motion. It does not mandate
 rewriting component structure/markup/logic — but achieving the Stripe-level
 look legitimately does require migrating individual components (starting
-with type weight) over time; see §8.
+with type weight) over time; see §10.
 
 ---
 
@@ -79,15 +79,21 @@ Reference scale:
 
 ```
 Display XXL   56px / 400 / lh 1.03 / ls -0.025em   — stat/hero numbers
-Display XL    48px / 400 / lh 1.03 / ls -0.02em    — page hero
-H1            40px / 400 / lh 1.2  / ls -0.02em
-H2            32px / 400 / lh 1.1  / ls -0.02em    — section headings
-H3            26px / 400 / lh 1.12 / ls -0.01em
+Display XL    48px / 400 / lh 1.03 / ls -0.02em    — big promo banner headlines (§4)
+H1            40px / 400 / lh 1.2  / ls -0.02em    — rare; a page's single top-level title
+H2            32px / 400 / lh 1.1  / ls -0.02em    — reserved for larger/hero-adjacent headings, used sparingly
+H3            26px / 400 / lh 1.12 / ls -0.01em    — DEFAULT for section headers, PDP product names, page titles
 H4            22px / 400 / lh 1.1  / ls -0.01em
 Body          16px / 400 / lh 1.4
 Nav links     14px / 400
 Eyebrow       14px / 400, no uppercase, no letter-spacing
 ```
+
+**Rule: default section/page heading size is H3, unless stated otherwise.**
+"Regular section headers, product names on the PDP, and similar" — homepage
+section headers (`SectionHeader`), PDP/deal/category/service page titles,
+etc. — use `.heading-h3`. Reach for H2/H1/Display sizes only for headings
+that are explicitly called out as larger (hero sections, big promo banners).
 
 **Use the utility classes, don't hand-roll the combo.** `app/globals.css`
 defines `.heading-xxl`, `.heading-xl`, `.heading-h1`, `.heading-h2`,
@@ -95,12 +101,12 @@ defines `.heading-xxl`, `.heading-xl`, `.heading-h1`, `.heading-h2`,
 size + weight + line-height + letter-spacing + color together, mirroring
 the Stripe reference's own class names. Apply the class instead of
 composing `text-*`/`font-*`/`tracking-*` Tailwind utilities by hand; that's
-exactly how heading weight/letter-spacing drift happens (see §8).
+exactly how heading weight/letter-spacing drift happens (see §10).
 
 **Rule: default weight is regular (400), never heavy.** `font-bold`/
 `font-extrabold`/`font-black` on an `<h1>`–`<h3>` (or on body/emphasis text)
 is off-system. Weight carries hierarchy through size and color, not
-boldness. This is a real gap today — see §8.
+boldness. This is a real gap today — see §10.
 
 ## 4. Spacing & Radius
 
@@ -121,6 +127,10 @@ Radius (`app/globals.css`, single source of truth):
 `rounded-[Npx]`** unless it maps to one of the above. Today the app mixes
 `rounded-lg`, `rounded-xl`, `rounded-2xl`, and one arbitrary `rounded-[28px]`
 somewhat interchangeably for what should be the same "card" radius — pick one.
+
+**Big promo banners** (`components/BannerSonderwerkzeuge.tsx`, the homepage
+carousel banners): headline is `.heading-xl` (Display XL), outer container
+corner radius is `md` (`rounded-md`, 8px) — not `rounded-2xl`.
 
 ## 5. Shadows
 
@@ -156,15 +166,53 @@ custom properties. Don't use Tailwind's bare `transition`/`transition-colors`
 Three variants, defined once as CSS classes in `app/globals.css` — **reuse
 these, don't hand-roll new button styles per page**:
 
-- `.btn-orange` — primary CTA, brand-filled, white text
+- `.btn-brand` — primary CTA, brand-filled, white text (named `.btn-brand`,
+  not `.btn-orange` — that was legacy naming from when the placeholder
+  brand color was literally orange; renamed everywhere in this migration)
 - `.btn-black` — secondary CTA, ink-filled, white text
 - `.btn-outline` — tertiary/ghost, bordered, ink text, brand border on hover
 
 If a page needs a button style these three don't cover, extend the shared
 classes — don't inline a fourth pattern with arbitrary Tailwind utilities
-(see §8, this already happened several times).
+(see §10, this already happened several times).
 
-## 8. Known inconsistencies (migration backlog)
+## 8. Icon tiles & checklist
+
+- `.icon-tile` (+ `--sm` / `--lg` modifiers) — square, rounded, brand-tinted
+  container for a line icon (trust badges, contact links, feature callouts).
+  40×40px default, `radius-md`, `brand-100` border, `brand-25` fill,
+  `brand-500` icon color.
+- `.checklist` / `.checklist-item` / `.checklist-badge` — benefit/feature
+  list with a filled circular brand checkmark per item (sidebars, promo
+  panels, service pages).
+
+Both are shown live at `/design-system`.
+
+## 9. Form elements (reference only — not live yet)
+
+Extracted from the Schärfservice form redesign prototype
+(`design-system/schaerfservice-reference/`) so the visual language exists
+as reusable classes before that form gets rebuilt. **Not wired into the
+live Schärfservice form yet** — `app/(public)/sonder-schaerfservice/` still
+uses the old form.
+
+- `.form-label`, `.form-input`, `.form-textarea` — labeled text inputs,
+  48px height, brand focus ring
+- `.form-pill` / `.form-pill--selected` — multi-select pill toggle
+- `.form-option-card` / `.form-option-card--selected` +
+  `.form-option-badge` / `.form-option-badge--selected` — single-select
+  radio-style card with a circular selection indicator
+- `.form-chip` / `.form-chip--active` — dropdown trigger (date/time pickers)
+- `.form-step-label`, `.form-progress-track`, `.form-progress-fill` —
+  multi-step progress bar ("Schritt 2 von 6")
+- `.kbd` — small keyboard-shortcut hint chip (e.g. "Enter ↵")
+
+When the Schärfservice form is actually rebuilt, wire real React
+state/validation/Supabase submission around these classes rather than
+re-deriving the visual style — see that folder's README for the full
+step-by-step flow the prototype defines.
+
+## 10. Known inconsistencies (migration backlog)
 
 Audited via grep across `app/` and `components/` on 2026-07-01. Ranked by
 impact. None of this needs fixing before the design-system docs/page are
@@ -229,16 +277,44 @@ heading weights per template (homepage hero first, highest visibility).
 - ✅ `components/SectionHeader.tsx` (used on the homepage by `BestSellers`,
   `LatestProducts`, `NewsArticles`) migrated from
   `text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight` to
-  `.heading-h2`. `.view-all` (the paired "View All" link) moved off
-  Tailwind's default `#64748B` blue-grey onto `--color-neutral-500` and
-  dropped its `font-medium` override to match the 14px/400 nav-link rule.
-  This is item #5 above, template 1 of many — first real visible proof
-  that heading weight changes read as "redesigned," not just recolored.
+  `.heading-h3` (originally moved to `.heading-h2`, corrected to `.heading-h3`
+  once the H3-default rule was set — see below). `.view-all` (the paired
+  "View All" link) moved off Tailwind's default `#64748B` blue-grey onto
+  `--color-neutral-500` and dropped its `font-medium` override to match the
+  14px/400 nav-link rule. This is item #5 above, template 1 of many —
+  first real visible proof that heading weight changes read as
+  "redesigned," not just recolored.
+- ✅ Default heading weight changed from 300 (light, the Stripe default) to
+  400 (regular) — Bukara's deliberate deviation, see §3.
+- ✅ H3 established as the default section/page-heading size (§3). The exact
+  class combo `text-2xl sm:text-3xl font-extrabold text-slate-900
+  leading-tight` had drifted into 12 near-identical copies across
+  `ProduktPageContent`, `KatalogProductContent`, `DealPageContent`,
+  `sortiment/[slug]`, `sonder-schaerfservice`, `danke`, `checkout`,
+  `loesungen/[slug]` (×2), `DealCard`, and `ServiceCard` (×2) — all
+  swept to `.heading-h3` in one pass, since it was already exactly one
+  pattern pretending to be independent.
+- ✅ `.btn-orange` renamed to `.btn-brand` everywhere (26 files) — the old
+  name was a leftover from when the placeholder brand color was literally
+  orange; the class always themed off `--orange`/`brand-500`, never
+  Tailwind's orange palette, so the name was actively misleading.
+- ✅ `components/BannerSonderwerkzeuge.tsx` (the big homepage promo
+  carousel): headline moved from
+  `text-2xl sm:text-3xl md:text-4xl font-extrabold` to `.heading-xl`
+  (Display XL); container radius moved from `rounded-2xl` (32px) to
+  `rounded-md` (8px, our `--radius-md` token).
+- ✅ Added `.icon-tile`, `.checklist`/`.checklist-item`/`.checklist-badge`,
+  and a `.form-*` component set (`.form-input`, `.form-pill`,
+  `.form-option-card`, `.form-chip`, `.form-progress-*`, `.kbd`) — see §8–9.
+  The `--input-*` tokens these rely on were referenced by the original
+  Stripe reference material but had never actually been ported into this
+  app's `:root`; added them now.
 
-## 9. Where to look
+## 11. Where to look
 
 - Tokens: `app/globals.css` (`@theme` block + `:root`)
 - Stripe reference package (inspiration only, not imported by the app): `design-system/stripe-reference/`
+- Schärfservice form redesign (reference only, not built yet): `design-system/schaerfservice-reference/`
 - Visual reference: `/design-system` route
-- Shared button classes: `app/globals.css` (`.btn-orange`, `.btn-black`, `.btn-outline`)
+- Shared button classes: `app/globals.css` (`.btn-brand`, `.btn-black`, `.btn-outline`)
 - This file: update it whenever a token is added/changed/deprecated.

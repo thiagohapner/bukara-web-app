@@ -53,7 +53,7 @@ export default function DealCard({ deal, index }: Props) {
 
   const contentBlock = (
     <div className={`flex-1 p-8 sm:p-10 flex flex-col justify-center ${!isEven ? "sm:order-first" : ""}`}>
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+      <h2 className="heading-h3 mb-2">
         {deal.title}
       </h2>
       <p className="text-slate-500 text-sm mb-6 leading-relaxed">{deal.subtitle}</p>
@@ -89,7 +89,7 @@ export default function DealCard({ deal, index }: Props) {
       </p>
 
       <div>
-        <Link href={deal.href} className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
+        <Link href={deal.href} className="btn-brand inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
           Zum Angebot
           <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
         </Link>

@@ -58,7 +58,7 @@ function OrderSummary({
     return (
       <div className="text-center py-12">
         <p className="text-slate-500 text-sm mb-4">Ihr Warenkorb ist leer.</p>
-        <Link href="/katalog" className="btn-orange" style={{ textDecoration: "none" }}>
+        <Link href="/katalog" className="btn-brand" style={{ textDecoration: "none" }}>
           Produkte entdecken
         </Link>
       </div>
@@ -327,7 +327,7 @@ export default function CheckoutPage() {
         </div>
 
         <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10 pb-20">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4">Bestellübersicht</h1>
+          <h1 className="heading-h3 mb-4">Bestellübersicht</h1>
 
           {/* Trust bar */}
           <div className="flex flex-wrap gap-x-6 gap-y-2 mb-8 pb-6 border-b border-slate-100">

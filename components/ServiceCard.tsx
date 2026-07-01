@@ -29,7 +29,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
     return (
       <div className="service-card rounded-lg overflow-hidden bg-[#F5F5F7] flex flex-col h-full">
         <div className="p-10 flex flex-col flex-1">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+          <h2 className="heading-h3 mb-2">
             {service.name}
           </h2>
           <p className="text-slate-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
@@ -50,7 +50,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
           </div>
           <Link
             href={`/loesungen/${service.slug}`}
-            className="btn-orange inline-flex items-center gap-2 self-start mt-auto"
+            className="btn-brand inline-flex items-center gap-2 self-start mt-auto"
             style={{ textDecoration: "none" }}
           >
             Zum Service
@@ -97,7 +97,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
 
   const contentBlock = (
     <div className={`flex-1 p-8 sm:p-10 flex flex-col justify-center ${!isEven ? "sm:order-first" : ""}`}>
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+      <h2 className="heading-h3 mb-2">
         {service.name}
       </h2>
       <p className="text-slate-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
@@ -124,7 +124,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
       <div>
         <Link
           href={`/loesungen/${service.slug}`}
-          className="btn-orange inline-flex items-center gap-2"
+          className="btn-brand inline-flex items-center gap-2"
           style={{ textDecoration: "none" }}
         >
           Zum Service

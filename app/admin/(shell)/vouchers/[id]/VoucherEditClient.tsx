@@ -198,7 +198,7 @@ export default function VoucherEditClient({
             </p>
           )}
         </div>
-        <button onClick={() => persist()} disabled={saving} className="btn-orange px-5 py-2 text-sm disabled:opacity-60">
+        <button onClick={() => persist()} disabled={saving} className="btn-brand px-5 py-2 text-sm disabled:opacity-60">
           {saving ? "Speichern..." : "Speichern"}
         </button>
       </div>

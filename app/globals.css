@@ -149,6 +149,20 @@
 
   /* ─── SPACING (new, additive) ────────────────────────────── */
   --space-section: 96px;
+
+  /* ─── INPUTS (new, additive) ─────────────────────────────── */
+  --input-height: 48px;
+  --input-border-width: 1px;
+  --input-radius: var(--radius-sm);
+  --input-pad-x: 16px;
+  --input-pad-y: 12px;
+  --input-bg: #ffffff;
+  --input-border: rgba(208,225,222,.75);
+  --input-border-hover: var(--color-brand-500);
+  --input-text: #14403b;
+  --input-placeholder: var(--color-neutral-400);
+  --input-focus-ring: var(--color-brand-500);
+  --input-focus-ring-soft: rgba(1,164,151,.15);
 }
 
 /* ============================================================
@@ -303,8 +317,8 @@ label[for] {
   cursor: pointer;
 }
 
-/* Primary CTA button (named "orange" for back-compat, uses brand green) */
-.btn-orange {
+/* Primary CTA button */
+.btn-brand {
   background: var(--orange);
   color: white;
   border-radius: var(--radius-sm);
@@ -319,7 +333,7 @@ label[for] {
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-.btn-orange:hover {
+.btn-brand:hover {
   background: var(--orange-dark);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px -4px rgba(0, 165, 151, 0.45);
@@ -368,11 +382,206 @@ label[for] {
 }
 
 @media (max-width: 1023px) {
-  .hero-cta a.btn-orange,
+  .hero-cta a.btn-brand,
   .hero-cta a.btn-outline {
     padding-top: 0.805rem;
     padding-bottom: 0.805rem;
   }
+}
+
+/* ============================================================
+   Icon tile — square/rounded icon container (trust badges,
+   contact links, feature callouts). See DESIGN_SYSTEM.md §7.
+   ============================================================ */
+.icon-tile {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-brand-100);
+  background: var(--color-brand-25);
+  color: var(--color-brand-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-tile--sm { width: 32px; height: 32px; border-radius: var(--radius-sm); }
+.icon-tile--lg { width: 48px; height: 48px; }
+
+/* ============================================================
+   Checklist — circular brand checkmark + label, for benefit/
+   feature lists (sidebars, promo panels).
+   ============================================================ */
+.checklist { display: flex; flex-direction: column; gap: var(--sp-3); }
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  color: var(--color-ink);
+  line-height: var(--lh-body);
+}
+.checklist-badge {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand-500);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+/* ============================================================
+   Form elements — inputs, pill toggles, option cards, chips,
+   progress. Extracted from the Schärfservice form redesign
+   (design-system/schaerfservice-reference/) for reuse once that
+   flow gets rebuilt for real. Not wired into the live form yet.
+   ============================================================ */
+.form-label {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-ink);
+  margin-bottom: var(--sp-2);
+}
+.form-input,
+.form-textarea {
+  width: 100%;
+  height: var(--input-height);
+  padding: var(--input-pad-y) var(--input-pad-x);
+  background: var(--input-bg);
+  border: var(--input-border-width) solid var(--input-border);
+  border-radius: var(--input-radius);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  color: var(--input-text);
+  outline: none;
+  transition: var(--transition-nav);
+}
+.form-textarea { height: auto; resize: vertical; }
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--input-placeholder); }
+.form-input:hover,
+.form-textarea:hover { border-color: var(--input-border-hover); }
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--input-focus-ring);
+  box-shadow: 0 0 0 4px var(--input-focus-ring-soft);
+}
+
+/* Multi-select pill toggle (e.g. "which tool type") */
+.form-pill {
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-neutral-500);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  cursor: pointer;
+  transition: var(--transition-nav);
+}
+.form-pill--selected {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-25);
+  color: var(--color-ink);
+}
+
+/* Single-select option card (e.g. pickup location, package size) */
+.form-option-card {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition-nav);
+}
+.form-option-card--selected {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-25);
+}
+.form-option-badge {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--color-neutral-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: transparent;
+  background: transparent;
+}
+.form-option-badge--selected {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-500);
+  color: #fff;
+}
+
+/* Dropdown trigger chip (date/time pickers) */
+.form-chip {
+  height: var(--input-height);
+  padding: 0 var(--input-pad-x);
+  border-radius: var(--input-radius);
+  border: 1px solid var(--input-border);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1-5);
+  transition: var(--transition-nav);
+}
+.form-chip--active {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-25);
+}
+
+/* Multi-step progress bar */
+.form-step-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-brand-500);
+}
+.form-progress-track {
+  flex: 1;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+.form-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--color-brand-500);
+  border-radius: var(--radius-pill);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Keyboard-shortcut hint chip (e.g. "Enter ↵") */
+.kbd {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+  font-weight: var(--fw-medium);
+  color: var(--color-neutral-500);
+  font-size: 12px;
 }
 
 /* Section "View all" link */

@@ -162,7 +162,7 @@ function SchaerfPage() {
             </div>
 
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+              <h1 className="heading-h3 mb-2">
                 {service.name}
               </h1>
               <p className="text-slate-500 text-sm mb-4 leading-relaxed">{service.tagline}</p>
@@ -312,7 +312,7 @@ function SchaerfPage() {
                 {submitError && <p className="text-sm text-red-500 mb-4 mt-4">{submitError}</p>}
 
                 <div className="mt-8">
-                  <button type="submit" disabled={submitting} className="btn-orange" style={{ opacity: submitting ? 0.7 : 1 }}>
+                  <button type="submit" disabled={submitting} className="btn-brand" style={{ opacity: submitting ? 0.7 : 1 }}>
                     {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                     {!submitting && (
                       <ArrowRight className="w-4 h-4" strokeWidth={2.5} />

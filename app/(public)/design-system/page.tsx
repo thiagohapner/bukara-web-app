@@ -4,6 +4,7 @@ import ProductCard, { ProductCardData } from "@/components/ProductCard";
 import ServiceCard from "@/components/ServiceCard";
 import Testimonials from "@/components/Testimonials";
 import { SERVICES } from "@/lib/data";
+import { Users, LifeBuoy, Grid2x2Plus, Check, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Design System — Bukara (internal)",
@@ -40,6 +41,14 @@ const RADII = [
   ["xl — hero frames", "24px"],
   ["pill — chips, badges", "9999px"],
 ] as const;
+
+const CHECKLIST_ITEMS = [
+  "Deutschlandweit",
+  "Kostenloser Abholservice",
+  "Fertig in 1–2 Wochen",
+  "Keine Mindestmenge",
+  "Auch für Fremdwerkzeuge",
+];
 
 const MOCK_PRODUCTS: ProductCardData[] = [
   {
@@ -142,10 +151,22 @@ export default function DesignSystemPage() {
         description="Font family: Geist. Every size — display down to nav links — defaults to weight 400 (regular); hierarchy comes from size/letter-spacing/color, not boldness. Most templates on the live site still use 600–900; see DESIGN_SYSTEM.md §8 for the migration list."
       >
         <div className="flex flex-col gap-6">
-          <div className="heading-xxl">Display XXL / 56 / 400</div>
-          <div className="heading-xl">Display XL / 48 / 400</div>
-          <div className="heading-h2">H2 / 32 / 400</div>
-          <div className="heading-h3">H3 / 26 / 400</div>
+          <div>
+            <div className="heading-xxl">Display XXL / 56 / 400</div>
+            <p className="text-xs text-neutral-500 mt-1">.heading-xxl — stat/hero numbers only</p>
+          </div>
+          <div>
+            <div className="heading-xl">Display XL / 48 / 400</div>
+            <p className="text-xs text-neutral-500 mt-1">.heading-xl — big promo banner headlines</p>
+          </div>
+          <div>
+            <div className="heading-h2">H2 / 32 / 400</div>
+            <p className="text-xs text-neutral-500 mt-1">.heading-h2 — reserved for larger/hero-adjacent headings, used sparingly</p>
+          </div>
+          <div>
+            <div className="heading-h3">H3 / 26 / 400</div>
+            <p className="text-xs text-neutral-500 mt-1">.heading-h3 — default for section headers, PDP product names, page titles, and similar, unless stated otherwise</p>
+          </div>
           <p className="body-text max-w-xl">
             Body / 16 / 400 — Bequem und sicher bezahlen, deutschlandweiter
             Schärfservice, exklusiver Partner von ITA Tools.
@@ -214,9 +235,119 @@ export default function DesignSystemPage() {
         description="Shared classes from app/globals.css — reuse these instead of one-off Tailwind button styles."
       >
         <div className="flex flex-wrap items-center gap-4">
-          <button type="button" className="btn-orange">Primary — .btn-orange</button>
+          <button type="button" className="btn-brand">Primary — .btn-brand</button>
           <button type="button" className="btn-black">Secondary — .btn-black</button>
           <button type="button" className="btn-outline">Tertiary — .btn-outline</button>
+        </div>
+      </Block>
+
+      <Block
+        title="Promo banner headline"
+        description="Big homepage promo banners (components/BannerSonderwerkzeuge.tsx): headline is .heading-xl (Display XL), container corner radius is md."
+      >
+        <div className="rounded-md overflow-hidden bg-brand-900 px-10 py-12 max-w-2xl">
+          <h3 className="heading-xl m-0" style={{ color: "#ffffff" }}>
+            Nachschliff, der Standzeit verlängert
+          </h3>
+        </div>
+      </Block>
+
+      <Block
+        title="Icon tiles"
+        description="Square icon container for trust badges, contact links, and feature callouts — .icon-tile / .icon-tile--sm / .icon-tile--lg."
+      >
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="icon-tile"><Users className="w-5 h-5" strokeWidth={1.75} /></div>
+          <div className="icon-tile"><LifeBuoy className="w-5 h-5" strokeWidth={1.75} /></div>
+          <div className="icon-tile"><Grid2x2Plus className="w-5 h-5" strokeWidth={1.75} /></div>
+          <div className="icon-tile icon-tile--sm"><Users className="w-4 h-4" strokeWidth={1.75} /></div>
+          <div className="icon-tile icon-tile--lg"><Users className="w-6 h-6" strokeWidth={1.75} /></div>
+        </div>
+      </Block>
+
+      <Block
+        title="Checklist"
+        description="Circular brand checkmark + label — .checklist / .checklist-item / .checklist-badge, for benefit lists (sidebars, promo panels)."
+      >
+        <div className="checklist bg-brand-25 border border-neutral-100 rounded-md p-6 max-w-sm">
+          {CHECKLIST_ITEMS.map((item) => (
+            <div key={item} className="checklist-item">
+              <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
+              {item}
+            </div>
+          ))}
+        </div>
+      </Block>
+
+      <Block
+        title="Form elements"
+        description="Extracted from the Schärfservice form redesign (design-system/schaerfservice-reference/) — not wired into the live form yet, reference for that future rebuild."
+      >
+        <div className="flex flex-col gap-8 max-w-xl">
+          <div>
+            <p className="text-xs text-neutral-500 mb-2">.form-label + .form-input</p>
+            <label className="form-label" htmlFor="ds-demo-input">Firma</label>
+            <input id="ds-demo-input" className="form-input" placeholder="Muster GmbH" readOnly />
+          </div>
+
+          <div>
+            <p className="text-xs text-neutral-500 mb-2">.form-pill (multi-select)</p>
+            <div className="flex flex-wrap gap-2.5">
+              <span className="form-pill form-pill--selected">Bohrer</span>
+              <span className="form-pill">DP &amp; HW Werkzeuge</span>
+              <span className="form-pill">Vollhartmetall Fräser</span>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs text-neutral-500 mb-2">.form-option-card + .form-option-badge (single-select)</p>
+            <div className="flex flex-col gap-2">
+              <div className="form-option-card form-option-card--selected">
+                <span className="form-option-badge form-option-badge--selected"><Check className="w-3 h-3" strokeWidth={3} /></span>
+                <span className="text-base font-normal">Büro</span>
+              </div>
+              <div className="form-option-card">
+                <span className="form-option-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
+                <span className="text-base font-normal">Warenannahme</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs text-neutral-500 mb-2">.form-chip (date/time picker trigger)</p>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="form-chip form-chip--active">3 Jul 2026</span>
+              <span className="text-sm text-neutral-500">von</span>
+              <span className="form-chip">08:30</span>
+              <span className="text-sm text-neutral-500">bis</span>
+              <span className="form-chip">18:00</span>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs text-neutral-500 mb-2">.form-step-label + .form-progress-track/.form-progress-fill</p>
+            <div className="flex items-center gap-3">
+              <span className="form-step-label">Schritt 2 von 6</span>
+              <span className="form-progress-track">
+                <span className="form-progress-fill" style={{ width: "33%" }} />
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs text-neutral-500 mb-2">Back/next navigation + .kbd hint</p>
+            <div className="flex items-center gap-3">
+              <button type="button" aria-label="Zurück" className="w-12 h-12 flex-shrink-0 border border-neutral-100 bg-white rounded-sm cursor-pointer flex items-center justify-center text-neutral-600">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button type="button" className="btn-brand">
+                Weiter <ChevronRight className="w-4 h-4" />
+              </button>
+              <span className="text-xs text-neutral-500 flex items-center gap-1.5">
+                drücken Sie <span className="kbd">Enter ↵</span>
+              </span>
+            </div>
+          </div>
         </div>
       </Block>
 

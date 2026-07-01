@@ -8,7 +8,7 @@ interface Props {
 export default function SectionHeader({ title, viewAllHref = "#" }: Props) {
   return (
     <div className="flex items-center justify-between mb-8">
-      <h2 className="heading-h2">
+      <h2 className="heading-h3">
         {title}
       </h2>
       <a href={viewAllHref} className="view-all">

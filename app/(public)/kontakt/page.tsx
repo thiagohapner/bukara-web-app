@@ -283,7 +283,7 @@ export default function KontaktPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="btn-orange inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="btn-brand inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Wird gesendet…" : "Nachricht senden"}
                     {!submitting && (

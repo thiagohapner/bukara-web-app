@@ -140,7 +140,7 @@ export default function V2SkuEditClient({
         <button
           onClick={save}
           disabled={saving}
-          className="btn-orange px-5 py-2 text-sm"
+          className="btn-brand px-5 py-2 text-sm"
         >
           {saving ? "Speichert…" : "Speichern"}
         </button>

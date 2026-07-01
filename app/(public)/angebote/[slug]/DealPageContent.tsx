@@ -316,7 +316,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
           </div>
 
           <div className="w-full lg:w-[40%] flex-shrink-0 min-w-0">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+            <h1 className="heading-h3 mb-2">
               {offer?.title ?? ""}
             </h1>
 

@@ -172,13 +172,13 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
       <div
         style={{ background: slide.bgColor, opacity: visible ? 1 : 0 }}
-        className="w-full h-auto md:h-[360px] rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)] transition-opacity duration-200"
+        className="w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)] transition-opacity duration-200"
       >
         {/* LEFT COLUMN */}
         <div className="flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
           <h2
             style={{ color: slide.textColor }}
-            className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight tracking-tight m-0"
+            className="heading-xl m-0"
           >
             {slide.headline}{" "}
             {slide.highlightColor ? (

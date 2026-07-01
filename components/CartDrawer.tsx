@@ -98,7 +98,7 @@ export default function CartDrawer() {
               <Link
                 href="/katalog"
                 onClick={closeDrawer}
-                className="btn-orange text-sm"
+                className="btn-brand text-sm"
                 style={{ textDecoration: "none" }}
               >
                 Produkte entdecken

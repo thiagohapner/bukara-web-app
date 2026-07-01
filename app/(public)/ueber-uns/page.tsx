@@ -97,7 +97,7 @@ export default function UeberUnsPage() {
               <p className="text-slate-600 text-base leading-relaxed mb-8">
                 Von Profilwechselmessern über VHM-Werkzeuge bis zu diamantbestückten Lösungen – wir entwickeln gemeinsam mit Ihnen die optimale Ausführung und liefern vom ersten Kontakt bis zum fertigen Werkzeug in kürzester Zeit.
               </p>
-              <Link href="/loesungen/sonderwerkzeug" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
+              <Link href="/loesungen/sonderwerkzeug" className="btn-brand inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Sonderwerkzeuge anfragen
                 <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>
@@ -132,7 +132,7 @@ export default function UeberUnsPage() {
                 Über unser B2B-Portal haben Sie jederzeit Zugriff auf Preise, Verfügbarkeit und Bestellinfos – ohne Umwege, ohne Warten.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/katalog" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
+                <Link href="/katalog" className="btn-brand inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                   Produkte entdecken
                   <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                 </Link>
@@ -175,7 +175,7 @@ export default function UeberUnsPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/loesungen/schaerfservice" className="btn-orange inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
+              <Link href="/loesungen/schaerfservice" className="btn-brand inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Schärfservice anfragen
                 <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>

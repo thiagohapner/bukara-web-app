@@ -41,7 +41,7 @@ export default function ProductSpotlight() {
             <h2 className="text-3xl font-semibold text-slate-900 mb-5">
               30 Jahre Bukara - Ein Jahr voller Deals und Angebote
             </h2>
-            <button className="btn-orange text-sm">
+            <button className="btn-brand text-sm">
               Angebote entdecken
               <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
             </button>

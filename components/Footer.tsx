@@ -108,7 +108,7 @@ export default function Footer() {
                 placeholder="Ihre E-Mail"
                 className="w-full bg-white/10 text-white text-sm px-4 py-3 rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#00A597]/40 focus:border-[#00A597] transition-colors placeholder:text-slate-400"
               />
-              <button className="btn-orange w-full justify-center">
+              <button className="btn-brand w-full justify-center">
                 Anmelden
               </button>
             </div>

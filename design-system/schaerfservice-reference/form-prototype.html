@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"Inter","SF Pro Display",system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#00201d;background:#fff}
+  @keyframes scIn{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes pop{0%{transform:scale(.5)}55%{transform:scale(1.1)}100%{transform:scale(1)}}
+  @keyframes ring{from{transform:scale(.6);opacity:.6}to{transform:scale(1.5);opacity:0}}
+  input::placeholder,textarea::placeholder{color:#6f938e}
+  input,textarea,button{font-family:inherit}
+</style>
+</helmet>
+
+<div style="display:flex;width:100%;background:#fff">
+
+  <aside style="width:380px;flex-shrink:0;background:#f7fbfa;color:#00201d;padding:40px 36px;display:flex;flex-direction:column;gap:28px;position:sticky;top:32px;margin:32px;border-radius:6px;align-self:stretch;height:calc(100vh - 64px);overflow-y:auto;border:1px solid #e2efed">
+
+    <div>
+      <h1 style="font-size:28px;font-weight:300;letter-spacing:-0.02em;line-height:1.1;color:#00201d">Schärfservice</h1>
+      <p style="font-size:15px;font-weight:300;color:#567c76;margin-top:6px;line-height:1.4">Professionelles Schärfen. Deutschlandweit.</p>
+    </div>
+
+    <div style="height:1px;background:#e2efed"></div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:300;color:#00201d;line-height:1.4"><span style="width:20px;height:20px;flex-shrink:0;border-radius:50%;background:#197970;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:400">✓</span>Deutschlandweit</div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:300;color:#00201d;line-height:1.4"><span style="width:20px;height:20px;flex-shrink:0;border-radius:50%;background:#197970;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:400">✓</span>Kostenloser Abholservice</div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:300;color:#00201d;line-height:1.4"><span style="width:20px;height:20px;flex-shrink:0;border-radius:50%;background:#197970;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:400">✓</span>Fertig in 1–2 Wochen</div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:300;color:#00201d;line-height:1.4"><span style="width:20px;height:20px;flex-shrink:0;border-radius:50%;background:#197970;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:400">✓</span>Keine Mindestmenge</div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:300;color:#00201d;line-height:1.4"><span style="width:20px;height:20px;flex-shrink:0;border-radius:50%;background:#197970;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:400">✓</span>Auch für Fremdwerkzeuge</div>
+    </div>
+
+    <p style="font-size:13px;font-weight:300;line-height:1.5;color:#567c76">Für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.</p>
+
+    <div style="margin-top:auto;border-top:1px solid #e2efed;padding-top:24px">
+      <div style="font-size:15px;font-weight:400;margin-bottom:4px;color:#00201d">Noch Fragen?</div>
+      <p style="font-size:13px;font-weight:300;color:#567c76;line-height:1.5;margin-bottom:14px">Wir beraten Sie gerne persönlich und unverbindlich.</p>
+      <a href="tel:+4974439661-0" style="display:flex;align-items:center;gap:12px;color:#00201d;text-decoration:none;font-size:14px;font-weight:300;margin-bottom:10px">
+        <span style="width:40px;height:40px;flex-shrink:0;border-radius:6px;border:1px solid #bce6e0;background:#ecfaf7;color:#197970;display:flex;align-items:center;justify-content:center;font-size:18px">☎</span>+49 7443 / 9661-0
+      </a>
+      <a href="mailto:info@bukara.de" style="display:flex;align-items:center;gap:12px;color:#00201d;text-decoration:none;font-size:14px;font-weight:300">
+        <span style="width:40px;height:40px;flex-shrink:0;border-radius:6px;border:1px solid #bce6e0;background:#ecfaf7;color:#197970;display:flex;align-items:center;justify-content:center;font-size:16px">✉</span>info@bukara.de
+      </a>
+    </div>
+  </aside>
+
+  <main style="flex:1;display:flex;flex-direction:column">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 56px">
+      <div style="width:100%;max-width:560px">
+
+        <sc-if value="{{ notSuccess }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:14px;font-weight:400;color:#197970;margin-bottom:28px;display:flex;align-items:center;gap:12px">
+            <span style="white-space:nowrap">{{ stepLabel }}</span>
+            <span style="flex:1;height:2px;border-radius:99px;background:#e2efed;position:relative;overflow:hidden">
+              <span style="position:absolute;left:0;top:0;height:100%;width:{{ progress }}%;background:#197970;border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)"></span>
+            </span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is1 }}" hint-placeholder-val="{{ true }}">
+          <div style="animation:scIn .45s cubic-bezier(.2,.7,.2,1) forwards">
+            <h2 style="font-size:32px;font-weight:300;letter-spacing:-0.02em;line-height:1.1;color:#00201d">Welche Werkzeuge senden Sie ein?</h2>
+            <p style="font-size:16px;font-weight:300;color:#567c76;margin-top:8px;margin-bottom:28px;line-height:1.4">Mehrfachauswahl möglich — wählen Sie alle zutreffenden Arten.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <sc-for list="{{ werkOptions }}" as="opt" hint-placeholder-count="6">
+                <button onClick="{{ opt.toggle }}" style="{{ opt.style }}">{{ opt.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is2 }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:scIn .45s cubic-bezier(.2,.7,.2,1) forwards">
+            <h2 style="font-size:32px;font-weight:300;letter-spacing:-0.02em;line-height:1.1;color:#00201d">Wann sollen wir abholen?</h2>
+            <p style="font-size:16px;font-weight:300;color:#567c76;margin-top:8px;margin-bottom:28px;line-height:1.4">Wählen Sie Datum und Zeitfenster — voreingestellt ist eine Abholung in zwei Tagen.</p>
+            <div style="font-size:14px;font-weight:400;color:#14403b;margin-bottom:10px">Abholtermin <span style="color:#197970">*</span></div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <div style="position:relative">
+                <button onClick="{{ toggleCal }}" style="{{ dateChipStyle }}">{{ dateLabel }}</button>
+                <sc-if value="{{ openCal }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;top:calc(100% + 8px);left:0;z-index:50;background:#fff;border:1px solid #e2efed;border-radius:6px;padding:16px;width:296px;animation:scIn .2s ease forwards;box-shadow:0px 5px 14px 0px #00377014,0px 2px 8px 0px #003b890d">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                      <button onClick="{{ prevMonth }}" style="width:32px;height:32px;border:1px solid #e2efed;background:#fff;border-radius:4px;cursor:pointer;font-size:18px;color:#00201d;display:flex;align-items:center;justify-content:center">‹</button>
+                      <span style="font-size:14px;font-weight:400;color:#00201d">{{ calLabel }}</span>
+                      <button onClick="{{ nextMonth }}" style="width:32px;height:32px;border:1px solid #e2efed;background:#fff;border-radius:4px;cursor:pointer;font-size:18px;color:#00201d;display:flex;align-items:center;justify-content:center">›</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:6px">
+                      <sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7">
+                        <div style="text-align:center;font-size:11px;font-weight:400;color:#8aaba6;padding:4px 0">{{ w }}</div>
+                      </sc-for>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px">
+                      <sc-for list="{{ calDays }}" as="cd" hint-placeholder-count="42">
+                        <button onClick="{{ cd.pick }}" style="{{ cd.style }}">{{ cd.day }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+              <span style="font-size:14px;font-weight:400;color:#567c76">von</span>
+              <div style="position:relative">
+                <button onClick="{{ toggleVon }}" style="{{ vonChipStyle }}">{{ d.von }}</button>
+                <sc-if value="{{ openVon }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;top:calc(100% + 8px);left:0;z-index:50;background:#fff;border:1px solid #e2efed;border-radius:6px;max-height:240px;overflow-y:auto;width:120px;padding:6px;animation:scIn .2s ease forwards;box-shadow:0px 5px 14px 0px #00377014,0px 2px 8px 0px #003b890d" data-dd="von">
+                    <sc-for list="{{ vonTimes }}" as="t" hint-placeholder-count="6">
+                      <button onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.t }}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+              <span style="font-size:14px;font-weight:400;color:#567c76">bis</span>
+              <div style="position:relative">
+                <button onClick="{{ toggleBis }}" style="{{ bisChipStyle }}">{{ d.bis }}</button>
+                <sc-if value="{{ openBis }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;top:calc(100% + 8px);left:0;z-index:50;background:#fff;border:1px solid #e2efed;border-radius:6px;max-height:240px;overflow-y:auto;width:120px;padding:6px;animation:scIn .2s ease forwards;box-shadow:0px 5px 14px 0px #00377014,0px 2px 8px 0px #003b890d" data-dd="bis">
+                    <sc-for list="{{ bisTimes }}" as="t" hint-placeholder-count="6">
+                      <button onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.t }}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+            <sc-if value="{{ anyOpen }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ closePickers }}" style="position:fixed;inset:0;z-index:40"></div>
+            </sc-if>
+            <label style="display:flex;flex-direction:column;gap:8px;margin-top:24px">
+              <span style="font-size:14px;font-weight:400;color:#14403b">Möchten Sie uns etwas mitteilen? <span style="font-weight:300;color:#8aaba6">(optional)</span></span>
+              <textarea value="{{ d.bemerkung }}" onInput="{{ onBemerkung }}" rows="3" placeholder="Besondere Hinweise zur Abholung…" style="width:100%;padding:12px 16px;font-size:16px;font-weight:300;border:1px solid rgba(208,225,222,.75);border-radius:4px;outline:none;resize:vertical;transition:border-color 240ms cubic-bezier(.45,.05,.55,.95),box-shadow 240ms cubic-bezier(.45,.05,.55,.95);color:#14403b;line-height:1.4" style-focus="border-color:#197970;box-shadow:0 0 0 4px rgba(10,132,121,.15)"></textarea>
+            </label>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is3 }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:scIn .45s cubic-bezier(.2,.7,.2,1) forwards">
+            <h2 style="font-size:32px;font-weight:300;letter-spacing:-0.02em;line-height:1.1;color:#00201d">Wo sollen wir abholen?</h2>
+            <p style="font-size:16px;font-weight:300;color:#567c76;margin-top:8px;margin-bottom:28px;line-height:1.4">Wählen Sie den gewünschten Abholungsort.</p>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <button onClick="{{ pickBuero }}" style="{{ ortStyleBuero }}">
+                <span style="{{ keyBuero }}">✓</span>
+                <span style="font-size:16px;font-weight:400;flex:1">Büro</span>
+              </button>
+              <button onClick="{{ pickWaren }}" style="{{ ortStyleWaren }}">
+                <span style="{{ keyWaren }}">✓</span>
+                <span style="font-size:16px;font-weight:400;flex:1">Warenannahme</span>
+              </button>
+              <button onClick="{{ pickSonst }}" style="{{ ortStyleSonst }}">
+                <span style="{{ keySonst }}">✓</span>
+                <span style="font-size:16px;font-weight:400;flex:1">Abweichende Abholadresse</span>
+              </button>
+            </div>
+            <sc-if value="{{ selSonst }}" hint-placeholder-val="{{ false }}">
+              <div style="animation:scIn .3s ease forwards;margin-top:12px">
+                <input value="{{ d.ortText }}" onInput="{{ onOrtText }}" placeholder="Abweichende Adresse / Bemerkungen eingeben…" style="width:100%;height:48px;padding:0 16px;font-size:16px;font-weight:300;border:1px solid #197970;border-radius:4px;outline:none;background:#ecfaf7;color:#14403b;transition:box-shadow 240ms cubic-bezier(.45,.05,.55,.95)" style-focus="box-shadow:0 0 0 4px rgba(10,132,121,.15)">
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is4 }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:scIn .45s cubic-bezier(.2,.7,.2,1) forwards">
+            <h2 style="font-size:32px;font-weight:300;letter-spacing:-0.02em;line-height:1.1;color:#00201d">Ihr Paket</h2>
+            <p style="font-size:16px;font-weight:300;color:#567c76;margin-top:8px;margin-bottom:24px;line-height:1.4">Wählen Sie die ungefähre Größe — die genauen Maße klären wir bei der Abholung.</p>
+            <div style="font-size:14px;font-weight:400;color:#14403b;margin-bottom:10px">Paketgröße <span style="color:#197970">*</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:32px">
+              <sc-for list="{{ sizeOptions }}" as="sz" hint-placeholder-count="3">
+                <button onClick="{{ sz.pick }}" style="{{ sz.style }}">
+                  <span style="{{ sz.badge }}">✓</span>
+                  <span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:400">{{ sz.label }}</span><span style="font-size:13px;font-weight:300;color:#567c76">{{ sz.desc }}</span></span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px">
+              <span style="font-size:14px;font-weight:400;color:#14403b">Paketgewicht</span>
+              <span style="font-size:28px;font-weight:300;color:#00201d;letter-spacing:-0.02em">{{ weightLabel }}</span>
+            </div>
+            <div style="position:relative;height:24px">
+              <div style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:6px;background:#e2efed;border-radius:6px"></div>
+              <div style="{{ fillStyle }}"></div>
+              <div style="{{ thumbStyle }}"></div>
+              <input type="range" min="0" max="20" step="0.5" value="{{ d.gewicht }}" onInput="{{ onGewicht }}" style="position:absolute;left:0;top:0;width:100%;height:24px;margin:0;opacity:0;cursor:pointer">
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:300;color:#8aaba6;margin-top:8px"><span>0 kg</span><span>20+ kg</span></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is5 }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:scIn .45s cubic-bezier(.2,.7,.2,1) forwards">
+            <h2 style="font-size:32px;font-weight:300;letter-spacing:-0.02em;line-height:1.1;color:#00201d">Serviceoptionen</h2>
+            <p style="font-size:16px;font-weight:300;color:#567c76;margin-top:8px;margin-bottom:24px;line-height:1.4">Zwei kurze Angaben zur Bearbeitung.</p>
+            <div style="font-size:14px;font-weight:400;color:#14403b;margin-bottom:10px">Zahnersatz (falls nötig) durchführen? <span style="color:#197970">*</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+              <button onClick="{{ pickZahnA }}" style="{{ zahnStyleA }}"><span style="{{ keyZahnA }}">✓</span><span style="font-size:16px;font-weight:400;flex:1">Ja, soweit wirtschaftlich</span></button>
+              <button onClick="{{ pickZahnB }}" style="{{ zahnStyleB }}"><span style="{{ keyZahnB }}">✓</span><span style="font-size:16px;font-weight:400;flex:1">Ja, aber nur nach Rücksprache</span></button>
+              <button onClick="{{ pickZahnC }}" style="{{ zahnStyleC }}"><span style="{{ keyZahnC }}">✓</span><span style="font-size:16px;font-weight:400;flex:1">Nein, bitte unbearbeitet zurückschicken</span></button>
+            </div>
+            <div style="font-size:14px;font-weight:400;color:#14403b;margin-bottom:10px">Gravur <span style="color:#197970">*</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button onClick="{{ pickGravA }}" style="{{ gravStyleA }}"><span style="{{ keyGravA }}">✓</span><span style="font-size:16px;font-weight:400;flex:1">Bukara Gravur</span></button>
+              <button onClick="{{ pickGravB }}" style="{{ gravStyleB }}"><span style="{{ keyGravB }}">✓</span><span style="font-size:16px;font-weight:400;flex:1">Neutrale Gravur</span></button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ is6 }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:scIn .45s cubic-bezier(.2,.7,.2,1) forwards">
+            <h2 style="font-size:32px;font-weight:300;letter-spacing:-0.02em;line-height:1.1;color:#00201d">Ihre Kontaktdaten</h2>
+            <p style="font-size:16px;font-weight:300;color:#567c76;margin-top:8px;margin-bottom:28px;line-height:1.4">Damit wir wissen, an wen wir uns wenden dürfen.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <label style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:14px;font-weight:400;color:#14403b">Firma <span style="color:#197970">*</span></span>
+                <input value="{{ d.firma }}" onInput="{{ onFirma }}" placeholder="Muster GmbH" style="width:100%;height:48px;padding:0 16px;font-size:16px;font-weight:300;border:1px solid rgba(208,225,222,.75);border-radius:4px;outline:none;color:#14403b;transition:border-color 240ms cubic-bezier(.45,.05,.55,.95),box-shadow 240ms cubic-bezier(.45,.05,.55,.95)" style-focus="border-color:#197970;box-shadow:0 0 0 4px rgba(10,132,121,.15)">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:14px;font-weight:400;color:#14403b">Kontaktperson <span style="color:#197970">*</span></span>
+                <input value="{{ d.kontakt }}" onInput="{{ onKontakt }}" placeholder="Max Mustermann" style="width:100%;height:48px;padding:0 16px;font-size:16px;font-weight:300;border:1px solid rgba(208,225,222,.75);border-radius:4px;outline:none;color:#14403b;transition:border-color 240ms cubic-bezier(.45,.05,.55,.95),box-shadow 240ms cubic-bezier(.45,.05,.55,.95)" style-focus="border-color:#197970;box-shadow:0 0 0 4px rgba(10,132,121,.15)">
+              </label>
+            </div>
+            <label style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+              <span style="font-size:14px;font-weight:400;color:#14403b">E-Mail <span style="color:#197970">*</span></span>
+              <input type="email" value="{{ d.email }}" onInput="{{ onEmail }}" placeholder="anfrage@firma.de" style="width:100%;height:48px;padding:0 16px;font-size:16px;font-weight:300;border:1px solid rgba(208,225,222,.75);border-radius:4px;outline:none;color:#14403b;transition:border-color 240ms cubic-bezier(.45,.05,.55,.95),box-shadow 240ms cubic-bezier(.45,.05,.55,.95)" style-focus="border-color:#197970;box-shadow:0 0 0 4px rgba(10,132,121,.15)">
+            </label>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isSuccess }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;animation:scIn .5s cubic-bezier(.2,.7,.2,1) forwards">
+            <div style="position:relative;width:80px;height:80px;margin:0 auto 24px">
+              <span style="position:absolute;inset:0;border-radius:50%;background:#bce6e0;animation:ring 1.2s ease-out infinite"></span>
+              <div style="position:relative;width:80px;height:80px;border-radius:50%;background:#197970;display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;animation:pop .5s ease-out forwards">✓</div>
+            </div>
+            <h2 style="font-size:32px;font-weight:300;letter-spacing:-0.02em;color:#00201d">Vielen Dank!</h2>
+            <p style="font-size:16px;font-weight:300;color:#567c76;margin-top:10px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.5">Ihre Anfrage wurde übermittelt. Wir melden uns innerhalb von <strong style="color:#00201d;font-weight:400">24 Stunden</strong> bei Ihnen.</p>
+            <button onClick="{{ restart }}" style="margin-top:28px;height:48px;padding:0 24px;font-size:16px;font-weight:400;color:#197970;background:#fff;border:1px solid #bce6e0;border-radius:4px;cursor:pointer;transition:background-color 300ms cubic-bezier(.25,1,.5,1),border-color 300ms cubic-bezier(.25,1,.5,1)" style-hover="background:#ecfaf7;border-color:#197970">Neue Anfrage starten</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ err }}" hint-placeholder-val="">
+          <div style="margin-top:20px;display:flex;align-items:center;gap:8px;color:#d8351e;font-size:14px;font-weight:400"><span>⚠</span>{{ err }}</div>
+        </sc-if>
+
+        <sc-if value="{{ notSuccess }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:12px;margin-top:36px">
+            <sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ back }}" style="width:48px;height:48px;flex-shrink:0;border:1px solid #e2efed;background:#fff;border-radius:4px;cursor:pointer;font-size:18px;color:#416963;display:flex;align-items:center;justify-content:center;transition:background-color 240ms cubic-bezier(.45,.05,.55,.95),border-color 240ms cubic-bezier(.45,.05,.55,.95)" style-hover="background:#f7fbfa;border-color:#bce6e0">←</button>
+            </sc-if>
+            <button onClick="{{ next }}" style="height:48px;padding:15.5px 24px 16.5px;font-size:16px;font-weight:400;color:#fff;background:#197970;border:1px solid transparent;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background-color 300ms cubic-bezier(.25,1,.5,1)" style-hover="background:#1b6059" style-active="background:#164641">
+              {{ nextLabel }} <span>→</span>
+            </button>
+            <span style="font-size:13px;font-weight:300;color:#8aaba6;display:flex;align-items:center;gap:5px">drücken Sie <span style="border:1px solid #e2efed;border-radius:4px;padding:2px 7px;font-weight:400;color:#567c76;font-size:12px">Enter ↵</span></span>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = (() => { const t = new Date(); t.setDate(t.getDate()+2); const z=n=>String(n).padStart(2,'0'); const iso=t.getFullYear()+'-'+z(t.getMonth()+1)+'-'+z(t.getDate()); return { step:1, err:'', openPicker:'', calY:t.getFullYear(), calM:t.getMonth(), data:{ werkzeuge:[], firma:'', kontakt:'', email:'', datum:iso, von:'08:30', bis:'18:00', bemerkung:'', size:'', gewicht:5, ort:'', ortText:'', zahn:'', gravur:'' } }; })();
+
+  componentDidMount() {
+    this._key = (e) => {
+      if (e.key === 'Escape' && this.state.openPicker) { this.setState({ openPicker:'' }); return; }
+      if (e.key !== 'Enter' || e.shiftKey) return;
+      if (e.target && e.target.tagName === 'TEXTAREA') return;
+      if (this.state.openPicker) { this.setState({ openPicker:'' }); e.preventDefault(); return; }
+      if (this.state.step === 7) return;
+      e.preventDefault();
+      this.next();
+    };
+    window.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._key); }
+  componentDidUpdate(pp, ps) {
+    const op = this.state.openPicker;
+    if (op && op !== ps.openPicker && (op === 'von' || op === 'bis')) {
+      const doScroll = () => {
+        const cont = document.querySelector('[data-dd="' + op + '"]');
+        if (!cont) return;
+        const val = this.state.data[op];
+        const btn = Array.from(cont.querySelectorAll('button')).find(b => b.textContent.trim() === val);
+        if (btn) cont.scrollTop = Math.max(0, btn.offsetTop - 12);
+      };
+      requestAnimationFrame(() => { doScroll(); setTimeout(doScroll, 60); });
+    }
+  }
+
+  next() {
+    const d = this.state.data, s = this.state.step;
+    let e = '';
+    if (s === 1) {
+      if (!d.werkzeuge.length) e = 'Bitte wählen Sie mindestens eine Werkzeugart.';
+    } else if (s === 2) {
+      if (!d.datum || !d.von || !d.bis) e = 'Bitte Abholdatum und Zeitfenster angeben.';
+      else if (d.von >= d.bis) e = 'Die Endzeit muss nach der Startzeit liegen.';
+    } else if (s === 3) {
+      if (!d.ort) e = 'Bitte wählen Sie einen Abholungsort.';
+      else if (d.ort === 'Sonstiges' && !d.ortText.trim()) e = 'Bitte geben Sie die abweichende Adresse / Bemerkung an.';
+    } else if (s === 4) {
+      if (!d.size) e = 'Bitte wählen Sie eine Paketgröße.';
+    } else if (s === 5) {
+      if (!d.zahn || !d.gravur) e = 'Bitte beide Serviceoptionen wählen.';
+    } else if (s === 6) {
+      if (!d.firma.trim() || !d.kontakt.trim() || !d.email.trim()) e = 'Bitte füllen Sie alle Pflichtfelder aus.';
+      else if (!/.+@.+\..+/.test(d.email)) e = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+    }
+    if (e) { this.setState({ err: e }); return; }
+    this.setState(st => ({ step: st.step + 1, err: '' }));
+  }
+  back() { this.setState(st => ({ step: Math.max(1, st.step - 1), err: '' })); }
+  toggleWerk(label) {
+    this.setState(s => {
+      const a = s.data.werkzeuge, has = a.includes(label);
+      return { data: { ...s.data, werkzeuge: has ? a.filter(x => x !== label) : [...a, label] }, err: '' };
+    });
+  }
+  iso(dt) { const z=n=>String(n).padStart(2,'0'); return dt.getFullYear()+'-'+z(dt.getMonth()+1)+'-'+z(dt.getDate()); }
+  togglePicker(which) {
+    const willOpen = this.state.openPicker !== which;
+    this.setState(s => ({ openPicker: s.openPicker===which ? '' : which, err:'' }));
+    if (willOpen && (which === 'von' || which === 'bis')) {
+      const op = which;
+      const run = () => {
+        const cont = document.querySelector('[data-dd="' + op + '"]');
+        if (!cont) return;
+        const val = this.state.data[op];
+        const b = Array.from(cont.querySelectorAll('button')).find(x => x.textContent.trim() === val);
+        if (b) cont.scrollTop = Math.max(0, b.offsetTop - 12);
+      };
+      setTimeout(run, 40); setTimeout(run, 130);
+    }
+  }
+  closePickers() { this.setState({ openPicker:'' }); }
+  shiftMonth(delta) { this.setState(s => { let m=s.calM+delta, y=s.calY; if(m<0){m=11;y--;} if(m>11){m=0;y++;} return { calM:m, calY:y }; }); }
+  pickDay(isoStr) { this.setState(s => ({ data:{...s.data, datum:isoStr}, openPicker:'', err:'' })); }
+  pickTime(field,val) { this.setState(s => ({ data:{...s.data, [field]:val}, openPicker:'', err:'' })); }
+
+  renderVals() {
+    const d = this.state.data, step = this.state.step;
+    const set = (f) => (e) => { const v = e.target.value; this.setState(s => ({ data: { ...s.data, [f]: v }, err: '' })); };
+    const pick = (f, v) => () => this.setState(s => ({ data: { ...s.data, [f]: v }, err: '' }));
+
+    const card = (sel) => ({ display:'flex', alignItems:'center', gap:'14px', padding:'16px 20px', borderRadius:'6px', border:'1.5px solid '+(sel?'#197970':'#e2efed'), background:sel?'#ecfaf7':'#fff', cursor:'pointer', textAlign:'left', width:'100%', fontFamily:'inherit', transition:'border-color 240ms cubic-bezier(.45,.05,.55,.95),background 240ms cubic-bezier(.45,.05,.55,.95)' });
+    const keyBadge = (sel) => ({ width:'24px', height:'24px', flexShrink:0, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'13px', fontWeight:400, border:'1.5px solid '+(sel?'#197970':'#b2cdc9'), background:sel?'#197970':'transparent', color:sel?'#fff':'transparent' });
+    const labels = ['Weiter','Weiter','Weiter','Weiter','Weiter','Anfrage absenden'];
+
+    const pill = (sel) => ({ padding:'10px 20px', borderRadius:'999px', border:'1.5px solid '+(sel?'#197970':'#e2efed'), background:sel?'#ecfaf7':'#fff', color:sel?'#00201d':'#567c76', fontSize:'15px', fontWeight:400, cursor:'pointer', fontFamily:'inherit', transition:'all 240ms cubic-bezier(.45,.05,.55,.95)' });
+    const werk = ['Bohrer','DP & HW Werkzeuge','Vollhartmetall Fräser','DP & VHW Werkzeuge','Kreissägeblätter','Sonstiges'];
+    const werkOptions = werk.map((label) => {
+      const sel = d.werkzeuge.includes(label);
+      return { label, sel, style: pill(sel), toggle: () => this.toggleWerk(label) };
+    });
+    const sizes = [
+      { label:'Klein', desc:'bis ca. 30 × 20 × 15 cm' },
+      { label:'Mittel', desc:'bis ca. 60 × 40 × 30 cm' },
+      { label:'Groß', desc:'bis ca. 120 × 60 × 60 cm' },
+    ];
+    const sizeOptions = sizes.map((s, i) => {
+      const sel = d.size === s.label;
+      return { key:'SML'[i], label:s.label, desc:s.desc, sel, style: card(sel), pick: pick('size', s.label), badge: keyBadge(sel) };
+    });
+    const gw = parseFloat(d.gewicht) || 0;
+    const weightLabel = gw >= 20 ? '20+ kg' : gw + ' kg';
+    const pct = Math.max(0, Math.min(100, gw / 20 * 100));
+    const fillStyle = { position:'absolute', left:0, top:'50%', transform:'translateY(-50%)', height:'6px', width:pct+'%', background:'#197970', borderRadius:'6px' };
+    const thumbStyle = { position:'absolute', left:pct+'%', top:'50%', transform:'translate(-50%,-50%)', width:'20px', height:'20px', borderRadius:'50%', background:'#197970', border:'3px solid #fff', boxShadow:'0px 2px 10px 0px #0037700f,0px 1px 4px 0px #003b890a', pointerEvents:'none' };
+
+    const z2 = n => String(n).padStart(2,'0');
+    const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    const monAbbr = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    const fmt = (isoStr) => { const p = isoStr.split('-'); return parseInt(p[2],10)+' '+monAbbr[parseInt(p[1],10)-1]+' '+p[0]; };
+    const open = this.state.openPicker;
+    const cy = this.state.calY, cm = this.state.calM;
+    const first = new Date(cy, cm, 1);
+    const startDow = (first.getDay()+6)%7;
+    const gridStart = new Date(cy, cm, 1-startDow);
+    const todayIso = this.iso(new Date());
+    const dayBtn = (sel,today,inMonth) => ({ width:'100%', aspectRatio:'1', border:'none', borderRadius:'4px', cursor:'pointer', fontFamily:'inherit', fontSize:'13px', fontWeight:sel?400:300, background:sel?'#197970':(today?'#daf1ed':'transparent'), color:sel?'#fff':(inMonth?'#00201d':'#b2cdc9') });
+    const calDays = [];
+    for (let i=0;i<42;i++){ const dt=new Date(gridStart.getFullYear(),gridStart.getMonth(),gridStart.getDate()+i); const di=this.iso(dt); const inMonth=dt.getMonth()===cm; calDays.push({ day:dt.getDate(), style:dayBtn(di===d.datum,di===todayIso,inMonth), pick:()=>this.pickDay(di) }); }
+    const times = []; for (let h=7;h<20;h++){ times.push(z2(h)+':00'); times.push(z2(h)+':30'); }
+    const timeBtn = (sel) => ({ width:'100%', textAlign:'left', padding:'8px 12px', border:'none', borderRadius:'4px', cursor:'pointer', fontFamily:'inherit', fontSize:'14px', fontWeight:sel?400:300, background:sel?'#ecfaf7':'transparent', color:sel?'#197970':'#00201d' });
+    const vonTimes = times.map(t => ({ t, style:timeBtn(t===d.von), pick:()=>this.pickTime('von',t) }));
+    const bisTimes = times.map(t => ({ t, style:timeBtn(t===d.bis), pick:()=>this.pickTime('bis',t) }));
+    const chip = (active) => ({ height:'48px', padding:'0 16px', border:'1px solid '+(active?'#197970':'rgba(208,225,222,.75)'), background:active?'#ecfaf7':'#fff', borderRadius:'4px', fontSize:'15px', fontWeight:400, color:'#00201d', cursor:'pointer', fontFamily:'inherit', transition:'all 240ms cubic-bezier(.45,.05,.55,.95)', display:'flex', alignItems:'center', gap:'6px' });
+    return {
+      step,
+      progress: Math.min(step, 6) / 6 * 100,
+      stepLabel: 'Schritt ' + Math.min(step, 6) + ' von 6',
+      nextLabel: labels[Math.min(step, 6) - 1],
+      d, err: this.state.err,
+      is1: step===1, is2: step===2, is3: step===3, is4: step===4, is5: step===5, is6: step===6,
+      isSuccess: step===7, notSuccess: step!==7, canBack: step>1 && step<7,
+      werkOptions, sizeOptions, weightLabel, fillStyle, thumbStyle,
+      dateLabel: fmt(d.datum), dateChipStyle: chip(open==='cal'), vonChipStyle: chip(open==='von'), bisChipStyle: chip(open==='bis'),
+      toggleCal: () => this.togglePicker('cal'), toggleVon: () => this.togglePicker('von'), toggleBis: () => this.togglePicker('bis'),
+      closePickers: () => this.closePickers(), anyOpen: !!open, openCal: open==='cal', openVon: open==='von', openBis: open==='bis',
+      calLabel: months[cm]+' '+cy, prevMonth: () => this.shiftMonth(-1), nextMonth: () => this.shiftMonth(1),
+      weekdays: ['Mo','Di','Mi','Do','Fr','Sa','So'], calDays, vonTimes, bisTimes,
+      onFirma: set('firma'), onKontakt: set('kontakt'), onEmail: set('email'),
+      onDatum: set('datum'), onZeiten: set('zeiten'), onBemerkung: set('bemerkung'),
+      onSize: set('size'), onGewicht: set('gewicht'), onOrtText: set('ortText'),
+      pickBuero: pick('ort','Büro'), pickWaren: pick('ort','Warenannahme'), pickSonst: pick('ort','Sonstiges'),
+      selBuero: d.ort==='Büro', selWaren: d.ort==='Warenannahme', selSonst: d.ort==='Sonstiges',
+      ortStyleBuero: card(d.ort==='Büro'), ortStyleWaren: card(d.ort==='Warenannahme'), ortStyleSonst: card(d.ort==='Sonstiges'),
+      keyBuero: keyBadge(d.ort==='Büro'), keyWaren: keyBadge(d.ort==='Warenannahme'), keySonst: keyBadge(d.ort==='Sonstiges'),
+      pickZahnA: pick('zahn','a'), pickZahnB: pick('zahn','b'), pickZahnC: pick('zahn','c'),
+      selZahnA: d.zahn==='a', selZahnB: d.zahn==='b', selZahnC: d.zahn==='c',
+      zahnStyleA: card(d.zahn==='a'), zahnStyleB: card(d.zahn==='b'), zahnStyleC: card(d.zahn==='c'),
+      keyZahnA: keyBadge(d.zahn==='a'), keyZahnB: keyBadge(d.zahn==='b'), keyZahnC: keyBadge(d.zahn==='c'),
+      pickGravA: pick('gravur','bukara'), pickGravB: pick('gravur','neutral'),
+      selGravA: d.gravur==='bukara', selGravB: d.gravur==='neutral',
+      gravStyleA: card(d.gravur==='bukara'), gravStyleB: card(d.gravur==='neutral'),
+      keyGravA: keyBadge(d.gravur==='bukara'), keyGravB: keyBadge(d.gravur==='neutral'),
+      next: () => this.next(), back: () => this.back(),
+      restart: () => { const t=new Date(); t.setDate(t.getDate()+2); const iso=this.iso(t); this.setState({ step:1, err:'', openPicker:'', calY:t.getFullYear(), calM:t.getMonth(), data:{ werkzeuge:[], firma:'', kontakt:'', email:'', datum:iso, von:'08:30', bis:'18:00', bemerkung:'', size:'', gewicht:5, ort:'', ortText:'', zahn:'', gravur:'' } }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
