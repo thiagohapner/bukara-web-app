@@ -22,35 +22,35 @@ export default function BannerAurora() {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const blobs = rootRef.current?.querySelectorAll<HTMLDivElement>(".banner-aurora__blob");
-    if (!blobs || !blobs.length) return;
+    const root = rootRef.current;
+    if (!root) return;
 
-    const mm = gsap.matchMedia();
-    mm.add(
-      { reduce: "(prefers-reduced-motion: reduce)", move: "(prefers-reduced-motion: no-preference)" },
-      (context) => {
-        const { reduce } = context.conditions as { reduce: boolean };
-        if (reduce) return;
+    const blobs = gsap.utils.toArray<HTMLDivElement>(".banner-aurora__blob", root);
+    if (!blobs.length) return;
 
-        const ctx = gsap.context(() => {
-          blobs.forEach((blob, i) => {
-            gsap.to(blob, {
-              x: i % 2 === 0 ? 36 : -32,
-              y: i % 2 === 0 ? -24 : 28,
-              scale: 1.12,
-              duration: 9 + i * 2.5,
-              ease: "sine.inOut",
-              repeat: -1,
-              yoyo: true,
-              delay: i * 0.6,
-            });
-          });
-        }, rootRef);
-        return () => ctx.revert();
-      }
-    );
+    // Respect reduced motion — skip the drift but keep the static glow.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    return () => mm.revert();
+    const ctx = gsap.context(() => {
+      blobs.forEach((blob, i) => {
+        const dir = i % 2 === 0 ? 1 : -1;
+        // xPercent/yPercent are relative to each blob's own (large) size, so
+        // these read as a clearly visible, organic drift — not a 30px nudge.
+        gsap.to(blob, {
+          xPercent: dir * (14 + i * 5),
+          yPercent: -dir * (10 + i * 4),
+          scale: 1.28,
+          opacity: 0.6,
+          duration: 6 + i * 1.8,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay: i * 0.4,
+        });
+      });
+    }, root);
+
+    return () => ctx.revert();
   }, []);
 
   return (
