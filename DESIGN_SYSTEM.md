@@ -346,7 +346,17 @@ heading weights per template (homepage hero first, highest visibility).
   instead of the bespoke dark/light button styles. Added a
   `sidebarStyle?: boolean` flag to the slide data so this could be
   scoped to just those two slides. The X99 slide (1st) is explicitly
-  unchanged — still black bg, image panel, white CTA button.
+  unchanged — still black bg, image panel, white CTA button, and its
+  drop shadow.
+- ✅ Dropped the drop shadow on the two `sidebarStyle` banner slides
+  (kept on X99) and added `components/BannerAurora.tsx` — slow-drifting
+  blurred brand-teal gradient blobs behind the content, GSAP-driven, in
+  the spirit of stripe.com's aurora backgrounds (`.banner-aurora`,
+  `.banner-aurora__blob`, `--grad-aura-brand-{1,2,3}` in
+  `app/globals.css`). Respects `prefers-reduced-motion` via
+  `gsap.matchMedia()` — animation is skipped entirely rather than just
+  slowed down. Atmosphere only, one cluster, monochrome brand color, per
+  the Stripe reference's gradient rule (§1 of the original package).
 
 ## 11. Where to look
 

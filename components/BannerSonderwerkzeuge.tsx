@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import BannerAurora from "./BannerAurora";
 
 type Feature = { text: ReactNode };
 
@@ -129,10 +130,14 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           opacity: visible ? 1 : 0,
           border: slide.sidebarStyle ? "1px solid #D0E1DE" : "none",
         }}
-        className="w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)] transition-opacity duration-200"
+        className={`relative w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-opacity duration-200 ${
+          slide.sidebarStyle ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
+        }`}
       >
+        {slide.sidebarStyle && <BannerAurora />}
+
         {/* LEFT COLUMN */}
-        <div className="flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
+        <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
           <h2
             style={{ color: slide.textColor }}
             className="heading-xl m-0"
@@ -179,7 +184,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="hidden md:flex items-center pr-14 pl-5 py-9">
+        <div className="relative z-10 hidden md:flex items-center pr-14 pl-5 py-9">
           {slide.rightPanel.kind === "features" ? (
             <div className="checklist w-full">
               {slide.rightPanel.features.map((f, i) => (

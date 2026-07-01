@@ -140,6 +140,13 @@
   --shadow-xl: 0px 20px 80px -16px rgba(4,72,67,0.14),0px 10px 60px -16px rgba(4,72,67,0.06);
   --shadow-focus: 0 0 0 4px rgba(1,164,151,0.35);
 
+  /* ─── GRADIENTS (new, additive) — atmosphere only, monochrome
+     brand teal per the Stripe reference's "one aurora cluster,
+     never competing colors" rule. ────────────────────────────── */
+  --grad-aura-brand-1: radial-gradient(50% 50%, rgba(1,164,151,.35) 0%, rgba(1,164,151,0) 70%);
+  --grad-aura-brand-2: radial-gradient(50% 50%, rgba(4,133,123,.28) 0%, rgba(4,133,123,0) 70%);
+  --grad-aura-brand-3: radial-gradient(50% 50%, rgba(132,205,199,.32) 0%, rgba(132,205,199,0) 70%);
+
   /* ─── MOTION (new, additive) ─────────────────────────────── */
   --ease-standard: cubic-bezier(0.45,0.05,0.55,0.95); /* nav / ui */
   --ease-emphasis: cubic-bezier(0.25,1.00,0.50,1.00); /* buttons  */
@@ -662,6 +669,24 @@ label[for] {
 .form-calendar-day--today { background: var(--color-brand-50); }
 .form-calendar-day--selected { background: var(--color-brand-500); color: #fff; }
 .form-calendar-day--outside { color: var(--color-neutral-200); }
+
+/* ============================================================
+   Banner aurora — ambient animated background blobs (GSAP-driven
+   drift, see components/BannerAurora.tsx). Atmosphere only: sits
+   behind content at z-0, never carries functional color/contrast.
+   ============================================================ */
+.banner-aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.banner-aurora__blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  will-change: transform;
+}
 
 /* Section "View all" link */
 .view-all {
