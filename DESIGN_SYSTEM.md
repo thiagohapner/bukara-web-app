@@ -421,6 +421,17 @@ heading weights per template (homepage hero first, highest visibility).
   per §3; color transitions → the 240ms standard motion track. The
   category card's arrow badge and the feature-bar hover moved onto brand
   teal.
+- ✅ **Sonderwerkzeug form rebuilt as a wizard** at
+  `app/(public)/sonder-werkzeug/page.tsx`, mirroring the Schärfservice
+  wizard exactly (brand-25 sidebar + checklist/contact tiles; one question
+  per step across 11 steps using `.form-pill`/`.form-option-card`/
+  `.form-input`, progress bar, Enter/Escape keyboard nav, in-place success
+  screen). The DB insert (`service_inquiries` + identical 18-key
+  `sonder_details`), Storage upload, and `type:"sonderwerkzeug"`
+  confirmation email are unchanged — only the UI. Primary CTAs repointed
+  from `/loesungen/sonderwerkzeug` to `/sonder-werkzeug` (homepage banner,
+  navbar desktop+mobile "Sonderlösung gestalten", search special-case);
+  the old `/loesungen/[slug]` page is left as-is.
 
 ## 11. Where to look
 

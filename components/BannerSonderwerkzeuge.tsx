@@ -64,7 +64,7 @@ const slides: Slide[] = [
     subline:
       "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf.",
     ctaLabel: "Sonderwerkzeug anfragen",
-    ctaHref: "/loesungen/sonderwerkzeug",
+    ctaHref: "/sonder-werkzeug",
     bgColor: "var(--color-surface-dark)",
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",

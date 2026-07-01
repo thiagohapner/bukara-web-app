@@ -79,7 +79,7 @@ function SearchBar({
       return;
     }
     if (q === "sonderwerkzeug") {
-      router.push("/loesungen/sonderwerkzeug");
+      router.push("/sonder-werkzeug");
       return;
     }
     router.push(`/katalog?q=${encodeURIComponent(raw)}`);
@@ -207,7 +207,7 @@ export default function Navbar({
           {/* Desktop actions */}
           <div className="hidden lg:flex items-center gap-5">
             <Link
-              href="/loesungen/sonderwerkzeug"
+              href="/sonder-werkzeug"
               className="inline-flex items-center gap-2 rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-normal text-slate-900 hover:bg-brand-25 hover:border-brand-600 transition-colors duration-[300ms] ease-[cubic-bezier(0.25,1.00,0.50,1.00)] whitespace-nowrap"
               style={{ textDecoration: "none" }}
             >
@@ -285,7 +285,7 @@ export default function Navbar({
             <ul className="flex flex-col gap-1">
               <li>
                 <Link
-                  href="/loesungen/sonderwerkzeug"
+                  href="/sonder-werkzeug"
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex items-center gap-2 py-2 text-sm font-normal text-slate-900"
                   style={{ textDecoration: "none" }}
