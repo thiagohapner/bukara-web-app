@@ -76,6 +76,8 @@ function buildSchaerfEmail(d: Record<string, string>) {
     ["Firma", d.company],
     ["Ansprechpartner", d.contact],
     ["E-Mail", d.email],
+  ]) + section("Werkzeuge", [
+    ["Werkzeugarten", d.toolTypes],
   ]) + section("Abholung", [
     ["Abholadresse / Bemerkungen", d.pickupAddressDeviation],
     ["Gewünschtes Datum", d.pickupDate],

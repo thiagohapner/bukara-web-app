@@ -49,6 +49,7 @@
   --color-neutral-700: #2B5751;
 
   /* Radius scale — single source of truth */
+  --radius-xs:   2px;     /* dropdown rows, calendar cells */
   --radius-sm:   4px;     /* buttons, inputs              */
   --radius-md:   8px;     /* cards                        */
   --radius-lg:   12px;    /* panels, containers, galleries */
@@ -583,6 +584,72 @@ label[for] {
   color: var(--color-neutral-500);
   font-size: 12px;
 }
+
+/* Dropdown panel + rows for date/time pickers anchored off a .form-chip */
+.form-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+.form-dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-2) var(--sp-3);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-ink);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  cursor: pointer;
+  font-family: inherit;
+}
+.form-dropdown-item--selected {
+  background: var(--color-brand-25);
+  color: var(--color-brand-500);
+  font-weight: var(--fw-medium);
+}
+
+/* Calendar grid inside a .form-dropdown */
+.form-calendar-nav-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-calendar-weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  color: var(--color-neutral-300);
+  padding: 4px 0;
+}
+.form-calendar-day {
+  width: 100%;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: var(--fw-regular);
+  background: transparent;
+  color: var(--color-ink);
+}
+.form-calendar-day--today { background: var(--color-brand-50); }
+.form-calendar-day--selected { background: var(--color-brand-500); color: #fff; }
+.form-calendar-day--outside { color: var(--color-neutral-200); }
 
 /* Section "View all" link */
 .view-all {

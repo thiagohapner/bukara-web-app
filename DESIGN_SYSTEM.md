@@ -117,6 +117,7 @@ Radius (`app/globals.css`, single source of truth):
 
 | Token | Value | Use |
 |---|---|---|
+| `--radius-xs` | 2px | dropdown rows, calendar cells |
 | `--radius-sm` | 4px | buttons, inputs |
 | `--radius-md` | 8px | cards |
 | `--radius-lg` | 12px | panels, containers, galleries |
@@ -188,13 +189,13 @@ classes — don't inline a fourth pattern with arbitrary Tailwind utilities
 
 Both are shown live at `/design-system`.
 
-## 9. Form elements (reference only — not live yet)
+## 9. Form elements
 
 Extracted from the Schärfservice form redesign prototype
-(`design-system/schaerfservice-reference/`) so the visual language exists
-as reusable classes before that form gets rebuilt. **Not wired into the
-live Schärfservice form yet** — `app/(public)/sonder-schaerfservice/` still
-uses the old form.
+(`design-system/schaerfservice-reference/`) and now live in
+`app/(public)/sonder-schaerfservice/page.tsx` as a real 6-step wizard —
+**this is the canonical form pattern going forward**; any future form
+should reuse these classes rather than inventing new ad-hoc styling.
 
 - `.form-label`, `.form-input`, `.form-textarea` — labeled text inputs,
   48px height, brand focus ring
@@ -203,14 +204,19 @@ uses the old form.
   `.form-option-badge` / `.form-option-badge--selected` — single-select
   radio-style card with a circular selection indicator
 - `.form-chip` / `.form-chip--active` — dropdown trigger (date/time pickers)
+- `.form-dropdown` / `.form-dropdown-item` (+ `--selected`) — the panel
+  that opens off a `.form-chip` (time lists, etc.)
+- `.form-calendar-nav-btn`, `.form-calendar-weekday`, `.form-calendar-day`
+  (+ `--today` / `--selected` / `--outside`) — the calendar grid inside a
+  `.form-dropdown`
 - `.form-step-label`, `.form-progress-track`, `.form-progress-fill` —
   multi-step progress bar ("Schritt 2 von 6")
 - `.kbd` — small keyboard-shortcut hint chip (e.g. "Enter ↵")
 
-When the Schärfservice form is actually rebuilt, wire real React
-state/validation/Supabase submission around these classes rather than
-re-deriving the visual style — see that folder's README for the full
-step-by-step flow the prototype defines.
+**Known gap**: the prototype's tool-type selection has no corresponding
+column on `service_inquiries` yet — the live form currently folds it into
+the free-text remarks column instead of a dedicated one. See that folder's
+README for what a proper fix (a DB migration) looks like.
 
 ## 10. Known inconsistencies (migration backlog)
 
@@ -309,6 +315,14 @@ heading weights per template (homepage hero first, highest visibility).
   The `--input-*` tokens these rely on were referenced by the original
   Stripe reference material but had never actually been ported into this
   app's `:root`; added them now.
+- ✅ `app/(public)/sonder-schaerfservice/page.tsx` rebuilt as the real
+  6-step wizard from `design-system/schaerfservice-reference/` (tool type
+  → pickup date/time → location → package size/weight → service options →
+  contact → success), replacing the old single-page form. Same backend
+  (`service_inquiries` insert + `/api/send-email`), extended with the new
+  fields the redesign collects. `.form-dropdown`/`.form-calendar-*` classes
+  added to support the calendar + time-picker pattern. One open gap: tool
+  types have no dedicated DB column yet — see that folder's README.
 
 ## 11. Where to look
 
