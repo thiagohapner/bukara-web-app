@@ -406,6 +406,21 @@ heading weights per template (homepage hero first, highest visibility).
   `.checklist--on-dark`. `components/BannerAurora.tsx` retuned from three
   scattered blobs to one coherent top-right glow cluster. X99 slide still
   untouched.
+- ✅ Schärfservice banner given an optional full-bleed background photo
+  (`bgImage` → `/service2_banner.png`) blended into the dark surface via a
+  left→right gradient; replaces that slide's aurora + checklist.
+- ✅ **Remaining homepage components migrated** to the DS (`SelectedProducts`
+  carousel, `CategoryShowcase` carousel, `HomeAboutSections`, `FeatureBar`,
+  `Footer`): section headings → `.heading-h3`/`.heading-h2`; the about-section
+  eyebrow → `.eyebrow.eyebrow--brand` (added that modifier, same cascade
+  reasoning as `--on-dark`); default blue-grey `slate-{300..700}` → green
+  `neutral-*` (or the dark-body token on dark surfaces); inline `#00A597`
+  → `brand-500`; brand-dark drift `#044749` → `brand-800` and footer
+  `#022221` → `--color-surface-dark`; grey `shadow-md` on carousel arrows →
+  `--shadow-md`; heavy `font-semibold`/`font-extrabold` headings → 400/500
+  per §3; color transitions → the 240ms standard motion track. The
+  category card's arrow badge and the feature-bar hover moved onto brand
+  teal.
 
 ## 11. Where to look
 

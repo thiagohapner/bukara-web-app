@@ -255,6 +255,8 @@
 /* On a dark surface the ink color is invisible; use the light teal.
    Defined after .eyebrow so it wins (both unlayered, same specificity). */
 .eyebrow--on-dark { color: var(--color-text-dark-link); }
+/* Brand-colored eyebrow on light surfaces (same cascade reasoning). */
+.eyebrow--brand { color: var(--color-brand-500); }
 .body-text {
   font-size: var(--fs-base);
   font-weight: var(--fw-regular);

@@ -42,9 +42,7 @@ export default function CategoryShowcaseCarousel({
 
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-12">
-      <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight mb-8">
-        Unser Standardsortiment
-      </h2>
+      <h2 className="heading-h3 mb-8">Unser Standardsortiment</h2>
 
       {/* Track + right-edge fade to hint there's more (3 cards visible, 4th peeks) */}
       <div className="relative">
@@ -62,8 +60,7 @@ export default function CategoryShowcaseCarousel({
               style={{ textDecoration: "none" }}
             >
               <div
-                className="relative flex min-h-[380px] sm:min-h-[480px] lg:min-h-[600px] flex-col overflow-hidden rounded-[28px] p-8 sm:p-10"
-                style={{ background: "#EEEFEF" }}
+                className="relative flex min-h-[380px] sm:min-h-[480px] lg:min-h-[600px] flex-col overflow-hidden rounded-xl p-8 sm:p-10 bg-neutral-25"
               >
                 {/* Transparent product PNG in a fixed-height strip anchored to the bottom,
                     so every tool renders to the same height (widths vary by tool thickness). */}
@@ -79,18 +76,18 @@ export default function CategoryShowcaseCarousel({
                   </div>
                 )}
 
-                <p className="relative z-10 text-sm font-medium text-slate-500">
+                <p className="relative z-10 text-sm font-normal text-neutral-500">
                   {item.name}
                 </p>
                 {item.blurb && (
-                  <h3 className="relative z-10 mt-2 break-words text-lg sm:text-xl font-semibold leading-tight text-slate-900">
+                  <h3 className="relative z-10 mt-2 break-words text-lg sm:text-xl font-medium leading-tight text-slate-900">
                     {item.blurb}
                   </h3>
                 )}
 
                 <span
                   aria-hidden
-                  className="absolute bottom-6 right-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white transition-transform duration-300 group-hover:scale-110"
+                  className="absolute bottom-6 right-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-white transition-transform duration-300 ease-[cubic-bezier(0.25,1.00,0.50,1.00)] group-hover:scale-110"
                 >
                   <ArrowUpRight size={20} strokeWidth={2.5} />
                 </span>
@@ -110,7 +107,7 @@ export default function CategoryShowcaseCarousel({
           type="button"
           aria-label="Zurück"
           onClick={() => scroll(-1)}
-          className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+          className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-[var(--shadow-md)] ring-1 ring-neutral-100 flex items-center justify-center hover:bg-brand-25 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] ${
             atStart ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
@@ -122,7 +119,7 @@ export default function CategoryShowcaseCarousel({
           type="button"
           aria-label="Weiter"
           onClick={() => scroll(1)}
-          className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+          className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-[var(--shadow-md)] ring-1 ring-neutral-100 flex items-center justify-center hover:bg-brand-25 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] ${
             atEnd ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >

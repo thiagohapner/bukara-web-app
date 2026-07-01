@@ -39,18 +39,18 @@ export default function HomeAboutSections() {
             />
           </div>
           <div className="flex-1">
-            <p className="text-xs font-semibold text-[#00A597] uppercase tracking-widest mb-3">Unser Sortiment</p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
+            <p className="eyebrow eyebrow--brand mb-3">Unser Sortiment</p>
+            <h2 className="heading-h2 mb-4">
               Schnell und digital bestellen
             </h2>
-            <div className="inline-flex items-center gap-1.5 bg-white rounded-lg px-3 py-1.5 mb-5" style={{ border: "1px solid #e8e8e8" }}>
-              <span className="text-[11px] font-medium whitespace-nowrap" style={{ color: "#022221" }}>Exklusiver Partner von</span>
+            <div className="inline-flex items-center gap-1.5 bg-white border border-neutral-100 rounded-md px-3 py-1.5 mb-5">
+              <span className="text-[11px] font-normal text-slate-900 whitespace-nowrap">Exklusiver Partner von</span>
               <Image src="/ITA_Logo.png" alt="ITA Tools" width={44} height={14} className="object-contain" />
             </div>
-            <p className="text-slate-600 text-base leading-relaxed mb-4">
+            <p className="body-text body-text--subdued leading-relaxed mb-4">
               Unser Sortiment wächst – und zwar mit System: Dank unserer Exklusivpartnerschaft mit einem der am schnellsten wachsenden Standardwerkzeug-Anbieter Europas bekommen Sie starke Produkte zu einem Preis-Leistungs-Verhältnis, das überzeugt.
             </p>
-            <p className="text-slate-600 text-base leading-relaxed mb-8">
+            <p className="body-text body-text--subdued leading-relaxed mb-8">
               Über unser B2B-Portal haben Sie jederzeit Zugriff auf Preise, Verfügbarkeit und Bestellinfos – ohne Umwege, ohne Warten.
             </p>
             <div className="flex flex-wrap gap-3">
