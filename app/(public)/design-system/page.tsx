@@ -205,13 +205,13 @@ export default function DesignSystemPage() {
         description="Two tracks only — hover these to feel the difference. Nav/UI: 240ms standard ease. Buttons: 300ms emphasis ease."
       >
         <div className="flex flex-wrap items-center gap-6">
-          <a
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            className="text-sm font-normal text-slate-900 hover:text-brand-500 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)]"
+          <span
+            role="link"
+            tabIndex={0}
+            className="text-sm font-normal text-slate-900 hover:text-brand-500 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] cursor-pointer"
           >
             Nav link (240ms standard)
-          </a>
+          </span>
           <button
             type="button"
             className="rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-normal text-slate-900 hover:bg-brand-25 hover:border-brand-600 transition-colors duration-[300ms] ease-[cubic-bezier(0.25,1.00,0.50,1.00)]"
