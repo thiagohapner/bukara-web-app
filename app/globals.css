@@ -106,8 +106,7 @@
   --navy-mid: #1E293B;
 
   /* ─── TYPE SCALE (new, additive) ─────────────────────────── */
-  --fw-light:   300;
-  --fw-regular: 400;
+  --fw-regular: 400; /* default weight — headings and body alike */
   --fw-medium:  500;
   --fw-bold:    600;
 
@@ -160,35 +159,35 @@
    ============================================================ */
 .heading-xxl {
   font-size: var(--fs-display-xxl);
-  font-weight: var(--fw-light);
+  font-weight: var(--fw-regular);
   line-height: var(--lh-display);
   letter-spacing: var(--ls-xxl);
   color: var(--color-ink);
 }
 .heading-xl {
   font-size: var(--fs-display-xl);
-  font-weight: var(--fw-light);
+  font-weight: var(--fw-regular);
   line-height: var(--lh-display);
   letter-spacing: var(--ls-display);
   color: var(--color-ink);
 }
 .heading-h1 {
   font-size: var(--fs-h1);
-  font-weight: var(--fw-light);
+  font-weight: var(--fw-regular);
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-display);
   color: var(--color-ink);
 }
 .heading-h2 {
   font-size: var(--fs-h2);
-  font-weight: var(--fw-light);
+  font-weight: var(--fw-regular);
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-display);
   color: var(--color-ink);
 }
 .heading-h3 {
   font-size: var(--fs-h3);
-  font-weight: var(--fw-light);
+  font-weight: var(--fw-regular);
   line-height: var(--lh-heading-md);
   letter-spacing: var(--ls-tight);
   color: var(--color-ink);

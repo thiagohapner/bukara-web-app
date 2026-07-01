@@ -139,13 +139,13 @@ export default function DesignSystemPage() {
 
       <Block
         title="Typography"
-        description="Font family: Geist. Display/heading tokens are weight 300 (light) — most templates on the live site still use 600–900; see DESIGN_SYSTEM.md §8 for the migration list."
+        description="Font family: Geist. Every size — display down to nav links — defaults to weight 400 (regular); hierarchy comes from size/letter-spacing/color, not boldness. Most templates on the live site still use 600–900; see DESIGN_SYSTEM.md §8 for the migration list."
       >
         <div className="flex flex-col gap-6">
-          <div className="heading-xxl">Display XXL / 56 / 300</div>
-          <div className="heading-xl">Display XL / 48 / 300</div>
-          <div className="heading-h2">H2 / 32 / 300</div>
-          <div className="heading-h3">H3 / 26 / 300</div>
+          <div className="heading-xxl">Display XXL / 56 / 400</div>
+          <div className="heading-xl">Display XL / 48 / 400</div>
+          <div className="heading-h2">H2 / 32 / 400</div>
+          <div className="heading-h3">H3 / 26 / 400</div>
           <p className="body-text max-w-xl">
             Body / 16 / 400 — Bequem und sicher bezahlen, deutschlandweiter
             Schärfservice, exklusiver Partner von ITA Tools.
