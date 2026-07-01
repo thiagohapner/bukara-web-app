@@ -272,6 +272,24 @@ heading weights per template (homepage hero first, highest visibility).
 
 ### Migration log
 
+- 🐛 **Bug, not a design choice**: `.icon-tile`, `.checklist`/`.checklist-item`,
+  `.form-pill`, `.form-option-card`, `.form-chip`, `.form-dropdown-item`,
+  `.form-calendar-nav-btn`, and `.kbd` referenced `var(--sp-1-5|2|3|4|5)`
+  and `var(--color-border|surface)` — names copied from the Stripe
+  reference material's convention — that were never actually defined in
+  this app's `:root`. Confirmed in the *compiled* output, not just source
+  (`grep` the built CSS chunk, don't trust that a rule "looks right" in
+  the source file). Effect: `gap`/`padding`/`border`/`background`
+  declarations using an undefined `var()` with no fallback are invalid at
+  computed-value time and silently reset to their initial value — the
+  checklist checkmark sat flush against the label text, pills/option
+  cards/chips lost their border and fill. Fixed by actually defining
+  `--sp-1` through `--sp-8` and aliasing `--color-border` →
+  `--color-neutral-50`, `--color-surface` → `#ffffff`. **Rule going
+  forward**: after adding any CSS class that references a token, grep the
+  *built* CSS (`.next/static/chunks/*.css` after `next build`) for that
+  token's definition before considering the work done — don't just trust
+  that the variable name looks plausible.
 - ✅ `--color-ink`/`--color-body` were dead tokens set to a third near-black
   (`#131514`), different from the ink actually in use (`#022221`). Fixed to
   match — one more source of hex drift removed.
