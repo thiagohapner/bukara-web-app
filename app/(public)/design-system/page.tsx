@@ -79,9 +79,7 @@ function Block({ title, description, children }: { title: string; description?: 
   return (
     <section className="py-14 border-b border-neutral-50">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-        <h2 className="text-2xl sm:text-3xl font-normal text-slate-900 tracking-tight mb-2">
-          {title}
-        </h2>
+        <h2 className="heading-h3 mb-2">{title}</h2>
         {description && (
           <p className="text-sm text-neutral-500 max-w-2xl mb-8">{description}</p>
         )}
@@ -99,9 +97,7 @@ export default function DesignSystemPage() {
           <p className="text-xs font-normal uppercase tracking-wide text-brand-600 mb-2">
             Internal — not indexed, not linked from nav
           </p>
-          <h1 className="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight mb-3">
-            Bukara Design System
-          </h1>
+          <h1 className="heading-h1 mb-3">Bukara Design System</h1>
           <p className="text-base text-neutral-600 max-w-2xl">
             Live reference for the tokens in <code>app/globals.css</code> and the
             rules in <code>DESIGN_SYSTEM.md</code>. The header/footer on this page
@@ -146,19 +142,11 @@ export default function DesignSystemPage() {
         description="Font family: Geist. Display/heading tokens are weight 300 (light) — most templates on the live site still use 600–900; see DESIGN_SYSTEM.md §8 for the migration list."
       >
         <div className="flex flex-col gap-6">
-          <div style={{ fontWeight: 300, fontSize: "3.5rem", lineHeight: 1.03, letterSpacing: "-0.025em" }} className="text-slate-900">
-            Display XXL / 56 / 300
-          </div>
-          <div style={{ fontWeight: 300, fontSize: "3rem", lineHeight: 1.03, letterSpacing: "-0.02em" }} className="text-slate-900">
-            Display XL / 48 / 300
-          </div>
-          <div style={{ fontWeight: 300, fontSize: "2rem", lineHeight: 1.1, letterSpacing: "-0.02em" }} className="text-slate-900">
-            H2 / 32 / 300
-          </div>
-          <div style={{ fontWeight: 300, fontSize: "1.625rem", lineHeight: 1.12, letterSpacing: "-0.01em" }} className="text-slate-900">
-            H3 / 26 / 300
-          </div>
-          <p className="text-base font-normal text-slate-900 leading-[1.4] max-w-xl">
+          <div className="heading-xxl">Display XXL / 56 / 300</div>
+          <div className="heading-xl">Display XL / 48 / 300</div>
+          <div className="heading-h2">H2 / 32 / 300</div>
+          <div className="heading-h3">H3 / 26 / 300</div>
+          <p className="body-text max-w-xl">
             Body / 16 / 400 — Bequem und sicher bezahlen, deutschlandweiter
             Schärfservice, exklusiver Partner von ITA Tools.
           </p>
@@ -254,9 +242,7 @@ export default function DesignSystemPage() {
 
       <div className="py-14">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-normal text-slate-900 tracking-tight mb-8">
-            Testimonials (real section)
-          </h2>
+          <h2 className="heading-h3 mb-8">Testimonials (real section)</h2>
         </div>
         <Testimonials />
       </div>

@@ -5,9 +5,21 @@ before touching any styling. Tokens live in `app/globals.css`; a live,
 clickable reference lives at `/design-system` (public route, not linked
 in nav, `noindex`).
 
+**Visual reference: stripe.com (marketing site).** Stripe is the model for
+Bukara's visual language — generous whitespace, light/thin display type,
+restrained single-accent color use, subtle tinted shadows, precise two-track
+motion. Only the palette changes (Bukara teal `#01A497`, not Stripe's blue/
+teal mix); layout rhythm, type weight philosophy, and interaction feel
+should read as "the same design sensibility as stripe.com." The original
+Stripe-derived rules/tokens package this system was distilled from lives at
+`design-system/stripe-reference/` — treat it as inspiration/reference, not
+code the app imports (see the README in that folder).
+
 This is a **style system**, not a component-behavior spec: it governs
 color, type, spacing, radius, shadow, and motion. It does not mandate
-rewriting component structure/markup/logic.
+rewriting component structure/markup/logic — but achieving the Stripe-level
+look legitimately does require migrating individual components (starting
+with type weight) over time; see §8.
 
 ---
 
@@ -69,6 +81,14 @@ Body          16px / 400 / lh 1.4
 Nav links     14px / 400
 Eyebrow       14px / 400, no uppercase, no letter-spacing
 ```
+
+**Use the utility classes, don't hand-roll the combo.** `app/globals.css`
+defines `.heading-xxl`, `.heading-xl`, `.heading-h1`, `.heading-h2`,
+`.heading-h3`, `.eyebrow`, `.body-text` / `.body-text--subdued` — each sets
+size + weight + line-height + letter-spacing + color together, mirroring
+the Stripe reference's own class names. Apply the class instead of
+composing `text-*`/`font-*`/`tracking-*` Tailwind utilities by hand; that's
+exactly how heading weight/letter-spacing drift happens (see §8).
 
 **Rule: headings are light (300), never heavy.** `font-bold`/`font-extrabold`/
 `font-black` on an `<h1>`–`<h3>` is off-system. Weight carries hierarchy
@@ -193,9 +213,24 @@ brand-dark drift, (3) extract a shared `Button` component so CTA button
 styling has one source of truth, (4) do a deliberate, reviewed pass on
 heading weights per template (homepage hero first, highest visibility).
 
+### Migration log
+
+- ✅ `--color-ink`/`--color-body` were dead tokens set to a third near-black
+  (`#131514`), different from the ink actually in use (`#022221`). Fixed to
+  match — one more source of hex drift removed.
+- ✅ `components/SectionHeader.tsx` (used on the homepage by `BestSellers`,
+  `LatestProducts`, `NewsArticles`) migrated from
+  `text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight` to
+  `.heading-h2`. `.view-all` (the paired "View All" link) moved off
+  Tailwind's default `#64748B` blue-grey onto `--color-neutral-500` and
+  dropped its `font-medium` override to match the 14px/400 nav-link rule.
+  This is item #5 above, template 1 of many — first real visible proof
+  that heading weight changes read as "redesigned," not just recolored.
+
 ## 9. Where to look
 
 - Tokens: `app/globals.css` (`@theme` block + `:root`)
+- Stripe reference package (inspiration only, not imported by the app): `design-system/stripe-reference/`
 - Visual reference: `/design-system` route
 - Shared button classes: `app/globals.css` (`.btn-orange`, `.btn-black`, `.btn-outline`)
 - This file: update it whenever a token is added/changed/deprecated.

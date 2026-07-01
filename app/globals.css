@@ -69,9 +69,10 @@
   --color-primary-focus:   #04857B;
   --color-primary-on-dark: #01A497;
 
-  /* Text */
-  --color-ink:          #131514;
-  --color-body:         #131514;
+  /* Text — kept equal to slate-900/800 (#022221), the ink value actually
+     used across the app, to avoid a third near-black drifting in. */
+  --color-ink:          #022221;
+  --color-body:         #022221;
   --color-body-on-dark: #ffffff;
   --color-body-muted:   #cccccc;
   --color-ink-muted-80: #333333;
@@ -149,6 +150,64 @@
 
   /* ─── SPACING (new, additive) ────────────────────────────── */
   --space-section: 96px;
+}
+
+/* ============================================================
+   Typography utilities — Stripe-inspired heading/body scale.
+   Canonical way to set a heading/body style; don't hand-roll
+   font-size/weight/letter-spacing combos on ad-hoc elements.
+   See DESIGN_SYSTEM.md §3.
+   ============================================================ */
+.heading-xxl {
+  font-size: var(--fs-display-xxl);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-xxl);
+  color: var(--color-ink);
+}
+.heading-xl {
+  font-size: var(--fs-display-xl);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-h1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-h2 {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-heading-md);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-ink);
+}
+.eyebrow {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  color: var(--color-ink);
+  letter-spacing: var(--ls-normal);
+  text-transform: none;
+}
+.body-text {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  color: var(--color-ink);
+}
+.body-text--subdued {
+  color: var(--color-neutral-500);
 }
 
 /* ============================================================
@@ -319,12 +378,13 @@ label[for] {
 
 /* Section "View all" link */
 .view-all {
-  font-size: 0.875rem;
-  color: #64748B;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  color: var(--color-neutral-500);
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  transition: color 0.2s;
+  transition: var(--transition-nav);
   text-decoration: none;
 }
 
