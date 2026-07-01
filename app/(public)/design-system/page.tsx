@@ -30,6 +30,7 @@ const SEMANTIC_COLORS = [
   ["Error", "#FF3C40"],
   ["Canvas", "#ffffff"],
   ["Canvas parchment", "#f5f5f7"],
+  ["Surface dark", "#041A19"],
 ] as const;
 
 const SHADOWS = ["xs", "sm", "md", "lg", "xl"] as const;
@@ -246,13 +247,36 @@ export default function DesignSystemPage() {
       </Block>
 
       <Block
-        title="Promo banner headline"
-        description="Sonderlösungen/Schärfservice homepage banners (components/BannerSonderwerkzeuge.tsx, sidebarStyle slides): headline is .heading-l (Display L), no shadow, container corner radius is md, animated aurora background (components/BannerAurora.tsx, not shown in this static mock). The X99 banner is untouched — still .heading-xl, dark bg, drop shadow."
+        title="Dark aurora hero banner"
+        description="Sonderlösungen/Schärfservice homepage banners (components/BannerSonderwerkzeuge.tsx, darkHero slides): deep brand-teal surface, eyebrow → .heading-l (Display L) in white → .body-text--on-dark → two-tier CTA (flat .btn-brand + arrow link), .checklist--on-dark, no shadow, rounded-md. The live component adds an animated aurora glow (components/BannerAurora.tsx), not shown in this static mock. The X99 banner is untouched — still .heading-xl, dark image bg, drop shadow."
       >
-        <div className="rounded-md overflow-hidden bg-brand-25 border border-neutral-100 px-10 py-12 max-w-2xl">
-          <h3 className="heading-l m-0">
-            Nachschliff, der Standzeit verlängert
-          </h3>
+        <div
+          className="rounded-md overflow-hidden border px-10 py-10 max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-8 items-center"
+          style={{ background: "var(--color-surface-dark)", borderColor: "var(--color-border-dark)" }}
+        >
+          <div>
+            <p className="eyebrow text-brand-300 mb-3">Schärfservice</p>
+            <h3 className="heading-l m-0" style={{ color: "var(--color-text-dark-heading)" }}>
+              Nachschliff, der Standzeit verlängert
+            </h3>
+            <p className="body-text body-text--on-dark mt-4 max-w-[420px]">
+              Präzise, schnell, bundesweit.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <span className="btn-brand">Schärfauftrag starten</span>
+              <span className="inline-flex items-center gap-1 text-sm" style={{ color: "var(--color-text-dark-link)" }}>
+                Mehr erfahren <ChevronRight className="w-4 h-4" strokeWidth={2} />
+              </span>
+            </div>
+          </div>
+          <div className="checklist checklist--on-dark">
+            {["Bundesweit", "Fertig in 1–2 Wochen", "Auch für Fremdwerkzeuge", "Keine Mindestmenge"].map((t) => (
+              <div key={t} className="checklist-item">
+                <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
+                {t}
+              </div>
+            ))}
+          </div>
         </div>
       </Block>
 

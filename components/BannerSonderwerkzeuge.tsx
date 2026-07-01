@@ -17,18 +17,22 @@ type SlideId = "x99" | "sonderloesungen" | "schaerfservice";
 
 type Slide = {
   id: SlideId;
+  eyebrow?: string;
   headline: string;
   highlight: string;
   subline: string;
   ctaLabel: string;
   ctaHref: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
   bgColor: string;
   textColor: string;
   ctaStyle: "dark" | "white" | "brand";
   highlightColor?: string;
-  /** Matches the Schärfservice form's sidebar panel: brand-25 bg, neutral
-   *  border, checklist-style feature list instead of a floating white card. */
-  sidebarStyle?: boolean;
+  /** Dark-hero treatment: deep brand-teal surface, glowing aurora, eyebrow +
+   *  light headline + subdued-teal body + two-tier CTA + checklist on dark.
+   *  (X99 slide leaves this off and keeps its own dark-image look.) */
+  darkHero?: boolean;
   rightPanel: RightPanel;
 };
 
@@ -52,16 +56,19 @@ const slides: Slide[] = [
   },
   {
     id: "sonderloesungen",
+    eyebrow: "Sonderlösungen",
     headline: "Sonderlösungen,",
     highlight: "geplant für Ihre Maschine",
     subline:
       "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf.",
     ctaLabel: "Sonderwerkzeug anfragen",
     ctaHref: "/loesungen/sonderwerkzeug",
-    bgColor: "#F5FAFA",
-    textColor: "#022221",
+    secondaryCtaLabel: "Mehr erfahren",
+    secondaryCtaHref: "/loesungen/sonderwerkzeug",
+    bgColor: "var(--color-surface-dark)",
+    textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
-    sidebarStyle: true,
+    darkHero: true,
     rightPanel: {
       kind: "features",
       features: [
@@ -76,16 +83,19 @@ const slides: Slide[] = [
   },
   {
     id: "schaerfservice",
+    eyebrow: "Schärfservice",
     headline: "Nachschliff,",
     highlight: "der Standzeit verlängert",
     subline:
       "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
-    bgColor: "#F5FAFA",
-    textColor: "#022221",
+    secondaryCtaLabel: "Mehr erfahren",
+    secondaryCtaHref: "/loesungen/schaerfservice",
+    bgColor: "var(--color-surface-dark)",
+    textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
-    sidebarStyle: true,
+    darkHero: true,
     rightPanel: {
       kind: "features",
       features: [
@@ -128,19 +138,22 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         style={{
           background: slide.bgColor,
           opacity: visible ? 1 : 0,
-          border: slide.sidebarStyle ? "1px solid #D0E1DE" : "none",
+          border: slide.darkHero ? "1px solid var(--color-border-dark)" : "none",
         }}
         className={`relative w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-opacity duration-200 ${
-          slide.sidebarStyle ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
+          slide.darkHero ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
         }`}
       >
-        {slide.sidebarStyle && <BannerAurora />}
+        {slide.darkHero && <BannerAurora />}
 
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
+          {slide.eyebrow && (
+            <p className="eyebrow text-brand-300 mb-3">{slide.eyebrow}</p>
+          )}
           <h2
             style={{ color: slide.textColor }}
-            className={`m-0 ${slide.sidebarStyle ? "heading-l" : "heading-xl"}`}
+            className={`m-0 ${slide.darkHero ? "heading-l" : "heading-xl"}`}
           >
             {slide.headline}{" "}
             {slide.highlightColor ? (
@@ -161,13 +174,15 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </h2>
 
           <p
-            style={{ color: slide.sidebarStyle ? "#567C76" : slide.textColor }}
-            className={`mt-4 max-w-[420px] text-base leading-relaxed ${slide.sidebarStyle ? "font-normal" : "font-medium opacity-80"}`}
+            className={`mt-4 max-w-[420px] text-base leading-relaxed ${
+              slide.darkHero ? "body-text body-text--on-dark" : "font-medium opacity-80"
+            }`}
+            style={slide.darkHero ? undefined : { color: slide.textColor }}
           >
             {slide.subline}
           </p>
 
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
             <Link
               href={slide.ctaHref}
               className={
@@ -180,13 +195,23 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             >
               {slide.ctaLabel}
             </Link>
+            {slide.secondaryCtaLabel && slide.secondaryCtaHref && (
+              <Link
+                href={slide.secondaryCtaHref}
+                className="inline-flex items-center gap-1 text-sm font-normal no-underline whitespace-nowrap transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] hover:opacity-80"
+                style={{ color: "var(--color-text-dark-link)" }}
+              >
+                {slide.secondaryCtaLabel}
+                <ChevronRight className="w-4 h-4" strokeWidth={2} />
+              </Link>
+            )}
           </div>
         </div>
 
         {/* RIGHT COLUMN */}
         <div className="relative z-10 hidden md:flex items-center pr-14 pl-5 py-9">
           {slide.rightPanel.kind === "features" ? (
-            <div className="checklist w-full">
+            <div className="checklist checklist--on-dark w-full">
               {slide.rightPanel.features.map((f, i) => (
                 <div key={i} className="checklist-item">
                   <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>

@@ -3,15 +3,19 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-// Ambient animated background for the sidebar-style promo banners —
-// slow-drifting blurred brand-teal blobs, in the spirit of stripe.com's
-// aurora backgrounds. Atmosphere only (see DESIGN_SYSTEM.md §5/§10):
-// one cluster, monochrome brand color, never fighting the foreground copy.
+// Ambient animated background for the dark-hero promo banners — a single
+// coherent glow cluster radiating from the top-right (a sense of one light
+// source), in the spirit of stripe.com's aurora backgrounds. Atmosphere
+// only (see DESIGN_SYSTEM.md §5): one cluster, monochrome brand teal, tuned
+// to actually read against the deep-teal dark surface.
 
 const BLOBS = [
-  { grad: "var(--grad-aura-brand-1)", size: 340, top: "-12%", left: "-6%" },
-  { grad: "var(--grad-aura-brand-2)", size: 300, top: "40%", left: "78%" },
-  { grad: "var(--grad-aura-brand-3)", size: 220, top: "70%", left: "10%" },
+  // Primary bright core, top-right behind the checklist.
+  { grad: "var(--grad-aura-brand-core)", size: 460, top: "-24%", left: "58%" },
+  // Cooler mid glow just below it, for depth.
+  { grad: "var(--grad-aura-brand-2)", size: 360, top: "34%", left: "72%" },
+  // Faint far-left wash so the cluster doesn't feel one-sided.
+  { grad: "var(--grad-aura-brand-3)", size: 300, top: "58%", left: "-14%" },
 ];
 
 export default function BannerAurora() {

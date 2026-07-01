@@ -89,6 +89,15 @@
   --color-surface-black:            #000000;
   --color-surface-chip-translucent: #d2d2d7;
 
+  /* Dark sections — deep brand-teal band with light text, for dramatic
+     contrast against the otherwise light page (e.g. the homepage promo
+     banners). See DESIGN_SYSTEM.md §2. */
+  --color-surface-dark:      var(--color-brand-975); /* #041A19 */
+  --color-text-dark-heading: #ffffff;
+  --color-text-dark-body:    #A6CDC6;                /* muted light teal, AA on the dark surface */
+  --color-text-dark-link:    var(--color-brand-300); /* #84CDC7 */
+  --color-border-dark:       var(--color-brand-800); /* subtle hairline */
+
   /* Lines */
   --color-divider-soft: #f0f0f0;
   --color-hairline:     #e0e0e0;
@@ -145,6 +154,7 @@
   /* ─── GRADIENTS (new, additive) — atmosphere only, monochrome
      brand teal per the Stripe reference's "one aurora cluster,
      never competing colors" rule. ────────────────────────────── */
+  --grad-aura-brand-core: radial-gradient(50% 50%, rgba(1,164,151,.55) 0%, rgba(1,164,151,0) 70%);
   --grad-aura-brand-1: radial-gradient(50% 50%, rgba(1,164,151,.35) 0%, rgba(1,164,151,0) 70%);
   --grad-aura-brand-2: radial-gradient(50% 50%, rgba(4,133,123,.28) 0%, rgba(4,133,123,0) 70%);
   --grad-aura-brand-3: radial-gradient(50% 50%, rgba(132,205,199,.32) 0%, rgba(132,205,199,0) 70%);
@@ -250,6 +260,9 @@
 }
 .body-text--subdued {
   color: var(--color-neutral-500);
+}
+.body-text--on-dark {
+  color: var(--color-text-dark-body);
 }
 
 /* ============================================================
@@ -463,6 +476,9 @@ label[for] {
   justify-content: center;
   font-size: 11px;
 }
+/* Checklist on a dark surface (e.g. the dark-hero promo banners) */
+.checklist--on-dark .checklist-item { color: var(--color-text-dark-heading); }
+.checklist--on-dark .checklist-badge { box-shadow: 0 0 0 4px rgba(1, 164, 151, 0.15); }
 
 /* ============================================================
    Form elements — inputs, pill toggles, option cards, chips,

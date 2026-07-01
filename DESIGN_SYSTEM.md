@@ -42,7 +42,16 @@ with type weight) over time; see §10.
 | Green-tinted neutrals (borders, quiet text, icons, dividers) | `--color-neutral-{25,50,100,200,300,400,500,600,700}` / Tailwind `neutral-*` |
 | Ink / body text               | `--color-ink`, `--color-body`, `--color-body-muted`, `slate-900`/`slate-800` utilities |
 | Surfaces                      | `--color-canvas`, `--color-canvas-parchment`, `--color-surface-pearl`, `--color-surface-tile-*` |
+| Dark sections                 | `--color-surface-dark` (deep brand teal `#041A19`), `--color-text-dark-heading` (`#fff`), `--color-text-dark-body` (`#A6CDC6`), `--color-text-dark-link` (`brand-300`), `--color-border-dark` (`brand-800`) |
 | Status                        | `--color-error` (`#FF3C40`) |
+
+**Dark sections.** For a dramatic dark band on the otherwise-light page (the
+homepage promo banners today), use `--color-surface-dark` with the
+`--color-text-dark-*` tokens for text/links, `--color-border-dark` for a
+subtle hairline, and pair with an aurora glow (§5) — glow only reads on dark.
+Body copy uses `.body-text--on-dark`; a checklist uses `.checklist--on-dark`
+(§8). Keep it monochrome brand teal; the flat `--color-brand-500` button is
+the focal CTA since it pops against the dark field.
 
 **Rule: neutrals are always green-tinted.** Never use Tailwind's default
 `slate-*`/`gray-*`/`zinc-*` palette for borders, dividers, muted text, or
@@ -136,7 +145,7 @@ somewhat interchangeably for what should be the same "card" radius — pick one.
 **Big promo banners** (`components/BannerSonderwerkzeuge.tsx`, the homepage
 carousel banners): outer container corner radius is `md` (`rounded-md`,
 8px) — not `rounded-2xl`. Headline size differs by slide: the two
-`sidebarStyle` slides (Sonderlösungen, Schärfservice) use `.heading-l`
+`darkHero` slides (Sonderlösungen, Schärfservice) use `.heading-l`
 (Display L); the X99 slide keeps `.heading-xl` (Display XL) and its own
 distinct look (dark bg, image panel, drop shadow) — it's intentionally
 not part of this restyle.
@@ -193,7 +202,9 @@ classes — don't inline a fourth pattern with arbitrary Tailwind utilities
   `brand-500` icon color.
 - `.checklist` / `.checklist-item` / `.checklist-badge` — benefit/feature
   list with a filled circular brand checkmark per item (sidebars, promo
-  panels, service pages).
+  panels, service pages). Add `.checklist--on-dark` on the container when
+  it sits on a dark surface — flips item text to white and adds a soft
+  glow ring around each badge.
 
 Both are shown live at `/design-system`.
 
@@ -372,6 +383,19 @@ heading weights per template (homepage hero first, highest visibility).
   now reserved/unused elsewhere. The 44px value matches `--hero-fs-md`
   from the original Stripe token package, so it's not an arbitrary
   in-between number.
+- ✅ **Banner reconceived as a dark aurora hero** (supersedes the light
+  "sidebar panel" look from the entries above). The two promo slides now
+  use a deep brand-teal surface with a glowing aurora, eyebrow → white
+  `.heading-l` → `.body-text--on-dark` → two-tier CTA (flat `.btn-brand`
+  + arrow text-link), and `.checklist--on-dark`. The `sidebarStyle` flag
+  was renamed `darkHero` to match. Added dark-section tokens
+  (`--color-surface-dark`, `--color-text-dark-{heading,body,link}`,
+  `--color-border-dark`) — these existed in the original Stripe reference
+  but had never been ported in — plus `--grad-aura-brand-core` (a brighter
+  aurora core that reads on dark), `.body-text--on-dark`, and
+  `.checklist--on-dark`. `components/BannerAurora.tsx` retuned from three
+  scattered blobs to one coherent top-right glow cluster. X99 slide still
+  untouched.
 
 ## 11. Where to look
 
