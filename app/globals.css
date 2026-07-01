@@ -1,15 +1,37 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Bukara brand color tokens — override Tailwind's orange
-   palette so every *-orange-* class resolves to brand green.
-   Components are untouched.
+   Bukara Design System — token layer v1
+   Source: Bukara brand revamp (adapted from Stripe Marketing DS
+   structure, recolored/rescaled to Bukara's brand teal #01A497).
+
+   Back-compat: every previously-existing variable name below
+   keeps working with an updated value. New semantic --color-brand-*
+   / --color-neutral-* / type / shadow / motion tokens are additive
+   so existing components render immediately without edits.
    ============================================================ */
 @theme {
-  --color-orange-50:  #e8f7f6;   /* hero panel, category hover bg */
-  --color-orange-400: #00bfb3;   /* lighter hover variant           */
-  --color-orange-500: #00A597;   /* Action Green — primary accent   */
-  --color-orange-600: #007A70;   /* Focus / darker hover            */
+  /* Brand ramp — single source of truth, 500 = exact brand color */
+  --color-brand-25:  #F5FAFA;
+  --color-brand-50:  #EAF5F4;
+  --color-brand-75:  #E2F1F0;
+  --color-brand-100: #D6EBE9;
+  --color-brand-200: #B4DAD7;
+  --color-brand-300: #84CDC7;
+  --color-brand-400: #27D8CA;
+  --color-brand-500: #01A497; /* Bukara brand */
+  --color-brand-600: #04857B;
+  --color-brand-700: #07645D;
+  --color-brand-800: #074843;
+  --color-brand-900: #062F2C;
+  --color-brand-950: #05211F;
+  --color-brand-975: #041A19;
+
+  /* Legacy hijack kept in sync with the brand ramp — do not diverge */
+  --color-orange-50:  #EAF5F4;
+  --color-orange-400: #27D8CA;
+  --color-orange-500: #01A497; /* Action Green — primary accent   */
+  --color-orange-600: #04857B; /* Focus / darker hover            */
 
   --color-slate-900: #022221;    /* Bukara dark — primary text      */
   --color-slate-800: #022221;    /* Bukara dark — secondary text    */
@@ -18,7 +40,8 @@
   --radius-sm:   4px;     /* buttons, inputs              */
   --radius-md:   8px;     /* cards                        */
   --radius-lg:   12px;    /* panels, containers, galleries */
-  --radius-pill: 9999px;  /* chips, badges, tags          */
+  --radius-xl:   24px;    /* hero frames, feature panels   */
+  --radius-pill: 9999px;  /* chips, badges, tags            */
 
 }
 
@@ -27,12 +50,12 @@
    ============================================================ */
 :root {
   /* Brand & Accent */
-  --orange:      #00A597;   /* replaces the old #F97316          */
-  --orange-dark: #007A70;   /* replaces the old #EA580C          */
+  --orange:      #01A497;   /* replaces the old #F97316          */
+  --orange-dark: #04857B;   /* replaces the old #EA580C          */
 
-  --color-primary:         #00A597;
-  --color-primary-focus:   #007A70;
-  --color-primary-on-dark: #00A597;
+  --color-primary:         #01A497;
+  --color-primary-focus:   #04857B;
+  --color-primary-on-dark: #01A497;
 
   /* Text */
   --color-ink:          #131514;
@@ -68,6 +91,52 @@
   /* Legacy aliases kept so nothing else breaks */
   --navy:     #0F172A;
   --navy-mid: #1E293B;
+
+  /* ─── TYPE SCALE (new, additive) ─────────────────────────── */
+  --fw-light:   300;
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-bold:    600;
+
+  --fs-xs:          0.875rem;
+  --fs-sm:          0.875rem;
+  --fs-base:        1rem;
+  --fs-lg:          1.125rem;
+  --fs-h4:          1.375rem;
+  --fs-h3:          1.625rem;
+  --fs-h2:          2rem;
+  --fs-h1:          2.5rem;
+  --fs-display-xl:  3rem;
+  --fs-display-xxl: 3.5rem;
+
+  --lh-display:    1.03;
+  --lh-heading:    1.1;
+  --lh-heading-md: 1.12;
+  --lh-body:       1.4;
+
+  --ls-xxl:     -0.025em;
+  --ls-display: -0.02em;
+  --ls-tight:   -0.01em;
+  --ls-normal:   0em;
+
+  /* ─── SHADOWS (brand-teal-tinted, replaces default grey) ──── */
+  --shadow-xs: 0px 2px 10px 0px rgba(4,72,67,0.06),  0px 1px 4px 0px rgba(4,72,67,0.04);
+  --shadow-sm: 0px 5px 14px 0px rgba(4,72,67,0.08),  0px 2px 8px 0px rgba(4,72,67,0.05);
+  --shadow-md: 0px 6px 22px 0px rgba(4,72,67,0.10),  0px 4px 8px 0px rgba(4,72,67,0.03);
+  --shadow-lg: 0px 15px 40px -2px rgba(4,72,67,0.10),0px 5px 20px -2px rgba(4,72,67,0.04);
+  --shadow-xl: 0px 20px 80px -16px rgba(4,72,67,0.14),0px 10px 60px -16px rgba(4,72,67,0.06);
+  --shadow-focus: 0 0 0 4px rgba(1,164,151,0.35);
+
+  /* ─── MOTION (new, additive) ─────────────────────────────── */
+  --ease-standard: cubic-bezier(0.45,0.05,0.55,0.95); /* nav / ui */
+  --ease-emphasis: cubic-bezier(0.25,1.00,0.50,1.00); /* buttons  */
+  --dur-fast: 240ms;
+  --dur-slow: 300ms;
+  --transition-nav:    color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+  --transition-button: background-color var(--dur-slow) var(--ease-emphasis), color var(--dur-slow) var(--ease-emphasis), border var(--dur-slow) var(--ease-emphasis);
+
+  /* ─── SPACING (new, additive) ────────────────────────────── */
+  --space-section: 96px;
 }
 
 /* ============================================================
