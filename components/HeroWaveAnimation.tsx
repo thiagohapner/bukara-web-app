@@ -33,8 +33,9 @@ void main(){
   float across = dot(p, nrm);
   float along  = dot(p, dir);
 
-  // Dense fine brushed striations across the grooves.
-  float stri = pow(0.5 + 0.5 * sin(across * 230.0), 1.4);
+  // Dense fine brushed striations across the grooves — razor-thin lines
+  // (high exponent narrows each bright ridge to a hairline).
+  float stri = pow(0.5 + 0.5 * sin(across * 230.0), 14.0);
 
   // Specular streak: a bright band of lit grooves sweeping across (perp).
   float streakPos = mix(-0.2, 1.1, 0.5 + 0.5 * sin(t * 0.16));
@@ -45,7 +46,7 @@ void main(){
   float glint = beam * exp(-pow((along - glintAlong) / 0.28, 2.0));
 
   // Compose on the near-black base: brand grooves, pale-hot core at the glint.
-  float bright = beam * 0.55 + glint * 1.7;
+  float bright = beam * 0.75 + glint * 2.1;
   vec3 grooveCol = mix(c2, c4, glint);
   vec3 col = c1;
   col += grooveCol * stri * bright;
