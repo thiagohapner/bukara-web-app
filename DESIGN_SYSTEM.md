@@ -156,15 +156,17 @@ pattern). No photo is used anymore (`/service2_banner.png` is unreferenced).
 They share one layout: big headline + body + a `.btn-arrow` CTA and an
 on-surface right panel indented ~right.
 
-**Per-slide background pattern (`bgPattern`, via `BannerAurora`'s `pattern`
-prop):** each service gets its own thin-line motif, same visual language:
-- **Sonderwerkzeuge** → `grid` (`.banner-grid`): the technical-drawing /
-  graph-paper grid — the "made-to-drawing" story.
-- **Schärfservice** → `arcs` (`.banner-arcs`): concentric grinding arcs
-  sweeping from the lower-left — evokes a grinding/sharpening wheel and the
-  radius of a honed edge.
-Both come in dark (light lines) and `--light` (dark teal lines) variants and
-share the same radial edge mask + opacity-breath.
+**Per-slide background (`bgPattern`):** each service gets its own motif:
+- **Sonderwerkzeuge** → `grid`: the technical-drawing / graph-paper grid via
+  `BannerAurora` (glow + `.banner-grid`) — the "made-to-drawing" story. Has
+  dark (light lines) and `--light` (dark teal lines) variants.
+- **Schärfservice** → `petals`: an animated "flowing ribbon petals" canvas
+  (`components/HeroWaveAnimation.tsx`) — Stripe-hero-style organic bezier
+  petals with silky radial striations, glowing where they overlap (`screen`
+  blend), drifting on a GSAP loop. Monochrome teal ramp, Canvas 2D, GSAP-
+  driven, reduced-motion-safe (static frame). Clustered right, masked to fade
+  left (`.banner-petals`); a right-weighted scrim (`.banner-petals-scrim`)
+  keeps the 1-2-3 stepper legible over it.
 
 They differ in the **right panel** (`RightPanel` kind):
 - **Sonderlösungen** → `features`: the `.checklist` (6 benefit items with

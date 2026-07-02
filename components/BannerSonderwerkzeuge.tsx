@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import BannerAurora from "./BannerAurora";
+import HeroWaveAnimation from "./HeroWaveAnimation";
 import CtaArrow from "./CtaArrow";
 
 type Feature = { text: ReactNode };
@@ -38,10 +39,10 @@ type Slide = {
    *  surface, light text, white CTA, on-dark panel. "light" = pale brand-teal
    *  surface, ink text, brand CTA, dark-on-light grid + light panel. */
   heroMode?: "light" | "dark";
-  /** Background line pattern for an aurora-hero slide. "grid" (default) =
-   *  technical-drawing grid (Sonderwerkzeuge); "arcs" = concentric grinding
-   *  arcs (Schärfservice — the sharpening-service motif). */
-  bgPattern?: "grid" | "arcs";
+  /** Background for an aurora-hero slide. "grid" (default) = technical-drawing
+   *  grid via BannerAurora (Sonderwerkzeuge); "petals" = the flowing ribbon
+   *  petals canvas via HeroWaveAnimation (Schärfservice). */
+  bgPattern?: "grid" | "petals";
   rightPanel: RightPanel;
 };
 
@@ -105,7 +106,7 @@ const slides: Slide[] = [
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
-    bgPattern: "arcs",
+    bgPattern: "petals",
     rightPanel: {
       kind: "stepper",
       steps: [
@@ -155,7 +156,16 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         }}
         className="relative w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-opacity duration-200"
       >
-        {slide.darkHero && <BannerAurora light={isLight} pattern={slide.bgPattern ?? "grid"} />}
+        {slide.darkHero && slide.bgPattern === "petals" ? (
+          <div className="banner-petals">
+            <HeroWaveAnimation />
+          </div>
+        ) : (
+          slide.darkHero && <BannerAurora light={isLight} />
+        )}
+        {slide.darkHero && slide.bgPattern === "petals" && (
+          <div className="banner-petals-scrim" />
+        )}
 
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">

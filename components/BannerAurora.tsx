@@ -27,19 +27,9 @@ const BLOBS_LIGHT = [
   { grad: "radial-gradient(50% 50%, rgba(4,133,123,0.14) 0%, rgba(4,133,123,0) 70%)", size: 300, top: "60%", left: "22%" },
 ];
 
-export default function BannerAurora({
-  light = false,
-  pattern = "grid",
-}: {
-  light?: boolean;
-  /** Background line pattern: "grid" (technical drawing, Sonderwerkzeuge)
-   *  or "arcs" (concentric grinding arcs, Schärfservice). */
-  pattern?: "grid" | "arcs";
-}) {
+export default function BannerAurora({ light = false }: { light?: boolean }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const BLOBS = light ? BLOBS_LIGHT : BLOBS_DARK;
-  const patternClass =
-    (pattern === "arcs" ? "banner-arcs" : "banner-grid") + (light ? ` ${pattern === "arcs" ? "banner-arcs" : "banner-grid"}--light` : "");
 
   useEffect(() => {
     const root = rootRef.current;
@@ -53,8 +43,8 @@ export default function BannerAurora({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
-      // Breathe the background pattern (grid or arcs) gently in and out.
-      gsap.to(".banner-grid, .banner-arcs", {
+      // Breathe the technical grid gently in and out of the banner BG.
+      gsap.to(".banner-grid", {
         opacity: 0.3,
         duration: 5,
         ease: "sine.inOut",
@@ -85,8 +75,8 @@ export default function BannerAurora({
 
   return (
     <div ref={rootRef} className="banner-aurora" aria-hidden>
-      {/* Background line pattern (grid or arcs) — behind the glow blobs. */}
-      <div className={patternClass} />
+      {/* Technical-drawing grid — behind the glow blobs so they bloom over it. */}
+      <div className={`banner-grid${light ? " banner-grid--light" : ""}`} />
       {BLOBS.map((b, i) => (
         <div
           key={i}

@@ -876,28 +876,29 @@ label[for] {
     linear-gradient(90deg, rgba(1, 164, 151, 0.1) 1px, transparent 1px);
 }
 
-/* Concentric grinding arcs — the sharpening-service counterpart to the
-   technical grid. Thin concentric rings sweeping up from the lower-left
-   corner, evoking a grinding/sharpening wheel and the radius of a honed
-   edge. Two-tier like the grid (fine rings every 40px, stronger accent
-   rings every 120px). Same edge mask so it dissolves into the banner. */
-.banner-arcs {
+/* "Flowing ribbon petals" canvas background (Schärfservice) — see
+   components/HeroWaveAnimation.tsx. Clustered right, fading out to the left
+   via a mask so the headline zone stays clean. */
+.banner-petals {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  overflow: hidden;
   pointer-events: none;
-  opacity: 0.65;
-  will-change: opacity;
-  background-image:
-    repeating-radial-gradient(circle at 12% 92%, transparent 0 119px, rgba(132, 205, 199, 0.13) 119px 120px),
-    repeating-radial-gradient(circle at 12% 92%, transparent 0 39px, rgba(132, 205, 199, 0.07) 39px 40px);
-  -webkit-mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
-  mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 30%);
+  mask-image: linear-gradient(to right, transparent, #000 30%);
 }
-/* Light-mode arcs: dark teal rings on a pale surface (symmetry with the grid). */
-.banner-arcs--light {
-  background-image:
-    repeating-radial-gradient(circle at 12% 92%, transparent 0 119px, rgba(1, 164, 151, 0.16) 119px 120px),
-    repeating-radial-gradient(circle at 12% 92%, transparent 0 39px, rgba(1, 164, 151, 0.09) 39px 40px);
+.banner-petals__canvas {
+  position: absolute;
+  inset: 0;
+}
+/* Right-weighted scrim so the 1-2-3 stepper stays legible over the petals. */
+.banner-petals-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 55%, rgba(4, 26, 25, 0.5) 100%);
 }
 
 /* Section "View all" link */
