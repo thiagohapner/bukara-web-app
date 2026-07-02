@@ -154,10 +154,11 @@ not part of this restyle.
 
 A `darkHero` slide can optionally take a full-bleed background photo via
 the `bgImage` field (a path in `/public`). The photo is anchored right and
-blended into `--color-surface-dark` with a left→right gradient (solid on
-the left ~32% for text legibility, revealing the photo toward the right);
-this replaces that slide's aurora and checklist. Schärfservice uses this
-(`/service2_banner.png`); Sonderlösungen keeps the aurora + checklist.
+blended into `--color-surface-dark` with a left→right gradient — solid on
+the left for text legibility, staying dark enough (~0.6 alpha) on the right
+that the checklist remains readable over the photo. It replaces that
+slide's aurora only; the checklist still renders on top. Schärfservice
+uses this (`/service2_banner.png`); Sonderlösungen keeps the aurora.
 
 ## 5. Shadows
 
@@ -408,7 +409,9 @@ heading weights per template (homepage hero first, highest visibility).
   untouched.
 - ✅ Schärfservice banner given an optional full-bleed background photo
   (`bgImage` → `/service2_banner.png`) blended into the dark surface via a
-  left→right gradient; replaces that slide's aurora + checklist.
+  left→right gradient; replaces that slide's aurora (the checklist still
+  renders over the photo, and the gradient stays ~0.6 dark on the right to
+  keep it readable).
 - ✅ **Remaining homepage components migrated** to the DS (`SelectedProducts`
   carousel, `CategoryShowcase` carousel, `HomeAboutSections`, `FeatureBar`,
   `Footer`): section headings → `.heading-h3`/`.heading-h2`; the about-section

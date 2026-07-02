@@ -156,12 +156,13 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               />
             </div>
             {/* Blend it into the dark surface: solid on the left for text
-                legibility, revealing the photo toward the right. */}
+                legibility, keeping the right dark enough for the checklist
+                to stay readable over the photo. */}
             <div
               className="absolute inset-0 z-0"
               style={{
                 background:
-                  "linear-gradient(90deg, #041A19 0%, #041A19 32%, rgba(4,26,25,0.85) 48%, rgba(4,26,25,0.35) 72%, rgba(4,26,25,0.1) 100%)",
+                  "linear-gradient(90deg, #041A19 0%, #041A19 38%, rgba(4,26,25,0.94) 55%, rgba(4,26,25,0.78) 78%, rgba(4,26,25,0.62) 100%)",
               }}
             />
           </>
@@ -220,8 +221,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </div>
         </div>
 
-        {/* RIGHT COLUMN — hidden when a background photo is the visual */}
-        {!slide.bgImage && (
+        {/* RIGHT COLUMN */}
         <div className="relative z-10 hidden md:flex items-center pr-14 pl-5 py-9">
           {slide.rightPanel.kind === "features" ? (
             <div className="checklist checklist--on-dark w-full">
@@ -243,7 +243,6 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             </div>
           )}
         </div>
-        )}
       </div>
 
       {/* CONTROLS — dots left, arrows right, below the card (hidden for single-slide banners) */}
