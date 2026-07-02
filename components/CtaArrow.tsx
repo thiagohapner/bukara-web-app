@@ -8,7 +8,7 @@ import { ChevronRight, ArrowRight } from "lucide-react";
 export default function CtaArrow() {
   return (
     <span className="cta-arrow" aria-hidden>
-      <ChevronRight className="cta-arrow__chev" strokeWidth={2.5} />
+      <ChevronRight className="cta-arrow__chev" strokeWidth={3} />
       <ArrowRight className="cta-arrow__arr" strokeWidth={2.5} />
     </span>
   );
