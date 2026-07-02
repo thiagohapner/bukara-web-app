@@ -162,15 +162,6 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               className="absolute inset-0 z-0"
               style={{ backgroundColor: "var(--color-brand-800)", mixBlendMode: "multiply", opacity: 0.6 }}
             />
-            {/* Vignette: darken the edges so the photo melts into the card
-                and attention stays center-left. */}
-            <div
-              className="absolute inset-0 z-0"
-              style={{
-                background:
-                  "radial-gradient(130% 130% at 28% 50%, rgba(4,26,25,0) 42%, rgba(4,26,25,0.55) 100%)",
-              }}
-            />
             {/* Horizontal gradient: solid on the left for text, darker floor
                 on the right (checklist still legible). */}
             <div
