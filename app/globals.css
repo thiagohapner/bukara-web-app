@@ -891,6 +891,8 @@ label[for] {
 .banner-petals__canvas {
   position: absolute;
   inset: 0;
+  /* Soften the ribbon edges so the composition reads as silk, not glass. */
+  filter: blur(6px);
 }
 /* Right-weighted scrim so the 1-2-3 stepper stays legible over the petals. */
 .banner-petals-scrim {

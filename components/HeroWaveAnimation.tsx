@@ -5,66 +5,62 @@ import gsap from "gsap";
 
 // "Flowing ribbon petals" background — a Stripe-hero-style canvas animation
 // adapted to the Bukara monochrome-teal palette (see DESIGN_SYSTEM.md §5).
-// Large organic bezier "petals" with gradient fills + dense radial striations
-// (silky fabric texture) drift/rotate/warp on a seamless GSAP loop and glow
-// where they overlap (screen blend). Canvas 2D only — GSAP drives all values.
+// Each petal is a smooth tapered ribbon (two mirrored bezier edges) with a
+// gradient fill + dense radial striations (silky sheen). Petals are drawn
+// with a screen blend so overlaps glow, and drift/rotate/warp on a seamless
+// GSAP loop. Canvas 2D only — GSAP drives all animation values. A CSS blur on
+// the canvas melts the edges so it reads as silk, not glass.
 
 type Petal = {
-  // Bezier control points, normalized 0–1 (scaled to canvas size at draw).
-  startX: number; startY: number;
-  cp1x: number; cp1y: number;
-  cp2x: number; cp2y: number;
-  endX: number; endY: number;
-  // Base/root point the petal rotates + striations radiate from (normalized).
+  // Base (narrow root) and tip, normalized 0–1 (scaled to canvas at draw).
   baseX: number; baseY: number;
+  tipX: number; tipY: number;
+  // Half-width of the ribbon at its widest, as a fraction of canvas width.
+  width: number;
+  // Asymmetry of the two edges (0 = symmetric leaf, >0 = one side bows more).
+  bow: number;
   colorStart: string;
   colorEnd: string;
   striationCount: number;
   striationOpacity: number;
-  // Animation state, mutated by GSAP tweens each frame.
+  // Animation state, mutated by GSAP each frame.
   rotation: number; // radians
   scale: number;
   warpY: number; // px
   opacity: number;
 };
 
-// Bukara teal ramp (monochrome, on the deep-teal dark surface). Clustered in
-// the right ~60%; the left fade is handled by the CSS mask on the canvas.
+// Broad, graceful ribbons clustered in the right ~60%. Teal ramp only.
 const makePetals = (): Petal[] => [
   {
-    startX: 0.55, startY: 0.15, cp1x: 1.05, cp1y: 0.0, cp2x: 1.1, cp2y: 0.7,
-    endX: 0.6, endY: 0.95, baseX: 0.58, baseY: 0.5,
+    baseX: 0.6, baseY: 1.15, tipX: 0.72, tipY: -0.15, width: 0.16, bow: 0.35,
     colorStart: "#07645D", colorEnd: "#062F2C",
-    striationCount: 190, striationOpacity: 0.1,
+    striationCount: 170, striationOpacity: 0.09,
     rotation: 0, scale: 1, warpY: 0, opacity: 0.9,
   },
   {
-    startX: 0.62, startY: -0.05, cp1x: 1.15, cp1y: 0.25, cp2x: 0.95, cp2y: 0.85,
-    endX: 0.7, endY: 1.05, baseX: 0.66, baseY: 0.42,
+    baseX: 0.7, baseY: 1.2, tipX: 0.86, tipY: 0.0, width: 0.19, bow: -0.3,
     colorStart: "#01A497", colorEnd: "#07645D",
-    striationCount: 170, striationOpacity: 0.12,
+    striationCount: 170, striationOpacity: 0.11,
     rotation: 0, scale: 1, warpY: 0, opacity: 0.85,
   },
   {
-    startX: 0.72, startY: 0.1, cp1x: 1.2, cp1y: 0.4, cp2x: 1.05, cp2y: 0.95,
-    endX: 0.8, endY: 1.1, baseX: 0.74, baseY: 0.55,
+    baseX: 0.66, baseY: 1.1, tipX: 1.0, tipY: 0.2, width: 0.17, bow: 0.4,
     colorStart: "#27D8CA", colorEnd: "#01A497",
-    striationCount: 160, striationOpacity: 0.14,
+    striationCount: 160, striationOpacity: 0.13,
     rotation: 0, scale: 1, warpY: 0, opacity: 0.8,
   },
   {
-    startX: 0.8, startY: -0.1, cp1x: 1.25, cp1y: 0.15, cp2x: 1.15, cp2y: 0.75,
-    endX: 0.85, endY: 0.9, baseX: 0.82, baseY: 0.4,
+    baseX: 0.82, baseY: 1.15, tipX: 1.05, tipY: -0.1, width: 0.2, bow: -0.35,
     colorStart: "#84CDC7", colorEnd: "#04857B",
-    striationCount: 150, striationOpacity: 0.12,
-    rotation: 0, scale: 1, warpY: 0, opacity: 0.7,
+    striationCount: 150, striationOpacity: 0.11,
+    rotation: 0, scale: 1, warpY: 0, opacity: 0.72,
   },
   {
-    startX: 0.5, startY: 0.35, cp1x: 0.95, cp1y: 0.35, cp2x: 1.0, cp2y: 0.95,
-    endX: 0.55, endY: 1.15, baseX: 0.55, baseY: 0.62,
+    baseX: 0.58, baseY: 1.2, tipX: 0.62, tipY: 0.05, width: 0.14, bow: 0.2,
     colorStart: "#B4DAD7", colorEnd: "#01A497",
-    striationCount: 140, striationOpacity: 0.1,
-    rotation: 0, scale: 1, warpY: 0, opacity: 0.65,
+    striationCount: 140, striationOpacity: 0.09,
+    rotation: 0, scale: 1, warpY: 0, opacity: 0.6,
   },
 ];
 
@@ -97,55 +93,60 @@ export default function HeroWaveAnimation() {
     const drawPetal = (p: Petal) => {
       const bx = p.baseX * w;
       const by = p.baseY * h;
+      const tx = p.tipX * w;
+      const ty = p.tipY * h;
+
+      // Spine direction + perpendicular (for the ribbon's width).
+      const dx = tx - bx;
+      const dy = ty - by;
+      const len = Math.hypot(dx, dy) || 1;
+      const nx = -dy / len;
+      const ny = dx / len;
+      const hw = p.width * w;
+
+      // Widen in the middle, taper to base + tip — a smooth leaf/ribbon.
+      const eA1x = bx + dx * 0.28 + nx * hw * (1 + p.bow);
+      const eA1y = by + dy * 0.28 + ny * hw * (1 + p.bow);
+      const eA2x = bx + dx * 0.72 + nx * hw * (0.85 + p.bow * 0.5);
+      const eA2y = by + dy * 0.72 + ny * hw * (0.85 + p.bow * 0.5);
+      const eB1x = bx + dx * 0.72 - nx * hw * 0.85;
+      const eB1y = by + dy * 0.72 - ny * hw * 0.85;
+      const eB2x = bx + dx * 0.28 - nx * hw * (1 - p.bow * 0.5);
+      const eB2y = by + dy * 0.28 - ny * hw * (1 - p.bow * 0.5);
 
       ctx.save();
       ctx.globalCompositeOperation = "screen";
       ctx.globalAlpha = p.opacity;
-      // Warp/rotate/scale around the petal's base point.
       ctx.translate(bx, by + p.warpY);
       ctx.rotate(p.rotation);
       ctx.scale(p.scale, p.scale);
       ctx.translate(-bx, -by);
 
-      // Petal silhouette (closed bezier loop back through the base).
       ctx.beginPath();
-      ctx.moveTo(p.startX * w, p.startY * h);
-      ctx.bezierCurveTo(
-        p.cp1x * w, p.cp1y * h,
-        p.cp2x * w, p.cp2y * h,
-        p.endX * w, p.endY * h
-      );
-      ctx.bezierCurveTo(
-        bx + (p.endX * w - bx) * 0.3, by + (p.endY * h - by) * 0.3,
-        bx + (p.startX * w - bx) * 0.3, by + (p.startY * h - by) * 0.3,
-        p.startX * w, p.startY * h
-      );
+      ctx.moveTo(bx, by);
+      ctx.bezierCurveTo(eA1x, eA1y, eA2x, eA2y, tx, ty);
+      ctx.bezierCurveTo(eB1x, eB1y, eB2x, eB2y, bx, by);
       ctx.closePath();
 
-      const grad = ctx.createLinearGradient(bx, by, p.endX * w, p.endY * h);
+      const grad = ctx.createLinearGradient(bx, by, tx, ty);
       grad.addColorStop(0, p.colorStart);
       grad.addColorStop(1, p.colorEnd);
       ctx.fillStyle = grad;
       ctx.fill();
 
-      // Silky striations: fan of thin lines from the base to points along the
-      // petal's outer edge (clipped to the petal shape).
+      // Silky striations: a fan from the base across the ribbon's far edge,
+      // clipped to the petal so they read as fine satin ribs.
       ctx.clip();
       ctx.lineWidth = 1;
-      const ex = p.endX * w;
-      const ey = p.endY * h;
-      const sx = p.startX * w;
-      const sy = p.startY * h;
-      for (let i = 0; i < p.striationCount; i++) {
-        const t = i / (p.striationCount - 1);
-        // Interpolate the outer edge from start point to end point.
-        const tx = sx + (ex - sx) * t;
-        const ty = sy + (ey - sy) * t;
-        ctx.strokeStyle = `rgba(255,255,255,${p.striationOpacity})`;
+      ctx.strokeStyle = `rgba(255,255,255,${p.striationOpacity})`;
+      for (let i = 0; i <= p.striationCount; i++) {
+        const t = i / p.striationCount;
+        // Sweep the far endpoint across the full width at the tip end.
+        const acrossX = tx + nx * hw * (t * 2 - 1);
+        const acrossY = ty + ny * hw * (t * 2 - 1);
         ctx.beginPath();
         ctx.moveTo(bx, by);
-        // Overshoot past the edge so lines always reach the clip boundary.
-        ctx.lineTo(bx + (tx - bx) * 1.6, by + (ty - by) * 1.6);
+        ctx.lineTo(acrossX, acrossY);
         ctx.stroke();
       }
       ctx.restore();
@@ -167,11 +168,7 @@ export default function HeroWaveAnimation() {
     if (canvas.parentElement) ro.observe(canvas.parentElement);
 
     if (reduced) {
-      // Static composition — spread the petals to their mid state and draw once.
-      petals.forEach((p, i) => {
-        p.rotation = (i - 2) * 0.06;
-        p.scale = 1;
-      });
+      petals.forEach((p, i) => { p.rotation = (i - 2) * 0.05; });
       render();
       return () => ro.disconnect();
     }
@@ -180,15 +177,15 @@ export default function HeroWaveAnimation() {
       petals.forEach((p, i) => {
         const dir = i % 2 === 0 ? 1 : -1;
         gsap.to(p, {
-          rotation: dir * (0.16 + i * 0.03),
-          scale: 1.08,
-          warpY: dir * (14 + i * 3),
-          opacity: Math.min(1, p.opacity + 0.1),
-          duration: 9 + i * 1.6,
+          rotation: dir * (0.1 + i * 0.02),
+          scale: 1.06,
+          warpY: dir * (12 + i * 3),
+          opacity: Math.min(1, p.opacity + 0.08),
+          duration: 10 + i * 1.8,
           ease: "sine.inOut",
           repeat: -1,
           yoyo: true,
-          delay: i * 0.6,
+          delay: i * 0.7,
         });
       });
     });
