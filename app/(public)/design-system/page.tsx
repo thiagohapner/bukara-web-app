@@ -150,31 +150,31 @@ export default function DesignSystemPage() {
 
       <Block
         title="Typography"
-        description="Font family: Geist. Every size — display down to nav links — defaults to weight 400 (regular); hierarchy comes from size/letter-spacing/color, not boldness. Most templates on the live site still use 600–900; see DESIGN_SYSTEM.md §8 for the migration list."
+        description="Font family: Geist. Headings and body are weight 300 (light), per the Stripe reference; nav links, eyebrows and controls are 400. Hierarchy comes from size/letter-spacing/color, not boldness. Most templates on the live site still use 600–900; see DESIGN_SYSTEM.md §8 for the migration list."
       >
         <div className="flex flex-col gap-6">
           <div>
-            <div className="heading-xxl">Display XXL / 56 / 400</div>
+            <div className="heading-xxl">Display XXL / 56 / 300</div>
             <p className="text-xs text-neutral-500 mt-1">.heading-xxl — stat/hero numbers only</p>
           </div>
           <div>
-            <div className="heading-xl">Display XL / 48 / 400</div>
+            <div className="heading-xl">Display XL / 48 / 300</div>
             <p className="text-xs text-neutral-500 mt-1">.heading-xl — reserved, not currently used on any live page</p>
           </div>
           <div>
-            <div className="heading-l">Display L / 44 / 400</div>
+            <div className="heading-l">Display L / 44 / 300</div>
             <p className="text-xs text-neutral-500 mt-1">.heading-l — big promo banner headlines. Bukara addition, doesn&apos;t exist in the Stripe reference — sits between Display XL and H1/H2.</p>
           </div>
           <div>
-            <div className="heading-h2">H2 / 32 / 400</div>
+            <div className="heading-h2">H2 / 32 / 300</div>
             <p className="text-xs text-neutral-500 mt-1">.heading-h2 — reserved for larger/hero-adjacent headings, used sparingly</p>
           </div>
           <div>
-            <div className="heading-h3">H3 / 26 / 400</div>
+            <div className="heading-h3">H3 / 26 / 300</div>
             <p className="text-xs text-neutral-500 mt-1">.heading-h3 — default for section headers, PDP product names, page titles, and similar, unless stated otherwise</p>
           </div>
           <p className="body-text max-w-xl">
-            Body / 16 / 400 — Bequem und sicher bezahlen, deutschlandweiter
+            Body / 16 / 300 — Bequem und sicher bezahlen, deutschlandweiter
             Schärfservice, exklusiver Partner von ITA Tools.
           </p>
           <p className="text-sm font-normal text-neutral-600">Nav link / 14 / 400</p>

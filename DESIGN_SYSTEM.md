@@ -73,32 +73,30 @@ Söhne files available). Type tokens in `app/globals.css`:
 
 | Token | Value | Use |
 |---|---|---|
-| `--fw-regular` | 400 | **Default weight for everything** — headings, body text, nav links, buttons |
-| `--fw-medium` | 500 | Light emphasis (labels, eyebrows) |
+| `--fw-light` | 300 | **Display/heading type and body text** (matches the Stripe reference) |
+| `--fw-regular` | 400 | Nav links, eyebrows, form controls |
+| `--fw-medium` | 500 | Light emphasis (labels) |
 | `--fw-bold` | 600 | Strong emphasis — used sparingly, not for headings |
 | `--fs-display-xxl` … `--fs-xs` | 3.5rem → 0.875rem | See scale below |
 
-Deviation from the Stripe reference: Stripe sets display/heading type at
-weight 300 (light). Bukara intentionally uses weight 400 (regular) as the
-default everywhere instead — hierarchy comes from size, letter-spacing, and
-color, not from going lighter-than-body-text on headings. The Stripe
-reference package under `design-system/stripe-reference/` still documents
-300; that's expected, ignore it for weight, keep it for size/spacing/motion/
-shadow guidance.
+Headings and body are weight **300 (light)**, per the Stripe reference —
+hierarchy comes from size, letter-spacing, and color, with a light,
+airy feel rather than heavy type. (This was briefly set to 400 and then
+reverted back to 300.)
 
 Reference scale:
 
 ```
-Display XXL   56px / 400 / lh 1.03  / ls -0.025em   — stat/hero numbers
-Display XL    48px / 400 / lh 1.03  / ls -0.02em    — reserved, not currently used on any live page
-Display L     44px / 400 / lh 1.05  / ls -0.02em    — big promo banner headlines (§4). Bukara-specific
+Display XXL   56px / 300 / lh 1.03  / ls -0.025em   — stat/hero numbers
+Display XL    48px / 300 / lh 1.03  / ls -0.02em    — reserved, not currently used on any live page
+Display L     44px / 300 / lh 1.05  / ls -0.02em    — big promo banner headlines (§4). Bukara-specific
                                                         rung, doesn't exist in the Stripe reference —
                                                         sits between Display XL and H1/H2.
-H1            40px / 400 / lh 1.2   / ls -0.02em    — rare; a page's single top-level title
-H2            32px / 400 / lh 1.1   / ls -0.02em    — reserved for larger/hero-adjacent headings, used sparingly
-H3            26px / 400 / lh 1.12  / ls -0.01em    — DEFAULT for section headers, PDP product names, page titles
-H4            22px / 400 / lh 1.1   / ls -0.01em
-Body          16px / 400 / lh 1.4
+H1            40px / 300 / lh 1.2   / ls -0.02em    — rare; a page's single top-level title
+H2            32px / 300 / lh 1.1   / ls -0.02em    — reserved for larger/hero-adjacent headings, used sparingly
+H3            26px / 300 / lh 1.12  / ls -0.01em    — DEFAULT for section headers, PDP product names, page titles
+H4            22px / 300 / lh 1.1   / ls -0.01em
+Body          16px / 300 / lh 1.4
 Nav links     14px / 400
 Eyebrow       14px / 400, no uppercase, no letter-spacing
 ```
@@ -118,7 +116,7 @@ addition — see above). Apply the class instead of
 composing `text-*`/`font-*`/`tracking-*` Tailwind utilities by hand; that's
 exactly how heading weight/letter-spacing drift happens (see §10).
 
-**Rule: default weight is regular (400), never heavy.** `font-bold`/
+**Rule: headings and body are light (300), never heavy.** `font-bold`/
 `font-extrabold`/`font-black` on an `<h1>`–`<h3>` (or on body/emphasis text)
 is off-system. Weight carries hierarchy through size and color, not
 boldness. This is a real gap today — see §10.
@@ -276,10 +274,10 @@ the rest of the app still routes around the token layer entirely.
 4. **`#0F172A` (Tailwind's default near-black navy) used 33 times** as a
    button/text color — this is not brand ink (`#022221`) and is a leftover
    from a pre-rebrand palette (see `--navy` legacy alias in `globals.css`).
-5. **Heading weights are heavy, not regular.** 111 `font-semibold` + 58
+5. **Heading weights are heavy, not light.** 111 `font-semibold` + 58
    `font-bold` + 37 `font-extrabold` + 7 `font-black` instances across
-   headings/emphasis text, vs. 18 `font-normal`. The DS calls for weight-400
-   headings (§3) — today's headings are 2-5 steps heavier than that. This
+   headings/emphasis text, vs. 18 `font-normal`. The DS calls for weight-300
+   headings (§3) — today's headings are far heavier than that. This
    is the single biggest visual gap between "tokens updated"
    and "site looks redesigned," and it's a real design decision (not a
    find-and-replace) since it changes visual hierarchy — needs a deliberate
@@ -343,8 +341,10 @@ heading weights per template (homepage hero first, highest visibility).
   14px/400 nav-link rule. This is item #5 above, template 1 of many —
   first real visible proof that heading weight changes read as
   "redesigned," not just recolored.
-- ✅ Default heading weight changed from 300 (light, the Stripe default) to
-  400 (regular) — Bukara's deliberate deviation, see §3.
+- ✅ Heading/body weight: briefly set to 400, then reverted to **300
+  (light)** to match the Stripe reference — the airy, light-type look.
+  `.heading-*` and `.body-text` use `--fw-light`; nav/eyebrow/controls
+  stay 400.
 - ✅ H3 established as the default section/page-heading size (§3). The exact
   class combo `text-2xl sm:text-3xl font-extrabold text-slate-900
   leading-tight` had drifted into 12 near-identical copies across
