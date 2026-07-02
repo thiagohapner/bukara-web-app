@@ -459,21 +459,24 @@ label[for] {
   width: 1.05em;
   height: 1.05em;
   flex-shrink: 0;
+  /* The whole icon slides — both glyphs move together, so they never
+     separate into two offset arrows. */
+  transition: transform 460ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+.btn-arrow:hover .cta-arrow { transform: translateX(4px); }
 .cta-arrow svg {
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 0;
   width: 1.05em;
   height: 1.05em;
-  /* Longer, gentle in-out easing so the swap glides rather than snaps. */
-  transition: opacity 380ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 460ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Icons are stacked in the exact same spot and only cross-fade in place,
+     so the swap reads as one shape morphing — no ghosting, no motion blur. */
+  transition: opacity 320ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-.cta-arrow__chev { opacity: 1; transform: translate(0, -50%); }
-.cta-arrow__arr  { opacity: 0; transform: translate(-6px, -50%); }
-.btn-arrow:hover .cta-arrow__chev { opacity: 0; transform: translate(6px, -50%); }
-.btn-arrow:hover .cta-arrow__arr  { opacity: 1; transform: translate(0, -50%); }
+.cta-arrow__arr { opacity: 0; }
+.btn-arrow:hover .cta-arrow__chev { opacity: 0; }
+.btn-arrow:hover .cta-arrow__arr  { opacity: 1; }
 
 @media (max-width: 1023px) {
   .hero-cta a.btn-brand,
