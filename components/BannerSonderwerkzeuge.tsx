@@ -152,7 +152,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                 alt=""
                 fill
                 aria-hidden
-                className="object-cover object-right"
+                className="object-cover object-[70%_center]"
                 style={{ filter: "saturate(0.95)" }}
               />
             </div>
