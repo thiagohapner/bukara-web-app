@@ -254,7 +254,7 @@ export default function DesignSystemPage() {
 
       <Block
         title="Aurora hero banner — dark & light"
-        description="The live homepage hero banners (components/BannerSonderwerkzeuge.tsx, darkHero slides). Both share one layout — big .heading-l, body copy, a .btn-arrow CTA and an on-surface right panel (checklist or numbered stepper) — over an animated BannerAurora (glow + breathing technical grid). The heroMode flag swaps the palette per slide: DARK (Sonderlösungen) = deep brand-teal gradient, white text, .btn-white CTA, on-dark panel; LIGHT (Schärfservice) = pale brand-25→100 gradient, ink text, .btn-brand CTA, dark-on-light grid, light stepper. The X99 banner is untouched."
+        description="The live homepage hero banners (components/BannerSonderwerkzeuge.tsx, darkHero slides). Both share one layout — big .heading-l, body copy, a .btn-arrow CTA and an on-surface right panel (checklist or numbered stepper) — over an animated BannerAurora (glow + breathing technical grid). The heroMode flag swaps the palette per slide: DARK (Schärfservice) = deep brand-teal gradient, white text, .btn-white CTA, on-dark panel; LIGHT (Sonderlösungen) = pale brand-25→100 gradient, ink text, .btn-brand CTA, dark-on-light grid, light stepper. The X99 banner is untouched."
       >
         <div className="-mx-4 sm:-mx-6 flex flex-col gap-2">
           <BannerSonderwerkzeuge only="sonderloesungen" />

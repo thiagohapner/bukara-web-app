@@ -67,13 +67,14 @@ const slides: Slide[] = [
       "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf.",
     ctaLabel: "Sonderwerkzeug anfragen",
     ctaHref: "/sonder-werkzeug",
-    // Distinct-but-related scheme vs Schärfservice (flat near-black + photo):
-    // a diagonal brand-teal gradient (brand-800 → brand-950), lighter/greener
-    // in the headline area, deep on the right so the checklist stays legible.
-    bgColor: "linear-gradient(105deg, #074843 0%, #062F2C 48%, #05211F 100%)",
-    textColor: "var(--color-text-dark-heading)",
+    // Light-mode sibling: airy pale brand-teal gradient (brand-25 → brand-50
+    // → brand-100) with the aurora glow + technical grid, ink text and a
+    // brand CTA.
+    bgColor: "linear-gradient(105deg, #F5FAFA 0%, #EAF5F4 48%, #D6EBE9 100%)",
+    textColor: "var(--color-ink)",
     ctaStyle: "brand",
     darkHero: true,
+    heroMode: "light",
     rightPanel: {
       kind: "features",
       features: [
@@ -94,14 +95,12 @@ const slides: Slide[] = [
       "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
-    // Light-mode sibling of the dark Sonderlösungen banner: airy pale
-    // brand-teal gradient (brand-25 → brand-50 → brand-100) with the same
-    // aurora glow + technical grid, ink text and a brand CTA.
-    bgColor: "linear-gradient(105deg, #F5FAFA 0%, #EAF5F4 48%, #D6EBE9 100%)",
-    textColor: "var(--color-ink)",
+    // Dark scheme: deep diagonal brand-teal gradient (brand-800 → brand-950)
+    // with the aurora glow + technical grid, white text and a white CTA.
+    bgColor: "linear-gradient(105deg, #074843 0%, #062F2C 48%, #05211F 100%)",
+    textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
-    heroMode: "light",
     rightPanel: {
       kind: "stepper",
       steps: [
