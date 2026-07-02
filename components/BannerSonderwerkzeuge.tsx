@@ -145,31 +145,50 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
       >
         {slide.darkHero && slide.bgImage && (
           <>
-            {/* Full-bleed background photo, anchored right */}
+            {/* Full-bleed background photo, pushed right + darkened */}
             <div className="absolute inset-0 z-0">
               <Image
                 src={slide.bgImage}
                 alt=""
                 fill
                 aria-hidden
-                className="object-cover object-[60%_center]"
-                style={{ filter: "saturate(0.95)" }}
+                className="object-cover object-[42%_center]"
+                style={{ filter: "saturate(0.9) brightness(0.92)" }}
               />
             </div>
-            {/* Partial multiply of the brand teal — tints the photo toward
-                teal-black and knocks the highlights back so it reads on-brand,
-                but at 0.55 opacity the image stays clearly visible. */}
+            {/* Duotone: multiply the brand teal over the photo so it tints
+                teal-black and reads as one on-brand dark surface. */}
             <div
               className="absolute inset-0 z-0"
-              style={{ backgroundColor: "var(--color-brand-800)", mixBlendMode: "multiply", opacity: 0.55 }}
+              style={{ backgroundColor: "var(--color-brand-800)", mixBlendMode: "multiply", opacity: 0.6 }}
             />
-            {/* Horizontal gradient: fully solid on the left for text, easing
-                to a light floor on the right so the photo shows through. */}
+            {/* Vignette: darken the edges so the photo melts into the card
+                and attention stays center-left. */}
             <div
               className="absolute inset-0 z-0"
               style={{
                 background:
-                  "linear-gradient(90deg, #041A19 0%, #041A19 46%, rgba(4,26,25,0.62) 72%, rgba(4,26,25,0.35) 100%)",
+                  "radial-gradient(130% 130% at 28% 50%, rgba(4,26,25,0) 42%, rgba(4,26,25,0.55) 100%)",
+              }}
+            />
+            {/* Horizontal gradient: solid on the left for text, darker floor
+                on the right (checklist still legible). */}
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                background:
+                  "linear-gradient(90deg, #041A19 0%, #041A19 46%, rgba(4,26,25,0.78) 72%, rgba(4,26,25,0.55) 100%)",
+              }}
+            />
+            {/* Teal glow bloom over the polishing area — a faux light source,
+                screen-blended so it adds light on top of the dark base
+                (Stripe-style). Monochrome brand teal, atmosphere only. */}
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                background:
+                  "radial-gradient(45% 65% at 70% 52%, rgba(1,164,151,0.5) 0%, rgba(1,164,151,0.12) 45%, rgba(1,164,151,0) 72%)",
+                mixBlendMode: "screen",
               }}
             />
           </>
