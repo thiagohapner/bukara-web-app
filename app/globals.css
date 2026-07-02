@@ -537,50 +537,63 @@ label[for] {
 .checklist--on-dark .checklist-badge { box-shadow: 0 0 0 4px rgba(1, 164, 151, 0.15); }
 
 /* Numbered 1-2-3 stepper for a dark-hero banner (Schärfservice process).
-   Outline circles in the light-teal brand tint, joined by a vertical
-   connector line drawn off each non-last circle so it scales with the gap. */
-.banner-stepper { display: flex; flex-direction: column; gap: var(--sp-8); }
+   A single continuous connector line runs behind the circles (drawn per
+   step from its circle-bottom down to the next circle-top, so the segments
+   join seamlessly regardless of text height). --step-circle keeps the
+   circle size, connector x-offset, and line length in sync. */
+.banner-stepper {
+  --step-circle: 30px;
+  --step-gap: var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--step-gap);
+}
 .banner-step { display: flex; align-items: flex-start; gap: var(--sp-4); position: relative; }
 .banner-step-num {
   position: relative;
   z-index: 1;
-  width: 34px;
-  height: 34px;
+  width: var(--step-circle);
+  height: var(--step-circle);
   flex-shrink: 0;
   border-radius: var(--radius-pill);
-  border: 1.5px solid var(--color-brand-500);
-  background: rgba(1, 164, 151, 0.12);
-  color: var(--color-text-dark-link);
-  font-size: var(--fs-sm);
+  border: 1.5px solid var(--color-brand-400);
+  background: rgba(39, 216, 202, 0.06);
+  color: #fff;
+  font-size: 0.8125rem;
   font-weight: var(--fw-medium);
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-/* Vertical connector from this circle to the next one. Height spans the
-   flex gap (--sp-8) plus the two half-circle offsets so the line meets both. */
-.banner-step:not(:last-child) .banner-step-num::after {
+/* Continuous connector: from this circle's bottom edge to the next circle's
+   top edge. Anchored to the step (not the circle) so tall text never opens a
+   gap: top = circle height, bottom = -(gap) reaches the next step's top. */
+.banner-step:not(:last-child)::after {
   content: "";
   position: absolute;
-  top: 100%;
-  left: 50%;
+  left: calc(var(--step-circle) / 2);
   transform: translateX(-50%);
+  top: var(--step-circle);
+  bottom: calc(-1 * var(--step-gap));
   width: 1.5px;
-  height: var(--sp-8);
-  background: var(--color-brand-700);
+  background: linear-gradient(var(--color-brand-500), var(--color-brand-700));
+  opacity: 0.55;
 }
-.banner-step-body { padding-top: 5px; }
+/* Nudge the text so the title's cap-height lines up with the circle centre. */
+.banner-step-body { padding-top: 3px; }
 .banner-step-title {
   color: var(--color-text-dark-heading);
   font-size: var(--fs-base);
   font-weight: var(--fw-medium);
-  line-height: 1.3;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
 }
 .banner-step-sub {
-  margin-top: 2px;
+  margin-top: 3px;
   color: var(--color-text-dark-body);
   font-size: var(--fs-sm);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 /* ============================================================
