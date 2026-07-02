@@ -870,10 +870,10 @@ label[for] {
    graph/CAD paper (dark ruling on light paper). */
 .banner-grid--light {
   background-image:
+    linear-gradient(rgba(1, 164, 151, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1, 164, 151, 0.18) 1px, transparent 1px),
     linear-gradient(rgba(1, 164, 151, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(1, 164, 151, 0.1) 1px, transparent 1px),
-    linear-gradient(rgba(1, 164, 151, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(1, 164, 151, 0.05) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(1, 164, 151, 0.1) 1px, transparent 1px);
 }
 
 /* Section "View all" link */
