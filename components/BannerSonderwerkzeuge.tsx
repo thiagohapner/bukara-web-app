@@ -144,7 +144,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
       >
         {slide.darkHero && slide.bgImage && (
           <>
-            {/* Full-bleed background photo, anchored right, pre-darkened */}
+            {/* Full-bleed background photo, anchored right */}
             <div className="absolute inset-0 z-0">
               <Image
                 src={slide.bgImage}
@@ -152,24 +152,23 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                 fill
                 aria-hidden
                 className="object-cover object-right"
-                style={{ filter: "brightness(0.72) saturate(0.9)" }}
+                style={{ filter: "saturate(0.95)" }}
               />
             </div>
-            {/* Multiply the brand dark over the photo — crushes the highlights
-                and tints it teal-black so it reads as one cohesive dark
-                surface (Stripe-style), not a photo behind a veil. */}
+            {/* Partial multiply of the brand teal — tints the photo toward
+                teal-black and knocks the highlights back so it reads on-brand,
+                but at 0.55 opacity the image stays clearly visible. */}
             <div
               className="absolute inset-0 z-0"
-              style={{ backgroundColor: "var(--color-brand-900)", mixBlendMode: "multiply" }}
+              style={{ backgroundColor: "var(--color-brand-800)", mixBlendMode: "multiply", opacity: 0.55 }}
             />
-            {/* Horizontal gradient on top: fully solid on the left for text,
-                easing to a dark floor on the right (image already darkened
-                by the multiply, so the checklist stays readable). */}
+            {/* Horizontal gradient: fully solid on the left for text, easing
+                to a light floor on the right so the photo shows through. */}
             <div
               className="absolute inset-0 z-0"
               style={{
                 background:
-                  "linear-gradient(90deg, #041A19 0%, #041A19 46%, rgba(4,26,25,0.55) 74%, rgba(4,26,25,0.35) 100%)",
+                  "linear-gradient(90deg, #041A19 0%, #041A19 44%, rgba(4,26,25,0.5) 72%, rgba(4,26,25,0.2) 100%)",
               }}
             />
           </>
@@ -228,10 +227,10 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </div>
         </div>
 
-        {/* RIGHT COLUMN — photo slides push the checklist toward the right edge */}
-        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "justify-end pr-16 pl-5" : "pr-14 pl-5"}`}>
+        {/* RIGHT COLUMN — photo slides indent the checklist a bit further in */}
+        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "pr-14 pl-12" : "pr-14 pl-5"}`}>
           {slide.rightPanel.kind === "features" ? (
-            <div className={`checklist checklist--on-dark ${slide.bgImage ? "w-auto" : "w-full"}`}>
+            <div className="checklist checklist--on-dark w-full">
               {slide.rightPanel.features.map((f, i) => (
                 <div key={i} className="checklist-item">
                   <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
