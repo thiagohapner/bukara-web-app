@@ -158,6 +158,17 @@ that the checklist remains readable over the photo. It replaces that
 slide's aurora only; the checklist still renders on top. Schärfservice
 uses this (`/service2_banner.png`); Sonderlösungen keeps the aurora.
 
+The two `darkHero` slides share one layout (light headline + subdued-teal
+body + white CTA with the chevron→arrow affordance + on-dark checklist,
+checklist indented ~right on both) but carry distinct, on-brand color
+schemes so they read as siblings rather than duplicates. **Schärfservice**
+is the flat near-black surface (`--color-surface-dark`) with the duotone
+photo. **Sonderlösungen** has no photo: it uses a diagonal brand-teal
+gradient (`linear-gradient(105deg, #074843 → #062F2C → #05211F)`,
+brand-800 → brand-950) — lighter/greener in the headline zone, deep on the
+right so the checklist stays legible — with the aurora glow clustered on
+the LEFT (behind the headline, off the checklist).
+
 ## 5. Shadows
 
 Brand-teal-tinted (not grey, not Stripe's blue) double-layer shadows:

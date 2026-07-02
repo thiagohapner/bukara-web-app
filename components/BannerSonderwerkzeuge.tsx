@@ -59,14 +59,16 @@ const slides: Slide[] = [
   },
   {
     id: "sonderloesungen",
-    eyebrow: "Sonderlösungen",
     headline: "Sonderlösungen,",
     highlight: "geplant für Ihre Maschine",
     subline:
       "Wir definieren gemeinsam mit Ihnen Ihren vollständigen Werkzeugbedarf.",
     ctaLabel: "Sonderwerkzeug anfragen",
     ctaHref: "/sonder-werkzeug",
-    bgColor: "var(--color-surface-dark)",
+    // Distinct-but-related scheme vs Schärfservice (flat near-black + photo):
+    // a diagonal brand-teal gradient (brand-800 → brand-950), lighter/greener
+    // in the headline area, deep on the right so the checklist stays legible.
+    bgColor: "linear-gradient(105deg, #074843 0%, #062F2C 48%, #05211F 100%)",
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
@@ -231,7 +233,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         </div>
 
         {/* RIGHT COLUMN — photo slides indent the checklist a bit further in */}
-        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "pr-14 pl-[108px]" : "pr-14 pl-5"}`}>
+        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.darkHero ? "pr-14 pl-[108px]" : "pr-14 pl-5"}`}>
           {slide.rightPanel.kind === "features" ? (
             <div className="checklist checklist--on-dark w-full">
               {slide.rightPanel.features.map((f, i) => (

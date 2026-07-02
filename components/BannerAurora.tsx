@@ -3,19 +3,19 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-// Ambient animated background for the dark-hero promo banners — a single
-// coherent glow cluster radiating from the top-right (a sense of one light
-// source), in the spirit of stripe.com's aurora backgrounds. Atmosphere
-// only (see DESIGN_SYSTEM.md §5): one cluster, monochrome brand teal, tuned
-// to actually read against the deep-teal dark surface.
+// Ambient animated background for the Sonderlösungen dark-hero banner — a
+// coherent glow cluster on the LEFT (behind the headline), in the spirit of
+// stripe.com's aurora backgrounds. Kept off the right side so it never sits
+// behind the checklist and hurts legibility. Atmosphere only (see
+// DESIGN_SYSTEM.md §5): monochrome brand teal on the deep-teal surface.
 
 const BLOBS = [
-  // Primary bright core, top-right behind the checklist.
-  { grad: "var(--grad-aura-brand-core)", size: 460, top: "-24%", left: "58%" },
-  // Cooler mid glow just below it, for depth.
-  { grad: "var(--grad-aura-brand-2)", size: 360, top: "34%", left: "72%" },
-  // Faint far-left wash so the cluster doesn't feel one-sided.
-  { grad: "var(--grad-aura-brand-3)", size: 300, top: "58%", left: "-14%" },
+  // Primary bright core, upper-left behind the headline.
+  { grad: "var(--grad-aura-brand-core)", size: 460, top: "-26%", left: "2%" },
+  // Cooler mid glow just below/left, for depth.
+  { grad: "var(--grad-aura-brand-2)", size: 360, top: "38%", left: "-12%" },
+  // Faint accent drifting toward center — never past the midline.
+  { grad: "var(--grad-aura-brand-3)", size: 300, top: "60%", left: "22%" },
 ];
 
 export default function BannerAurora() {
