@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import BannerAurora from "./BannerAurora";
+import CtaArrow from "./CtaArrow";
 
 type Feature = { text: ReactNode };
 
@@ -225,6 +226,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               }
             >
               {slide.ctaLabel}
+              {slide.darkHero && <CtaArrow />}
             </Link>
           </div>
         </div>

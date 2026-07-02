@@ -3,6 +3,7 @@ import SectionHeader from "@/components/SectionHeader";
 import ProductCard, { ProductCardData } from "@/components/ProductCard";
 import ServiceCard from "@/components/ServiceCard";
 import Testimonials from "@/components/Testimonials";
+import CtaArrow from "@/components/CtaArrow";
 import { SERVICES } from "@/lib/data";
 import { Users, LifeBuoy, Grid2x2Plus, Check, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -245,8 +246,8 @@ export default function DesignSystemPage() {
           <button type="button" className="btn-outline">Tertiary — .btn-outline</button>
         </div>
         <div className="flex flex-wrap items-center gap-4 mt-4 p-4 rounded-md bg-brand-900">
-          <span className="btn-white btn-arrow">On dark — .btn-white</span>
-          <span className="btn-brand btn-arrow">Link CTA — .btn-arrow</span>
+          <span className="btn-white btn-arrow">On dark — .btn-white<CtaArrow /></span>
+          <span className="btn-brand btn-arrow">Link CTA — .btn-arrow<CtaArrow /></span>
         </div>
       </Block>
 
@@ -266,7 +267,7 @@ export default function DesignSystemPage() {
               Präzise, schnell, bundesweit.
             </p>
             <div className="mt-6">
-              <span className="btn-white btn-arrow">Schärfauftrag starten</span>
+              <span className="btn-white btn-arrow">Schärfauftrag starten<CtaArrow /></span>
             </div>
           </div>
           <div className="checklist checklist--on-dark">

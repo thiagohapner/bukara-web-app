@@ -203,10 +203,13 @@ hand-roll new button styles per page**:
   brand-ink text, faint teal tint on hover
 
 **Link CTAs get an arrow.** Add `.btn-arrow` to any button that *navigates
-somewhere* — it appends a trailing chevron `›` that turns into an arrow `→`
-and nudges right on hover (Stripe-style). Do **not** add it to submit/step
-buttons (form "Absenden", wizard Weiter/Zurück) — only to links. Prefer
-`.btn-arrow` over hand-placing a trailing `<ArrowRight>` icon.
+somewhere* and drop `<CtaArrow />` (`components/CtaArrow.tsx`) as its last
+child. A lucide `ChevronRight` shows by default and cross-fades into a lucide
+`ArrowRight` on hover (Stripe-style) — both from the same icon set so they
+share stroke weight/proportions and rendered size, and the button width
+never changes. Do **not** use it on submit/step buttons (form "Absenden",
+wizard Weiter/Zurück) — only on links. Prefer this over a hand-placed
+trailing `<ArrowRight>` icon.
 
 If a page needs a button style these don't cover, extend the shared
 classes — don't inline another pattern with arbitrary Tailwind utilities

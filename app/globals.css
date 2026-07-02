@@ -448,22 +448,31 @@ label[for] {
   background: var(--color-brand-50);
 }
 
-/* Link-CTA affordance (Stripe-style): a trailing chevron that turns into an
-   arrow and nudges right on hover. Add `.btn-arrow` to any .btn-* used as a
-   link that navigates somewhere. Don't use on submit/step-action buttons. */
-.btn-arrow::after {
-  content: "\203A"; /* › */
+/* Link-CTA affordance (Stripe-style): a trailing chevron that cross-fades
+   into an arrow on hover. Add `.btn-arrow` to any .btn-* used as a link that
+   navigates somewhere, and drop a <CtaArrow/> as its last child. Both glyphs
+   are lucide icons (matching stroke language, same size). Don't use on
+   submit/step-action buttons. */
+.cta-arrow {
+  position: relative;
   display: inline-block;
-  width: 1.1em;      /* fixed box so the ›→→ glyph swap can't resize the button */
-  text-align: center;
-  font-size: 1.05em;
-  line-height: 1;
-  transition: transform var(--dur-slow) var(--ease-emphasis);
+  width: 1.05em;
+  height: 1.05em;
+  flex-shrink: 0;
 }
-.btn-arrow:hover::after {
-  content: "\2192"; /* → */
-  transform: translateX(2px);
+.cta-arrow svg {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1.05em;
+  height: 1.05em;
+  transition: opacity var(--dur-fast) var(--ease-standard),
+              transform var(--dur-slow) var(--ease-emphasis);
 }
+.cta-arrow__chev { opacity: 1; transform: translate(0, -50%); }
+.cta-arrow__arr  { opacity: 0; transform: translate(-4px, -50%); }
+.btn-arrow:hover .cta-arrow__chev { opacity: 0; transform: translate(4px, -50%); }
+.btn-arrow:hover .cta-arrow__arr  { opacity: 1; transform: translate(0, -50%); }
 
 @media (max-width: 1023px) {
   .hero-cta a.btn-brand,

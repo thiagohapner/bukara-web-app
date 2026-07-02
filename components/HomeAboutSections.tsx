@@ -6,6 +6,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ExternalLink } from "lucide-react";
+import CtaArrow from "./CtaArrow";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,6 +57,7 @@ export default function HomeAboutSections() {
             <div className="flex flex-wrap gap-3">
               <Link href="/katalog" className="btn-brand btn-arrow" style={{ textDecoration: "none" }}>
                 Produkte entdecken
+                <CtaArrow />
               </Link>
               <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Zum B2B Portal
