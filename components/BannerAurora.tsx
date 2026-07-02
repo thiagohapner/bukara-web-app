@@ -28,10 +28,20 @@ export default function BannerAurora() {
     const blobs = gsap.utils.toArray<HTMLDivElement>(".banner-aurora__blob", root);
     if (!blobs.length) return;
 
-    // Respect reduced motion — skip the drift but keep the static glow.
+    // Respect reduced motion — skip the drift/breath but keep the static
+    // glow + grid (their base opacity is set in CSS).
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
+      // Breathe the technical grid gently in and out of the banner BG.
+      gsap.to(".banner-grid", {
+        opacity: 0.3,
+        duration: 5,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
+
       blobs.forEach((blob, i) => {
         const dir = i % 2 === 0 ? 1 : -1;
         // xPercent/yPercent are relative to each blob's own (large) size, so
@@ -55,6 +65,8 @@ export default function BannerAurora() {
 
   return (
     <div ref={rootRef} className="banner-aurora" aria-hidden>
+      {/* Technical-drawing grid — behind the glow blobs so they bloom over it. */}
+      <div className="banner-grid" />
       {BLOBS.map((b, i) => (
         <div
           key={i}

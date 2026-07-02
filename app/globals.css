@@ -768,6 +768,29 @@ label[for] {
   filter: blur(40px);
   will-change: transform;
 }
+/* Technical-drawing squared grid (graph-paper / CAD look) for the
+   Sonderlösungen dark-hero banner. Two-tier: fine minor lines every 24px,
+   stronger major lines every 96px (every 4th square). Light-teal brand-300
+   tint at low alpha so it whispers on the deep-teal gradient. A radial mask
+   dissolves it toward the card edges so it fades into the banner BG rather
+   than ending at a hard edge. Base opacity keeps it visible without JS
+   (reduced-motion); the GSAP tween breathes it in/out when motion is on. */
+.banner-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.65;
+  will-change: opacity;
+  background-image:
+    linear-gradient(rgba(132, 205, 199, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(132, 205, 199, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(132, 205, 199, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(132, 205, 199, 0.05) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  -webkit-mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
+  mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
+}
 
 /* Section "View all" link */
 .view-all {
