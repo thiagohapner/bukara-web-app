@@ -171,17 +171,6 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                   "linear-gradient(90deg, #041A19 0%, #041A19 46%, rgba(4,26,25,0.78) 72%, rgba(4,26,25,0.55) 100%)",
               }}
             />
-            {/* Teal glow bloom over the polishing area — a faux light source,
-                screen-blended so it adds light on top of the dark base
-                (Stripe-style). Monochrome brand teal, atmosphere only. */}
-            <div
-              className="absolute inset-0 z-0"
-              style={{
-                background:
-                  "radial-gradient(45% 65% at 70% 52%, rgba(1,164,151,0.5) 0%, rgba(1,164,151,0.12) 45%, rgba(1,164,151,0) 72%)",
-                mixBlendMode: "screen",
-              }}
-            />
           </>
         )}
         {slide.darkHero && !slide.bgImage && <BannerAurora />}
