@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-// Ambient animated background for the Sonderlösungen dark-hero banner — a
-// coherent glow cluster on the LEFT (behind the headline), in the spirit of
-// stripe.com's aurora backgrounds. Kept off the right side so it never sits
-// behind the checklist and hurts legibility. Atmosphere only (see
-// DESIGN_SYSTEM.md §5): monochrome brand teal on the deep-teal surface.
+// Ambient animated background for the aurora hero banners — a coherent glow
+// cluster on the LEFT (behind the headline), in the spirit of stripe.com's
+// aurora backgrounds. Kept off the right side so it never sits behind the
+// right panel and hurts legibility. Atmosphere only (see DESIGN_SYSTEM.md
+// §5): monochrome brand teal. Comes in dark (deep-teal surface) and light
+// (pale-teal surface) variants; only the blob gradients + grid tint change.
 
-const BLOBS = [
+const BLOBS_DARK = [
   // Primary bright core, upper-left behind the headline.
   { grad: "var(--grad-aura-brand-core)", size: 460, top: "-26%", left: "2%" },
   // Cooler mid glow just below/left, for depth.
@@ -18,8 +19,17 @@ const BLOBS = [
   { grad: "var(--grad-aura-brand-3)", size: 300, top: "60%", left: "22%" },
 ];
 
-export default function BannerAurora() {
+// Light variant: soft teal blooms that tint (rather than light up) the pale
+// surface — same positions, gentler saturated washes visible on brand-25.
+const BLOBS_LIGHT = [
+  { grad: "radial-gradient(50% 50%, rgba(1,164,151,0.20) 0%, rgba(1,164,151,0) 70%)", size: 460, top: "-26%", left: "2%" },
+  { grad: "radial-gradient(50% 50%, rgba(39,216,202,0.16) 0%, rgba(39,216,202,0) 70%)", size: 360, top: "38%", left: "-12%" },
+  { grad: "radial-gradient(50% 50%, rgba(4,133,123,0.14) 0%, rgba(4,133,123,0) 70%)", size: 300, top: "60%", left: "22%" },
+];
+
+export default function BannerAurora({ light = false }: { light?: boolean }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const BLOBS = light ? BLOBS_LIGHT : BLOBS_DARK;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -66,7 +76,7 @@ export default function BannerAurora() {
   return (
     <div ref={rootRef} className="banner-aurora" aria-hidden>
       {/* Technical-drawing grid — behind the glow blobs so they bloom over it. */}
-      <div className="banner-grid" />
+      <div className={`banner-grid${light ? " banner-grid--light" : ""}`} />
       {BLOBS.map((b, i) => (
         <div
           key={i}

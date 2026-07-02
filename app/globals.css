@@ -595,6 +595,18 @@ label[for] {
   font-size: var(--fs-sm);
   line-height: 1.45;
 }
+/* Light-mode stepper: ink text + brand numerals on the pale surface. */
+.banner-stepper--light .banner-step-num {
+  background: #fff;
+  border-color: var(--color-brand-500);
+  color: var(--color-brand-600);
+}
+.banner-stepper--light .banner-step:not(:last-child)::after {
+  background: linear-gradient(var(--color-brand-500), var(--color-brand-300));
+  opacity: 0.9;
+}
+.banner-stepper--light .banner-step-title { color: var(--color-ink); }
+.banner-stepper--light .banner-step-sub { color: var(--color-neutral-500); }
 
 /* ============================================================
    Form elements — inputs, pill toggles, option cards, chips,
@@ -850,6 +862,15 @@ label[for] {
   background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
   -webkit-mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
   mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
+}
+/* Light-mode grid: dark teal lines on the pale surface — reads like real
+   graph/CAD paper (dark ruling on light paper). */
+.banner-grid--light {
+  background-image:
+    linear-gradient(rgba(1, 164, 151, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1, 164, 151, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(1, 164, 151, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1, 164, 151, 0.05) 1px, transparent 1px);
 }
 
 /* Section "View all" link */

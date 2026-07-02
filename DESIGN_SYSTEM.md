@@ -159,13 +159,32 @@ photo is used anymore (`/service2_banner.png` is unreferenced). They share
 one layout too: light headline + subdued-teal body + white CTA with the
 chevron→arrow affordance, and an on-dark right panel indented ~right.
 
-They differ only in the **right panel** (`RightPanel` kind):
-- **Sonderlösungen** → `features`: the on-dark `.checklist` (6 benefit items
-  with check badges).
+They differ in the **right panel** (`RightPanel` kind):
+- **Sonderlösungen** → `features`: the `.checklist` (6 benefit items with
+  check badges).
 - **Schärfservice** → `stepper`: a numbered 1-2-3 `.banner-stepper` (outline
   circles joined by a vertical connector, each with a title + subline)
   describing the 3-step process — Formular ausfüllen · Abholung · Fertig in
   1–2 Wochen.
+
+### Hero colour theme (`heroMode`)
+
+The aurora-hero layout ships in two swappable palettes, set per slide via
+`heroMode` (default `"dark"`). Same layout + atmosphere, different surface:
+
+- **`dark`** (Sonderlösungen): deep brand-teal gradient (brand-800 →
+  brand-950), white headline, `.body-text--on-dark`, white `.btn-white` CTA,
+  `.checklist--on-dark`, `.banner-grid` (light lines on dark), border
+  `--color-border-dark`, no shadow.
+- **`light`** (Schärfservice): pale brand-teal gradient (`brand-25 →
+  brand-50 → brand-100`), ink headline (`--color-ink`), `.body-text--subdued`,
+  brand-filled `.btn-brand` CTA (white chevron→arrow), `.banner-stepper--light`
+  / plain `.checklist`, `.banner-grid--light` (dark teal lines on light — like
+  real graph paper), border `--color-brand-100`, soft shadow.
+
+`BannerAurora` takes a `light` prop that switches the glow blobs to soft
+teal washes and the grid to its light tint. Both banners render live on the
+homepage (dark Sonderlösungen + light Schärfservice) and on `/design-system`.
 
 ## 5. Shadows
 

@@ -4,6 +4,7 @@ import ProductCard, { ProductCardData } from "@/components/ProductCard";
 import ServiceCard from "@/components/ServiceCard";
 import Testimonials from "@/components/Testimonials";
 import CtaArrow from "@/components/CtaArrow";
+import BannerSonderwerkzeuge from "@/components/BannerSonderwerkzeuge";
 import { SERVICES } from "@/lib/data";
 import { Users, LifeBuoy, Grid2x2Plus, Check, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -252,32 +253,12 @@ export default function DesignSystemPage() {
       </Block>
 
       <Block
-        title="Dark aurora hero banner"
-        description="Sonderlösungen/Schärfservice homepage banners (components/BannerSonderwerkzeuge.tsx, darkHero slides): deep brand-teal surface, .heading-l (Display L) in white → .body-text--on-dark → a white .btn-white CTA with the .btn-arrow chevron, .checklist--on-dark, no shadow, rounded-md. The live component adds either an animated aurora glow or a multiply-blended background photo (Schärfservice), not shown in this static mock. The X99 banner is untouched — still .heading-xl, dark image bg, drop shadow."
+        title="Aurora hero banner — dark & light"
+        description="The live homepage hero banners (components/BannerSonderwerkzeuge.tsx, darkHero slides). Both share one layout — big .heading-l, body copy, a .btn-arrow CTA and an on-surface right panel (checklist or numbered stepper) — over an animated BannerAurora (glow + breathing technical grid). The heroMode flag swaps the palette per slide: DARK (Sonderlösungen) = deep brand-teal gradient, white text, .btn-white CTA, on-dark panel; LIGHT (Schärfservice) = pale brand-25→100 gradient, ink text, .btn-brand CTA, dark-on-light grid, light stepper. The X99 banner is untouched."
       >
-        <div
-          className="rounded-md overflow-hidden border px-10 py-10 max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-8 items-center"
-          style={{ background: "var(--color-surface-dark)", borderColor: "var(--color-border-dark)" }}
-        >
-          <div>
-            <h3 className="heading-l m-0" style={{ color: "var(--color-text-dark-heading)" }}>
-              Nachschliff, der Standzeit verlängert
-            </h3>
-            <p className="body-text body-text--on-dark mt-4 max-w-[420px]">
-              Präzise, schnell, bundesweit.
-            </p>
-            <div className="mt-6">
-              <span className="btn-white btn-arrow">Schärfauftrag starten<CtaArrow /></span>
-            </div>
-          </div>
-          <div className="checklist checklist--on-dark">
-            {["Bundesweit", "Fertig in 1–2 Wochen", "Auch für Fremdwerkzeuge", "Keine Mindestmenge"].map((t) => (
-              <div key={t} className="checklist-item">
-                <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
-                {t}
-              </div>
-            ))}
-          </div>
+        <div className="-mx-4 sm:-mx-6 flex flex-col gap-2">
+          <BannerSonderwerkzeuge only="sonderloesungen" />
+          <BannerSonderwerkzeuge only="schaerfservice" />
         </div>
       </Block>
 

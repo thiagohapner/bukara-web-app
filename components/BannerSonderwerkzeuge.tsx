@@ -30,11 +30,14 @@ type Slide = {
   textColor: string;
   ctaStyle: "dark" | "white" | "brand";
   highlightColor?: string;
-  /** Dark-hero treatment: deep brand-teal gradient surface, aurora glow +
-   *  technical grid, light headline + subdued-teal body + white CTA, and an
-   *  on-dark right panel (checklist or stepper).
-   *  (X99 slide leaves this off and keeps its own dark-image look.) */
+  /** Aurora-hero treatment: brand-teal gradient surface, aurora glow +
+   *  technical grid, big headline, body + CTA, and a right panel (checklist
+   *  or stepper). (X99 slide leaves this off and keeps its own dark-image look.) */
   darkHero?: boolean;
+  /** Colour theme for an aurora-hero slide. "dark" (default) = deep-teal
+   *  surface, light text, white CTA, on-dark panel. "light" = pale brand-teal
+   *  surface, ink text, brand CTA, dark-on-light grid + light panel. */
+  heroMode?: "light" | "dark";
   rightPanel: RightPanel;
 };
 
@@ -91,12 +94,14 @@ const slides: Slide[] = [
       "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
-    // Same scheme as Sonderlösungen: diagonal brand-teal gradient +
-    // aurora glow + technical grid (no photo).
-    bgColor: "linear-gradient(105deg, #074843 0%, #062F2C 48%, #05211F 100%)",
-    textColor: "var(--color-text-dark-heading)",
+    // Light-mode sibling of the dark Sonderlösungen banner: airy pale
+    // brand-teal gradient (brand-25 → brand-50 → brand-100) with the same
+    // aurora glow + technical grid, ink text and a brand CTA.
+    bgColor: "linear-gradient(105deg, #F5FAFA 0%, #EAF5F4 48%, #D6EBE9 100%)",
+    textColor: "var(--color-ink)",
     ctaStyle: "brand",
     darkHero: true,
+    heroMode: "light",
     rightPanel: {
       kind: "stepper",
       steps: [
@@ -130,24 +135,30 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
   const slide = shownSlides[active] ?? shownSlides[0];
   if (!slide) return null;
 
+  const isLight = slide.heroMode === "light";
+
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
       <div
         style={{
           background: slide.bgColor,
           opacity: visible ? 1 : 0,
-          border: slide.darkHero ? "1px solid var(--color-border-dark)" : "none",
+          border: slide.darkHero
+            ? isLight
+              ? "1px solid var(--color-brand-100)"
+              : "1px solid var(--color-border-dark)"
+            : "none",
         }}
         className={`relative w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-opacity duration-200 ${
-          slide.darkHero ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
+          slide.darkHero && !isLight ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
         }`}
       >
-        {slide.darkHero && <BannerAurora />}
+        {slide.darkHero && <BannerAurora light={isLight} />}
 
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
           {slide.eyebrow && (
-            <p className="eyebrow eyebrow--on-dark mb-3">{slide.eyebrow}</p>
+            <p className={`eyebrow ${isLight ? "eyebrow--brand" : "eyebrow--on-dark"} mb-3`}>{slide.eyebrow}</p>
           )}
           <h2
             style={{ color: slide.textColor }}
@@ -173,7 +184,11 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
 
           <p
             className={`mt-4 max-w-[420px] text-base leading-relaxed ${
-              slide.darkHero ? "body-text body-text--on-dark" : "font-medium opacity-80"
+              slide.darkHero
+                ? isLight
+                  ? "body-text body-text--subdued"
+                  : "body-text body-text--on-dark"
+                : "font-medium opacity-80"
             }`}
             style={slide.darkHero ? undefined : { color: slide.textColor }}
           >
@@ -185,7 +200,9 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               href={slide.ctaHref}
               className={
                 slide.darkHero
-                  ? "btn-white btn-arrow no-underline"
+                  ? isLight
+                    ? "btn-brand btn-arrow no-underline"
+                    : "btn-white btn-arrow no-underline"
                   : slide.ctaStyle === "white"
                   ? "inline-block whitespace-nowrap bg-white text-[#0F172A] text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-gray-100"
                   : slide.ctaStyle === "brand"
@@ -202,7 +219,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         {/* RIGHT COLUMN — dark-hero slides indent the panel a bit further in */}
         <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.darkHero ? "pr-14 pl-[108px]" : "pr-14 pl-5"}`}>
           {slide.rightPanel.kind === "features" ? (
-            <div className="checklist checklist--on-dark w-full">
+            <div className={`checklist ${isLight ? "" : "checklist--on-dark"} w-full`}>
               {slide.rightPanel.features.map((f, i) => (
                 <div key={i} className="checklist-item">
                   <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
@@ -211,7 +228,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               ))}
             </div>
           ) : slide.rightPanel.kind === "stepper" ? (
-            <div className="banner-stepper w-full">
+            <div className={`banner-stepper ${isLight ? "banner-stepper--light" : ""} w-full`}>
               {slide.rightPanel.steps.map((s, i) => (
                 <div key={i} className="banner-step">
                   <span className="banner-step-num">{i + 1}</span>
