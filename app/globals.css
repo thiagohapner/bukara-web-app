@@ -536,6 +536,53 @@ label[for] {
 .checklist--on-dark .checklist-item { color: var(--color-text-dark-heading); }
 .checklist--on-dark .checklist-badge { box-shadow: 0 0 0 4px rgba(1, 164, 151, 0.15); }
 
+/* Numbered 1-2-3 stepper for a dark-hero banner (Schärfservice process).
+   Outline circles in the light-teal brand tint, joined by a vertical
+   connector line drawn off each non-last circle so it scales with the gap. */
+.banner-stepper { display: flex; flex-direction: column; gap: var(--sp-8); }
+.banner-step { display: flex; align-items: flex-start; gap: var(--sp-4); position: relative; }
+.banner-step-num {
+  position: relative;
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--color-brand-500);
+  background: rgba(1, 164, 151, 0.12);
+  color: var(--color-text-dark-link);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Vertical connector from this circle to the next one. Height spans the
+   flex gap (--sp-8) plus the two half-circle offsets so the line meets both. */
+.banner-step:not(:last-child) .banner-step-num::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: var(--sp-8);
+  background: var(--color-brand-700);
+}
+.banner-step-body { padding-top: 5px; }
+.banner-step-title {
+  color: var(--color-text-dark-heading);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  line-height: 1.3;
+}
+.banner-step-sub {
+  margin-top: 2px;
+  color: var(--color-text-dark-body);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}
+
 /* ============================================================
    Form elements — inputs, pill toggles, option cards, chips,
    progress. Extracted from the Schärfservice form redesign

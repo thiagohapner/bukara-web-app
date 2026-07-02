@@ -9,9 +9,11 @@ import BannerAurora from "./BannerAurora";
 import CtaArrow from "./CtaArrow";
 
 type Feature = { text: ReactNode };
+type Step = { title: string; sub: string };
 
 type RightPanel =
   | { kind: "features"; features: Feature[] }
+  | { kind: "stepper"; steps: Step[] }
   | { kind: "image"; src: string; alt: string };
 
 type SlideId = "x99" | "sonderloesungen" | "schaerfservice";
@@ -28,14 +30,11 @@ type Slide = {
   textColor: string;
   ctaStyle: "dark" | "white" | "brand";
   highlightColor?: string;
-  /** Dark-hero treatment: deep brand-teal surface, glowing aurora, eyebrow +
-   *  light headline + subdued-teal body + CTA + checklist on dark.
+  /** Dark-hero treatment: deep brand-teal gradient surface, aurora glow +
+   *  technical grid, light headline + subdued-teal body + white CTA, and an
+   *  on-dark right panel (checklist or stepper).
    *  (X99 slide leaves this off and keeps its own dark-image look.) */
   darkHero?: boolean;
-  /** Full-bleed background photo (in /public) for a darkHero slide, blended
-   *  into the surface via a left→right gradient so the left stays dark for
-   *  text. Replaces the aurora + checklist for that slide. */
-  bgImage?: string;
   rightPanel: RightPanel;
 };
 
@@ -92,20 +91,18 @@ const slides: Slide[] = [
       "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
-    bgColor: "var(--color-surface-dark)",
+    // Same scheme as Sonderlösungen: diagonal brand-teal gradient +
+    // aurora glow + technical grid (no photo).
+    bgColor: "linear-gradient(105deg, #074843 0%, #062F2C 48%, #05211F 100%)",
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
-    bgImage: "/service2_banner.png",
     rightPanel: {
-      kind: "features",
-      features: [
-        { text: <>Bukara- und Fremdwerkzeuge</> },
-        { text: <>Für HW-Messer, PCD-Werkzeuge &amp; Bohrer</> },
-        { text: <>Bundesweite Abholung &amp; Rücksendung</> },
-        { text: <>Rücklauf in 1 bis 2 Wochen</> },
-        { text: <>Nachschliff, Reparatur &amp; Aufbereitung</> },
-        { text: <>Keine Mindestmenge</> },
+      kind: "stepper",
+      steps: [
+        { title: "Formular ausfüllen", sub: "In 2 Minuten online – Werkzeug & Menge angeben" },
+        { title: "Abholung", sub: "Gratis und deutschlandweit" },
+        { title: "Fertig in 1–2 Wochen", sub: "Geschärft & geprüft zurück bei Ihnen" },
       ],
     },
   },
@@ -145,37 +142,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           slide.darkHero ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
         }`}
       >
-        {slide.darkHero && slide.bgImage && (
-          <>
-            {/* Full-bleed background photo, pushed right + darkened */}
-            <div className="absolute inset-0 z-0">
-              <Image
-                src={slide.bgImage}
-                alt=""
-                fill
-                aria-hidden
-                className="object-cover object-[95%_center]"
-                style={{ filter: "saturate(0.9) brightness(0.92)" }}
-              />
-            </div>
-            {/* Duotone: multiply the brand teal over the photo so it tints
-                teal-black and reads as one on-brand dark surface. */}
-            <div
-              className="absolute inset-0 z-0"
-              style={{ backgroundColor: "var(--color-brand-800)", mixBlendMode: "multiply", opacity: 0.6 }}
-            />
-            {/* Horizontal gradient: solid on the left for text, darker floor
-                on the right (checklist still legible). */}
-            <div
-              className="absolute inset-0 z-0"
-              style={{
-                background:
-                  "linear-gradient(90deg, #041A19 0%, #041A19 46%, rgba(4,26,25,0.78) 72%, rgba(4,26,25,0.55) 100%)",
-              }}
-            />
-          </>
-        )}
-        {slide.darkHero && !slide.bgImage && <BannerAurora />}
+        {slide.darkHero && <BannerAurora />}
 
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
@@ -232,7 +199,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </div>
         </div>
 
-        {/* RIGHT COLUMN — photo slides indent the checklist a bit further in */}
+        {/* RIGHT COLUMN — dark-hero slides indent the panel a bit further in */}
         <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.darkHero ? "pr-14 pl-[108px]" : "pr-14 pl-5"}`}>
           {slide.rightPanel.kind === "features" ? (
             <div className="checklist checklist--on-dark w-full">
@@ -240,6 +207,18 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                 <div key={i} className="checklist-item">
                   <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
                   {f.text}
+                </div>
+              ))}
+            </div>
+          ) : slide.rightPanel.kind === "stepper" ? (
+            <div className="banner-stepper w-full">
+              {slide.rightPanel.steps.map((s, i) => (
+                <div key={i} className="banner-step">
+                  <span className="banner-step-num">{i + 1}</span>
+                  <div className="banner-step-body">
+                    <div className="banner-step-title">{s.title}</div>
+                    <div className="banner-step-sub">{s.sub}</div>
+                  </div>
                 </div>
               ))}
             </div>

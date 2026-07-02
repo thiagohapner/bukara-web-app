@@ -150,24 +150,22 @@ carousel banners): outer container corner radius is `md` (`rounded-md`,
 distinct look (dark bg, image panel, drop shadow) — it's intentionally
 not part of this restyle.
 
-A `darkHero` slide can optionally take a full-bleed background photo via
-the `bgImage` field (a path in `/public`). The photo is anchored right and
-blended into `--color-surface-dark` with a left→right gradient — solid on
-the left for text legibility, staying dark enough (~0.6 alpha) on the right
-that the checklist remains readable over the photo. It replaces that
-slide's aurora only; the checklist still renders on top. Schärfservice
-uses this (`/service2_banner.png`); Sonderlösungen keeps the aurora.
+Both `darkHero` slides (Sonderlösungen, Schärfservice) now share the **same
+background treatment**: the diagonal brand-teal gradient
+(`linear-gradient(105deg, #074843 → #062F2C → #05211F)`, brand-800 →
+brand-950) rendered behind `BannerAurora`, which layers a breathing
+technical-drawing grid (`.banner-grid`) + a left-clustered aurora glow. No
+photo is used anymore (`/service2_banner.png` is unreferenced). They share
+one layout too: light headline + subdued-teal body + white CTA with the
+chevron→arrow affordance, and an on-dark right panel indented ~right.
 
-The two `darkHero` slides share one layout (light headline + subdued-teal
-body + white CTA with the chevron→arrow affordance + on-dark checklist,
-checklist indented ~right on both) but carry distinct, on-brand color
-schemes so they read as siblings rather than duplicates. **Schärfservice**
-is the flat near-black surface (`--color-surface-dark`) with the duotone
-photo. **Sonderlösungen** has no photo: it uses a diagonal brand-teal
-gradient (`linear-gradient(105deg, #074843 → #062F2C → #05211F)`,
-brand-800 → brand-950) — lighter/greener in the headline zone, deep on the
-right so the checklist stays legible — with the aurora glow clustered on
-the LEFT (behind the headline, off the checklist).
+They differ only in the **right panel** (`RightPanel` kind):
+- **Sonderlösungen** → `features`: the on-dark `.checklist` (6 benefit items
+  with check badges).
+- **Schärfservice** → `stepper`: a numbered 1-2-3 `.banner-stepper` (outline
+  circles joined by a vertical connector, each with a title + subline)
+  describing the 3-step process — Formular ausfüllen · Abholung · Fertig in
+  1–2 Wochen.
 
 ## 5. Shadows
 
