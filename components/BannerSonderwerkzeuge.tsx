@@ -144,7 +144,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
       >
         {slide.darkHero && slide.bgImage && (
           <>
-            {/* Full-bleed background photo, anchored right */}
+            {/* Full-bleed background photo, anchored right, pre-darkened */}
             <div className="absolute inset-0 z-0">
               <Image
                 src={slide.bgImage}
@@ -152,16 +152,24 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                 fill
                 aria-hidden
                 className="object-cover object-right"
+                style={{ filter: "brightness(0.72) saturate(0.9)" }}
               />
             </div>
-            {/* Blend it into the dark surface: solid on the left for text
-                legibility, keeping the right dark enough for the checklist
-                to stay readable over the photo. */}
+            {/* Multiply the brand dark over the photo — crushes the highlights
+                and tints it teal-black so it reads as one cohesive dark
+                surface (Stripe-style), not a photo behind a veil. */}
+            <div
+              className="absolute inset-0 z-0"
+              style={{ backgroundColor: "var(--color-brand-900)", mixBlendMode: "multiply" }}
+            />
+            {/* Horizontal gradient on top: fully solid on the left for text,
+                easing to a dark floor on the right (image already darkened
+                by the multiply, so the checklist stays readable). */}
             <div
               className="absolute inset-0 z-0"
               style={{
                 background:
-                  "linear-gradient(90deg, #041A19 0%, #041A19 48%, rgba(4,26,25,0.7) 70%, rgba(4,26,25,0.45) 100%)",
+                  "linear-gradient(90deg, #041A19 0%, #041A19 46%, rgba(4,26,25,0.55) 74%, rgba(4,26,25,0.35) 100%)",
               }}
             />
           </>
