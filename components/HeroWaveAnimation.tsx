@@ -20,30 +20,50 @@ uniform vec2 u_res;
 uniform float u_time;
 uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
-// One straight, razor-thin beam: a bright line at angle ang, positioned at
-// pos along its normal. Returns a thin core + a faint glow.
-float beam(vec2 uv, float ang, float pos){
-  vec2 n = vec2(cos(ang), sin(ang));
-  float d = dot(uv, n) - pos;
-  float core = 0.00006 / (d * d + 0.00006);      // razor line
-  float halo = 0.004  / (d * d + 0.004) * 0.10;  // faint glow
-  return (core + halo) * 0.4;                     // keep it subtle, low contrast
+const int NODES = 9;
+
+// Slowly drifting node position (normalized), deterministic per index.
+vec2 nodePos(int i, float t){
+  float fi = float(i);
+  float x = 0.5 + 0.42 * sin(fi * 2.3 + 0.6);
+  float y = 0.5 + 0.42 * cos(fi * 1.7 + 1.1);
+  x += 0.05 * sin(t * 0.18 + fi * 1.3);
+  y += 0.05 * cos(t * 0.15 + fi * 0.9);
+  return vec2(x, y);
+}
+
+// Shortest distance from point p to the segment a–b.
+float segDist(vec2 p, vec2 a, vec2 b){
+  vec2 pa = p - a; vec2 ba = b - a;
+  float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+  return length(pa - ba * h);
 }
 
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
   float t = u_time;
 
-  // Several precise beams, each from a DIFFERENT direction, slowly sweeping
-  // across (and crossing) on their own timing. Near-black teal base.
+  // Neural-network look: drifting nodes joined by thin beams where they're
+  // close enough. Near-black teal base; everything at very low opacity.
+  float edges = 0.0;
+  float dots = 0.0;
+  for (int i = 0; i < NODES; i++){
+    vec2 a = nodePos(i, t);
+    for (int j = 0; j < NODES; j++){
+      if (j <= i) continue;
+      vec2 b = nodePos(j, t);
+      float conn = smoothstep(0.52, 0.16, distance(a, b)); // only near nodes link
+      if (conn > 0.0){
+        edges += smoothstep(0.0018, 0.0, segDist(uv, a, b)) * conn;
+      }
+    }
+    float d = distance(uv, a);
+    dots += 0.00022 / (d * d + 0.00022);
+  }
+
   vec3 col = c1;
-  col += c2 * beam(uv,  0.35, mod(t * 0.026,        2.2) - 0.6);
-  col += c3 * beam(uv, -0.70, mod(t * 0.020 + 0.9,  2.2) - 0.6);
-  col += c4 * beam(uv,  1.25, mod(t * 0.023 + 1.7,  2.2) - 0.6);
-  col += c2 * beam(uv,  2.15, mod(t * 0.016 + 1.2,  2.2) - 0.6);
-  col += c3 * beam(uv, -1.30, mod(t * 0.019 + 0.4,  2.2) - 0.6);
-  col += c4 * beam(uv,  0.90, mod(t * 0.024 + 2.0,  2.2) - 0.6);
-  col += c2 * beam(uv,  1.75, mod(t * 0.017 + 1.5,  2.2) - 0.6);
+  col += c3 * edges * 0.10;  // connecting beams — very faint
+  col += c4 * dots  * 0.14;  // node glints — slightly brighter
   gl_FragColor = vec4(col, 1.0);
 }
 `;
