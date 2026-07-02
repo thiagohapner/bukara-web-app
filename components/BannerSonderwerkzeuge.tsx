@@ -83,7 +83,6 @@ const slides: Slide[] = [
   },
   {
     id: "schaerfservice",
-    eyebrow: "Schärfservice",
     headline: "Nachschliff,",
     highlight: "der Standzeit verlängert",
     subline:
@@ -162,7 +161,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               className="absolute inset-0 z-0"
               style={{
                 background:
-                  "linear-gradient(90deg, #041A19 0%, #041A19 38%, rgba(4,26,25,0.94) 55%, rgba(4,26,25,0.78) 78%, rgba(4,26,25,0.62) 100%)",
+                  "linear-gradient(90deg, #041A19 0%, #041A19 48%, rgba(4,26,25,0.7) 70%, rgba(4,26,25,0.45) 100%)",
               }}
             />
           </>
@@ -221,10 +220,10 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="relative z-10 hidden md:flex items-center pr-14 pl-5 py-9">
+        {/* RIGHT COLUMN — photo slides push the checklist toward the right edge */}
+        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "justify-end pr-16 pl-5" : "pr-14 pl-5"}`}>
           {slide.rightPanel.kind === "features" ? (
-            <div className="checklist checklist--on-dark w-full">
+            <div className={`checklist checklist--on-dark ${slide.bgImage ? "w-auto" : "w-full"}`}>
               {slide.rightPanel.features.map((f, i) => (
                 <div key={i} className="checklist-item">
                   <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
