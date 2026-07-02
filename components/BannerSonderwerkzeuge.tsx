@@ -153,7 +153,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                 fill
                 aria-hidden
                 className="object-cover object-[42%_center]"
-                style={{ filter: "saturate(0.9) brightness(0.92)" }}
+                style={{ filter: "saturate(0.9) brightness(0.92)", transform: "translateX(50px)" }}
               />
             </div>
             {/* Duotone: multiply the brand teal over the photo so it tints
