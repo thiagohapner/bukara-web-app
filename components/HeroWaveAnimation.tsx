@@ -24,20 +24,16 @@ void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
   float t = u_time * 0.25;
 
-  // Wavy warp so the beams undulate rather than run dead straight.
-  float warp = 0.10 * sin(uv.x * 3.0 + t) + 0.05 * sin(uv.x * 7.0 - t * 1.3);
-
-  // Near-black teal base, then add thin bright laser lines on top.
+  // Near-black teal base, then add dead-straight, razor-thin laser beams.
   vec3 col = c1;
   for (int i = 0; i < 6; i++) {
     float fi = float(i);
-    float slope = 0.12 + fi * 0.05;
-    float freq = 5.0 + fi * 2.2;
-    float phase = (uv.y + warp + slope * uv.x) * freq + t * (0.5 + fi * 0.18);
+    float slope = 0.18 + fi * 0.06;   // fixed angle — precise, no undulation
+    float freq = 4.0 + fi * 2.0;
+    float phase = (uv.y + slope * uv.x) * freq + t * (0.4 + fi * 0.15);
     float s = 0.5 + 0.5 * sin(phase * 3.14159);
-    float core = pow(s, 70.0);        // razor-thin bright line
-    float halo = pow(s, 12.0) * 0.12; // soft glow around it
-    // Alternate the beam colour between brand teal, mint and pale.
+    float core = pow(s, 240.0);       // extremely thin, sharp beam
+    float halo = pow(s, 40.0) * 0.06; // very faint glow
     vec3 lc = fi < 2.0 ? c2 : (fi < 4.0 ? c3 : c4);
     col += lc * (core + halo);
   }
