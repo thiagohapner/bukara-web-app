@@ -66,8 +66,8 @@ void main(){
   }
 
   vec3 col = c1;
-  col += c3 * edges * 0.10;  // connecting beams — very faint
-  col += c4 * dots  * 0.14;  // node glints — slightly brighter
+  col += c3 * edges * 0.16;  // connecting beams — faint
+  col += c4 * dots  * 0.22;  // node glints — slightly brighter
   gl_FragColor = vec4(col, 1.0);
 }
 `;
