@@ -27,20 +27,23 @@ float beam(vec2 uv, float ang, float pos){
   float d = dot(uv, n) - pos;
   float core = 0.00006 / (d * d + 0.00006);      // razor line
   float halo = 0.004  / (d * d + 0.004) * 0.10;  // faint glow
-  return core + halo;
+  return (core + halo) * 0.4;                     // keep it subtle, low contrast
 }
 
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
   float t = u_time;
 
-  // A few precise beams, each from a DIFFERENT direction, slowly sweeping
+  // Several precise beams, each from a DIFFERENT direction, slowly sweeping
   // across (and crossing) on their own timing. Near-black teal base.
   vec3 col = c1;
-  col += c2 * beam(uv,  0.35, mod(t * 0.055,        2.2) - 0.6);
-  col += c3 * beam(uv, -0.70, mod(t * 0.041 + 0.9,  2.2) - 0.6);
-  col += c4 * beam(uv,  1.25, mod(t * 0.047 + 1.7,  2.2) - 0.6);
-  col += c2 * beam(uv,  2.15, mod(t * 0.033 + 1.2,  2.2) - 0.6);
+  col += c2 * beam(uv,  0.35, mod(t * 0.026,        2.2) - 0.6);
+  col += c3 * beam(uv, -0.70, mod(t * 0.020 + 0.9,  2.2) - 0.6);
+  col += c4 * beam(uv,  1.25, mod(t * 0.023 + 1.7,  2.2) - 0.6);
+  col += c2 * beam(uv,  2.15, mod(t * 0.016 + 1.2,  2.2) - 0.6);
+  col += c3 * beam(uv, -1.30, mod(t * 0.019 + 0.4,  2.2) - 0.6);
+  col += c4 * beam(uv,  0.90, mod(t * 0.024 + 2.0,  2.2) - 0.6);
+  col += c2 * beam(uv,  1.75, mod(t * 0.017 + 1.5,  2.2) - 0.6);
   gl_FragColor = vec4(col, 1.0);
 }
 `;
