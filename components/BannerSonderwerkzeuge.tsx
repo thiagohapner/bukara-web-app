@@ -168,7 +168,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               className="absolute inset-0 z-0"
               style={{
                 background:
-                  "linear-gradient(90deg, #041A19 0%, #041A19 44%, rgba(4,26,25,0.5) 72%, rgba(4,26,25,0.2) 100%)",
+                  "linear-gradient(90deg, #041A19 0%, #041A19 46%, rgba(4,26,25,0.62) 72%, rgba(4,26,25,0.35) 100%)",
               }}
             />
           </>
@@ -228,7 +228,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         </div>
 
         {/* RIGHT COLUMN — photo slides indent the checklist a bit further in */}
-        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "pr-14 pl-12" : "pr-14 pl-5"}`}>
+        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "pr-14 pl-[78px]" : "pr-14 pl-5"}`}>
           {slide.rightPanel.kind === "features" ? (
             <div className="checklist checklist--on-dark w-full">
               {slide.rightPanel.features.map((f, i) => (
