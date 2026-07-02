@@ -180,7 +180,7 @@ The aurora-hero layout ships in two swappable palettes, set per slide via
   brand-50 → brand-100`), ink headline (`--color-ink`), `.body-text--subdued`,
   brand-filled `.btn-brand` CTA (white chevron→arrow), `.banner-stepper--light`
   / plain `.checklist`, `.banner-grid--light` (dark teal lines on light — like
-  real graph paper), border `--color-brand-100`, soft shadow.
+  real graph paper), border `--color-brand-100`. No shadow (banners are flat).
 
 `BannerAurora` takes a `light` prop that switches the glow blobs to soft
 teal washes and the grid to its light tint. Both banners render live on the

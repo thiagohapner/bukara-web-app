@@ -149,9 +149,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               : "1px solid var(--color-border-dark)"
             : "none",
         }}
-        className={`relative w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-opacity duration-200 ${
-          slide.darkHero && !isLight ? "" : "shadow-[0_18px_50px_-20px_rgba(46,26,64,0.28)]"
-        }`}
+        className="relative w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-opacity duration-200"
       >
         {slide.darkHero && <BannerAurora light={isLight} />}
 
