@@ -19,14 +19,15 @@ type Orb = {
   dx: number; dy: number; scale: number; a: number;
 };
 
-// Teal ramp with a couple of brighter mint accents for visible color movement.
-const makeOrbs = (): Orb[] => [
-  { x: 0.78, y: 0.35, r: 0.42, color: "1,164,151",  alpha: 0.55, dx: 0, dy: 0, scale: 1, a: 0.55 },
-  { x: 0.95, y: 0.15, r: 0.5,  color: "4,133,123",  alpha: 0.5,  dx: 0, dy: 0, scale: 1, a: 0.5 },
-  { x: 0.7,  y: 0.75, r: 0.38, color: "39,216,202", alpha: 0.42, dx: 0, dy: 0, scale: 1, a: 0.42 },
-  { x: 1.02, y: 0.6,  r: 0.44, color: "1,164,151",  alpha: 0.5,  dx: 0, dy: 0, scale: 1, a: 0.5 },
-  { x: 0.62, y: 0.2,  r: 0.3,  color: "132,205,199", alpha: 0.34, dx: 0, dy: 0, scale: 1, a: 0.34 },
-  { x: 0.85, y: 0.9,  r: 0.34, color: "7,100,93",   alpha: 0.45, dx: 0, dy: 0, scale: 1, a: 0.45 },
+// Teal ramp with brighter mint accents for visible color movement. Each orb
+// gets a large per-orb travel/scale range so the flow is clearly perceptible.
+type OrbSpec = Orb & { toX: number; toY: number; toScale: number; toA: number; dur: number };
+const makeOrbs = (): OrbSpec[] => [
+  { x: 0.72, y: 0.4,  r: 0.4,  color: "1,164,151",   alpha: 0.55, dx: 0, dy: 0, scale: 1, a: 0.55, toX: 260,  toY: -120, toScale: 1.35, toA: 0.7,  dur: 8 },
+  { x: 0.98, y: 0.2,  r: 0.46, color: "4,133,123",   alpha: 0.5,  dx: 0, dy: 0, scale: 1, a: 0.5,  toX: -200, toY: 140,  toScale: 1.3,  toA: 0.62, dur: 10 },
+  { x: 0.66, y: 0.78, r: 0.36, color: "39,216,202",  alpha: 0.42, dx: 0, dy: 0, scale: 1, a: 0.42, toX: 230,  toY: -160, toScale: 1.4,  toA: 0.6,  dur: 9 },
+  { x: 1.05, y: 0.62, r: 0.42, color: "1,164,151",   alpha: 0.5,  dx: 0, dy: 0, scale: 1, a: 0.5,  toX: -260, toY: -90,  toScale: 1.25, toA: 0.66, dur: 11 },
+  { x: 0.6,  y: 0.15, r: 0.3,  color: "132,205,199", alpha: 0.36, dx: 0, dy: 0, scale: 1, a: 0.36, toX: 180,  toY: 180,  toScale: 1.45, toA: 0.55, dur: 7.5 },
 ];
 
 export default function HeroWaveAnimation() {
@@ -89,17 +90,16 @@ export default function HeroWaveAnimation() {
 
     const ctxGsap = gsap.context(() => {
       orbs.forEach((o, i) => {
-        const dir = i % 2 === 0 ? 1 : -1;
         gsap.to(o, {
-          dx: dir * (40 + i * 12),
-          dy: -dir * (24 + i * 8),
-          scale: 1.18,
-          a: Math.min(0.8, o.alpha + 0.12),
-          duration: 12 + i * 2.2,
+          dx: o.toX,
+          dy: o.toY,
+          scale: o.toScale,
+          a: o.toA,
+          duration: o.dur,
           ease: "sine.inOut",
           repeat: -1,
           yoyo: true,
-          delay: i * 0.9,
+          delay: i * 0.6,
         });
       });
     });
