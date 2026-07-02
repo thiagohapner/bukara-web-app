@@ -453,13 +453,16 @@ label[for] {
    link that navigates somewhere. Don't use on submit/step-action buttons. */
 .btn-arrow::after {
   content: "\203A"; /* › */
-  font-size: 1.15em;
+  display: inline-block;
+  width: 1.1em;      /* fixed box so the ›→→ glyph swap can't resize the button */
+  text-align: center;
+  font-size: 1.05em;
   line-height: 1;
   transition: transform var(--dur-slow) var(--ease-emphasis);
 }
 .btn-arrow:hover::after {
   content: "\2192"; /* → */
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
 
 @media (max-width: 1023px) {
