@@ -20,8 +20,8 @@ uniform vec2 u_res;
 uniform float u_time;
 uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
-// One straight, razor-thin beam: a bright line at angle `ang`, positioned at
-// `pos` along its normal. Returns a thin core + a faint glow.
+// One straight, razor-thin beam: a bright line at angle ang, positioned at
+// pos along its normal. Returns a thin core + a faint glow.
 float beam(vec2 uv, float ang, float pos){
   vec2 n = vec2(cos(ang), sin(ang));
   float d = dot(uv, n) - pos;
