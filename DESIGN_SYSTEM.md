@@ -191,17 +191,25 @@ custom properties. Don't use Tailwind's bare `transition`/`transition-colors`
 
 ## 7. Buttons
 
-Three variants, defined once as CSS classes in `app/globals.css` — **reuse
-these, don't hand-roll new button styles per page**:
+Defined once as CSS classes in `app/globals.css` — **reuse these, don't
+hand-roll new button styles per page**:
 
 - `.btn-brand` — primary CTA, brand-filled, white text (named `.btn-brand`,
   not `.btn-orange` — that was legacy naming from when the placeholder
   brand color was literally orange; renamed everywhere in this migration)
 - `.btn-black` — secondary CTA, ink-filled, white text
 - `.btn-outline` — tertiary/ghost, bordered, ink text, brand border on hover
+- `.btn-white` — for dark surfaces (the dark-hero banners): white fill,
+  brand-ink text, faint teal tint on hover
 
-If a page needs a button style these three don't cover, extend the shared
-classes — don't inline a fourth pattern with arbitrary Tailwind utilities
+**Link CTAs get an arrow.** Add `.btn-arrow` to any button that *navigates
+somewhere* — it appends a trailing chevron `›` that turns into an arrow `→`
+and nudges right on hover (Stripe-style). Do **not** add it to submit/step
+buttons (form "Absenden", wizard Weiter/Zurück) — only to links. Prefer
+`.btn-arrow` over hand-placing a trailing `<ArrowRight>` icon.
+
+If a page needs a button style these don't cover, extend the shared
+classes — don't inline another pattern with arbitrary Tailwind utilities
 (see §10, this already happened several times).
 
 ## 8. Icon tiles & checklist

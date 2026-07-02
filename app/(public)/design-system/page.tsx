@@ -237,25 +237,28 @@ export default function DesignSystemPage() {
 
       <Block
         title="Buttons"
-        description="Shared classes from app/globals.css — reuse these instead of one-off Tailwind button styles."
+        description="Shared classes from app/globals.css — reuse these instead of one-off Tailwind button styles. Add .btn-arrow to a link CTA for the Stripe-style chevron→arrow on hover (hover the last two)."
       >
         <div className="flex flex-wrap items-center gap-4">
           <button type="button" className="btn-brand">Primary — .btn-brand</button>
           <button type="button" className="btn-black">Secondary — .btn-black</button>
           <button type="button" className="btn-outline">Tertiary — .btn-outline</button>
         </div>
+        <div className="flex flex-wrap items-center gap-4 mt-4 p-4 rounded-md bg-brand-900">
+          <span className="btn-white btn-arrow">On dark — .btn-white</span>
+          <span className="btn-brand btn-arrow">Link CTA — .btn-arrow</span>
+        </div>
       </Block>
 
       <Block
         title="Dark aurora hero banner"
-        description="Sonderlösungen/Schärfservice homepage banners (components/BannerSonderwerkzeuge.tsx, darkHero slides): deep brand-teal surface, eyebrow → .heading-l (Display L) in white → .body-text--on-dark → two-tier CTA (flat .btn-brand + arrow link), .checklist--on-dark, no shadow, rounded-md. The live component adds an animated aurora glow (components/BannerAurora.tsx), not shown in this static mock. The X99 banner is untouched — still .heading-xl, dark image bg, drop shadow."
+        description="Sonderlösungen/Schärfservice homepage banners (components/BannerSonderwerkzeuge.tsx, darkHero slides): deep brand-teal surface, .heading-l (Display L) in white → .body-text--on-dark → a white .btn-white CTA with the .btn-arrow chevron, .checklist--on-dark, no shadow, rounded-md. The live component adds either an animated aurora glow or a multiply-blended background photo (Schärfservice), not shown in this static mock. The X99 banner is untouched — still .heading-xl, dark image bg, drop shadow."
       >
         <div
           className="rounded-md overflow-hidden border px-10 py-10 max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-8 items-center"
           style={{ background: "var(--color-surface-dark)", borderColor: "var(--color-border-dark)" }}
         >
           <div>
-            <p className="eyebrow eyebrow--on-dark mb-3">Schärfservice</p>
             <h3 className="heading-l m-0" style={{ color: "var(--color-text-dark-heading)" }}>
               Nachschliff, der Standzeit verlängert
             </h3>
@@ -263,7 +266,7 @@ export default function DesignSystemPage() {
               Präzise, schnell, bundesweit.
             </p>
             <div className="mt-6">
-              <span className="btn-brand">Schärfauftrag starten</span>
+              <span className="btn-white btn-arrow">Schärfauftrag starten</span>
             </div>
           </div>
           <div className="checklist checklist--on-dark">

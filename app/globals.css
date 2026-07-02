@@ -428,6 +428,40 @@ label[for] {
   color: var(--orange);
 }
 
+/* White CTA — for dark surfaces (e.g. the dark-hero banners). White fill,
+   brand-ink text, faint teal tint on hover. */
+.btn-white {
+  background: #ffffff;
+  color: var(--color-ink);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition-button);
+}
+.btn-white:hover {
+  background: var(--color-brand-50);
+}
+
+/* Link-CTA affordance (Stripe-style): a trailing chevron that turns into an
+   arrow and nudges right on hover. Add `.btn-arrow` to any .btn-* used as a
+   link that navigates somewhere. Don't use on submit/step-action buttons. */
+.btn-arrow::after {
+  content: "\203A"; /* › */
+  font-size: 1.15em;
+  line-height: 1;
+  transition: transform var(--dur-slow) var(--ease-emphasis);
+}
+.btn-arrow:hover::after {
+  content: "\2192"; /* → */
+  transform: translateX(3px);
+}
+
 @media (max-width: 1023px) {
   .hero-cta a.btn-brand,
   .hero-cta a.btn-outline {

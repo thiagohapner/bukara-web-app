@@ -215,7 +215,9 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             <Link
               href={slide.ctaHref}
               className={
-                slide.ctaStyle === "white"
+                slide.darkHero
+                  ? "btn-white btn-arrow no-underline"
+                  : slide.ctaStyle === "white"
                   ? "inline-block whitespace-nowrap bg-white text-[#0F172A] text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-gray-100"
                   : slide.ctaStyle === "brand"
                   ? "btn-brand no-underline"

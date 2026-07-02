@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,9 +54,8 @@ export default function HomeAboutSections() {
               Über unser B2B-Portal haben Sie jederzeit Zugriff auf Preise, Verfügbarkeit und Bestellinfos – ohne Umwege, ohne Warten.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/katalog" className="btn-brand inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
+              <Link href="/katalog" className="btn-brand btn-arrow" style={{ textDecoration: "none" }}>
                 Produkte entdecken
-                <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>
               <a href="https://b2b.bukara.de/" target="_blank" rel="noopener noreferrer" className="btn-outline inline-flex items-center gap-2" style={{ textDecoration: "none" }}>
                 Zum B2B Portal
