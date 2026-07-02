@@ -150,14 +150,21 @@ carousel banners): outer container corner radius is `md` (`rounded-md`,
 distinct look (dark bg, image panel, drop shadow) — it's intentionally
 not part of this restyle.
 
-Both `darkHero` slides (Sonderlösungen, Schärfservice) now share the **same
-background treatment**: the diagonal brand-teal gradient
-(`linear-gradient(105deg, #074843 → #062F2C → #05211F)`, brand-800 →
-brand-950) rendered behind `BannerAurora`, which layers a breathing
-technical-drawing grid (`.banner-grid`) + a left-clustered aurora glow. No
-photo is used anymore (`/service2_banner.png` is unreferenced). They share
-one layout too: light headline + subdued-teal body + white CTA with the
-chevron→arrow affordance, and an on-dark right panel indented ~right.
+Both `darkHero` slides share the same **layout** rendered behind
+`BannerAurora` (a left-clustered aurora glow + a breathing background line
+pattern). No photo is used anymore (`/service2_banner.png` is unreferenced).
+They share one layout: big headline + body + a `.btn-arrow` CTA and an
+on-surface right panel indented ~right.
+
+**Per-slide background pattern (`bgPattern`, via `BannerAurora`'s `pattern`
+prop):** each service gets its own thin-line motif, same visual language:
+- **Sonderwerkzeuge** → `grid` (`.banner-grid`): the technical-drawing /
+  graph-paper grid — the "made-to-drawing" story.
+- **Schärfservice** → `arcs` (`.banner-arcs`): concentric grinding arcs
+  sweeping from the lower-left — evokes a grinding/sharpening wheel and the
+  radius of a honed edge.
+Both come in dark (light lines) and `--light` (dark teal lines) variants and
+share the same radial edge mask + opacity-breath.
 
 They differ in the **right panel** (`RightPanel` kind):
 - **Sonderlösungen** → `features`: the `.checklist` (6 benefit items with

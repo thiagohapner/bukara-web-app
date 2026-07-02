@@ -38,6 +38,10 @@ type Slide = {
    *  surface, light text, white CTA, on-dark panel. "light" = pale brand-teal
    *  surface, ink text, brand CTA, dark-on-light grid + light panel. */
   heroMode?: "light" | "dark";
+  /** Background line pattern for an aurora-hero slide. "grid" (default) =
+   *  technical-drawing grid (Sonderwerkzeuge); "arcs" = concentric grinding
+   *  arcs (Schärfservice — the sharpening-service motif). */
+  bgPattern?: "grid" | "arcs";
   rightPanel: RightPanel;
 };
 
@@ -101,6 +105,7 @@ const slides: Slide[] = [
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
+    bgPattern: "arcs",
     rightPanel: {
       kind: "stepper",
       steps: [
@@ -150,7 +155,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         }}
         className="relative w-full h-auto md:h-[360px] rounded-md overflow-hidden grid grid-cols-1 md:grid-cols-2 transition-opacity duration-200"
       >
-        {slide.darkHero && <BannerAurora light={isLight} />}
+        {slide.darkHero && <BannerAurora light={isLight} pattern={slide.bgPattern ?? "grid"} />}
 
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
