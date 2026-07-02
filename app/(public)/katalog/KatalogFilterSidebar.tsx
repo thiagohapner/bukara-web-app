@@ -250,9 +250,7 @@ export default function KatalogFilterSidebar({
       {/* DURCHMESSER */}
       {absoluteMaxDiam > absoluteMinDiam && (
         <div className="border-b border-slate-100 py-4">
-          <SectionLabel>
-            Durchmesser: {localDiamMin} – {localDiamMax} mm
-          </SectionLabel>
+          <SectionLabel>Durchmesser</SectionLabel>
           <RangeSlider
             min={absoluteMinDiam}
             max={absoluteMaxDiam}
@@ -261,15 +259,49 @@ export default function KatalogFilterSidebar({
             onChange={(min, max) => { setLocalDiamMin(min); setLocalDiamMax(max); }}
             onCommit={(min, max) => { onCommitDiam(min, max); onFilterApplied?.(); }}
           />
+          <div className="flex items-center gap-2 mt-3">
+            <input
+              type="number"
+              value={localDiamMin}
+              min={absoluteMinDiam}
+              max={localDiamMax - 1}
+              step={0.5}
+              onChange={e => setLocalDiamMin(Number(e.target.value))}
+              onBlur={e => {
+                const v = Math.min(Math.max(Number(e.target.value), absoluteMinDiam), localDiamMax - 1);
+                setLocalDiamMin(v);
+                onCommitDiam(v, localDiamMax);
+                onFilterApplied?.();
+              }}
+              onKeyDown={e => { if (e.key === "Enter") e.currentTarget.blur(); }}
+              className="w-20 border border-slate-200 rounded px-2 py-1 text-sm text-right focus:outline-none focus:border-slate-400"
+            />
+            <span className="text-slate-400 text-sm">–</span>
+            <input
+              type="number"
+              value={localDiamMax}
+              min={localDiamMin + 1}
+              max={absoluteMaxDiam}
+              step={0.5}
+              onChange={e => setLocalDiamMax(Number(e.target.value))}
+              onBlur={e => {
+                const v = Math.min(Math.max(Number(e.target.value), localDiamMin + 1), absoluteMaxDiam);
+                setLocalDiamMax(v);
+                onCommitDiam(localDiamMin, v);
+                onFilterApplied?.();
+              }}
+              onKeyDown={e => { if (e.key === "Enter") e.currentTarget.blur(); }}
+              className="w-20 border border-slate-200 rounded px-2 py-1 text-sm text-right focus:outline-none focus:border-slate-400"
+            />
+            <span className="text-slate-400 text-sm">mm</span>
+          </div>
         </div>
       )}
 
       {/* SCHAFTDURCHMESSER */}
       {absoluteMaxShank > absoluteMinShank && (
         <div className="border-b border-slate-100 py-4">
-          <SectionLabel>
-            Schaftdurchmesser: {localShankMin} – {localShankMax} mm
-          </SectionLabel>
+          <SectionLabel>Schaftdurchmesser</SectionLabel>
           <RangeSlider
             min={absoluteMinShank}
             max={absoluteMaxShank}
@@ -278,6 +310,42 @@ export default function KatalogFilterSidebar({
             onChange={(min, max) => { setLocalShankMin(min); setLocalShankMax(max); }}
             onCommit={(min, max) => { onCommitShank(min, max); onFilterApplied?.(); }}
           />
+          <div className="flex items-center gap-2 mt-3">
+            <input
+              type="number"
+              value={localShankMin}
+              min={absoluteMinShank}
+              max={localShankMax - 1}
+              step={0.5}
+              onChange={e => setLocalShankMin(Number(e.target.value))}
+              onBlur={e => {
+                const v = Math.min(Math.max(Number(e.target.value), absoluteMinShank), localShankMax - 1);
+                setLocalShankMin(v);
+                onCommitShank(v, localShankMax);
+                onFilterApplied?.();
+              }}
+              onKeyDown={e => { if (e.key === "Enter") e.currentTarget.blur(); }}
+              className="w-20 border border-slate-200 rounded px-2 py-1 text-sm text-right focus:outline-none focus:border-slate-400"
+            />
+            <span className="text-slate-400 text-sm">–</span>
+            <input
+              type="number"
+              value={localShankMax}
+              min={localShankMin + 1}
+              max={absoluteMaxShank}
+              step={0.5}
+              onChange={e => setLocalShankMax(Number(e.target.value))}
+              onBlur={e => {
+                const v = Math.min(Math.max(Number(e.target.value), localShankMin + 1), absoluteMaxShank);
+                setLocalShankMax(v);
+                onCommitShank(localShankMin, v);
+                onFilterApplied?.();
+              }}
+              onKeyDown={e => { if (e.key === "Enter") e.currentTarget.blur(); }}
+              className="w-20 border border-slate-200 rounded px-2 py-1 text-sm text-right focus:outline-none focus:border-slate-400"
+            />
+            <span className="text-slate-400 text-sm">mm</span>
+          </div>
         </div>
       )}
 
