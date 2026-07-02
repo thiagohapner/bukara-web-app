@@ -231,7 +231,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         </div>
 
         {/* RIGHT COLUMN — photo slides indent the checklist a bit further in */}
-        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "pr-14 pl-[78px]" : "pr-14 pl-5"}`}>
+        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.bgImage ? "pr-14 pl-[108px]" : "pr-14 pl-5"}`}>
           {slide.rightPanel.kind === "features" ? (
             <div className="checklist checklist--on-dark w-full">
               {slide.rightPanel.features.map((f, i) => (
