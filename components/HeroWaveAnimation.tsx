@@ -3,32 +3,70 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-// Soft flowing-gradient background — a Stripe-hero-style color flow adapted to
-// the Bukara teal ramp (see DESIGN_SYSTEM.md §5). Several large radial-gradient
-// orbs drift, scale and fade on a seamless GSAP loop, screen-blended so they
-// melt into one another; a heavy CSS blur turns them into smooth silky color
-// flow with no hard edges. Canvas 2D only; GSAP drives all values. Clustered
-// in the right ~60%; the left fade + stepper scrim live in CSS.
+// Animated mesh gradient background (à la meshgradient.com / Stripe's hero),
+// recolored to the Bukara teal ramp. A WebGL fragment shader blends 4 teal
+// tones across a domain-warped fbm noise field that flows over time — a full,
+// smooth, edge-to-edge color field (not blobs on dark). Driven on the GSAP
+// ticker. The left fade + stepper scrim live in CSS.
 
-type Orb = {
-  x: number; y: number; // base center, normalized 0–1
-  r: number; // radius, fraction of canvas width
-  color: string; // center color (rgb); alpha comes from `alpha`
-  alpha: number;
-  // Animation state, mutated by GSAP each frame.
-  dx: number; dy: number; scale: number; a: number;
-};
+const VERT = `
+attribute vec2 p;
+void main() { gl_Position = vec4(p, 0.0, 1.0); }
+`;
 
-// Teal ramp with brighter mint accents for visible color movement. Each orb
-// gets a large per-orb travel/scale range so the flow is clearly perceptible.
-type OrbSpec = Orb & { toX: number; toY: number; toScale: number; toA: number; dur: number };
-const makeOrbs = (): OrbSpec[] => [
-  { x: 0.72, y: 0.4,  r: 0.4,  color: "1,164,151",   alpha: 0.55, dx: 0, dy: 0, scale: 1, a: 0.55, toX: 260,  toY: -120, toScale: 1.35, toA: 0.7,  dur: 8 },
-  { x: 0.98, y: 0.2,  r: 0.46, color: "4,133,123",   alpha: 0.5,  dx: 0, dy: 0, scale: 1, a: 0.5,  toX: -200, toY: 140,  toScale: 1.3,  toA: 0.62, dur: 10 },
-  { x: 0.66, y: 0.78, r: 0.36, color: "39,216,202",  alpha: 0.42, dx: 0, dy: 0, scale: 1, a: 0.42, toX: 230,  toY: -160, toScale: 1.4,  toA: 0.6,  dur: 9 },
-  { x: 1.05, y: 0.62, r: 0.42, color: "1,164,151",   alpha: 0.5,  dx: 0, dy: 0, scale: 1, a: 0.5,  toX: -260, toY: -90,  toScale: 1.25, toA: 0.66, dur: 11 },
-  { x: 0.6,  y: 0.15, r: 0.3,  color: "132,205,199", alpha: 0.36, dx: 0, dy: 0, scale: 1, a: 0.36, toX: 180,  toY: 180,  toScale: 1.45, toA: 0.55, dur: 7.5 },
+const FRAG = `
+precision highp float;
+uniform vec2 u_res;
+uniform float u_time;
+uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
+
+float hash(vec2 x){ return fract(sin(dot(x, vec2(127.1, 311.7))) * 43758.5453123); }
+float noise(vec2 x){
+  vec2 i = floor(x); vec2 f = fract(x);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash(i), hash(i + vec2(1.0,0.0)), u.x),
+             mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), u.x), u.y);
+}
+float fbm(vec2 x){
+  float v = 0.0; float a = 0.5;
+  for (int i = 0; i < 5; i++){ v += a * noise(x); x *= 2.0; a *= 0.5; }
+  return v;
+}
+void main(){
+  vec2 uv = gl_FragCoord.xy / u_res.xy;
+  uv.x *= u_res.x / u_res.y; // keep the cells round
+  float t = u_time * 0.06;
+  vec2 q = vec2(fbm(uv * 1.2 + vec2(0.0, t)), fbm(uv * 1.2 + vec2(t * 0.8, 1.3)));
+  float n = fbm(uv * 1.5 + q * 1.5 + vec2(-t * 0.5, t * 0.3));
+  float m = fbm(uv * 1.8 + q * 1.2 + 4.0 - t * 0.4);
+  float k = fbm(uv * 2.2 + q - t * 0.2);
+  vec3 col = mix(c1, c2, smoothstep(0.25, 0.75, n));
+  col = mix(col, c3, smoothstep(0.35, 0.90, m));
+  col = mix(col, c4, smoothstep(0.55, 0.95, k));
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+// Bukara teal ramp, normalized RGB: deep #062F2C, brand #01A497,
+// mint #27D8CA, pale #84CDC7.
+const COLORS: [number, number, number][] = [
+  [6 / 255, 47 / 255, 44 / 255],
+  [1 / 255, 164 / 255, 151 / 255],
+  [39 / 255, 216 / 255, 202 / 255],
+  [132 / 255, 205 / 255, 199 / 255],
 ];
+
+function compile(gl: WebGLRenderingContext, type: number, src: string) {
+  const sh = gl.createShader(type)!;
+  gl.shaderSource(sh, src);
+  gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    console.error(gl.getShaderInfoLog(sh));
+    gl.deleteShader(sh);
+    return null;
+  }
+  return sh;
+}
 
 export default function HeroWaveAnimation() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -36,13 +74,37 @@ export default function HeroWaveAnimation() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const gl = canvas.getContext("webgl", { antialias: true, premultipliedAlpha: false });
+    if (!gl) return;
 
-    const orbs = makeOrbs();
-    let w = 0;
-    let h = 0;
+    const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) return;
+    const prog = gl.createProgram()!;
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.error(gl.getProgramInfoLog(prog));
+      return;
+    }
+    gl.useProgram(prog);
 
+    // Full-screen quad.
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, "p");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    const uRes = gl.getUniformLocation(prog, "u_res");
+    const uTime = gl.getUniformLocation(prog, "u_time");
+    (["c1", "c2", "c3", "c4"] as const).forEach((name, i) => {
+      gl.uniform3fv(gl.getUniformLocation(prog, name), COLORS[i]);
+    });
+
+    let w = 0, h = 0;
     const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
@@ -53,62 +115,32 @@ export default function HeroWaveAnimation() {
       canvas.height = Math.max(1, Math.round(h * dpr));
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
     };
 
-    const render = () => {
-      ctx.clearRect(0, 0, w, h);
-      ctx.globalCompositeOperation = "screen";
-      for (const o of orbs) {
-        const cx = o.x * w + o.dx;
-        const cy = o.y * h + o.dy;
-        const rad = o.r * w * o.scale;
-        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
-        g.addColorStop(0, `rgba(${o.color},${o.a})`);
-        g.addColorStop(1, `rgba(${o.color},0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(cx, cy, rad, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    const draw = (time: number) => {
+      gl.uniform1f(uTime, time);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
 
     resize();
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const ro = new ResizeObserver(() => {
-      resize();
-      render();
-    });
+    const ro = new ResizeObserver(() => { resize(); });
     if (canvas.parentElement) ro.observe(canvas.parentElement);
 
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
-      render();
+      draw(0);
       return () => ro.disconnect();
     }
 
-    const ctxGsap = gsap.context(() => {
-      orbs.forEach((o, i) => {
-        gsap.to(o, {
-          dx: o.toX,
-          dy: o.toY,
-          scale: o.toScale,
-          a: o.toA,
-          duration: o.dur,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-          delay: i * 0.6,
-        });
-      });
-    });
-
-    gsap.ticker.add(render);
+    const start = performance.now();
+    const tick = () => draw((performance.now() - start) / 1000);
+    gsap.ticker.add(tick);
 
     return () => {
-      gsap.ticker.remove(render);
-      ctxGsap.revert();
+      gsap.ticker.remove(tick);
       ro.disconnect();
     };
   }, []);

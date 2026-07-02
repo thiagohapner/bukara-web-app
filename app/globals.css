@@ -891,9 +891,6 @@ label[for] {
 .banner-petals__canvas {
   position: absolute;
   inset: 0;
-  /* Blur melts the gradient orbs into smooth silky flow — but not so heavy
-     that their (deliberately large) drift becomes imperceptible. */
-  filter: blur(28px);
 }
 /* Right-weighted scrim so the 1-2-3 stepper stays legible over the petals. */
 .banner-petals-scrim {
