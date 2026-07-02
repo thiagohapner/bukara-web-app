@@ -20,23 +20,27 @@ uniform vec2 u_res;
 uniform float u_time;
 uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
+// One straight, razor-thin beam: a bright line at angle `ang`, positioned at
+// `pos` along its normal. Returns a thin core + a faint glow.
+float beam(vec2 uv, float ang, float pos){
+  vec2 n = vec2(cos(ang), sin(ang));
+  float d = dot(uv, n) - pos;
+  float core = 0.00006 / (d * d + 0.00006);      // razor line
+  float halo = 0.004  / (d * d + 0.004) * 0.10;  // faint glow
+  return core + halo;
+}
+
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
-  float t = u_time * 0.25;
+  float t = u_time;
 
-  // Near-black teal base, then add dead-straight, razor-thin laser beams.
+  // A few precise beams, each from a DIFFERENT direction, slowly sweeping
+  // across (and crossing) on their own timing. Near-black teal base.
   vec3 col = c1;
-  for (int i = 0; i < 6; i++) {
-    float fi = float(i);
-    float slope = 0.18 + fi * 0.06;   // fixed angle — precise, no undulation
-    float freq = 4.0 + fi * 2.0;
-    float phase = (uv.y + slope * uv.x) * freq + t * (0.4 + fi * 0.15);
-    float s = 0.5 + 0.5 * sin(phase * 3.14159);
-    float core = pow(s, 240.0);       // extremely thin, sharp beam
-    float halo = pow(s, 40.0) * 0.06; // very faint glow
-    vec3 lc = fi < 2.0 ? c2 : (fi < 4.0 ? c3 : c4);
-    col += lc * (core + halo);
-  }
+  col += c2 * beam(uv,  0.35, mod(t * 0.055,        2.2) - 0.6);
+  col += c3 * beam(uv, -0.70, mod(t * 0.041 + 0.9,  2.2) - 0.6);
+  col += c4 * beam(uv,  1.25, mod(t * 0.047 + 1.7,  2.2) - 0.6);
+  col += c2 * beam(uv,  2.15, mod(t * 0.033 + 1.2,  2.2) - 0.6);
   gl_FragColor = vec4(col, 1.0);
 }
 `;
