@@ -22,14 +22,15 @@ uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
 const int NODES = 9;
 
-// Slowly drifting node position (normalized), deterministic per index.
-vec2 nodePos(int i, float t){
+// Slowly drifting node position in aspect-corrected space (x scaled by
+// aspect so the network is isotropic/upright, not horizontally foreshortened).
+vec2 nodePos(int i, float t, float aspect){
   float fi = float(i);
   float x = 0.5 + 0.42 * sin(fi * 2.3 + 0.6);
   float y = 0.5 + 0.42 * cos(fi * 1.7 + 1.1);
   x += 0.05 * sin(t * 0.18 + fi * 1.3);
   y += 0.05 * cos(t * 0.15 + fi * 0.9);
-  return vec2(x, y);
+  return vec2(x * aspect, y);
 }
 
 // Shortest distance from point p to the segment a–b.
@@ -42,22 +43,25 @@ float segDist(vec2 p, vec2 a, vec2 b){
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
   float t = u_time;
+  float aspect = u_res.x / u_res.y;
+  // Sample in the same aspect-corrected space so the network reads upright.
+  vec2 p = vec2(uv.x * aspect, uv.y);
 
   // Neural-network look: drifting nodes joined by thin beams where they're
   // close enough. Near-black teal base; everything at very low opacity.
   float edges = 0.0;
   float dots = 0.0;
   for (int i = 0; i < NODES; i++){
-    vec2 a = nodePos(i, t);
+    vec2 a = nodePos(i, t, aspect);
     for (int j = 0; j < NODES; j++){
       if (j <= i) continue;
-      vec2 b = nodePos(j, t);
-      float conn = smoothstep(0.52, 0.16, distance(a, b)); // only near nodes link
+      vec2 b = nodePos(j, t, aspect);
+      float conn = smoothstep(1.4, 0.4, distance(a, b)); // only near nodes link
       if (conn > 0.0){
-        edges += smoothstep(0.0018, 0.0, segDist(uv, a, b)) * conn;
+        edges += smoothstep(0.0018, 0.0, segDist(p, a, b)) * conn;
       }
     }
-    float d = distance(uv, a);
+    float d = distance(p, a);
     dots += 0.00022 / (d * d + 0.00022);
   }
 
