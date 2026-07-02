@@ -892,13 +892,22 @@ label[for] {
   position: absolute;
   inset: 0;
 }
-/* Right-weighted scrim so the 1-2-3 stepper stays legible over the petals. */
+/* Dark layer over the whole animation so the banner reads dark overall and
+   the laser lines stay atmospheric (not glaring). Masked with the parent, so
+   it fades out on the left with the mesh. */
+.banner-petals::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 26, 25, 0.55);
+}
+/* Extra right-weighted scrim so the 1-2-3 stepper stays legible. */
 .banner-petals-scrim {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent 55%, rgba(4, 26, 25, 0.5) 100%);
+  background: linear-gradient(90deg, transparent 45%, rgba(4, 26, 25, 0.55) 100%);
 }
 
 /* Section "View all" link */

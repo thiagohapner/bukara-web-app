@@ -22,28 +22,33 @@ uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
-  float t = u_time * 0.22;
+  float t = u_time * 0.25;
 
-  // Gentle SINE domain-warp (smooth, not turbulent) so the bands undulate.
-  float wx = uv.x + 0.06 * sin(uv.y * 3.0 + t * 0.7);
-  float wy = uv.y + 0.06 * sin(uv.x * 3.0 - t * 0.5);
+  // Wavy warp so the beams undulate rather than run dead straight.
+  float warp = 0.10 * sin(uv.x * 3.0 + t) + 0.05 * sin(uv.x * 7.0 - t * 1.3);
 
-  // Three smooth, phase-shifted wave fields → clean wavy interference bands.
-  float f1 = 0.5 + 0.5 * sin(wx * 3.2 + wy * 1.4 + t);
-  float f2 = 0.5 + 0.5 * sin(wx * 2.0 - wy * 2.6 - t * 0.8 + 1.7);
-  float f3 = 0.5 + 0.5 * sin((wx + wy) * 2.4 + t * 0.6 + 3.1);
-
-  vec3 col = mix(c1, c2, smoothstep(0.12, 0.88, f1));
-  col = mix(col, c3, smoothstep(0.25, 0.85, f2) * 0.75);
-  col = mix(col, c4, smoothstep(0.40, 0.92, f3) * 0.6);
+  // Near-black teal base, then add thin bright laser lines on top.
+  vec3 col = c1;
+  for (int i = 0; i < 6; i++) {
+    float fi = float(i);
+    float slope = 0.12 + fi * 0.05;
+    float freq = 5.0 + fi * 2.2;
+    float phase = (uv.y + warp + slope * uv.x) * freq + t * (0.5 + fi * 0.18);
+    float s = 0.5 + 0.5 * sin(phase * 3.14159);
+    float core = pow(s, 70.0);        // razor-thin bright line
+    float halo = pow(s, 12.0) * 0.12; // soft glow around it
+    // Alternate the beam colour between brand teal, mint and pale.
+    vec3 lc = fi < 2.0 ? c2 : (fi < 4.0 ? c3 : c4);
+    col += lc * (core + halo);
+  }
   gl_FragColor = vec4(col, 1.0);
 }
 `;
 
-// Bukara teal ramp, normalized RGB: deep #062F2C, brand #01A497,
+// Bukara teal ramp, normalized RGB: near-black base #041A19, brand #01A497,
 // mint #27D8CA, pale #84CDC7.
 const COLORS: [number, number, number][] = [
-  [6 / 255, 47 / 255, 44 / 255],
+  [4 / 255, 26 / 255, 25 / 255],
   [1 / 255, 164 / 255, 151 / 255],
   [39 / 255, 216 / 255, 202 / 255],
   [132 / 255, 205 / 255, 199 / 255],
