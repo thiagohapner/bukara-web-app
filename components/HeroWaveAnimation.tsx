@@ -20,37 +20,58 @@ uniform vec2 u_res;
 uniform float u_time;
 uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
+const int NODES = 9;
+
+// Slowly drifting node position in aspect-corrected space (x scaled by
+// aspect so the network is isotropic/upright, not horizontally foreshortened).
+vec2 nodePos(int i, float t, float aspect){
+  float fi = float(i);
+  float x = 0.5 + 0.42 * sin(fi * 2.3 + 0.6);
+  float y = 0.5 + 0.42 * cos(fi * 1.7 + 1.1);
+  x += 0.05 * sin(t * 0.18 + fi * 1.3);
+  y += 0.05 * cos(t * 0.15 + fi * 0.9);
+  return vec2(x * aspect, y);
+}
+
+// Shortest distance from point p to the segment a–b.
+float segDist(vec2 p, vec2 a, vec2 b){
+  vec2 pa = p - a; vec2 ba = b - a;
+  float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+  return length(pa - ba * h);
+}
+
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
   float t = u_time;
   float aspect = u_res.x / u_res.y;
+  // Sample in the same aspect-corrected space so the network reads upright.
   vec2 p = vec2(uv.x * aspect, uv.y);
 
-  // Fixed diagonal groove direction.
-  float ang = 0.62;
-  vec2 dir = vec2(cos(ang), sin(ang)); // along the grooves
-  vec2 nrm = vec2(-sin(ang), cos(ang)); // across the grooves
-  float across = dot(p, nrm);
-  float along  = dot(p, dir);
+  // Neural-network look: drifting nodes joined by thin beams where they're
+  // close enough. Near-black teal base; everything at very low opacity.
+  float edges = 0.0;
+  float dots = 0.0;
+  for (int i = 0; i < NODES; i++){
+    vec2 a = nodePos(i, t, aspect);
+    for (int j = 0; j < NODES; j++){
+      if (j <= i) continue;
+      vec2 b = nodePos(j, t, aspect);
+      float conn = smoothstep(1.4, 0.4, distance(a, b)); // only near nodes link
+      if (conn > 0.0){
+        edges += smoothstep(0.0018, 0.0, segDist(p, a, b)) * conn;
+      }
+    }
+    float d = distance(p, a);
+    dots += 0.00022 / (d * d + 0.00022);
+  }
 
-  // Dense fine brushed striations across the grooves — razor-thin, tightly
-  // packed hairlines (high frequency = closer together, high exponent = thin).
-  float stri = pow(0.5 + 0.5 * sin(across * 520.0), 30.0);
+  // Horizontal ramp: subtler on the left (behind the headline), stronger
+  // toward the right.
+  float side = mix(0.28, 1.15, uv.x);
 
-  // Specular streak: a bright band of lit grooves sweeping across (perp).
-  float streakPos = mix(-0.2, 1.1, 0.5 + 0.5 * sin(t * 0.16));
-  float beam = exp(-pow((across - streakPos) / 0.22, 2.0));
-
-  // Hot glint travelling ALONG the streak — the converging light point.
-  float glintAlong = mix(-0.3, aspect + 0.3, 0.5 + 0.5 * sin(t * 0.11 + 1.3));
-  float glint = beam * exp(-pow((along - glintAlong) / 0.28, 2.0));
-
-  // Compose on the near-black base: brand grooves, pale-hot core at the glint.
-  float bright = beam * 0.75 + glint * 2.1;
-  vec3 grooveCol = mix(c2, c4, glint);
   vec3 col = c1;
-  col += grooveCol * stri * bright;
-  col += c4 * glint * 0.55;        // bright convergent glow
+  col += c3 * edges * 0.16 * side;  // connecting beams — faint
+  col += c4 * dots  * 0.22 * side;  // node glints — slightly brighter
   gl_FragColor = vec4(col, 1.0);
 }
 `;
