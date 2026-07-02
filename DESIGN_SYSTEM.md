@@ -186,6 +186,12 @@ The aurora-hero layout ships in two swappable palettes, set per slide via
 teal washes and the grid to its light tint. Both banners render live on the
 homepage (dark Schärfservice + light Sonderlösungen) and on `/design-system`.
 
+**Background motion (GSAP, reduced-motion safe):** the glow blobs drift, the
+grid breathes opacity + slowly pans one 96px cell diagonally (seamless loop
+behind a static radial mask), and a soft diagonal light sweep drifts across
+every ~12s. Subtle by design — noticeable, not distracting. Under
+`prefers-reduced-motion` the background is fully static.
+
 ## 5. Shadows
 
 Brand-teal-tinted (not grey, not Stripe's blue) double-layer shadows:

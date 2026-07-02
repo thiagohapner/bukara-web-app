@@ -52,6 +52,23 @@ export default function BannerAurora({ light = false }: { light?: boolean }) {
         yoyo: true,
       });
 
+      // Drift the blueprint grid diagonally — one 96px cell, looping
+      // seamlessly (pattern repeats every 96/24px, so the reset is invisible).
+      gsap.to(".banner-grid__lines", {
+        x: 96,
+        y: 96,
+        duration: 28,
+        ease: "none",
+        repeat: -1,
+      });
+
+      // Slow light sweep: a soft band drifts across, pausing between passes.
+      gsap.fromTo(
+        ".banner-sweep",
+        { xPercent: -160 },
+        { xPercent: 160, duration: 7, ease: "power1.inOut", repeat: -1, repeatDelay: 5 }
+      );
+
       blobs.forEach((blob, i) => {
         const dir = i % 2 === 0 ? 1 : -1;
         // xPercent/yPercent are relative to each blob's own (large) size, so
@@ -75,8 +92,11 @@ export default function BannerAurora({ light = false }: { light?: boolean }) {
 
   return (
     <div ref={rootRef} className="banner-aurora" aria-hidden>
-      {/* Technical-drawing grid — behind the glow blobs so they bloom over it. */}
-      <div className={`banner-grid${light ? " banner-grid--light" : ""}`} />
+      {/* Technical-drawing grid — behind the glow blobs so they bloom over it.
+          Masked/opacity-breathing wrapper + oversized panning lines layer. */}
+      <div className={`banner-grid${light ? " banner-grid--light" : ""}`}>
+        <div className="banner-grid__lines" />
+      </div>
       {BLOBS.map((b, i) => (
         <div
           key={i}
@@ -90,6 +110,8 @@ export default function BannerAurora({ light = false }: { light?: boolean }) {
           }}
         />
       ))}
+      {/* Light sweep — travels across on top of the grid + glow (behind text). */}
+      <div className={`banner-sweep${light ? " banner-sweep--light" : ""}`} />
     </div>
   );
 }
