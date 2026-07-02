@@ -891,9 +891,8 @@ label[for] {
 .banner-petals__canvas {
   position: absolute;
   inset: 0;
-  /* Just a touch of softening — keep the fine striations readable (they're
-     the silk grain); heavy blur turns the ribbons into blobs. */
-  filter: blur(1px);
+  /* Heavy blur melts the gradient orbs into one smooth, silky color flow. */
+  filter: blur(40px);
 }
 /* Right-weighted scrim so the 1-2-3 stepper stays legible over the petals. */
 .banner-petals-scrim {

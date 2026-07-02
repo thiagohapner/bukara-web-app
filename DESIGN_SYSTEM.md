@@ -160,13 +160,14 @@ on-surface right panel indented ~right.
 - **Sonderwerkzeuge** → `grid`: the technical-drawing / graph-paper grid via
   `BannerAurora` (glow + `.banner-grid`) — the "made-to-drawing" story. Has
   dark (light lines) and `--light` (dark teal lines) variants.
-- **Schärfservice** → `petals`: an animated "flowing ribbon petals" canvas
-  (`components/HeroWaveAnimation.tsx`) — Stripe-hero-style organic bezier
-  petals with silky radial striations, glowing where they overlap (`screen`
-  blend), drifting on a GSAP loop. Monochrome teal ramp, Canvas 2D, GSAP-
-  driven, reduced-motion-safe (static frame). Clustered right, masked to fade
-  left (`.banner-petals`); a right-weighted scrim (`.banner-petals-scrim`)
-  keeps the 1-2-3 stepper legible over it.
+- **Schärfservice** → `petals`: an animated **soft flowing-gradient** canvas
+  (`components/HeroWaveAnimation.tsx`) — several large teal radial-gradient
+  orbs that drift/scale/fade on a GSAP loop, screen-blended and heavily
+  blurred (CSS `blur(40px)`) into one smooth silky color flow (no hard edges).
+  Teal ramp + mint accents, Canvas 2D, GSAP-driven, reduced-motion-safe
+  (static frame). Clustered right, masked to fade left (`.banner-petals`); a
+  right-weighted scrim (`.banner-petals-scrim`) keeps the 1-2-3 stepper
+  legible over it.
 
 They differ in the **right panel** (`RightPanel` kind):
 - **Sonderlösungen** → `features`: the `.checklist` (6 benefit items with
