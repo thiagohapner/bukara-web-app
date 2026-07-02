@@ -33,9 +33,9 @@ void main(){
   float across = dot(p, nrm);
   float along  = dot(p, dir);
 
-  // Dense fine brushed striations across the grooves — razor-thin lines
-  // (high exponent narrows each bright ridge to a hairline).
-  float stri = pow(0.5 + 0.5 * sin(across * 230.0), 14.0);
+  // Dense fine brushed striations across the grooves — razor-thin, tightly
+  // packed hairlines (high frequency = closer together, high exponent = thin).
+  float stri = pow(0.5 + 0.5 * sin(across * 520.0), 30.0);
 
   // Specular streak: a bright band of lit grooves sweeping across (perp).
   float streakPos = mix(-0.2, 1.1, 0.5 + 0.5 * sin(t * 0.16));
