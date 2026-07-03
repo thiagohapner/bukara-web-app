@@ -55,7 +55,7 @@ interface BundleItem {
 function round2(n: number) { return Math.round(n * 100) / 100; }
 
 function DealCheck() {
-  return <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#00A597]" strokeWidth={2.5} />;
+  return <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#01A497]" strokeWidth={2.5} />;
 }
 
 // ─── Main export (receives slug from server-component shell) ──────────────────
@@ -216,7 +216,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
       content: (
         <div className="flex flex-col gap-2.5">
           {techItems.map((s) => (
-            <p key={s.id} className="text-base text-slate-700 leading-snug">{s.spec_value}</p>
+            <p key={s.id} className="text-base text-neutral-700 leading-snug">{s.spec_value}</p>
           ))}
         </div>
       ),
@@ -231,7 +231,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
       content: (
         <div className="flex flex-col gap-2">
           {anwendungItems.map((s) => (
-            <p key={s.id} className="text-base text-slate-700">{s.spec_value}</p>
+            <p key={s.id} className="text-base text-neutral-700">{s.spec_value}</p>
           ))}
         </div>
       ),
@@ -255,7 +255,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 <div key={mat.id} className="flex flex-col gap-1.5">
                   <p className="text-base text-slate-900 leading-snug">{mat.material_name}</p>
                   <Dots count={dotCount} />
-                  <p className="text-sm text-slate-400">{label}</p>
+                  <p className="text-sm text-neutral-400">{label}</p>
                 </div>
               );
             })}
@@ -272,17 +272,17 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
         <table className="w-full text-sm">
           <thead>
             <tr>
-              <th className="pb-3 pr-6 text-left text-base text-slate-400 font-normal">ø</th>
-              <th className="pb-3 pr-6 text-left text-base text-slate-400 font-normal">Vorschub</th>
-              <th className="pb-3 text-left text-base text-slate-400 font-normal">Drehzahl</th>
+              <th className="pb-3 pr-6 text-left text-base text-neutral-400 font-normal">ø</th>
+              <th className="pb-3 pr-6 text-left text-base text-neutral-400 font-normal">Vorschub</th>
+              <th className="pb-3 text-left text-base text-neutral-400 font-normal">Drehzahl</th>
             </tr>
           </thead>
           <tbody>
             {cuttingData.map((row) => (
-              <tr key={row.id} className="border-t border-slate-100">
+              <tr key={row.id} className="border-t border-neutral-100">
                 <td className="py-2.5 pr-6 text-base text-slate-900">{row.diameter}</td>
-                <td className="py-2.5 pr-6 text-base text-slate-700">{row.feed_rate}</td>
-                <td className="py-2.5 text-base text-slate-700">{row.rpm_range}</td>
+                <td className="py-2.5 pr-6 text-base text-neutral-700">{row.feed_rate}</td>
+                <td className="py-2.5 text-base text-neutral-700">{row.rpm_range}</td>
               </tr>
             ))}
           </tbody>
@@ -294,12 +294,12 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
   return (
     <>
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
-        <nav className="flex items-center gap-1.5 text-xs text-slate-400">
-          <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Start</Link>
+        <nav className="flex items-center gap-1.5 text-xs text-neutral-400">
+          <Link href="/" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>Start</Link>
           <span>/</span>
-          <Link href="/angebote" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Angebote</Link>
+          <Link href="/angebote" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>Angebote</Link>
           <span>/</span>
-          <span className="text-slate-700 font-medium">{offer?.title ?? "Angebot"}</span>
+          <span className="text-neutral-700 font-medium">{offer?.title ?? "Angebot"}</span>
         </nav>
       </div>
 
@@ -321,17 +321,17 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
             </h1>
 
             {selectedAnchorSku && (
-              <p className="text-sm text-slate-400 mb-4">Artikel-Nr.: {selectedAnchorSku.artikel_nr}</p>
+              <p className="text-sm text-neutral-400 mb-4">Artikel-Nr.: {selectedAnchorSku.artikel_nr}</p>
             )}
 
             <div className="flex items-baseline gap-3 mb-1">
               {loading ? (
-                <span className="text-2xl font-extrabold text-slate-200">—</span>
+                <span className="text-2xl font-bold text-neutral-200">—</span>
               ) : (
                 <>
-                  <span className="text-2xl font-extrabold text-[#9B242A]">{formatEur(campaignTotal)}</span>
+                  <span className="text-2xl font-bold text-[#9B242A]">{formatEur(campaignTotal)}</span>
                   <span className="flex items-baseline gap-1">
-                    <span className="text-base text-slate-400 line-through">{formatEur(originalTotal)}</span>
+                    <span className="text-base text-neutral-400 line-through">{formatEur(originalTotal)}</span>
                     {originalTotal > campaignTotal && (
                       <span className="text-sm font-semibold text-[#9B242A]">
                         -{Math.round((1 - campaignTotal / originalTotal) * 100)}%
@@ -341,7 +341,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 </>
               )}
             </div>
-            <p className="text-[11px] text-slate-400 mb-4">zzgl. 19% MwSt.</p>
+            <p className="text-[11px] text-neutral-400 mb-4">zzgl. 19% MwSt.</p>
 
             {offer?.subtitle && (
               <p className="text-base text-slate-900 leading-relaxed mb-2">{offer.subtitle}</p>
@@ -359,7 +359,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
 
             {items.length > 0 && (
               <div className="mb-5">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">
+                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-widest mb-3">
                   Enthaltene Produkte
                 </p>
                 <ul className="flex flex-col gap-2">
@@ -374,7 +374,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
               </div>
             )}
 
-            <div className="h-px bg-slate-100 mb-5" />
+            <div className="h-px bg-neutral-100 mb-5" />
 
             {items.filter((i) => i.requires_variant_selection).map((item) => (
               <div key={item.product_id} className="mb-8">
@@ -395,7 +395,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                  className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
                 </button>
@@ -403,7 +403,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                  className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
                 </button>
