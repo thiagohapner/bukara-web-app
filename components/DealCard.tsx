@@ -44,7 +44,7 @@ export default function DealCard({ deal, index }: Props) {
       {deal.cardImage ? (
         <Image src={deal.cardImage} alt={deal.title} fill className="object-cover" />
       ) : (
-        <span className="text-5xl font-black tracking-tighter select-none text-center px-4" style={{ color: "rgba(0,165,151,0.15)" }}>
+        <span className="text-5xl font-semibold tracking-tighter select-none text-center px-4" style={{ color: "rgba(1,164,151,0.15)" }}>
           {iconLabel}
         </span>
       )}
@@ -56,10 +56,10 @@ export default function DealCard({ deal, index }: Props) {
       <h2 className="heading-h3 mb-2">
         {deal.title}
       </h2>
-      <p className="text-slate-500 text-sm mb-6 leading-relaxed">{deal.subtitle}</p>
+      <p className="text-neutral-500 text-sm mb-6 leading-relaxed">{deal.subtitle}</p>
 
       <div className="mb-6">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+        <p className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-2">
           Enthaltene Produkte
         </p>
         <ul className="flex flex-col gap-1.5">
@@ -74,17 +74,17 @@ export default function DealCard({ deal, index }: Props) {
 
       <div className="mb-2 flex items-baseline gap-3 flex-wrap">
         <div>
-          <span className="text-xs text-slate-400 font-medium">Ab </span>
-          <span className="text-2xl font-extrabold text-[#9B242A]">{formatEur(deal.fromCampaignPrice)}</span>
+          <span className="text-xs text-neutral-400 font-medium">Ab </span>
+          <span className="text-2xl font-bold text-[#9B242A]">{formatEur(deal.fromCampaignPrice)}</span>
         </div>
         <span className="flex items-baseline gap-1">
-          <span className="text-sm text-slate-400 line-through">{formatEur(deal.fromOriginalPrice)}</span>
+          <span className="text-sm text-neutral-400 line-through">{formatEur(deal.fromOriginalPrice)}</span>
           {deal.discountPercent > 0 && (
             <span className="text-sm font-semibold text-[#9B242A]">-{deal.discountPercent}%</span>
           )}
         </span>
       </div>
-      <p className="text-xs text-slate-400 mb-7 leading-relaxed">
+      <p className="text-xs text-neutral-400 mb-7 leading-relaxed">
         Ab 200 € kostenloser Versand · Ab 500 € zusätzlich −10%
       </p>
 
@@ -98,7 +98,7 @@ export default function DealCard({ deal, index }: Props) {
   );
 
   return (
-    <div className="deal-card border border-slate-100 rounded-md overflow-hidden bg-white w-full flex flex-col sm:flex-row">
+    <div className="deal-card border border-neutral-100 rounded-md overflow-hidden bg-white w-full flex flex-col sm:flex-row">
       {imageBlock}
       {contentBlock}
     </div>

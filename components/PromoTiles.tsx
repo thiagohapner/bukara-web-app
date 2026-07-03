@@ -68,7 +68,7 @@ export default function PromoTiles() {
 
               {/* Text */}
               <div className="z-10 max-w-[55%]">
-                <p className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "#00A597" }}>
+                <p className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "#01A497" }}>
                   {tile.badge}
                 </p>
                 <h3 className="text-[17px] font-semibold leading-tight mb-4" style={{ color: "#022221" }}>

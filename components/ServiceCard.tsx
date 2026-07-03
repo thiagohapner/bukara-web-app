@@ -32,9 +32,9 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
           <h2 className="heading-h3 mb-2">
             {service.name}
           </h2>
-          <p className="text-slate-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
+          <p className="text-neutral-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
           <div className="mb-6">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Leistungen</p>
+            <p className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-2">Leistungen</p>
             <ul className="flex flex-col gap-1.5">
               {service.highlights.map((h) => (
                 <li key={h} className="flex items-start gap-2 text-sm text-slate-900">
@@ -45,8 +45,8 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
             </ul>
           </div>
           <div className="mb-8">
-            <span className="text-xs text-slate-400 font-medium">Preis: </span>
-            <span className="text-lg font-extrabold text-slate-900">{service.priceLabel}</span>
+            <span className="text-xs text-neutral-400 font-medium">Preis: </span>
+            <span className="text-lg font-bold text-slate-900">{service.priceLabel}</span>
           </div>
           <Link
             href={`/loesungen/${service.slug}`}
@@ -62,7 +62,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
             <Image src={heroImage} alt={service.name} fill className="object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center" style={{ background: imageBg }}>
-              <span className="text-5xl font-black tracking-tighter select-none" style={{ color: "rgba(0,165,151,0.15)" }}>
+              <span className="text-5xl font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.15)" }}>
                 {imageLabel}
               </span>
             </div>
@@ -86,8 +86,8 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
         />
       ) : (
         <span
-          className="text-5xl font-black tracking-tighter select-none text-center px-4"
-          style={{ color: "rgba(0,165,151,0.15)" }}
+          className="text-5xl font-semibold tracking-tighter select-none text-center px-4"
+          style={{ color: "rgba(1,164,151,0.15)" }}
         >
           {imageLabel}
         </span>
@@ -100,10 +100,10 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
       <h2 className="heading-h3 mb-2">
         {service.name}
       </h2>
-      <p className="text-slate-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
+      <p className="text-neutral-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
 
       <div className="mb-6">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+        <p className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-2">
           Leistungen
         </p>
         <ul className="flex flex-col gap-1.5">
@@ -117,8 +117,8 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
       </div>
 
       <div className="mb-7">
-        <span className="text-xs text-slate-400 font-medium">Preis: </span>
-        <span className="text-lg font-extrabold text-slate-900">{service.priceLabel}</span>
+        <span className="text-xs text-neutral-400 font-medium">Preis: </span>
+        <span className="text-lg font-bold text-slate-900">{service.priceLabel}</span>
       </div>
 
       <div>
@@ -135,7 +135,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
   );
 
   return (
-    <div className="service-card border border-slate-100 rounded-lg overflow-hidden bg-white w-full flex flex-col sm:flex-row">
+    <div className="service-card border border-neutral-100 rounded-lg overflow-hidden bg-white w-full flex flex-col sm:flex-row">
       {imageBlock}
       {contentBlock}
     </div>

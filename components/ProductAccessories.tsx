@@ -52,7 +52,7 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
   return (
     <div className="flex gap-3 items-start">
       {/* Thumbnail */}
-      <div className="w-20 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100 relative aspect-[3/4]">
+      <div className="w-20 flex-shrink-0 rounded-lg overflow-hidden bg-neutral-100 relative aspect-[3/4]">
         {accessory.images[0] && (
           <Image
             src={accessory.images[0]}
@@ -70,7 +70,7 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
         {/* Line 1: Name */}
         <Link
           href={`${linkBase}/${accessory.slug}`}
-          className="text-sm font-semibold text-slate-900 hover:text-[#00A597] transition-colors leading-snug"
+          className="text-sm font-semibold text-slate-900 hover:text-[#01A497] transition-colors leading-snug"
           style={{ textDecoration: "none" }}
         >
           {accessory.name}
@@ -93,7 +93,7 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
           <span className="text-sm font-bold text-[#9B242A]">{formatEur(unitPrice)}</span>
           {originalPrice > unitPrice && (
             <>
-              <span className="text-xs text-slate-400 line-through">{formatEur(originalPrice)}</span>
+              <span className="text-xs text-neutral-400 line-through">{formatEur(originalPrice)}</span>
               <span className="text-xs font-semibold text-[#9B242A]">
                 -{Math.round((1 - unitPrice / originalPrice) * 100)}%
               </span>
@@ -107,7 +107,7 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
             <button
               type="button"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="px-2.5 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+              className="px-2.5 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
             >
               <ChevronLeft className="w-3.5 h-3.5" strokeWidth={2.5} />
             </button>
@@ -115,7 +115,7 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
             <button
               type="button"
               onClick={() => setQuantity((q) => q + 1)}
-              className="px-2.5 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+              className="px-2.5 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
             >
               <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.5} />
             </button>
@@ -150,7 +150,7 @@ export default function ProductAccessories({
       <div className="border border-slate-800 rounded-lg p-4">
         {accessories.map((acc, idx) => (
           <div key={acc.id}>
-            {idx > 0 && <div className="border-t border-slate-100 mt-4 mb-4" />}
+            {idx > 0 && <div className="border-t border-neutral-100 mt-4 mb-4" />}
             <AccessoryRow accessory={acc} linkBase={linkBase} />
           </div>
         ))}

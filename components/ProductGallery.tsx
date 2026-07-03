@@ -15,7 +15,7 @@ interface Props {
 function PlaceholderBlock({ label }: { label: string }) {
   return (
     <div className="w-full h-full flex items-center justify-center" style={{ background: "#EEEEEE" }}>
-      <span className="font-black tracking-tighter select-none text-2xl" style={{ color: "rgba(0,165,151,0.18)" }}>
+      <span className="font-semibold tracking-tighter select-none text-2xl" style={{ color: "rgba(1,164,151,0.18)" }}>
         {label}
       </span>
     </div>

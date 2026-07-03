@@ -35,7 +35,7 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 bg-slate-50">
+    <section ref={sectionRef} className="py-16 bg-neutral-50">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
         <div className="t-header mb-4 flex items-center justify-between">
           <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900">Happy Customers</h2>
@@ -43,7 +43,7 @@ export default function Testimonials() {
             {[0, 1].map((i) => (
               <div
                 key={i}
-                className={`w-2 h-2 rounded-full transition-colors ${i === 0 ? "bg-orange-500" : "bg-slate-200"}`}
+                className={`w-2 h-2 rounded-full transition-colors ${i === 0 ? "bg-orange-500" : "bg-neutral-200"}`}
               />
             ))}
           </div>
@@ -52,14 +52,14 @@ export default function Testimonials() {
           {TESTIMONIALS.map((t) => (
             <div
               key={t.id}
-              className="t-card bg-white rounded-lg p-7 border border-slate-100 transition-transform duration-450 hover:scale-[1.02]"
+              className="t-card bg-white rounded-lg p-7 border border-neutral-100 transition-transform duration-450 hover:scale-[1.02]"
             >
               {/* Stars */}
               <div className="stars text-lg mb-3">
                 {"★".repeat(t.rating)}
               </div>
               {/* Text */}
-              <p className="text-slate-600 text-sm leading-relaxed mb-6">
+              <p className="text-neutral-600 text-sm leading-relaxed mb-6">
                 &ldquo;{t.text}&rdquo;
               </p>
               {/* Author */}
@@ -69,12 +69,12 @@ export default function Testimonials() {
                   alt={t.name}
                   width={44}
                   height={44}
-                  className="w-11 h-11 rounded-full object-cover border-2 border-slate-100"
+                  className="w-11 h-11 rounded-full object-cover border-2 border-neutral-100"
                   unoptimized
                 />
                 <div>
                   <p className="text-sm font-semibold text-slate-800">{t.name}</p>
-                  <p className="text-xs text-slate-400">{t.location}</p>
+                  <p className="text-xs text-neutral-400">{t.location}</p>
                 </div>
               </div>
             </div>
