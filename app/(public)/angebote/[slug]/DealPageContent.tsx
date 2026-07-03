@@ -25,7 +25,7 @@ function Dots({ count }: { count: number }) {
             width: 14,
             height: 5,
             borderRadius: 2,
-            backgroundColor: i < count ? "#2E4A47" : "#CBD5E1",
+            backgroundColor: i < count ? "var(--color-neutral-700)" : "#CBD5E1",
           }}
         />
       ))}

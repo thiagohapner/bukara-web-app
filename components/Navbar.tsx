@@ -157,7 +157,7 @@ export default function Navbar({
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
           <ul
             className="flex items-center gap-8 h-9 text-[11px] font-bold"
-            style={{ color: "#2d4a47" }}
+            style={{ color: "var(--color-neutral-700)" }}
           >
             {TOP_INFO.map(({ label, Icon, href }) => (
               <li key={label} className="inline-flex items-center">

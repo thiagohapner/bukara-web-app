@@ -174,7 +174,7 @@ export default function KontaktPage() {
                 <div className="border-t border-slate-100 pt-6">
                   <Link
                     href="/ueber-uns"
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#01A497] hover:text-[#007A70] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-500 hover:text-brand-600 transition-colors"
                     style={{ textDecoration: "none" }}
                   >
                     Mehr über uns

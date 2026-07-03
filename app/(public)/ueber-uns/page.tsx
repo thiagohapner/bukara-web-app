@@ -184,7 +184,7 @@ export default function UeberUnsPage() {
         </section>
 
         {/* ── 6. Kontakt ── */}
-        <section className="ueber-section w-full py-20" style={{ background: "linear-gradient(135deg, #01A497 0%, #007A70 100%)" }}>
+        <section className="ueber-section w-full py-20" style={{ background: "linear-gradient(135deg, #01A497 0%, #04857B 100%)" }}>
           <div className="max-w-[1320px] mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Kontakt</h2>
             <p className="text-white/80 text-base mb-8 max-w-md mx-auto leading-relaxed">

@@ -31,7 +31,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
       <Link
         href="/angebote"
         className="group block rounded-lg overflow-hidden"
-        style={{ textDecoration: "none", background: "linear-gradient(135deg, #01A497 0%, #007A70 100%)" }}
+        style={{ textDecoration: "none", background: "linear-gradient(135deg, #01A497 0%, #04857B 100%)" }}
       >
         <div className="flex items-center gap-3 px-5 py-4">
           <span ref={emojiRef} className="flex w-12 h-12 rounded-xl bg-transparent items-center justify-center flex-shrink-0 text-white" style={{ fontSize: "4.5rem", lineHeight: 1 }}>
@@ -54,7 +54,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
       className="group block rounded-lg overflow-hidden"
       style={{
         textDecoration: "none",
-        background: lightBg ? "#f1f5f9" : "linear-gradient(135deg, #01A497 0%, #007A70 100%)",
+        background: lightBg ? "#f1f5f9" : "linear-gradient(135deg, #01A497 0%, #04857B 100%)",
       }}
     >
       <div className={`flex flex-col sm:flex-row items-center justify-between gap-6 ${isCompact ? "px-6 py-5" : "px-16 py-16"}`}>
