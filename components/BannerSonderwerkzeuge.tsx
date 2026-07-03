@@ -103,7 +103,7 @@ const slides: Slide[] = [
     headline: "Nachschliff,",
     highlight: "der Standzeit verlängert",
     subline:
-      "Nachschliff für HW-Messer, PCD-Werkzeuge und Bohrer – präzise, schnell, bundesweit.",
+      "Nachschliff für alle Bukara und Fremdwerkzeuge – präzise, schnell, deutschlandweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
     // Dark scheme: deep diagonal brand-teal gradient (brand-800 → brand-950)
@@ -116,8 +116,8 @@ const slides: Slide[] = [
     rightPanel: {
       kind: "stepper",
       steps: [
-        { title: "Formular ausfüllen", sub: "In 2 Minuten online – Werkzeug & Menge angeben" },
-        { title: "Abholung", sub: "Gratis und deutschlandweit" },
+        { title: "Online-Formular ausfüllen", sub: "In nur 2 Minuten Werkzeugdetails angeben" },
+        { title: "Gratis Abholung", sub: "Deutschlandweiter Abholservice" },
         { title: "Fertig in 1–2 Wochen", sub: "Geschärft & geprüft zurück bei Ihnen" },
       ],
     },
