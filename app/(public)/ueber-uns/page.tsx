@@ -11,7 +11,7 @@ import { Check, ArrowRight, ExternalLink, Mail, Phone } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 function UeberCheck() {
-  return <Check className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
+  return <Check className="w-4 h-4 text-[#01A497] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
 }
 
 function Placeholder({ bg, label, className = "" }: { bg: string; label: string; className?: string }) {
@@ -63,7 +63,7 @@ export default function UeberUnsPage() {
         {/* ── 1. Hero ── */}
         <section className="ueber-section max-w-[1320px] mx-auto px-4 sm:px-6 pt-12 pb-4">
           <div className="max-w-3xl mx-auto text-center mb-10">
-            <span className="inline-flex text-[12px] font-bold bg-[#00A597] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-5">
+            <span className="inline-flex text-[12px] font-bold bg-[#01A497] text-white rounded-full px-3 py-1.5 leading-none tracking-wide mb-5">
               Über uns
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
@@ -87,7 +87,7 @@ export default function UeberUnsPage() {
               />
             </div>
             <div className="flex-1">
-              <p className="text-xs font-semibold text-[#00A597] uppercase tracking-widest mb-3">Unser Anspruch</p>
+              <p className="text-xs font-semibold text-[#01A497] uppercase tracking-widest mb-3">Unser Anspruch</p>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mb-5">
                 Präzision vom ersten Kontakt bis zur Lieferung
               </h2>
@@ -117,7 +117,7 @@ export default function UeberUnsPage() {
               />
             </div>
             <div className="flex-1">
-              <p className="text-xs font-semibold text-[#00A597] uppercase tracking-widest mb-3">Unser Sortiment</p>
+              <p className="text-xs font-semibold text-[#01A497] uppercase tracking-widest mb-3">Unser Sortiment</p>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
                 Schnell und digital bestellen
               </h2>
@@ -157,7 +157,7 @@ export default function UeberUnsPage() {
               />
             </div>
             <div className="flex-1">
-              <p className="text-xs font-semibold text-[#00A597] uppercase tracking-widest mb-3">Unser Service</p>
+              <p className="text-xs font-semibold text-[#01A497] uppercase tracking-widest mb-3">Unser Service</p>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mb-5">
                 Bequemer Schärfservice
               </h2>
@@ -184,7 +184,7 @@ export default function UeberUnsPage() {
         </section>
 
         {/* ── 6. Kontakt ── */}
-        <section className="ueber-section w-full py-20" style={{ background: "linear-gradient(135deg, #00A597 0%, #007A70 100%)" }}>
+        <section className="ueber-section w-full py-20" style={{ background: "linear-gradient(135deg, #01A497 0%, #007A70 100%)" }}>
           <div className="max-w-[1320px] mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Kontakt</h2>
             <p className="text-white/80 text-base mb-8 max-w-md mx-auto leading-relaxed">
@@ -206,7 +206,7 @@ export default function UeberUnsPage() {
             <a
               href="mailto:info@bukara.de"
               className="inline-flex items-center gap-2 bg-white font-semibold text-sm rounded-sm px-6 py-3 hover:bg-slate-50 transition-colors"
-              style={{ textDecoration: "none", color: "#00A597" }}
+              style={{ textDecoration: "none", color: "#01A497" }}
             >
               E-Mail schreiben
               <ArrowRight className="w-4 h-4" strokeWidth={2.5} />

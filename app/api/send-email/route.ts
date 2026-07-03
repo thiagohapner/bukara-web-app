@@ -177,13 +177,13 @@ function buildOrderEmail(d: {
       </tr>
       ${d.totals.bulkDiscountApplied ? `
       <tr>
-        <td colspan="3" style="padding:8px 12px;font-size:12px;color:#00A597;border-bottom:1px solid #e2e8f0;">Zusatzrabatt (10%)</td>
-        <td style="padding:8px 12px;font-size:13px;color:#00A597;text-align:right;border-bottom:1px solid #e2e8f0;">−${formatEur(d.totals.bulkDiscount)}</td>
+        <td colspan="3" style="padding:8px 12px;font-size:12px;color:#01A497;border-bottom:1px solid #e2e8f0;">Zusatzrabatt (10%)</td>
+        <td style="padding:8px 12px;font-size:13px;color:#01A497;text-align:right;border-bottom:1px solid #e2e8f0;">−${formatEur(d.totals.bulkDiscount)}</td>
       </tr>` : ""}
       ${(d.totals.voucherDiscount ?? 0) > 0 ? `
       <tr>
-        <td colspan="3" style="padding:8px 12px;font-size:12px;color:#00A597;border-bottom:1px solid #e2e8f0;">Gutschein${d.voucherCode ? ` ${d.voucherCode}` : ""}</td>
-        <td style="padding:8px 12px;font-size:13px;color:#00A597;text-align:right;border-bottom:1px solid #e2e8f0;">−${formatEur(d.totals.voucherDiscount ?? 0)}</td>
+        <td colspan="3" style="padding:8px 12px;font-size:12px;color:#01A497;border-bottom:1px solid #e2e8f0;">Gutschein${d.voucherCode ? ` ${d.voucherCode}` : ""}</td>
+        <td style="padding:8px 12px;font-size:13px;color:#01A497;text-align:right;border-bottom:1px solid #e2e8f0;">−${formatEur(d.totals.voucherDiscount ?? 0)}</td>
       </tr>` : ""}
       <tr>
         <td colspan="3" style="padding:8px 12px;font-size:12px;color:#64748b;border-bottom:1px solid #e2e8f0;">19% MwSt.</td>

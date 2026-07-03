@@ -16,11 +16,11 @@ const SERVICE_GALLERY: Record<string, { bg: string; label: string }> = {
 };
 
 function ServiceFeatureCheck() {
-  return <Check className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
+  return <Check className="w-4 h-4 text-[#01A497] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
 }
 
 function inputClass(extra = "") {
-  return `w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#00A597]/20 focus:border-[#00A597] transition-colors ${extra}`;
+  return `w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#01A497]/20 focus:border-[#01A497] transition-colors ${extra}`;
 }
 
 type SchaerfForm = {
@@ -255,7 +255,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                 <div className="flex flex-wrap gap-4">
                   {(["Büro", "Warenannahme", "Sonstiges"] as const).map((loc) => (
                     <label key={loc} className="flex items-center gap-2 cursor-pointer">
-                      <input type="radio" name="pickupLocation" value={loc} checked={form.pickupLocation === loc} onChange={() => setForm((f) => ({ ...f, pickupLocation: loc }))} className="accent-[#00A597] w-4 h-4" required />
+                      <input type="radio" name="pickupLocation" value={loc} checked={form.pickupLocation === loc} onChange={() => setForm((f) => ({ ...f, pickupLocation: loc }))} className="accent-[#01A497] w-4 h-4" required />
                       <span className="text-sm text-slate-800">{loc}</span>
                     </label>
                   ))}
@@ -304,7 +304,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                     { value: "nein",          label: "Nein, ist nicht erwünscht – bitte unbearbeitet zurückschicken" },
                   ] as const).map(({ value, label }) => (
                     <label key={value} className="flex items-start gap-2 cursor-pointer">
-                      <input type="radio" name="carbideReplacement" value={value} checked={form.carbideReplacement === value} onChange={() => setForm((f) => ({ ...f, carbideReplacement: value }))} className="accent-[#00A597] w-4 h-4 mt-0.5 flex-shrink-0" required />
+                      <input type="radio" name="carbideReplacement" value={value} checked={form.carbideReplacement === value} onChange={() => setForm((f) => ({ ...f, carbideReplacement: value }))} className="accent-[#01A497] w-4 h-4 mt-0.5 flex-shrink-0" required />
                       <span className="text-sm text-slate-800">{label}</span>
                     </label>
                   ))}
@@ -320,7 +320,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                     { value: "neutral", label: "Neutrale Gravur" },
                   ] as const).map(({ value, label }) => (
                     <label key={value} className="flex items-center gap-2 cursor-pointer">
-                      <input type="radio" name="engraving" value={value} checked={form.engraving === value} onChange={() => setForm((f) => ({ ...f, engraving: value }))} className="accent-[#00A597] w-4 h-4" required />
+                      <input type="radio" name="engraving" value={value} checked={form.engraving === value} onChange={() => setForm((f) => ({ ...f, engraving: value }))} className="accent-[#01A497] w-4 h-4" required />
                       <span className="text-sm text-slate-800">{label}</span>
                     </label>
                   ))}
@@ -390,7 +390,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
           type="checkbox"
           checked={arr.includes(value)}
           onChange={() => toggle(arrKey, value)}
-          className="accent-[#00A597] w-4 h-4 flex-shrink-0"
+          className="accent-[#01A497] w-4 h-4 flex-shrink-0"
         />
         <span className="text-sm text-slate-800">{value}</span>
       </label>
@@ -400,10 +400,10 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
   const radioBtn = (name: string, stateKey: keyof SonderForm, value: string) => {
     const active = (form[stateKey] as string) === value;
     return (
-      <label key={value} className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-colors ${active ? "border-[#00A597] bg-[#00A597]/5" : "border-slate-200 hover:border-slate-300"}`}>
+      <label key={value} className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-colors ${active ? "border-[#01A497] bg-[#01A497]/5" : "border-slate-200 hover:border-slate-300"}`}>
         <input type="radio" name={name} value={value} checked={active}
           onChange={() => setForm(f => ({ ...f, [stateKey]: value }))} className="sr-only" />
-        <span className={`text-sm font-medium ${active ? "text-[#00A597]" : "text-slate-700"}`}>{value}</span>
+        <span className={`text-sm font-medium ${active ? "text-[#01A497]" : "text-slate-700"}`}>{value}</span>
       </label>
     );
   };
@@ -541,9 +541,9 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
             {STEP_LABELS.map((label, i) => (
               <div key={i} className="flex-1 flex flex-col items-center relative">
                 {i < STEP_LABELS.length - 1 && (
-                  <div className={`absolute top-4 left-1/2 w-full h-px transition-colors ${step > i + 1 ? "bg-[#00A597]" : "bg-slate-200"}`} />
+                  <div className={`absolute top-4 left-1/2 w-full h-px transition-colors ${step > i + 1 ? "bg-[#01A497]" : "bg-slate-200"}`} />
                 )}
-                <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${step >= i + 1 ? "bg-[#00A597] text-white" : "bg-slate-100 text-slate-400"}`}>
+                <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${step >= i + 1 ? "bg-[#01A497] text-white" : "bg-slate-100 text-slate-400"}`}>
                   {step > i + 1 ? (
                     <Check className="w-4 h-4" strokeWidth={2.5} />
                   ) : i + 1}
@@ -711,7 +711,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                     <span className="text-slate-400 font-normal">(optional, PDF, DXF, DWG, JPG, PNG — max. 10 MB)</span>
                   </label>
                   <div
-                    className="border border-dashed border-slate-300 rounded-xl px-4 py-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#00A597] transition-colors bg-slate-50"
+                    className="border border-dashed border-slate-300 rounded-xl px-4 py-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#01A497] transition-colors bg-slate-50"
                     onClick={() => fileRef.current?.click()}
                   >
                     <Upload className="w-6 h-6 text-slate-400" strokeWidth={1.5} />
