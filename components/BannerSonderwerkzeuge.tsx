@@ -176,19 +176,19 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         observer.disconnect();
 
         tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-        tl.to(revealItems, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.5 });
+        tl.to(revealItems, { autoAlpha: 1, y: 0, stagger: 0.12, duration: 0.7 });
         if (checkItems.length) {
-          tl.to(checkItems, { autoAlpha: 1, y: 0, stagger: 0.09, duration: 0.45 }, "-=0.2");
+          tl.to(checkItems, { autoAlpha: 1, y: 0, stagger: 0.13, duration: 0.6 }, "-=0.25");
         }
         // Stepper: fill circle → draw line → next, in order.
         stepNums.forEach((num, i) => {
           tl!.to(
             num,
-            { backgroundColor: "#ffffff", borderColor: "#ffffff", color: "#05211F", duration: 0.35 },
+            { backgroundColor: "#ffffff", borderColor: "#ffffff", color: "#05211F", duration: 0.5 },
             i === 0 ? "-=0.1" : "-=0.05"
           );
           if (stepLines[i]) {
-            tl!.to(stepLines[i], { scaleY: 1, duration: 0.4 }, "-=0.05");
+            tl!.to(stepLines[i], { scaleY: 1, duration: 0.6 }, "-=0.05");
           }
         });
       },
