@@ -282,16 +282,22 @@ function SchaerfPage() {
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-8 lg:py-10">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
-            {/* Sidebar */}
-            <aside className="w-full lg:w-[360px] flex-shrink-0 bg-brand-25 border border-neutral-100 rounded-md p-8 flex flex-col gap-7 lg:sticky lg:top-[96px]">
+            {/* Sidebar — dark treatment matching the home Schärfservice banner */}
+            <aside
+              className="w-full lg:w-[360px] flex-shrink-0 rounded-md p-8 flex flex-col gap-7 lg:sticky lg:top-[96px]"
+              style={{
+                background: "linear-gradient(105deg, #074843 0%, #062F2C 48%, #05211F 100%)",
+                border: "1px solid var(--color-border-dark)",
+              }}
+            >
               <div>
-                <h1 className="heading-h2">{service.name}</h1>
-                <p className="text-[15px] text-neutral-500 mt-1.5 leading-[1.4]">{service.tagline}</p>
+                <h1 className="heading-h2" style={{ color: "var(--color-text-dark-heading)" }}>{service.name}</h1>
+                <p className="text-[15px] mt-1.5 leading-[1.4]" style={{ color: "var(--color-text-dark-body)" }}>{service.tagline}</p>
               </div>
 
-              <div className="h-px bg-neutral-100" />
+              <div className="h-px" style={{ background: "var(--color-border-dark)" }} />
 
-              <div className="checklist">
+              <div className="checklist checklist--on-dark">
                 {CHECKLIST_ITEMS.map((item) => (
                   <div key={item} className="checklist-item">
                     <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
@@ -300,21 +306,21 @@ function SchaerfPage() {
                 ))}
               </div>
 
-              <p className="text-[13px] text-neutral-500 leading-relaxed">
+              <p className="text-[13px] leading-relaxed" style={{ color: "var(--color-text-dark-body)" }}>
                 Für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.
               </p>
 
-              <div className="mt-auto border-t border-neutral-100 pt-6">
-                <div className="text-[15px] font-medium text-slate-900 mb-1">Noch Fragen?</div>
-                <p className="text-[13px] text-neutral-500 leading-relaxed mb-3.5">
+              <div className="mt-auto pt-6" style={{ borderTop: "1px solid var(--color-border-dark)" }}>
+                <div className="text-[15px] font-medium mb-1" style={{ color: "var(--color-text-dark-heading)" }}>Noch Fragen?</div>
+                <p className="text-[13px] leading-relaxed mb-3.5" style={{ color: "var(--color-text-dark-body)" }}>
                   Wir beraten Sie gerne persönlich und unverbindlich.
                 </p>
-                <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
-                  <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
+                <a href="tel:+4974439661-0" className="flex items-center gap-3 text-sm mb-2.5" style={{ textDecoration: "none", color: "var(--color-text-dark-heading)" }}>
+                  <span className="icon-tile icon-tile--sm icon-tile--on-dark"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
                   +49 7443 / 9661-0
                 </a>
-                <a href="mailto:info@bukara.de" className="flex items-center gap-3 text-slate-900 text-sm" style={{ textDecoration: "none" }}>
-                  <span className="icon-tile icon-tile--sm"><Mail className="w-4 h-4" strokeWidth={1.75} /></span>
+                <a href="mailto:info@bukara.de" className="flex items-center gap-3 text-sm" style={{ textDecoration: "none", color: "var(--color-text-dark-heading)" }}>
+                  <span className="icon-tile icon-tile--sm icon-tile--on-dark"><Mail className="w-4 h-4" strokeWidth={1.75} /></span>
                   info@bukara.de
                 </a>
               </div>

@@ -508,6 +508,12 @@ label[for] {
 }
 .icon-tile--sm { width: 32px; height: 32px; border-radius: var(--radius-sm); }
 .icon-tile--lg { width: 48px; height: 48px; }
+/* On a dark surface (e.g. the Schärfservice form sidebar). */
+.icon-tile--on-dark {
+  background: rgba(1, 164, 151, 0.1);
+  border-color: var(--color-brand-800);
+  color: var(--color-text-dark-link);
+}
 
 /* ============================================================
    Checklist — circular brand checkmark + label, for benefit/
