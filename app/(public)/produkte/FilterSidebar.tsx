@@ -246,7 +246,7 @@ export default function FilterSidebar({
               onFilterApplied?.();
             }}
             className="rounded flex-shrink-0"
-            style={{ accentColor: "#0F172A" }}
+            style={{ accentColor: "var(--navy)" }}
           />
           Im Angebot
         </label>
@@ -263,7 +263,7 @@ export default function FilterSidebar({
                 checked={selectedMaterials.includes(name)}
                 onChange={() => toggleMaterial(name)}
                 className="rounded flex-shrink-0"
-                style={{ accentColor: "#0F172A" }}
+                style={{ accentColor: "var(--navy)" }}
               />
               <span className={selectedMaterials.includes(name) ? "font-medium" : ""}>{name}</span>
               <span className="text-sm text-neutral-400 ml-auto">({count})</span>

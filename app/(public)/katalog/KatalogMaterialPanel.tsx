@@ -38,7 +38,7 @@ export default function KatalogMaterialPanel({
               checked={materials.includes(name)}
               onChange={() => toggle(name)}
               className="rounded flex-shrink-0"
-              style={{ accentColor: "#0F172A" }}
+              style={{ accentColor: "var(--navy)" }}
             />
             <span className={materials.includes(name) ? "font-medium" : ""}>{name}</span>
             <span className="text-xs text-slate-400 ml-auto">({c})</span>
@@ -57,7 +57,7 @@ export default function KatalogMaterialPanel({
                   name="material-minscore"
                   checked={minScore === value}
                   onChange={() => setMinScore(value)}
-                  style={{ accentColor: "#0F172A" }}
+                  style={{ accentColor: "var(--navy)" }}
                 />
                 <span className={minScore === value ? "font-medium" : ""}>{label}</span>
               </label>

@@ -282,10 +282,10 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                     ? "btn-brand btn-arrow no-underline"
                     : "btn-white btn-arrow no-underline"
                   : slide.ctaStyle === "white"
-                  ? "inline-block whitespace-nowrap bg-white text-[#0F172A] text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-gray-100"
+                  ? "inline-block whitespace-nowrap bg-white text-[var(--navy)] text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-neutral-100"
                   : slide.ctaStyle === "brand"
                   ? "btn-brand no-underline"
-                  : "inline-block whitespace-nowrap bg-[#0F172A] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[#1e293b]"
+                  : "inline-block whitespace-nowrap bg-[var(--navy)] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[var(--navy-mid)]"
               }
             >
               {slide.ctaLabel}
@@ -346,8 +346,8 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               onClick={() => goTo(i)}
               className="p-0 appearance-none cursor-pointer w-[9px] h-[9px] rounded-full transition-colors"
               style={{
-                background: i === active ? "#0F172A" : "transparent",
-                border: i === active ? "none" : "1.5px solid #0F172A",
+                background: i === active ? "var(--navy)" : "transparent",
+                border: i === active ? "none" : "1.5px solid var(--navy)",
                 opacity: i === active ? 1 : 0.45,
               }}
             />
@@ -381,7 +381,7 @@ function NavBtn({
     <button
       aria-label={label}
       onClick={onClick}
-      className="appearance-none border-none cursor-pointer w-10 h-10 rounded-full bg-[#0F172A] flex items-center justify-center transition-colors duration-150 hover:bg-[#1e293b]"
+      className="appearance-none border-none cursor-pointer w-10 h-10 rounded-full bg-[var(--navy)] flex items-center justify-center transition-colors duration-150 hover:bg-[var(--navy-mid)]"
     >
       {children}
     </button>

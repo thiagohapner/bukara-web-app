@@ -134,7 +134,7 @@ export default function KatalogFilterSidebar({
                   checked={(sort ?? "") === value}
                   onChange={() => onSortChange(value)}
                   className="flex-shrink-0"
-                  style={{ accentColor: "#0F172A" }}
+                  style={{ accentColor: "var(--navy)" }}
                 />
                 <span className={(sort ?? "") === value ? "font-medium" : ""}>{label}</span>
               </label>
@@ -159,7 +159,7 @@ export default function KatalogFilterSidebar({
                   checked={(view ?? "") === value}
                   onChange={() => onViewChange(value)}
                   className="flex-shrink-0"
-                  style={{ accentColor: "#0F172A" }}
+                  style={{ accentColor: "var(--navy)" }}
                 />
                 <span className={(view ?? "") === value ? "font-medium" : ""}>{label}</span>
               </label>
@@ -229,7 +229,7 @@ export default function KatalogFilterSidebar({
                   checked={selectedAnwendungen.includes(tag)}
                   onChange={() => { onToggleAnwendung(tag); onFilterApplied?.(); }}
                   className="rounded flex-shrink-0"
-                  style={{ accentColor: "#0F172A" }}
+                  style={{ accentColor: "var(--navy)" }}
                 />
                 <span className={selectedAnwendungen.includes(tag) ? "font-medium" : ""}>{tag}</span>
               </label>
@@ -308,7 +308,7 @@ export default function KatalogFilterSidebar({
                   checked={selectedMaterials.includes(name)}
                   onChange={() => { onToggleMaterial(name); onFilterApplied?.(); }}
                   className="rounded flex-shrink-0"
-                  style={{ accentColor: "#0F172A" }}
+                  style={{ accentColor: "var(--navy)" }}
                 />
                 <span className={selectedMaterials.includes(name) ? "font-medium" : ""}>{name}</span>
                 <span className="text-sm text-neutral-400 ml-auto">({count})</span>
@@ -335,7 +335,7 @@ export default function KatalogFilterSidebar({
                   checked={minScore === value}
                   onChange={() => { onSetMinScore(value); onFilterApplied?.(); }}
                   className="flex-shrink-0"
-                  style={{ accentColor: "#0F172A" }}
+                  style={{ accentColor: "var(--navy)" }}
                 />
                 <span className={minScore === value ? "font-medium" : ""}>{label}</span>
               </label>
