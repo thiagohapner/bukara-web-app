@@ -559,9 +559,11 @@ label[for] {
   height: var(--step-circle);
   flex-shrink: 0;
   border-radius: var(--radius-pill);
-  border: 1.5px solid var(--color-brand-400);
-  background: rgba(39, 216, 202, 0.06);
-  color: #fff;
+  /* Resting state: solid white fill, dark number (also what reduced-motion /
+     no-JS shows). The first-load animation fills it from hollow via JS. */
+  border: 1.5px solid #fff;
+  background: #fff;
+  color: var(--color-brand-950);
   font-size: 0.8125rem;
   font-weight: var(--fw-medium);
   line-height: 1;
@@ -569,17 +571,17 @@ label[for] {
   align-items: center;
   justify-content: center;
 }
-/* Continuous connector: from this circle's bottom edge to the next circle's
-   top edge. Anchored to the step (not the circle) so tall text never opens a
-   gap: top = circle height, bottom = -(gap) reaches the next step's top. */
-.banner-step:not(:last-child)::after {
-  content: "";
+/* Continuous connector as a real element (so GSAP can draw it): from this
+   circle's bottom edge to the next circle's top edge. Anchored to the step
+   so tall text never opens a gap. Centered via `left` (no translateX) so a
+   GSAP scaleY draw isn't fighting a transform. */
+.banner-step-line {
   position: absolute;
-  left: calc(var(--step-circle) / 2);
-  transform: translateX(-50%);
+  left: calc(var(--step-circle) / 2 - 0.75px);
   top: var(--step-circle);
   bottom: calc(-1 * var(--step-gap));
   width: 1.5px;
+  transform-origin: top center;
   background: linear-gradient(var(--color-brand-500), var(--color-brand-700));
   opacity: 0.55;
 }
@@ -604,7 +606,7 @@ label[for] {
   border-color: var(--color-brand-500);
   color: var(--color-brand-600);
 }
-.banner-stepper--light .banner-step:not(:last-child)::after {
+.banner-stepper--light .banner-step-line {
   background: linear-gradient(var(--color-brand-500), var(--color-brand-300));
   opacity: 0.9;
 }

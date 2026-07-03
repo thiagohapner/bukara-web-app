@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import gsap from "gsap";
 import BannerAurora from "./BannerAurora";
 import HeroWaveAnimation from "./HeroWaveAnimation";
 import CtaArrow from "./CtaArrow";
+
+// Run before paint on the client (so the pre-animation state is set with no
+// flash), fall back to useEffect on the server render.
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 type Feature = { text: ReactNode };
 type Step = { title: string; sub: string };
@@ -137,6 +143,65 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
   const prev = () => goTo((active - 1 + total) % total);
   const next = () => goTo((active + 1) % total);
 
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // First-in-viewport entrance animation (once per page load). Left-column
+  // items stagger in; the checklist staggers; the stepper fills each circle
+  // then draws its connector line in sequence. Respects reduced motion.
+  useIsomorphicLayoutEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const revealItems = gsap.utils.toArray<HTMLElement>(".reveal-item", card);
+    const checkItems = gsap.utils.toArray<HTMLElement>(".checklist-item", card);
+    const stepNums = gsap.utils.toArray<HTMLElement>(".banner-step-num", card);
+    const stepLines = gsap.utils.toArray<HTMLElement>(".banner-step-line", card);
+
+    // Pre-animation state (set immediately so there's no flash before reveal).
+    gsap.set(revealItems, { autoAlpha: 0, y: 12 });
+    gsap.set(checkItems, { autoAlpha: 0, y: 8 });
+    gsap.set(stepNums, {
+      backgroundColor: "rgba(39,216,202,0.06)",
+      borderColor: "#27D8CA",
+      color: "#ffffff",
+    });
+    gsap.set(stepLines, { scaleY: 0 });
+
+    let tl: gsap.core.Timeline | null = null;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry || !entry.isIntersecting) return;
+        observer.disconnect();
+
+        tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+        tl.to(revealItems, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.5 });
+        if (checkItems.length) {
+          tl.to(checkItems, { autoAlpha: 1, y: 0, stagger: 0.09, duration: 0.45 }, "-=0.2");
+        }
+        // Stepper: fill circle → draw line → next, in order.
+        stepNums.forEach((num, i) => {
+          tl!.to(
+            num,
+            { backgroundColor: "#ffffff", borderColor: "#ffffff", color: "#05211F", duration: 0.35 },
+            i === 0 ? "-=0.1" : "-=0.05"
+          );
+          if (stepLines[i]) {
+            tl!.to(stepLines[i], { scaleY: 1, duration: 0.4 }, "-=0.05");
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(card);
+
+    return () => {
+      observer.disconnect();
+      tl?.kill();
+    };
+  }, []);
+
   const slide = shownSlides[active] ?? shownSlides[0];
   if (!slide) return null;
 
@@ -145,6 +210,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
       <div
+        ref={cardRef}
         style={{
           background: slide.bgColor,
           opacity: visible ? 1 : 0,
@@ -170,11 +236,11 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         {/* LEFT COLUMN */}
         <div className="relative z-10 flex flex-col justify-center px-6 py-8 md:px-14 md:py-10 md:pr-9">
           {slide.eyebrow && (
-            <p className={`eyebrow ${isLight ? "eyebrow--brand" : "eyebrow--on-dark"} mb-3`}>{slide.eyebrow}</p>
+            <p className={`reveal-item eyebrow ${isLight ? "eyebrow--brand" : "eyebrow--on-dark"} mb-3`}>{slide.eyebrow}</p>
           )}
           <h2
             style={{ color: slide.textColor }}
-            className={`m-0 ${slide.darkHero ? "heading-l" : "heading-xl"}`}
+            className={`reveal-item m-0 ${slide.darkHero ? "heading-l" : "heading-xl"}`}
           >
             {slide.headline}{" "}
             {slide.highlightColor ? (
@@ -195,7 +261,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </h2>
 
           <p
-            className={`mt-4 max-w-[420px] text-base leading-relaxed ${
+            className={`reveal-item mt-4 max-w-[420px] text-base leading-relaxed ${
               slide.darkHero
                 ? isLight
                   ? "body-text body-text--subdued"
@@ -207,7 +273,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             {slide.subline}
           </p>
 
-          <div className="mt-6">
+          <div className="reveal-item mt-6">
             <Link
               href={slide.ctaHref}
               className={
@@ -241,9 +307,12 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
             </div>
           ) : slide.rightPanel.kind === "stepper" ? (
             <div className={`banner-stepper ${isLight ? "banner-stepper--light" : ""} w-full`}>
-              {slide.rightPanel.steps.map((s, i) => (
+              {slide.rightPanel.steps.map((s, i, arr) => (
                 <div key={i} className="banner-step">
                   <span className="banner-step-num">{i + 1}</span>
+                  {i < arr.length - 1 && (
+                    <span className="banner-step-line" aria-hidden />
+                  )}
                   <div className="banner-step-body">
                     <div className="banner-step-title">{s.title}</div>
                     <div className="banner-step-sub">{s.sub}</div>
