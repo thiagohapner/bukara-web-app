@@ -37,7 +37,7 @@ export default function DealCard({ deal, index }: Props) {
       style={{ background: imageBg, minHeight: "260px" }}
     >
       {deal.discountPercent > 0 && (
-        <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+        <span className="absolute top-3 left-3 z-10 bg-sale text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
           -{deal.discountPercent}%
         </span>
       )}
@@ -75,12 +75,12 @@ export default function DealCard({ deal, index }: Props) {
       <div className="mb-2 flex items-baseline gap-3 flex-wrap">
         <div>
           <span className="text-xs text-neutral-400 font-medium">Ab </span>
-          <span className="text-2xl font-bold text-[#9B242A]">{formatEur(deal.fromCampaignPrice)}</span>
+          <span className="text-2xl font-bold text-sale">{formatEur(deal.fromCampaignPrice)}</span>
         </div>
         <span className="flex items-baseline gap-1">
           <span className="text-sm text-neutral-400 line-through">{formatEur(deal.fromOriginalPrice)}</span>
           {deal.discountPercent > 0 && (
-            <span className="text-sm font-semibold text-[#9B242A]">-{deal.discountPercent}%</span>
+            <span className="text-sm font-semibold text-sale">-{deal.discountPercent}%</span>
           )}
         </span>
       </div>

@@ -90,11 +90,11 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
 
         {/* Line 2: Price + discount */}
         <div className="flex items-baseline gap-1">
-          <span className="text-sm font-bold text-[#9B242A]">{formatEur(unitPrice)}</span>
+          <span className="text-sm font-bold text-sale">{formatEur(unitPrice)}</span>
           {originalPrice > unitPrice && (
             <>
               <span className="text-xs text-neutral-400 line-through">{formatEur(originalPrice)}</span>
-              <span className="text-xs font-semibold text-[#9B242A]">
+              <span className="text-xs font-semibold text-sale">
                 -{Math.round((1 - unitPrice / originalPrice) * 100)}%
               </span>
             </>

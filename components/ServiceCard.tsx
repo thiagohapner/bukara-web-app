@@ -15,7 +15,7 @@ interface ServiceCardProps {
 }
 
 function ServiceCheck() {
-  return <Check className="w-4 h-4 text-[#9B242A] mt-0.5 flex-shrink-0" strokeWidth={2.5} />;
+  return <Check className="w-4 h-4 text-sale mt-0.5 flex-shrink-0" strokeWidth={2.5} />;
 }
 
 export default function ServiceCard({ service, index, variant = "default" }: ServiceCardProps) {

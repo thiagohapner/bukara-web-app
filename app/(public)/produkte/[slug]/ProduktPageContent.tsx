@@ -100,11 +100,11 @@ function PriceAndCart({
       {!loading && skus.length > 0 && (
         <div className="mb-4">
           <div className="flex items-baseline gap-3 mb-1">
-            <span className={`text-2xl font-bold ${selectedSku?.campaign_price != null ? "text-[#9B242A]" : "text-slate-900"}`}>{formatEur(unitPrice)}</span>
+            <span className={`text-2xl font-bold ${selectedSku?.campaign_price != null ? "text-sale" : "text-slate-900"}`}>{formatEur(unitPrice)}</span>
             {selectedSku?.campaign_price != null && originalPrice > unitPrice && (
               <span className="flex items-baseline gap-1">
                 <span className="text-base text-neutral-400 line-through">{formatEur(originalPrice)}</span>
-                <span className="text-sm font-semibold text-[#9B242A]">
+                <span className="text-sm font-semibold text-sale">
                   -{Math.round((1 - unitPrice / originalPrice) * 100)}%
                 </span>
               </span>

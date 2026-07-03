@@ -28,7 +28,7 @@ const NEUTRAL_RAMP = [
 
 const SEMANTIC_COLORS = [
   ["Primary ink", "#022221"],
-  ["Sale / badge red", "#9B242A"],
+  ["Sale / badge red", "var(--color-sale)"],
   ["Error", "#FF3C40"],
   ["Canvas", "#ffffff"],
   ["Canvas parchment", "#f5f5f7"],

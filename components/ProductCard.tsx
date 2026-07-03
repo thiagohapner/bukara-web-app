@@ -28,7 +28,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
         <div className="bg-white rounded-md overflow-hidden border border-neutral-100 group flex items-center gap-4 p-3">
           <div className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden" style={{ background: "#EEEEEE" }}>
             {card.badge && (
-              <span className="absolute top-2 left-2 z-10 bg-[#9B242A] text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
+              <span className="absolute top-2 left-2 z-10 bg-sale text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
                 {card.badge}
               </span>
             )}
@@ -57,14 +57,14 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
             )}
             {showPrice && (
               <div>
-                <div className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+                <div className={`text-[15px] font-bold ${isCampaign ? "text-sale" : "text-slate-900"}`}>
                   {card.hasVariants ? "ab " : ""}
                   {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}
                 </div>
                 {isCampaign && (
                   <div className="text-xs text-neutral-500 mt-0.5">
                     Statt <span className="line-through">{formatEur(card.fromOriginalPrice!)}</span>{" "}
-                    <span className="font-semibold text-[#9B242A]">
+                    <span className="font-semibold text-sale">
                       -{Math.round((1 - card.fromCampaignPrice! / card.fromOriginalPrice!) * 100)}%
                     </span>
                   </div>
@@ -84,7 +84,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
         {/* Portrait image */}
         <div className="relative aspect-[10/11] overflow-hidden" style={{ background: "#EEEEEE" }}>
           {card.badge && (
-            <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
+            <span className="absolute top-3 left-3 z-10 bg-sale text-white text-[12px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
               {card.badge}
             </span>
           )}
@@ -124,14 +124,14 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
           )}
           {showPrice && (
             <div>
-              <div className={`text-[15px] font-bold ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+              <div className={`text-[15px] font-bold ${isCampaign ? "text-sale" : "text-slate-900"}`}>
                 {card.hasVariants ? "ab " : ""}
                 {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}
               </div>
               {isCampaign && (
                 <div className="text-xs text-neutral-500 mt-0.5">
                   Statt <span className="line-through">{formatEur(card.fromOriginalPrice!)}</span>{" "}
-                  <span className="font-semibold text-[#9B242A]">
+                  <span className="font-semibold text-sale">
                     -{Math.round((1 - card.fromCampaignPrice! / card.fromOriginalPrice!) * 100)}%
                   </span>
                 </div>

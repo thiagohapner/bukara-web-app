@@ -27,6 +27,11 @@
   --color-brand-950: #05211F;
   --color-brand-975: #041A19;
 
+  /* Sale / offer accent (badge, deal price, "-X%") — the one functional
+     non-brand color. Single source of truth; use text-sale/bg-sale/border-sale
+     or var(--color-sale). */
+  --color-sale: #9B242A;
+
   /* Legacy hijack kept in sync with the brand ramp — do not diverge */
   --color-orange-50:  #EAF5F4;
   --color-orange-400: #27D8CA;

@@ -369,7 +369,7 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   <div>
                     <label className="block text-xs font-medium text-neutral-500 mb-1.5">
-                      Firmenname <span className="text-[#9B242A]">*</span>
+                      Firmenname <span className="text-sale">*</span>
                     </label>
                     <input type="text" required value={form.firmenname} onChange={field("firmenname")} className={inputClass()} placeholder="Muster GmbH" />
                   </div>
@@ -379,13 +379,13 @@ export default function CheckoutPage() {
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-neutral-500 mb-1.5">
-                      Ansprechpartner <span className="text-[#9B242A]">*</span>
+                      Ansprechpartner <span className="text-sale">*</span>
                     </label>
                     <input type="text" required value={form.ansprechpartner} onChange={field("ansprechpartner")} className={inputClass()} placeholder="Max Mustermann" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-neutral-500 mb-1.5">
-                      E-Mail <span className="text-[#9B242A]">*</span>
+                      E-Mail <span className="text-sale">*</span>
                     </label>
                     <input type="email" required value={form.email} onChange={field("email")} className={inputClass()} placeholder="anfrage@firma.de" />
                   </div>

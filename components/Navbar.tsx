@@ -237,7 +237,7 @@ export default function Navbar({
             {cartCount > 0 && (
               <span
                 className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold text-white px-1 leading-none"
-                style={{ backgroundColor: "#9B242A" }}
+                style={{ backgroundColor: "var(--color-sale)" }}
               >
                 {cartCount}
               </span>

@@ -329,11 +329,11 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 <span className="text-2xl font-bold text-neutral-200">—</span>
               ) : (
                 <>
-                  <span className="text-2xl font-bold text-[#9B242A]">{formatEur(campaignTotal)}</span>
+                  <span className="text-2xl font-bold text-sale">{formatEur(campaignTotal)}</span>
                   <span className="flex items-baseline gap-1">
                     <span className="text-base text-neutral-400 line-through">{formatEur(originalTotal)}</span>
                     {originalTotal > campaignTotal && (
-                      <span className="text-sm font-semibold text-[#9B242A]">
+                      <span className="text-sm font-semibold text-sale">
                         -{Math.round((1 - campaignTotal / originalTotal) * 100)}%
                       </span>
                     )}

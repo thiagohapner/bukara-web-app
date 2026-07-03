@@ -208,19 +208,19 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Firma <span className="text-[#9B242A]">*</span>
+                  Firma <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.company} onChange={field("company")} className={inputClass()} placeholder="Muster GmbH" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Kontaktperson <span className="text-[#9B242A]">*</span>
+                  Kontaktperson <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.contact} onChange={field("contact")} className={inputClass()} placeholder="Max Mustermann" />
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  E-Mail <span className="text-[#9B242A]">*</span>
+                  E-Mail <span className="text-sale">*</span>
                 </label>
                 <input type="email" required value={form.email} onChange={field("email")} className={inputClass()} placeholder="anfrage@firma.de" />
               </div>
@@ -236,21 +236,21 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Gewünschtes Abholdatum <span className="text-[#9B242A]">*</span>
+                  Gewünschtes Abholdatum <span className="text-sale">*</span>
                 </label>
                 <input type="date" required value={form.pickupDate} onChange={field("pickupDate")} className={inputClass()} />
                 <p className="text-[11px] text-slate-400 mt-1.5">Abholungen erfolgen in der Regel zwischen 07:00 und 16:00 Uhr</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Abholungszeiten <span className="text-[#9B242A]">*</span>
+                  Abholungszeiten <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.pickupTimes} onChange={field("pickupTimes")} className={inputClass()} placeholder="z. B. 08:00–12:00, 13:00–16:00" />
                 <p className="text-[11px] text-slate-400 mt-1.5">Falls Mittagspause, bitte angeben</p>
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-slate-500 mb-2">
-                  Gewünschter Abholungsort <span className="text-[#9B242A]">*</span>
+                  Gewünschter Abholungsort <span className="text-sale">*</span>
                 </label>
                 <div className="flex flex-wrap gap-4">
                   {(["Büro", "Warenannahme", "Sonstiges"] as const).map((loc) => (
@@ -277,14 +277,14 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Paketgröße <span className="text-[#9B242A]">*</span>
+                  Paketgröße <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.packageSize} onChange={field("packageSize")} className={inputClass()} placeholder="z. B. 30 × 20 × 15" />
                 <p className="text-[11px] text-slate-400 mt-1.5">Höhe × Breite × Tiefe in cm</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Paketgewicht <span className="text-[#9B242A]">*</span>
+                  Paketgewicht <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.packageWeight} onChange={field("packageWeight")} className={inputClass()} placeholder="z. B. 5" />
                 <p className="text-[11px] text-slate-400 mt-1.5">in kg</p>
@@ -295,7 +295,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             <div className="flex flex-col gap-6 mb-2">
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-2">
-                  Zahnersatz (falls nötig) durchführen? <span className="text-[#9B242A]">*</span>
+                  Zahnersatz (falls nötig) durchführen? <span className="text-sale">*</span>
                 </label>
                 <div className="flex flex-col gap-2">
                   {([
@@ -312,7 +312,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-2">
-                  Gravur <span className="text-[#9B242A]">*</span>
+                  Gravur <span className="text-sale">*</span>
                 </label>
                 <div className="flex flex-wrap gap-4">
                   {([
@@ -684,7 +684,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                 <SectionLabel>Kontaktdaten</SectionLabel>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Firmenname <span className="text-[#9B242A]">*</span></label>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Firmenname <span className="text-sale">*</span></label>
                     <input type="text" required value={form.company} onChange={txt("company")} className={inputClass()} placeholder="Muster GmbH" />
                   </div>
                   <div>
@@ -692,11 +692,11 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                     <input type="text" value={form.vat} onChange={txt("vat")} className={inputClass()} placeholder="DE123456789" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Ansprechpartner <span className="text-[#9B242A]">*</span></label>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Ansprechpartner <span className="text-sale">*</span></label>
                     <input type="text" required value={form.contact} onChange={txt("contact")} className={inputClass()} placeholder="Max Mustermann" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-500 mb-1.5">E-Mail <span className="text-[#9B242A]">*</span></label>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">E-Mail <span className="text-sale">*</span></label>
                     <input type="email" required value={form.email} onChange={txt("email")} className={inputClass()} placeholder="anfrage@firma.de" />
                   </div>
                   <div className="sm:col-span-2">

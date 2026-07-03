@@ -309,13 +309,13 @@ export default function KatalogProductContent({
 
             {selectedSku && (
               <div className="mb-4">
-                <div className={`text-2xl font-bold mb-1 ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+                <div className={`text-2xl font-bold mb-1 ${isCampaign ? "text-sale" : "text-slate-900"}`}>
                   {formatEur(displayPrice)}
                 </div>
                 {isCampaign && (
                   <div className="text-sm text-neutral-400 mb-1">
                     Statt <span className="line-through">{formatEur(originalPrice)}</span>{" "}
-                    <span className="font-semibold text-[#9B242A]">
+                    <span className="font-semibold text-sale">
                       -{Math.round((1 - displayPrice / originalPrice) * 100)}%
                     </span>
                   </div>
