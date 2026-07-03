@@ -109,7 +109,7 @@ export default function KatalogFilterSidebar({
   }, [shankMin, shankMax, absoluteMinShank, absoluteMaxShank]);
 
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-3">{children}</p>
+    <p className="text-[11px] font-medium text-neutral-500 uppercase tracking-wide mb-3">{children}</p>
   );
 
   return (
@@ -118,7 +118,7 @@ export default function KatalogFilterSidebar({
 
       {/* SORTIEREN — shown only in mobile drawer */}
       {onSortChange && (
-        <div className="border-b border-slate-100 pb-4 mb-0">
+        <div className="border-b border-neutral-100 pb-4 mb-0">
           <SectionLabel>Sortieren</SectionLabel>
           <div className="flex flex-col gap-2">
             {[
@@ -145,7 +145,7 @@ export default function KatalogFilterSidebar({
 
       {/* ANSICHT */}
       {onViewChange && (
-        <div className="border-b border-slate-100 pb-4 mb-0">
+        <div className="border-b border-neutral-100 pb-4 mb-0">
           <SectionLabel>Ansicht</SectionLabel>
           <div className="flex flex-col gap-2">
             {[
@@ -170,13 +170,13 @@ export default function KatalogFilterSidebar({
 
       {/* KATEGORIEN */}
       {!hideCategory && (
-      <div className="border-t border-slate-100">
+      <div className="border-t border-neutral-100">
         {topLevel.map((parent) => {
           const subs = subMap[parent.id] ?? [];
           const isExpanded = expandedId === parent.id;
 
           return (
-            <div key={parent.id} className="border-b border-slate-100">
+            <div key={parent.id} className="border-b border-neutral-100">
               <button
                 type="button"
                 onClick={() => setExpandedId(isExpanded ? null : parent.id)}
@@ -201,7 +201,7 @@ export default function KatalogFilterSidebar({
                           className={`w-full text-left py-2 text-sm cursor-pointer transition-colors ${
                             isActive
                               ? "font-semibold text-slate-900 border-l-2 border-slate-900 pl-[18px]"
-                              : "text-slate-500 hover:text-slate-800 pl-5"
+                              : "text-neutral-500 hover:text-slate-800 pl-5"
                           }`}
                         >
                           {sub.name}
@@ -219,7 +219,7 @@ export default function KatalogFilterSidebar({
 
       {/* ANWENDUNG */}
       {applicationTags.length > 0 && (
-        <div className="border-b border-slate-100 py-4">
+        <div className="border-b border-neutral-100 py-4">
           <SectionLabel>Anwendung</SectionLabel>
           <div className="flex flex-col gap-2">
             {applicationTags.map((tag) => (
@@ -238,7 +238,7 @@ export default function KatalogFilterSidebar({
               <button
                 type="button"
                 onClick={() => { onResetAnwendung(); onFilterApplied?.(); }}
-                className="text-xs text-slate-400 hover:text-slate-600 text-left mt-0.5"
+                className="text-xs text-neutral-400 hover:text-neutral-600 text-left mt-0.5"
               >
                 Zurücksetzen
               </button>
@@ -249,7 +249,7 @@ export default function KatalogFilterSidebar({
 
       {/* DURCHMESSER */}
       {absoluteMaxDiam > absoluteMinDiam && (
-        <div className="border-b border-slate-100 py-4">
+        <div className="border-b border-neutral-100 py-4">
           <SectionLabel>
             Durchmesser: {localDiamMin} – {localDiamMax} mm
           </SectionLabel>
@@ -266,7 +266,7 @@ export default function KatalogFilterSidebar({
 
       {/* SCHAFTDURCHMESSER */}
       {absoluteMaxShank > absoluteMinShank && (
-        <div className="border-b border-slate-100 py-4">
+        <div className="border-b border-neutral-100 py-4">
           <SectionLabel>
             Schaftdurchmesser: {localShankMin} – {localShankMax} mm
           </SectionLabel>
@@ -283,7 +283,7 @@ export default function KatalogFilterSidebar({
 
       {/* PREIS */}
       {absoluteMaxPrice > absoluteMinPrice && (
-        <div className="border-b border-slate-100 py-4">
+        <div className="border-b border-neutral-100 py-4">
           <SectionLabel>Preis: {localPriceMin} € – {localPriceMax} €</SectionLabel>
           <RangeSlider
             min={absoluteMinPrice}
@@ -298,7 +298,7 @@ export default function KatalogFilterSidebar({
 
       {/* GEEIGNET FÜR */}
       {materialCounts.length > 0 && (
-        <div className="border-b border-slate-100 py-4">
+        <div className="border-b border-neutral-100 py-4">
           <SectionLabel>Geeignet für</SectionLabel>
           <div className="flex flex-col gap-2.5">
             {materialCounts.map(({ name, count }) => (
@@ -311,7 +311,7 @@ export default function KatalogFilterSidebar({
                   style={{ accentColor: "#0F172A" }}
                 />
                 <span className={selectedMaterials.includes(name) ? "font-medium" : ""}>{name}</span>
-                <span className="text-sm text-slate-400 ml-auto">({count})</span>
+                <span className="text-sm text-neutral-400 ml-auto">({count})</span>
               </label>
             ))}
           </div>

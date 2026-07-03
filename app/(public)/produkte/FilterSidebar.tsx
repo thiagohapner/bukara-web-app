@@ -38,7 +38,7 @@ function PriceRangeSlider({
 
   return (
     <div className="relative h-5 mx-1">
-      <div className="absolute top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 rounded-full" />
+      <div className="absolute top-1/2 -translate-y-1/2 w-full h-1 bg-neutral-200 rounded-full" />
       <div
         className="absolute top-1/2 -translate-y-1/2 h-1 bg-slate-900 rounded-full"
         style={{ left: `${leftPct}%`, right: `${rightPct}%` }}
@@ -159,7 +159,7 @@ export default function FilterSidebar({
   }
 
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-3">{children}</p>
+    <p className="text-[11px] font-medium text-neutral-500 uppercase tracking-wide mb-3">{children}</p>
   );
 
   return (
@@ -168,13 +168,13 @@ export default function FilterSidebar({
       <p className="text-base font-semibold text-slate-900 mb-4">Kategorien & Filter</p>
 
       {/* KATEGORIEN — matches ProductAccordion exactly */}
-      <div className="border-t border-slate-100">
+      <div className="border-t border-neutral-100">
         {topLevel.map((parent) => {
           const subs = subMap[parent.id] ?? [];
           const isExpanded = expandedId === parent.id;
 
           return (
-            <div key={parent.id} className="border-b border-slate-100">
+            <div key={parent.id} className="border-b border-neutral-100">
               <button
                 type="button"
                 onClick={() => selectParent(parent)}
@@ -205,7 +205,7 @@ export default function FilterSidebar({
                           className={`w-full text-left py-2 text-sm cursor-pointer transition-colors ${
                             isSubActive
                               ? "font-semibold text-slate-900 border-l-2 border-slate-900 pl-[18px]"
-                              : "text-slate-500 hover:text-slate-800 pl-5"
+                              : "text-neutral-500 hover:text-slate-800 pl-5"
                           }`}
                         >
                           {sub.name}
@@ -222,7 +222,7 @@ export default function FilterSidebar({
 
       {/* PREIS */}
       {absoluteMaxPrice > absoluteMinPrice && (
-        <div className="border-b border-slate-100 py-4">
+        <div className="border-b border-neutral-100 py-4">
           <SectionLabel>Preis: {localPriceMin} € – {localPriceMax} €</SectionLabel>
           <PriceRangeSlider
             min={absoluteMinPrice}
@@ -236,7 +236,7 @@ export default function FilterSidebar({
       )}
 
       {/* IM ANGEBOT */}
-      <div className="border-b border-slate-100 py-4">
+      <div className="border-b border-neutral-100 py-4">
         <label className="flex items-center gap-2.5 text-base text-slate-900 cursor-pointer select-none">
           <input
             type="checkbox"
@@ -266,11 +266,11 @@ export default function FilterSidebar({
                 style={{ accentColor: "#0F172A" }}
               />
               <span className={selectedMaterials.includes(name) ? "font-medium" : ""}>{name}</span>
-              <span className="text-sm text-slate-400 ml-auto">({count})</span>
+              <span className="text-sm text-neutral-400 ml-auto">({count})</span>
             </label>
           ))}
           {materialCounts.length === 0 && (
-            <p className="text-sm text-slate-400">Keine Materialien verfügbar</p>
+            <p className="text-sm text-neutral-400">Keine Materialien verfügbar</p>
           )}
         </div>
       </div>
