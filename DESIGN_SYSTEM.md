@@ -484,6 +484,28 @@ heading weights per template (homepage hero first, highest visibility).
   from `/loesungen/sonderwerkzeug` to `/sonder-werkzeug` (homepage banner,
   navbar desktop+mobile "Sonderlösung gestalten", search special-case);
   the old `/loesungen/[slug]` page is left as-is.
+- ✅ **Commerce pages migrated to the DS** (go-live pass): product cards +
+  shared blocks (`ProductCard`, `ServiceCard`, `DealCard`, `PromoTiles`,
+  `DealsPromo`, `OrderBenefits`, `SortimentTiles`, `Testimonials`,
+  `ProductGallery`, `ProductAccessories`), product detail (`produkte/[slug]`,
+  `katalog/[slug]`), catalog + filter sidebars, deal page, cart drawer +
+  checkout. Non-hijacked `slate/gray/zinc-{50..700}` → `neutral-*`; heavy
+  weights lightened (`font-black`→semibold, price/total `extrabold`→bold, card
+  titles `semibold`→medium); presentational only. `slate-900/800` (hijacked
+  ink) preserved.
+- ✅ **Token cleanup (backlog §10 items 1–4)**: (1) sale-red → new
+  **`--color-sale`** token (`@theme`, `#9B242A`) — use `text-sale`/`bg-sale`/
+  `border-sale` or `var(--color-sale)`; all 38 inline usages replaced. (2)
+  Wrong brand hex **`#00A597` → `#01A497`** everywhere (email template +
+  favicon + pages) — repo-wide count now 0. (3) Brand-dark drift collapsed:
+  `#007A70`→brand-600, `#044749`→brand-800, `#2E4A47`/`#2d4a47`→neutral-700. (4)
+  Navy `#0F172A` tokenized to the existing `--navy`/`--navy-mid` in public
+  files (no visual change); admin + the `--navy` def left; recoloring navy is
+  a deferred design decision.
+- ⬜️ **Still deferred** before/around go-live: legal/content pages
+  (`ueber-uns`, `kontakt`, `impressum`, `datenschutz`, `agbs`, `b2b-portal`,
+  `danke`); the `loesungen/[slug]` retire-or-migrate decision; admin UI; and a
+  deliberate heading-weight pass on any remaining `font-semibold` headings.
 
 ## 11. Where to look
 
