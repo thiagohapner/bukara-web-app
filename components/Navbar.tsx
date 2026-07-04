@@ -208,7 +208,7 @@ export default function Navbar({
           <div className="hidden lg:flex items-center gap-5">
             <Link
               href="/sonder-werkzeug"
-              className="inline-flex items-center gap-2 rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-normal text-slate-900 hover:bg-brand-25 hover:border-brand-600 transition-colors duration-[300ms] ease-[cubic-bezier(0.25,1.00,0.50,1.00)] whitespace-nowrap"
+              className="inline-flex items-center gap-2 rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-medium text-slate-900 hover:bg-brand-25 hover:border-brand-600 transition-colors duration-[300ms] ease-[cubic-bezier(0.25,1.00,0.50,1.00)] whitespace-nowrap"
               style={{ textDecoration: "none" }}
             >
               <PencilRuler className="w-4 h-4" strokeWidth={2} />
@@ -218,7 +218,7 @@ export default function Navbar({
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-normal text-slate-900 hover:text-brand-500 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] whitespace-nowrap"
+                className="text-sm font-medium text-slate-900 hover:text-brand-500 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] whitespace-nowrap"
                 style={{ textDecoration: "none" }}
               >
                 {link.label}
