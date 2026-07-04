@@ -117,8 +117,6 @@
   --font-mono: var(--font-geist-mono);
 
   /* Legacy aliases kept so nothing else breaks */
-  --navy:     #0F172A;
-  --navy-mid: #1E293B;
 
   /* ─── TYPE SCALE (new, additive) ─────────────────────────── */
   --fw-light:   300; /* display/heading + body text */
@@ -393,7 +391,7 @@ label[for] {
 }
 
 .btn-black {
-  background: #0F172A;
+  background: var(--color-ink);
   color: white;
   border-radius: var(--radius-sm);
   padding: 0.7rem 1.75rem;
@@ -408,7 +406,7 @@ label[for] {
 }
 
 .btn-black:hover {
-  background: #1e293b;
+  background: var(--color-brand-900);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.25);
 }

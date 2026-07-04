@@ -282,10 +282,10 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
                     ? "btn-brand btn-arrow no-underline"
                     : "btn-white btn-arrow no-underline"
                   : slide.ctaStyle === "white"
-                  ? "inline-block whitespace-nowrap bg-white text-[var(--navy)] text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-neutral-100"
+                  ? "inline-block whitespace-nowrap bg-white text-[var(--color-ink)] text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-neutral-100"
                   : slide.ctaStyle === "brand"
                   ? "btn-brand no-underline"
-                  : "inline-block whitespace-nowrap bg-[var(--navy)] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[var(--navy-mid)]"
+                  : "inline-block whitespace-nowrap bg-[var(--color-ink)] text-white text-sm font-bold tracking-wide px-6 py-3.5 rounded-sm no-underline transition-colors duration-150 hover:bg-[var(--color-brand-900)]"
               }
             >
               {slide.ctaLabel}
@@ -346,8 +346,8 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               onClick={() => goTo(i)}
               className="p-0 appearance-none cursor-pointer w-[9px] h-[9px] rounded-full transition-colors"
               style={{
-                background: i === active ? "var(--navy)" : "transparent",
-                border: i === active ? "none" : "1.5px solid var(--navy)",
+                background: i === active ? "var(--color-ink)" : "transparent",
+                border: i === active ? "none" : "1.5px solid var(--color-ink)",
                 opacity: i === active ? 1 : 0.45,
               }}
             />
@@ -381,7 +381,7 @@ function NavBtn({
     <button
       aria-label={label}
       onClick={onClick}
-      className="appearance-none border-none cursor-pointer w-10 h-10 rounded-full bg-[var(--navy)] flex items-center justify-center transition-colors duration-150 hover:bg-[var(--navy-mid)]"
+      className="appearance-none border-none cursor-pointer w-10 h-10 rounded-full bg-[var(--color-ink)] flex items-center justify-center transition-colors duration-150 hover:bg-[var(--color-brand-900)]"
     >
       {children}
     </button>

@@ -30,7 +30,7 @@ export default function KatalogMultiSelectPanel({
               checked={selected.includes(opt)}
               onChange={() => toggle(opt)}
               className="rounded flex-shrink-0"
-              style={{ accentColor: "var(--navy)" }}
+              style={{ accentColor: "var(--color-ink)" }}
             />
             <span className={selected.includes(opt) ? "font-medium" : ""}>{opt}</span>
           </label>

@@ -309,9 +309,11 @@ the rest of the app still routes around the token layer entirely.
    are four distinct near-brand dark hexes used in different files for what
    is conceptually the same "brand hover/pressed" or "dark ink" role. Should
    collapse to `brand-600`/`brand-700`/`--color-ink`.
-4. **`#0F172A` (Tailwind's default near-black navy) used 33 times** as a
-   button/text color — this is not brand ink (`#022221`) and is a leftover
-   from a pre-rebrand palette (see `--navy` legacy alias in `globals.css`).
+4. ✅ **RESOLVED — navy `#0F172A` retired.** Was Tailwind's default near-black
+   navy (a pre-rebrand leftover), used for `.btn-black`, the X99 banner
+   controls, and checkbox accents. Collapsed into brand ink `#022221`
+   (`.btn-black` fill → `--color-ink`, hover → `brand-900`); the `--navy` /
+   `--navy-mid` tokens were removed. There is now one dark.
 5. **Heading weights are heavy, not light.** 111 `font-semibold` + 58
    `font-bold` + 37 `font-extrabold` + 7 `font-black` instances across
    headings/emphasis text, vs. 18 `font-normal`. The DS calls for weight-300
@@ -499,9 +501,10 @@ heading weights per template (homepage hero first, highest visibility).
   Wrong brand hex **`#00A597` → `#01A497`** everywhere (email template +
   favicon + pages) — repo-wide count now 0. (3) Brand-dark drift collapsed:
   `#007A70`→brand-600, `#044749`→brand-800, `#2E4A47`/`#2d4a47`→neutral-700. (4)
-  Navy `#0F172A` tokenized to the existing `--navy`/`--navy-mid` in public
-  files (no visual change); admin + the `--navy` def left; recoloring navy is
-  a deferred design decision.
+  Navy `#0F172A` **retired** — collapsed into brand ink `#022221` everywhere
+  (`.btn-black` fill → `--color-ink`, hover → `brand-900`; X99 banner controls,
+  checkbox accents incl. admin); the `--navy`/`--navy-mid` tokens were removed.
+  Repo-wide `#0F172A`/`--navy` count now 0. One dark from here on.
 - ⬜️ **Still deferred** before/around go-live: legal/content pages
   (`ueber-uns`, `kontakt`, `impressum`, `datenschutz`, `agbs`, `b2b-portal`,
   `danke`); the `loesungen/[slug]` retire-or-migrate decision; admin UI; and a

@@ -315,11 +315,11 @@ export default function V2ProductEditClient({
           </div>
           <div className="flex gap-6 pt-2">
             <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-              <input type="checkbox" checked={form.is_active} onChange={(e) => field("is_active", e.target.checked)} style={{ accentColor: "#0F172A" }} />
+              <input type="checkbox" checked={form.is_active} onChange={(e) => field("is_active", e.target.checked)} style={{ accentColor: "#022221" }} />
               Aktiv
             </label>
             <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-              <input type="checkbox" checked={form.has_public_page} onChange={(e) => field("has_public_page", e.target.checked)} style={{ accentColor: "#0F172A" }} />
+              <input type="checkbox" checked={form.has_public_page} onChange={(e) => field("has_public_page", e.target.checked)} style={{ accentColor: "#022221" }} />
               Öffentliche Seite
             </label>
           </div>
