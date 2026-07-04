@@ -8,6 +8,7 @@ import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import gsap from "gsap";
 import BannerAurora from "./BannerAurora";
 import HeroWaveAnimation from "./HeroWaveAnimation";
+import HeroNebula from "./HeroNebula";
 import CtaArrow from "./CtaArrow";
 
 // Run before paint on the client (so the pre-animation state is set with no
@@ -47,23 +48,29 @@ type Slide = {
   heroMode?: "light" | "dark";
   /** Background for an aurora-hero slide. "grid" (default) = technical-drawing
    *  grid via BannerAurora (Sonderwerkzeuge); "petals" = the flowing ribbon
-   *  petals canvas via HeroWaveAnimation (Schärfservice). */
-  bgPattern?: "grid" | "petals";
+   *  petals canvas via HeroWaveAnimation (Schärfservice); "nebula" = the
+   *  domain-warped teal nebula canvas via HeroNebula (X99 product teaser). */
+  bgPattern?: "grid" | "petals" | "nebula";
   rightPanel: RightPanel;
 };
 
 const slides: Slide[] = [
   {
     id: "x99",
-    headline: "X99 NeXcut VHW Highspeedfräser –",
-    highlight: "Ab 55,72 €",
+    headline: "X99 NeXcut VHW Highspeedfräser",
+    highlight: "",
     subline:
-      "Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind.",
+      "Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind – Ab 55,72 €",
     ctaLabel: "Angebote entdecken",
     ctaHref: "/angebote",
-    bgColor: "#000000",
-    textColor: "#ffffff",
-    ctaStyle: "white",
+    // Dark aurora-hero treatment: deep brand-950 surface with the drifting
+    // teal nebula, white text and a white CTA (matching Schärfservice); the
+    // product image sits full-bleed on the right.
+    bgColor: "var(--color-brand-950)",
+    textColor: "var(--color-text-dark-heading)",
+    ctaStyle: "brand",
+    darkHero: true,
+    bgPattern: "nebula",
     rightPanel: {
       kind: "image",
       src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/banner/Frame%2013%20(7).png",
@@ -226,6 +233,10 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           <div className="banner-petals">
             <HeroWaveAnimation />
           </div>
+        ) : slide.darkHero && slide.bgPattern === "nebula" ? (
+          <div className="banner-nebula">
+            <HeroNebula />
+          </div>
         ) : (
           slide.darkHero && <BannerAurora light={isLight} />
         )}
@@ -294,43 +305,54 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           </div>
         </div>
 
-        {/* RIGHT COLUMN — dark-hero slides indent the panel a bit further in */}
-        <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.darkHero ? "pr-14 pl-[108px]" : "pr-14 pl-5"}`}>
-          {slide.rightPanel.kind === "features" ? (
-            <div className={`checklist ${isLight ? "" : "checklist--on-dark"} w-full`}>
-              {slide.rightPanel.features.map((f, i) => (
-                <div key={i} className="checklist-item">
-                  <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
-                  {f.text}
-                </div>
-              ))}
-            </div>
-          ) : slide.rightPanel.kind === "stepper" ? (
-            <div className={`banner-stepper ${isLight ? "banner-stepper--light" : ""} w-full`}>
-              {slide.rightPanel.steps.map((s, i, arr) => (
-                <div key={i} className="banner-step">
-                  <span className="banner-step-num">{i + 1}</span>
-                  {i < arr.length - 1 && (
-                    <span className="banner-step-line" aria-hidden />
-                  )}
-                  <div className="banner-step-body">
-                    <div className="banner-step-title">{s.title}</div>
-                    <div className="banner-step-sub">{s.sub}</div>
+        {/* RIGHT COLUMN */}
+        {slide.rightPanel.kind === "image" ? (
+          // Full-bleed product image: fills the grid cell edge-to-edge so it
+          // touches the top, right and bottom of the banner, with a soft
+          // left-edge blend into the brand-950 surface.
+          <div className="relative z-10 hidden md:block h-full overflow-hidden">
+            <Image
+              src={slide.rightPanel.src}
+              alt={slide.rightPanel.alt}
+              fill
+              className="object-cover object-center"
+              sizes="50vw"
+            />
+            <div
+              className="absolute inset-y-0 left-0 w-24 pointer-events-none"
+              style={{ background: "linear-gradient(90deg, var(--color-brand-950) 0%, transparent 100%)" }}
+            />
+          </div>
+        ) : (
+          // dark-hero slides indent the panel a bit further in
+          <div className={`relative z-10 hidden md:flex items-center py-9 ${slide.darkHero ? "pr-14 pl-[108px]" : "pr-14 pl-5"}`}>
+            {slide.rightPanel.kind === "features" ? (
+              <div className={`checklist ${isLight ? "" : "checklist--on-dark"} w-full`}>
+                {slide.rightPanel.features.map((f, i) => (
+                  <div key={i} className="checklist-item">
+                    <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
+                    {f.text}
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="relative w-full h-full rounded-xl overflow-hidden">
-              <Image
-                src={slide.rightPanel.src}
-                alt={slide.rightPanel.alt}
-                fill
-                className="object-cover object-center"
-              />
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            ) : (
+              <div className={`banner-stepper ${isLight ? "banner-stepper--light" : ""} w-full`}>
+                {slide.rightPanel.steps.map((s, i, arr) => (
+                  <div key={i} className="banner-step">
+                    <span className="banner-step-num">{i + 1}</span>
+                    {i < arr.length - 1 && (
+                      <span className="banner-step-line" aria-hidden />
+                    )}
+                    <div className="banner-step-body">
+                      <div className="banner-step-title">{s.title}</div>
+                      <div className="banner-step-sub">{s.sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* CONTROLS — dots left, arrows right, below the card (hidden for single-slide banners) */}

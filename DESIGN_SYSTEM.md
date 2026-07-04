@@ -168,6 +168,12 @@ on-surface right panel indented ~right.
   the GSAP ticker, reduced-motion-safe (static frame). Clustered right,
   masked to fade left (`.banner-petals`); a right-weighted scrim
   (`.banner-petals-scrim`) keeps the 1-2-3 stepper legible over it.
+- **X99 product teaser** → `nebula`: a subtle "universe nebula"
+  (`components/HeroNebula.tsx`) — a WebGL domain-warped fbm cloud in the same
+  teal ramp on a deep brand-950 base, drifting slowly over time. Low-amplitude
+  so it reads atmospheric behind the headline; GSAP-ticker driven, reduced-
+  motion-safe (static frame). Full-field (`.banner-nebula`, no mask); the
+  full-bleed product image covers the right half.
 
 They differ in the **right panel** (`RightPanel` kind):
 - **Sonderlösungen** → `features`: the `.checklist` (6 benefit items with
