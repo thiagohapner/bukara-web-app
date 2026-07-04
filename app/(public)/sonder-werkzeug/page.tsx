@@ -253,12 +253,12 @@ export default function SonderWerkzeugPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-white">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-8 lg:py-6">
+      <main className="min-h-screen bg-brand-25">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
-            {/* Sidebar */}
-            <aside className="w-full lg:w-[360px] flex-shrink-0 bg-brand-25 border border-neutral-100 rounded-md p-6 flex flex-col gap-5 lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
+            {/* Sidebar (borderless — blends into the #F5FAFA page) */}
+            <aside className="w-full lg:w-[280px] flex-shrink-0 bg-brand-25 rounded-lg p-7 flex flex-col gap-5 lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
               <div>
                 <h1 className="heading-h2">{service.name}</h1>
                 <p className="text-[15px] text-neutral-500 mt-1.5 leading-[1.4]">{service.tagline}</p>
@@ -292,9 +292,10 @@ export default function SonderWerkzeugPage() {
               </div>
             </aside>
 
-            {/* Step content */}
-            <div className="flex-1 min-w-0 flex justify-center py-4 lg:py-10">
-              <div className="w-full max-w-[560px]">
+            {/* Step content — big white card, top-aligned + same height as the sidebar */}
+            <div className="flex-1 min-w-0">
+              <div className="w-full bg-white rounded-md p-6 sm:p-10 shadow-[var(--shadow-sm)] lg:min-h-[calc(100vh-204px)]">
+              <div className="w-full max-w-[560px] mx-auto">
 
                 {step <= TOTAL_STEPS && (
                   <div className="flex items-center gap-3 mb-7 text-sm">
@@ -490,6 +491,7 @@ export default function SonderWerkzeugPage() {
                     </span>
                   </div>
                 )}
+              </div>
               </div>
             </div>
           </div>
