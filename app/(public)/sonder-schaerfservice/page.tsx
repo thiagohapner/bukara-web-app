@@ -320,16 +320,20 @@ function SchaerfPage() {
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
             {/* Sidebar */}
-            <aside className="w-full lg:w-[360px] flex-shrink-0 bg-brand-25 border border-neutral-100 rounded-md p-6 flex flex-col gap-5 lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
-              <h1 className="heading-h2">{service.name}</h1>
+            <aside className="w-full lg:w-[380px] flex-shrink-0 bg-brand-25 border border-neutral-100 rounded-lg p-7 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
+              {/* Intro */}
+              <div>
+                <h1 className="heading-h2">{service.name}</h1>
+                <p className="mt-3 text-sm text-neutral-500 leading-relaxed">
+                  Nachschliff für alle Bukara und Fremdwerkzeuge – Keine Mindestmenge, schnell, deutschlandweit.
+                </p>
+              </div>
 
-              <div className="h-px bg-neutral-100" />
-
-              <p className="text-[13px] text-neutral-500 leading-relaxed">
-                Nachschliff für alle Bukara und Fremdwerkzeuge – Keine Mindestmenge, schnell, deutschlandweit.
-              </p>
-
-              <div ref={stepperRef} className="banner-stepper banner-stepper--light w-full">
+              {/* Steps */}
+              <div
+                ref={stepperRef}
+                className="banner-stepper banner-stepper--light banner-stepper--sidebar w-full mt-7 pt-7 border-t border-neutral-100"
+              >
                 {SIDEBAR_STEPS.map((s, i, arr) => (
                   <div key={i} className="banner-step">
                     <span className="banner-step-num">{i + 1}</span>
@@ -342,20 +346,25 @@ function SchaerfPage() {
                 ))}
               </div>
 
-              <p className="text-[13px] text-neutral-500 leading-relaxed">
-                Für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.
-              </p>
+              {/* Flexible spacer: fills the panel on desktop, holds a fixed gap on mobile */}
+              <div className="flex-1 min-h-[2rem]" />
 
-              <div className="mt-auto border-t border-neutral-100 pt-6">
-                <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
-                <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
-                  <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
-                  +49 7443 / 9661-0
-                </a>
-                <a href="mailto:info@bukara.de" className="flex items-center gap-3 text-slate-900 text-sm" style={{ textDecoration: "none" }}>
-                  <span className="icon-tile icon-tile--sm"><Mail className="w-4 h-4" strokeWidth={1.75} /></span>
-                  info@bukara.de
-                </a>
+              {/* Footer: fine print + contact */}
+              <div className="pt-6 border-t border-neutral-100">
+                <p className="text-[13px] text-neutral-400 leading-relaxed">
+                  Für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.
+                </p>
+                <div className="mt-6">
+                  <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
+                  <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
+                    <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
+                    +49 7443 / 9661-0
+                  </a>
+                  <a href="mailto:info@bukara.de" className="flex items-center gap-3 text-slate-900 text-sm" style={{ textDecoration: "none" }}>
+                    <span className="icon-tile icon-tile--sm"><Mail className="w-4 h-4" strokeWidth={1.75} /></span>
+                    info@bukara.de
+                  </a>
+                </div>
               </div>
             </aside>
 
