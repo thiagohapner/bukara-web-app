@@ -73,7 +73,7 @@ const fetchCatalog = unstable_cache(
       supabaseAdminV2
         .from("categories")
         .select(
-          "id, name, slug, parent_id, sort_order, seo_title, seo_description, show_on_home, home_sort_order",
+          "id, name, slug, parent_id, sort_order, seo_title, seo_description, category_intro, show_on_home, home_sort_order",
         )
         .order("sort_order")
         .order("id"),
