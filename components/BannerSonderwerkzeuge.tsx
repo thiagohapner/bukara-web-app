@@ -8,7 +8,6 @@ import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import gsap from "gsap";
 import BannerAurora from "./BannerAurora";
 import HeroWaveAnimation from "./HeroWaveAnimation";
-import HeroNebula from "./HeroNebula";
 import CtaArrow from "./CtaArrow";
 
 // Run before paint on the client (so the pre-animation state is set with no
@@ -48,9 +47,8 @@ type Slide = {
   heroMode?: "light" | "dark";
   /** Background for an aurora-hero slide. "grid" (default) = technical-drawing
    *  grid via BannerAurora (Sonderwerkzeuge); "petals" = the flowing ribbon
-   *  petals canvas via HeroWaveAnimation (Schärfservice); "nebula" = the
-   *  domain-warped teal nebula canvas via HeroNebula (X99 product teaser). */
-  bgPattern?: "grid" | "petals" | "nebula";
+   *  petals canvas via HeroWaveAnimation (Schärfservice). */
+  bgPattern?: "grid" | "petals";
   rightPanel: RightPanel;
 };
 
@@ -63,14 +61,13 @@ const slides: Slide[] = [
       "Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind – Ab 55,72 €",
     ctaLabel: "Angebote entdecken",
     ctaHref: "/angebote",
-    // Dark aurora-hero treatment: deep brand-950 surface with the drifting
-    // teal nebula, white text and a white CTA (matching Schärfservice); the
-    // product image sits full-bleed on the right.
+    // Dark aurora-hero treatment: deep brand-950 surface, white text and a
+    // white CTA (matching Schärfservice); the product image sits full-bleed
+    // on the right.
     bgColor: "var(--color-brand-950)",
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
-    bgPattern: "nebula",
     rightPanel: {
       kind: "image",
       src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/banner/Frame%2013%20(7).png",
@@ -233,12 +230,8 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
           <div className="banner-petals">
             <HeroWaveAnimation />
           </div>
-        ) : slide.darkHero && slide.bgPattern === "nebula" ? (
-          <div className="banner-nebula">
-            <HeroNebula />
-          </div>
         ) : (
-          slide.darkHero && <BannerAurora light={isLight} />
+          slide.darkHero && slide.rightPanel.kind !== "image" && <BannerAurora light={isLight} />
         )}
         {slide.darkHero && slide.bgPattern === "petals" && (
           <div className="banner-petals-scrim" />
@@ -308,8 +301,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
         {/* RIGHT COLUMN */}
         {slide.rightPanel.kind === "image" ? (
           // Full-bleed product image: fills the grid cell edge-to-edge so it
-          // touches the top, right and bottom of the banner, with a soft
-          // left-edge blend into the brand-950 surface.
+          // touches the top, right and bottom of the banner.
           <div className="relative z-10 hidden md:block h-full overflow-hidden">
             <Image
               src={slide.rightPanel.src}
@@ -317,10 +309,6 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
               fill
               className="object-cover object-center"
               sizes="50vw"
-            />
-            <div
-              className="absolute inset-y-0 left-0 w-24 pointer-events-none"
-              style={{ background: "linear-gradient(90deg, var(--color-brand-950) 0%, transparent 100%)" }}
             />
           </div>
         ) : (

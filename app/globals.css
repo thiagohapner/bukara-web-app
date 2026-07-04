@@ -881,22 +881,6 @@ label[for] {
   -webkit-mask-image: linear-gradient(to right, transparent, #000 30%);
   mask-image: linear-gradient(to right, transparent, #000 30%);
 }
-
-/* Subtle "universe nebula" background for the X99 product-teaser banner —
-   domain-warped teal fbm cloud on a brand-950 base, rendered by
-   components/HeroNebula.tsx. Full-field (no mask); the product image covers
-   the right half. */
-.banner-nebula {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.banner-nebula__canvas {
-  position: absolute;
-  inset: 0;
-}
 .banner-petals__canvas {
   position: absolute;
   inset: 0;
