@@ -320,12 +320,12 @@ function SchaerfPage() {
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
             {/* Sidebar (borderless — blends into the #F5FAFA page) */}
-            <aside className="w-full lg:w-[380px] flex-shrink-0 bg-brand-25 rounded-lg p-7 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
+            <aside className="w-full lg:w-[280px] flex-shrink-0 bg-brand-25 rounded-lg p-7 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
               {/* Intro */}
               <div>
                 <h1 className="heading-h2">{service.name}</h1>
                 <p className="mt-3 text-sm text-neutral-500 leading-relaxed">
-                  Nachschliff für alle Bukara und Fremdwerkzeuge – Keine Mindestmenge, schnell, deutschlandweit.
+                  Nachschliff für alle Bukara und Fremdwerkzeuge. Keine Mindestmenge, schnell, deutschlandweit.
                 </p>
               </div>
 

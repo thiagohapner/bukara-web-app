@@ -108,7 +108,7 @@ const slides: Slide[] = [
     headline: "Nachschliff,",
     highlight: "der Standzeit verlängert",
     subline:
-      "Nachschliff für alle Bukara und Fremdwerkzeuge – Keine Mindestmenge, schnell, deutschlandweit.",
+      "Nachschliff für alle Bukara und Fremdwerkzeuge. Keine Mindestmenge, schnell, deutschlandweit.",
     ctaLabel: "Schärfauftrag starten",
     ctaHref: "/sonder-schaerfservice",
     // Dark scheme: deep diagonal brand-teal gradient (brand-800 → brand-950)
