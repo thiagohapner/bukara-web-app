@@ -249,7 +249,7 @@ export async function POST(request: NextRequest) {
 
     await transporter.sendMail({
       from: `"BuKaRa GmbH" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_TO ?? process.env.EMAIL_USER,
+      to: process.env.EMAIL_TO ?? "bukaragmbh@gmail.com",
       subject,
       html,
     });

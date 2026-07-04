@@ -10,8 +10,8 @@ const NAV_LINKS = [
 ];
 
 const SERVICE_LINKS = [
-  { label: "Schärfservice",    href: "/loesungen/schaerfservice" },
-  { label: "Sonderwerkzeuge",  href: "/loesungen/sonderwerkzeug" },
+  { label: "Schärfservice",    href: "/sonder-schaerfservice" },
+  { label: "Sonderwerkzeuge",  href: "/sonder-werkzeug" },
   { label: "B2B Portal",       href: "https://b2b.bukara.de/", external: true },
 ];
 

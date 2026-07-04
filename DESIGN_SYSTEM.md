@@ -507,10 +507,22 @@ heading weights per template (homepage hero first, highest visibility).
   (`.btn-black` fill → `--color-ink`, hover → `brand-900`; X99 banner controls,
   checkbox accents incl. admin); the `--navy`/`--navy-mid` tokens were removed.
   Repo-wide `#0F172A`/`--navy` count now 0. One dark from here on.
+- ✅ **All service links repointed to the new form wizards**: every
+  `/loesungen/schaerfservice` → `/sonder-schaerfservice` and
+  `/loesungen/sonderwerkzeug` → `/sonder-werkzeug` across the site
+  (AnnouncementBar, Navbar category + search special-case, Footer, PromoTiles,
+  Hero, über-uns, and `ServiceCard` via a `SERVICE_FORM_HREF` slug map used by
+  the `/loesungen` overview). The old combined `/loesungen/[slug]` forms are
+  **redirect-retired** — `next.config.ts` permanently redirects both slugs to
+  the new forms, so old links/bookmarks still work and the old `SchaerfContent`/
+  `SonderContent` are no longer reachable. Both new wizards keep the existing
+  backend (same `service_inquiries` insert shape + Storage upload + POST to
+  `/api/send-email`); the notification recipient now falls back to
+  `bukaragmbh@gmail.com` when `EMAIL_TO` is unset.
 - ⬜️ **Still deferred** before/around go-live: legal/content pages
   (`ueber-uns`, `kontakt`, `impressum`, `datenschutz`, `agbs`, `b2b-portal`,
-  `danke`); the `loesungen/[slug]` retire-or-migrate decision; admin UI; and a
-  deliberate heading-weight pass on any remaining `font-semibold` headings.
+  `danke`); admin UI; and a deliberate heading-weight pass on any remaining
+  `font-semibold` headings.
 
 ## 11. Where to look
 

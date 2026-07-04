@@ -8,6 +8,12 @@ import { Check, ArrowRight } from "lucide-react";
 const PLACEHOLDER_COLORS = ["#e8f7f6", "#f5ede8"];
 const PLACEHOLDER_LABELS = ["SRV", "SWZ"];
 
+// Each service links straight to its new dedicated request-form wizard.
+const SERVICE_FORM_HREF: Record<string, string> = {
+  schaerfservice: "/sonder-schaerfservice",
+  sonderwerkzeug: "/sonder-werkzeug",
+};
+
 interface ServiceCardProps {
   service: BukaraService;
   index: number;
@@ -24,6 +30,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
   const imageLabel = PLACEHOLDER_LABELS[index % 2];
 
   const heroImage = service.images?.[0];
+  const formHref = SERVICE_FORM_HREF[service.slug] ?? `/loesungen/${service.slug}`;
 
   if (variant === "panel") {
     return (
@@ -49,7 +56,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
             <span className="text-lg font-bold text-slate-900">{service.priceLabel}</span>
           </div>
           <Link
-            href={`/loesungen/${service.slug}`}
+            href={formHref}
             className="btn-brand inline-flex items-center gap-2 self-start mt-auto"
             style={{ textDecoration: "none" }}
           >
@@ -123,7 +130,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
 
       <div>
         <Link
-          href={`/loesungen/${service.slug}`}
+          href={formHref}
           className="btn-brand inline-flex items-center gap-2"
           style={{ textDecoration: "none" }}
         >

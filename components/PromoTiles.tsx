@@ -13,7 +13,7 @@ const TILES = [
     badge: "Sonderwerkzeug",
     title: "Werkzeuge nach Ihren Spezifikationen",
     cta: "Jetzt anfragen",
-    href: "/loesungen/sonderwerkzeug",
+    href: "/sonder-werkzeug",
     image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/sonderwerkzeug/Frame%2065%20(4).png",
   },
   {
@@ -29,7 +29,7 @@ const TILES = [
     badge: "Schärfservice",
     title: "Bequemer Schärfservice — Deutschlandweit",
     cta: "Service anfragen",
-    href: "/loesungen/schaerfservice",
+    href: "/sonder-schaerfservice",
     image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/schaerfservice/main_image_small.png",
   },
 ];

@@ -12,7 +12,7 @@ import { ShoppingBasket, Search, ShieldCheck, Gem, PencilRuler } from "lucide-re
 // Row 1 — trust labels (one links to the Schärfservice page).
 const TOP_INFO = [
   { label: "Bequem und sicher bezahlen", Icon: ShieldCheck },
-  { label: "Deutschlandweiter Schärfservice", Icon: Gem, href: "/loesungen/schaerfservice" },
+  { label: "Deutschlandweiter Schärfservice", Icon: Gem, href: "/sonder-schaerfservice" },
 ];
 
 // Row 2 — text action links (besides search, the Sonderlösung button and cart).
@@ -75,7 +75,7 @@ function SearchBar({
     onSubmitted?.();
     // Special-case routing — explicit equality only, all else goes to the catalog.
     if (q === "schärfservice" || q === "schaerfservice") {
-      router.push("/loesungen/schaerfservice");
+      router.push("/sonder-schaerfservice");
       return;
     }
     if (q === "sonderwerkzeug") {
