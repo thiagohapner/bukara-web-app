@@ -340,7 +340,6 @@ function SchaerfPage() {
                     {i < arr.length - 1 && <span className="banner-step-line" aria-hidden />}
                     <div className="banner-step-body">
                       <div className="banner-step-title">{s.title}</div>
-                      <div className="banner-step-sub">{s.sub}</div>
                     </div>
                   </div>
                 ))}

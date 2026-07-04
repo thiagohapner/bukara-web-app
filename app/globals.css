@@ -608,8 +608,8 @@ label[for] {
 /* Sidebar stepper (Schärfservice form panel): an even, timeline-style rhythm.
    A fixed per-step height (tall enough for a two-line description) keeps the
    1-2-3 circles an equal distance apart no matter how each line wraps. */
-.banner-stepper--sidebar { --step-gap: 1.25rem; }
-.banner-stepper--sidebar .banner-step { min-height: 4.25rem; }
+.banner-stepper--sidebar { --step-gap: 1.5rem; }
+.banner-stepper--sidebar .banner-step { min-height: 2.5rem; }
 .banner-stepper--sidebar .banner-step:last-child { min-height: 0; }
 
 /* ============================================================
