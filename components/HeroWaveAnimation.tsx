@@ -97,7 +97,7 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
   return sh;
 }
 
-export default function HeroWaveAnimation({ animated = true }: { animated?: boolean }) {
+export default function HeroWaveAnimation() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -158,10 +158,8 @@ export default function HeroWaveAnimation({ animated = true }: { animated?: bool
     const ro = new ResizeObserver(() => { resize(); });
     if (canvas.parentElement) ro.observe(canvas.parentElement);
 
-    // Static mode (animated=false) or reduced-motion: render one still frame of
-    // the same shader and never join the ticker.
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!animated || reduced) {
+    if (reduced) {
       draw(0);
       return () => ro.disconnect();
     }
@@ -174,7 +172,7 @@ export default function HeroWaveAnimation({ animated = true }: { animated?: bool
       gsap.ticker.remove(tick);
       ro.disconnect();
     };
-  }, [animated]);
+  }, []);
 
   return <canvas ref={canvasRef} className="banner-petals__canvas" aria-hidden />;
 }

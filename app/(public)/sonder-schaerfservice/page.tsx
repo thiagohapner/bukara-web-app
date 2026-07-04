@@ -316,7 +316,7 @@ function SchaerfPage() {
   return (
     <>
       <main className="min-h-screen bg-brand-25">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-8 lg:py-6">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
             {/* Sidebar (borderless — blends into the #F5FAFA page) */}
@@ -367,9 +367,10 @@ function SchaerfPage() {
               </div>
             </aside>
 
-            {/* Step content — white rounded card on the pale page */}
-            <div className="flex-1 min-w-0 flex justify-center py-4 lg:py-6">
-              <div className="w-full max-w-[560px] bg-white rounded-md p-6 sm:p-8 shadow-[var(--shadow-sm)]">
+            {/* Step content — big white card, top-aligned + same height as the sidebar */}
+            <div className="flex-1 min-w-0">
+              <div className="w-full bg-white rounded-md p-6 sm:p-10 shadow-[var(--shadow-sm)] lg:min-h-[calc(100vh-204px)]">
+              <div className="w-full max-w-[560px] mx-auto">
 
                 {step !== 7 && (
                   <div className="flex items-center gap-3 mb-7 text-sm">
@@ -633,6 +634,7 @@ function SchaerfPage() {
                     </span>
                   </div>
                 )}
+              </div>
               </div>
             </div>
           </div>

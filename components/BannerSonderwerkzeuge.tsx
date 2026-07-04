@@ -39,8 +39,8 @@ type Slide = {
   highlightColor?: string;
   /** Aurora-hero treatment: brand-teal gradient surface, aurora glow +
    *  technical grid, big headline, body + CTA, and a right panel (checklist
-   *  or stepper). The X99 slide also uses this, with a frozen mesh background
-   *  (staticPattern) behind its full-bleed product image. */
+   *  or stepper). (X99 slide leaves the pattern off and keeps its own
+   *  dark-gradient + image look.) */
   darkHero?: boolean;
   /** Colour theme for an aurora-hero slide. "dark" (default) = deep-teal
    *  surface, light text, white CTA, on-dark panel. "light" = pale brand-teal
@@ -50,9 +50,6 @@ type Slide = {
    *  grid via BannerAurora (Sonderwerkzeuge); "petals" = the flowing ribbon
    *  petals canvas via HeroWaveAnimation (Schärfservice). */
   bgPattern?: "grid" | "petals";
-  /** Freeze a "petals" background on a single still frame (no WebGL animation).
-   *  Used by the X99 slide so it shares the Schärfservice mesh look statically. */
-  staticPattern?: boolean;
   rightPanel: RightPanel;
 };
 
@@ -65,15 +62,13 @@ const slides: Slide[] = [
       "Entdecken Sie Erweiterungsangebote die speziell auf den X99 NeXcut abgestimmt sind – Ab 55,72 €",
     ctaLabel: "Angebote entdecken",
     ctaHref: "/angebote",
-    // Dark aurora-hero treatment matching the Schärfservice slide: same deep
-    // diagonal brand-teal gradient + mesh background, but frozen (no animation);
-    // the product image sits full-bleed on the right.
+    // Dark aurora-hero treatment: deep diagonal brand-teal gradient surface,
+    // white text and a white CTA; the product image sits full-bleed on the
+    // right. No mesh/pattern — plain gradient only.
     bgColor: "linear-gradient(105deg, #074843 0%, #062F2C 48%, #05211F 100%)",
     textColor: "var(--color-text-dark-heading)",
     ctaStyle: "brand",
     darkHero: true,
-    bgPattern: "petals",
-    staticPattern: true,
     rightPanel: {
       kind: "image",
       src: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/banner/Frame%2013%20(7).png",
@@ -234,7 +229,7 @@ export default function BannerSonderwerkzeuge({ only }: { only?: SlideId } = {})
       >
         {slide.darkHero && slide.bgPattern === "petals" ? (
           <div className="banner-petals">
-            <HeroWaveAnimation animated={!slide.staticPattern} />
+            <HeroWaveAnimation />
           </div>
         ) : (
           slide.darkHero && slide.rightPanel.kind !== "image" && <BannerAurora light={isLight} />
