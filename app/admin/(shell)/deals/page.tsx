@@ -11,7 +11,7 @@ export default async function DealsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold text-slate-800">Angebote</h1>
-        <Link href="/admin/deals/new" className="btn-orange px-4 py-2 text-sm">
+        <Link href="/admin/deals/new" className="btn-brand px-4 py-2 text-sm">
           + Neues Angebot
         </Link>
       </div>

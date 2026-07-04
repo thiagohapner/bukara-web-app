@@ -13,7 +13,7 @@ const TILES = [
     badge: "Sonderwerkzeug",
     title: "Werkzeuge nach Ihren Spezifikationen",
     cta: "Jetzt anfragen",
-    href: "/loesungen/sonderwerkzeug",
+    href: "/sonder-werkzeug",
     image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/sonderwerkzeug/Frame%2065%20(4).png",
   },
   {
@@ -29,7 +29,7 @@ const TILES = [
     badge: "Schärfservice",
     title: "Bequemer Schärfservice — Deutschlandweit",
     cta: "Service anfragen",
-    href: "/loesungen/schaerfservice",
+    href: "/sonder-schaerfservice",
     image: "https://qdycgspamxfiurajizmt.supabase.co/storage/v1/object/public/images/services/schaerfservice/main_image_small.png",
   },
 ];
@@ -68,13 +68,13 @@ export default function PromoTiles() {
 
               {/* Text */}
               <div className="z-10 max-w-[55%]">
-                <p className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "#00A597" }}>
+                <p className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "#01A497" }}>
                   {tile.badge}
                 </p>
                 <h3 className="text-[17px] font-semibold leading-tight mb-4" style={{ color: "#022221" }}>
                   {tile.title}
                 </h3>
-                <span className="inline-flex items-center gap-2 text-sm font-semibold underline-offset-2 group-hover:underline" style={{ color: "#044749" }}>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold underline-offset-2 group-hover:underline" style={{ color: "var(--color-brand-800)" }}>
                   {tile.cta}
                   <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
                 </span>

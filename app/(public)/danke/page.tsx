@@ -25,10 +25,10 @@ function DankeContent() {
         className="w-20 h-20 rounded-full flex items-center justify-center mb-8"
         style={{ background: "rgba(0,165,151,0.08)" }}
       >
-        <Check className="w-10 h-10" style={{ color: "#00A597" }} strokeWidth={2.5} />
+        <Check className="w-10 h-10" style={{ color: "#01A497" }} strokeWidth={2.5} />
       </div>
 
-      <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4 leading-tight">
+      <h1 className="heading-h3 mb-4">
         Vielen Dank für Ihre Anfrage.
       </h1>
       <p className="text-slate-500 text-sm leading-relaxed mb-10">

@@ -16,11 +16,11 @@ const SERVICE_GALLERY: Record<string, { bg: string; label: string }> = {
 };
 
 function ServiceFeatureCheck() {
-  return <Check className="w-4 h-4 text-[#00A597] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
+  return <Check className="w-4 h-4 text-[#01A497] flex-shrink-0 mt-0.5" strokeWidth={2.5} />;
 }
 
 function inputClass(extra = "") {
-  return `w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#00A597]/20 focus:border-[#00A597] transition-colors ${extra}`;
+  return `w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#01A497]/20 focus:border-[#01A497] transition-colors ${extra}`;
 }
 
 type SchaerfForm = {
@@ -181,7 +181,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+          <h1 className="heading-h3 mb-2">
             {service.name}
           </h1>
           <p className="text-slate-500 text-sm mb-4 leading-relaxed">{service.tagline}</p>
@@ -208,19 +208,19 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Firma <span className="text-[#9B242A]">*</span>
+                  Firma <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.company} onChange={field("company")} className={inputClass()} placeholder="Muster GmbH" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Kontaktperson <span className="text-[#9B242A]">*</span>
+                  Kontaktperson <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.contact} onChange={field("contact")} className={inputClass()} placeholder="Max Mustermann" />
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  E-Mail <span className="text-[#9B242A]">*</span>
+                  E-Mail <span className="text-sale">*</span>
                 </label>
                 <input type="email" required value={form.email} onChange={field("email")} className={inputClass()} placeholder="anfrage@firma.de" />
               </div>
@@ -236,26 +236,26 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Gewünschtes Abholdatum <span className="text-[#9B242A]">*</span>
+                  Gewünschtes Abholdatum <span className="text-sale">*</span>
                 </label>
                 <input type="date" required value={form.pickupDate} onChange={field("pickupDate")} className={inputClass()} />
                 <p className="text-[11px] text-slate-400 mt-1.5">Abholungen erfolgen in der Regel zwischen 07:00 und 16:00 Uhr</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Abholungszeiten <span className="text-[#9B242A]">*</span>
+                  Abholungszeiten <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.pickupTimes} onChange={field("pickupTimes")} className={inputClass()} placeholder="z. B. 08:00–12:00, 13:00–16:00" />
                 <p className="text-[11px] text-slate-400 mt-1.5">Falls Mittagspause, bitte angeben</p>
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-slate-500 mb-2">
-                  Gewünschter Abholungsort <span className="text-[#9B242A]">*</span>
+                  Gewünschter Abholungsort <span className="text-sale">*</span>
                 </label>
                 <div className="flex flex-wrap gap-4">
                   {(["Büro", "Warenannahme", "Sonstiges"] as const).map((loc) => (
                     <label key={loc} className="flex items-center gap-2 cursor-pointer">
-                      <input type="radio" name="pickupLocation" value={loc} checked={form.pickupLocation === loc} onChange={() => setForm((f) => ({ ...f, pickupLocation: loc }))} className="accent-[#00A597] w-4 h-4" required />
+                      <input type="radio" name="pickupLocation" value={loc} checked={form.pickupLocation === loc} onChange={() => setForm((f) => ({ ...f, pickupLocation: loc }))} className="accent-[#01A497] w-4 h-4" required />
                       <span className="text-sm text-slate-800">{loc}</span>
                     </label>
                   ))}
@@ -277,14 +277,14 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Paketgröße <span className="text-[#9B242A]">*</span>
+                  Paketgröße <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.packageSize} onChange={field("packageSize")} className={inputClass()} placeholder="z. B. 30 × 20 × 15" />
                 <p className="text-[11px] text-slate-400 mt-1.5">Höhe × Breite × Tiefe in cm</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                  Paketgewicht <span className="text-[#9B242A]">*</span>
+                  Paketgewicht <span className="text-sale">*</span>
                 </label>
                 <input type="text" required value={form.packageWeight} onChange={field("packageWeight")} className={inputClass()} placeholder="z. B. 5" />
                 <p className="text-[11px] text-slate-400 mt-1.5">in kg</p>
@@ -295,7 +295,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             <div className="flex flex-col gap-6 mb-2">
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-2">
-                  Zahnersatz (falls nötig) durchführen? <span className="text-[#9B242A]">*</span>
+                  Zahnersatz (falls nötig) durchführen? <span className="text-sale">*</span>
                 </label>
                 <div className="flex flex-col gap-2">
                   {([
@@ -304,7 +304,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                     { value: "nein",          label: "Nein, ist nicht erwünscht – bitte unbearbeitet zurückschicken" },
                   ] as const).map(({ value, label }) => (
                     <label key={value} className="flex items-start gap-2 cursor-pointer">
-                      <input type="radio" name="carbideReplacement" value={value} checked={form.carbideReplacement === value} onChange={() => setForm((f) => ({ ...f, carbideReplacement: value }))} className="accent-[#00A597] w-4 h-4 mt-0.5 flex-shrink-0" required />
+                      <input type="radio" name="carbideReplacement" value={value} checked={form.carbideReplacement === value} onChange={() => setForm((f) => ({ ...f, carbideReplacement: value }))} className="accent-[#01A497] w-4 h-4 mt-0.5 flex-shrink-0" required />
                       <span className="text-sm text-slate-800">{label}</span>
                     </label>
                   ))}
@@ -312,7 +312,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-2">
-                  Gravur <span className="text-[#9B242A]">*</span>
+                  Gravur <span className="text-sale">*</span>
                 </label>
                 <div className="flex flex-wrap gap-4">
                   {([
@@ -320,7 +320,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
                     { value: "neutral", label: "Neutrale Gravur" },
                   ] as const).map(({ value, label }) => (
                     <label key={value} className="flex items-center gap-2 cursor-pointer">
-                      <input type="radio" name="engraving" value={value} checked={form.engraving === value} onChange={() => setForm((f) => ({ ...f, engraving: value }))} className="accent-[#00A597] w-4 h-4" required />
+                      <input type="radio" name="engraving" value={value} checked={form.engraving === value} onChange={() => setForm((f) => ({ ...f, engraving: value }))} className="accent-[#01A497] w-4 h-4" required />
                       <span className="text-sm text-slate-800">{label}</span>
                     </label>
                   ))}
@@ -331,7 +331,7 @@ function SchaerfContent({ serviceSlug }: { serviceSlug: string }) {
             {submitError && <p className="text-sm text-red-500 mb-4 mt-4">{submitError}</p>}
 
             <div className="mt-8">
-              <button type="submit" disabled={submitting} className="btn-orange" style={{ opacity: submitting ? 0.7 : 1 }}>
+              <button type="submit" disabled={submitting} className="btn-brand" style={{ opacity: submitting ? 0.7 : 1 }}>
                 {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                 {!submitting && (
                   <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
@@ -390,7 +390,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
           type="checkbox"
           checked={arr.includes(value)}
           onChange={() => toggle(arrKey, value)}
-          className="accent-[#00A597] w-4 h-4 flex-shrink-0"
+          className="accent-[#01A497] w-4 h-4 flex-shrink-0"
         />
         <span className="text-sm text-slate-800">{value}</span>
       </label>
@@ -400,10 +400,10 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
   const radioBtn = (name: string, stateKey: keyof SonderForm, value: string) => {
     const active = (form[stateKey] as string) === value;
     return (
-      <label key={value} className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-colors ${active ? "border-[#00A597] bg-[#00A597]/5" : "border-slate-200 hover:border-slate-300"}`}>
+      <label key={value} className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-colors ${active ? "border-[#01A497] bg-[#01A497]/5" : "border-slate-200 hover:border-slate-300"}`}>
         <input type="radio" name={name} value={value} checked={active}
           onChange={() => setForm(f => ({ ...f, [stateKey]: value }))} className="sr-only" />
-        <span className={`text-sm font-medium ${active ? "text-[#00A597]" : "text-slate-700"}`}>{value}</span>
+        <span className={`text-sm font-medium ${active ? "text-[#01A497]" : "text-slate-700"}`}>{value}</span>
       </label>
     );
   };
@@ -517,7 +517,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+          <h1 className="heading-h3 mb-2">
             {service.name}
           </h1>
           <p className="text-slate-500 text-sm mb-4 leading-relaxed">{service.tagline}</p>
@@ -541,9 +541,9 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
             {STEP_LABELS.map((label, i) => (
               <div key={i} className="flex-1 flex flex-col items-center relative">
                 {i < STEP_LABELS.length - 1 && (
-                  <div className={`absolute top-4 left-1/2 w-full h-px transition-colors ${step > i + 1 ? "bg-[#00A597]" : "bg-slate-200"}`} />
+                  <div className={`absolute top-4 left-1/2 w-full h-px transition-colors ${step > i + 1 ? "bg-[#01A497]" : "bg-slate-200"}`} />
                 )}
-                <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${step >= i + 1 ? "bg-[#00A597] text-white" : "bg-slate-100 text-slate-400"}`}>
+                <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${step >= i + 1 ? "bg-[#01A497] text-white" : "bg-slate-100 text-slate-400"}`}>
                   {step > i + 1 ? (
                     <Check className="w-4 h-4" strokeWidth={2.5} />
                   ) : i + 1}
@@ -684,7 +684,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                 <SectionLabel>Kontaktdaten</SectionLabel>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Firmenname <span className="text-[#9B242A]">*</span></label>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Firmenname <span className="text-sale">*</span></label>
                     <input type="text" required value={form.company} onChange={txt("company")} className={inputClass()} placeholder="Muster GmbH" />
                   </div>
                   <div>
@@ -692,11 +692,11 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                     <input type="text" value={form.vat} onChange={txt("vat")} className={inputClass()} placeholder="DE123456789" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Ansprechpartner <span className="text-[#9B242A]">*</span></label>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Ansprechpartner <span className="text-sale">*</span></label>
                     <input type="text" required value={form.contact} onChange={txt("contact")} className={inputClass()} placeholder="Max Mustermann" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-500 mb-1.5">E-Mail <span className="text-[#9B242A]">*</span></label>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">E-Mail <span className="text-sale">*</span></label>
                     <input type="email" required value={form.email} onChange={txt("email")} className={inputClass()} placeholder="anfrage@firma.de" />
                   </div>
                   <div className="sm:col-span-2">
@@ -711,7 +711,7 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                     <span className="text-slate-400 font-normal">(optional, PDF, DXF, DWG, JPG, PNG — max. 10 MB)</span>
                   </label>
                   <div
-                    className="border border-dashed border-slate-300 rounded-xl px-4 py-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#00A597] transition-colors bg-slate-50"
+                    className="border border-dashed border-slate-300 rounded-xl px-4 py-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#01A497] transition-colors bg-slate-50"
                     onClick={() => fileRef.current?.click()}
                   >
                     <Upload className="w-6 h-6 text-slate-400" strokeWidth={1.5} />
@@ -744,12 +744,12 @@ function SonderContent({ serviceSlug }: { serviceSlug: string }) {
                 </button>
               )}
               {step < 4 ? (
-                <button type="button" onClick={() => setStep(s => s + 1)} className="btn-orange">
+                <button type="button" onClick={() => setStep(s => s + 1)} className="btn-brand">
                   Weiter
                   <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                 </button>
               ) : (
-                <button type="submit" disabled={submitting} className="btn-orange" style={{ opacity: submitting ? 0.7 : 1 }}>
+                <button type="submit" disabled={submitting} className="btn-brand" style={{ opacity: submitting ? 0.7 : 1 }}>
                   {submitting ? "Wird gesendet…" : "Anfrage absenden"}
                   {!submitting && (
                     <ArrowRight className="w-4 h-4" strokeWidth={2.5} />

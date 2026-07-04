@@ -28,7 +28,7 @@ function Dots({ count }: { count: number }) {
             width: 14,
             height: 5,
             borderRadius: 2,
-            backgroundColor: i < count ? "#2E4A47" : "#CBD5E1",
+            backgroundColor: i < count ? "var(--color-neutral-700)" : "#CBD5E1",
           }}
         />
       ))}
@@ -94,23 +94,23 @@ function PriceAndCart({
   return (
     <>
       {selectedSku && (
-        <p className="text-sm text-slate-400 mb-4">Artikel-Nr.: {selectedSku.artikel_nr}</p>
+        <p className="text-sm text-neutral-400 mb-4">Artikel-Nr.: {selectedSku.artikel_nr}</p>
       )}
 
       {!loading && skus.length > 0 && (
         <div className="mb-4">
           <div className="flex items-baseline gap-3 mb-1">
-            <span className={`text-2xl font-extrabold ${selectedSku?.campaign_price != null ? "text-[#9B242A]" : "text-slate-900"}`}>{formatEur(unitPrice)}</span>
+            <span className={`text-2xl font-bold ${selectedSku?.campaign_price != null ? "text-sale" : "text-slate-900"}`}>{formatEur(unitPrice)}</span>
             {selectedSku?.campaign_price != null && originalPrice > unitPrice && (
               <span className="flex items-baseline gap-1">
-                <span className="text-base text-slate-400 line-through">{formatEur(originalPrice)}</span>
-                <span className="text-sm font-semibold text-[#9B242A]">
+                <span className="text-base text-neutral-400 line-through">{formatEur(originalPrice)}</span>
+                <span className="text-sm font-semibold text-sale">
                   -{Math.round((1 - unitPrice / originalPrice) * 100)}%
                 </span>
               </span>
             )}
           </div>
-          <p className="text-[11px] text-slate-400">zzgl. 19% MwSt.</p>
+          <p className="text-[11px] text-neutral-400">zzgl. 19% MwSt.</p>
         </div>
       )}
 
@@ -151,7 +151,7 @@ function PriceAndCart({
           <button
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+            className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
           </button>
@@ -159,7 +159,7 @@ function PriceAndCart({
           <button
             type="button"
             onClick={() => setQuantity((q) => q + 1)}
-            className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+            className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
           >
             <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
           </button>
@@ -198,7 +198,7 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
       content: (
         <div className="flex flex-col gap-2.5">
           {techItems.map((s) => (
-            <p key={s.id} className="text-base text-slate-700 leading-snug">{s.spec_value}</p>
+            <p key={s.id} className="text-base text-neutral-700 leading-snug">{s.spec_value}</p>
           ))}
         </div>
       ),
@@ -214,7 +214,7 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
       content: (
         <div className="flex flex-col gap-2">
           {anwendungItems.map((s) => (
-            <p key={s.id} className="text-base text-slate-700">{s.spec_value}</p>
+            <p key={s.id} className="text-base text-neutral-700">{s.spec_value}</p>
           ))}
         </div>
       ),
@@ -227,7 +227,7 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
       content: (
         <div className="flex flex-col gap-2">
           {maschinenItems.map((s) => (
-            <p key={s.id} className="text-base text-slate-700">{s.spec_value}</p>
+            <p key={s.id} className="text-base text-neutral-700">{s.spec_value}</p>
           ))}
         </div>
       ),
@@ -251,7 +251,7 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
                 <div key={mat.id} className="flex flex-col gap-1.5">
                   <p className="text-base text-slate-900 leading-snug">{mat.material_name}</p>
                   <Dots count={dotCount} />
-                  <p className="text-sm text-slate-400">{label}</p>
+                  <p className="text-sm text-neutral-400">{label}</p>
                 </div>
               );
             })}
@@ -268,17 +268,17 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
         <table className="w-full text-sm">
           <thead>
             <tr>
-              <th className="pb-3 pr-6 text-left text-base text-slate-400 font-normal">ø</th>
-              <th className="pb-3 pr-6 text-left text-base text-slate-400 font-normal">Vorschub</th>
-              <th className="pb-3 text-left text-base text-slate-400 font-normal">Drehzahl</th>
+              <th className="pb-3 pr-6 text-left text-base text-neutral-400 font-normal">ø</th>
+              <th className="pb-3 pr-6 text-left text-base text-neutral-400 font-normal">Vorschub</th>
+              <th className="pb-3 text-left text-base text-neutral-400 font-normal">Drehzahl</th>
             </tr>
           </thead>
           <tbody>
             {cuttingData.map((row) => (
-              <tr key={row.id} className="border-t border-slate-100">
+              <tr key={row.id} className="border-t border-neutral-100">
                 <td className="py-2.5 pr-6 text-base text-slate-900">{row.diameter}</td>
-                <td className="py-2.5 pr-6 text-base text-slate-700">{row.feed_rate}</td>
-                <td className="py-2.5 text-base text-slate-700">{row.rpm_range}</td>
+                <td className="py-2.5 pr-6 text-base text-neutral-700">{row.feed_rate}</td>
+                <td className="py-2.5 text-base text-neutral-700">{row.rpm_range}</td>
               </tr>
             ))}
           </tbody>
@@ -289,7 +289,7 @@ function PDPContent({ productName, description, skus, specs, materials, cuttingD
 
   return (
     <div className="w-full lg:w-[40%] flex-shrink-0 min-w-0">
-      <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+      <h1 className="heading-h3 mb-2">
         {productName}
       </h1>
       <PriceAndCart description={description} skus={skus} accessories={accessories} loading={loading} />
@@ -394,10 +394,10 @@ export default function ProduktPageContent({ slug }: { slug: string }) {
   return (
     <>
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
-        <nav className="flex items-center gap-1.5 text-xs text-slate-400">
-          <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
+        <nav className="flex items-center gap-1.5 text-xs text-neutral-400">
+          <Link href="/" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
           <span>/</span>
-          <Link href="/produkte" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Produkte</Link>
+          <Link href="/produkte" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>Produkte</Link>
           <span>/</span>
           <span className="text-slate-900 font-medium">{productName || "…"}</span>
         </nav>

@@ -42,12 +42,10 @@ export default function SelectedProductsCarousel({
   return (
     <section className="max-w-[1320px] mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between gap-4 mb-6">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-          Ausgewählte Produkte
-        </h2>
+        <h2 className="heading-h3">Ausgewählte Produkte</h2>
         <Link
           href="/katalog"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:text-[#00A597] transition-colors whitespace-nowrap"
+          className="inline-flex items-center gap-1.5 text-sm font-normal text-neutral-600 hover:text-brand-500 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] whitespace-nowrap"
           style={{ textDecoration: "none" }}
         >
           Alle Produkte ansehen
@@ -85,7 +83,7 @@ export default function SelectedProductsCarousel({
           aria-label="Zurück"
           onClick={() => scroll(-1)}
           style={{ top: imgCenter ?? "40%" }}
-          className={`absolute left-2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+          className={`absolute left-2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-[var(--shadow-md)] ring-1 ring-neutral-100 flex items-center justify-center hover:bg-brand-25 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] ${
             atStart ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
@@ -98,7 +96,7 @@ export default function SelectedProductsCarousel({
           aria-label="Weiter"
           onClick={() => scroll(1)}
           style={{ top: imgCenter ?? "40%" }}
-          className={`absolute right-2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-md ring-1 ring-slate-200 flex items-center justify-center hover:bg-slate-50 transition ${
+          className={`absolute right-2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white text-slate-900 shadow-[var(--shadow-md)] ring-1 ring-neutral-100 flex items-center justify-center hover:bg-brand-25 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] ${
             atEnd ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >

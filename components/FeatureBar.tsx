@@ -52,7 +52,7 @@ export default function FeatureBar() {
   }, []);
 
   return (
-    <section ref={barRef} className="py-10" style={{ backgroundColor: "#044749" }}>
+    <section ref={barRef} className="py-10" style={{ backgroundColor: "var(--color-brand-800)" }}>
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
         <div className="feature-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
           {FEATURES.map((f, i) => (
@@ -60,12 +60,12 @@ export default function FeatureBar() {
               key={i}
               className="feature-item flex flex-col items-center text-center gap-3 group"
             >
-              <div className="text-slate-300 group-hover:text-orange-400 transition-colors duration-250">
+              <div className="text-brand-200 group-hover:text-brand-400 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)]">
                 {f.icon}
               </div>
               <div>
-                <p className="text-white text-sm font-semibold">{f.title}</p>
-                <p className="text-slate-400 text-[11px] mt-0.5 leading-snug">{f.sub}</p>
+                <p className="text-white text-sm font-medium">{f.title}</p>
+                <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "var(--color-text-dark-body)" }}>{f.sub}</p>
               </div>
             </div>
           ))}

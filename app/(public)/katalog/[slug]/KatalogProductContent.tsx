@@ -26,7 +26,7 @@ function Dots({ count }: { count: number }) {
             width: 14,
             height: 5,
             borderRadius: 2,
-            backgroundColor: i < count ? "#2E4A47" : "#CBD5E1",
+            backgroundColor: i < count ? "var(--color-neutral-700)" : "#CBD5E1",
           }}
         />
       ))}
@@ -133,13 +133,13 @@ export default function KatalogProductContent({
     ];
     return (
       <div className="mb-6">
-        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-2">Staffelpreise</p>
-        <table className="w-full text-sm border border-slate-100 rounded-lg overflow-hidden">
+        <p className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wide mb-2">Staffelpreise</p>
+        <table className="w-full text-sm border border-neutral-100 rounded-lg overflow-hidden">
           <tbody>
             {tiers.map(({ label, price }) => (
               <tr key={label}>
-                <td className="py-2 px-3 text-slate-500">{label}</td>
-                <td className="py-2 px-3 text-right text-slate-500">{formatEur(price)} / Stk.</td>
+                <td className="py-2 px-3 text-neutral-500">{label}</td>
+                <td className="py-2 px-3 text-right text-neutral-500">{formatEur(price)} / Stk.</td>
               </tr>
             ))}
           </tbody>
@@ -152,12 +152,12 @@ export default function KatalogProductContent({
     if (s.spec_key && s.spec_key !== "details") {
       return (
         <div className="flex gap-4 text-base">
-          <span className="text-slate-400 min-w-[140px] shrink-0">{s.spec_key}</span>
+          <span className="text-neutral-400 min-w-[140px] shrink-0">{s.spec_key}</span>
           <span className="text-slate-900">{s.spec_value}</span>
         </div>
       );
     }
-    return <p className="text-base text-slate-700 leading-snug">{s.spec_value}</p>;
+    return <p className="text-base text-neutral-700 leading-snug">{s.spec_value}</p>;
   }
 
   const techItems = currentSpecs.filter((s) => s.spec_section === "technische_details");
@@ -181,20 +181,20 @@ export default function KatalogProductContent({
       label: "Schnittdaten",
       content: (
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[460px] text-base border border-slate-100 rounded-lg overflow-hidden">
+        <table className="w-full min-w-[460px] text-base border border-neutral-100 rounded-lg overflow-hidden">
           <thead>
-            <tr className="border-b border-slate-100">
-              <th className="py-2.5 px-3 text-left font-normal text-slate-400">Durchmesser</th>
-              <th className="py-2.5 px-3 text-left font-normal text-slate-400">Vorschubgeschwindigkeit</th>
-              <th className="py-2.5 px-3 text-left font-normal text-slate-400">Drehzahl</th>
+            <tr className="border-b border-neutral-100">
+              <th className="py-2.5 px-3 text-left font-normal text-neutral-400">Durchmesser</th>
+              <th className="py-2.5 px-3 text-left font-normal text-neutral-400">Vorschubgeschwindigkeit</th>
+              <th className="py-2.5 px-3 text-left font-normal text-neutral-400">Drehzahl</th>
             </tr>
           </thead>
           <tbody>
             {cuttingData.map((row) => (
-              <tr key={row.id} className="border-b border-slate-50 last:border-0">
+              <tr key={row.id} className="border-b border-neutral-50 last:border-0">
                 <td className="py-2.5 px-3 text-slate-900">{row.diameter}</td>
-                <td className="py-2.5 px-3 text-slate-700">{row.feed_rate}</td>
-                <td className="py-2.5 px-3 text-slate-700">{row.rpm_range}</td>
+                <td className="py-2.5 px-3 text-neutral-700">{row.feed_rate}</td>
+                <td className="py-2.5 px-3 text-neutral-700">{row.rpm_range}</td>
               </tr>
             ))}
           </tbody>
@@ -211,7 +211,7 @@ export default function KatalogProductContent({
       content: (
         <div className="flex flex-wrap gap-2">
           {applications.map((a) => (
-            <span key={a.tag} className="text-sm font-medium text-slate-700 bg-slate-100 px-3 py-1.5 rounded-pill">
+            <span key={a.tag} className="text-sm font-medium text-neutral-700 bg-neutral-100 px-3 py-1.5 rounded-pill">
               {a.tag}
             </span>
           ))}
@@ -257,7 +257,7 @@ export default function KatalogProductContent({
             <div key={i} className="flex flex-col gap-1.5">
               <p className="text-base text-slate-900 leading-snug">{mat.material_name}</p>
               <Dots count={mat.score} />
-              <p className="text-sm text-slate-400">{SCORE_LABEL[mat.score] ?? mat.suitability}</p>
+              <p className="text-sm text-neutral-400">{SCORE_LABEL[mat.score] ?? mat.suitability}</p>
             </div>
           ))}
         </div>
@@ -268,12 +268,12 @@ export default function KatalogProductContent({
   return (
     <>
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
-        <nav className="flex items-center gap-1.5 text-xs text-slate-400">
-          <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
+        <nav className="flex items-center gap-1.5 text-xs text-neutral-400">
+          <Link href="/" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
           <span>/</span>
-          <Link href="/katalog" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Katalog</Link>
+          <Link href="/katalog" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>Katalog</Link>
           <span>/</span>
-          <span className="text-slate-700 font-medium">{productName}</span>
+          <span className="text-neutral-700 font-medium">{productName}</span>
         </nav>
       </div>
 
@@ -293,34 +293,34 @@ export default function KatalogProductContent({
           {/* Right: info + accordions — 40% */}
           <div className="w-full lg:w-[40%] flex-shrink-0 min-w-0">
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+            <h1 className="heading-h3 mb-2">
               {productName}
             </h1>
 
             {product.tagline && (
-              <p className="text-slate-500 text-base mb-4">{product.tagline}</p>
+              <p className="text-neutral-500 text-base mb-4">{product.tagline}</p>
             )}
 
             {selectedSku && (
-              <p className="text-sm text-slate-400 mb-4">
+              <p className="text-sm text-neutral-400 mb-4">
                 Bukara-Art.-Nr.: {selectedSku.bukara_article_number}
               </p>
             )}
 
             {selectedSku && (
               <div className="mb-4">
-                <div className={`text-2xl font-extrabold mb-1 ${isCampaign ? "text-[#9B242A]" : "text-slate-900"}`}>
+                <div className={`text-2xl font-bold mb-1 ${isCampaign ? "text-sale" : "text-slate-900"}`}>
                   {formatEur(displayPrice)}
                 </div>
                 {isCampaign && (
-                  <div className="text-sm text-slate-400 mb-1">
+                  <div className="text-sm text-neutral-400 mb-1">
                     Statt <span className="line-through">{formatEur(originalPrice)}</span>{" "}
-                    <span className="font-semibold text-[#9B242A]">
+                    <span className="font-semibold text-sale">
                       -{Math.round((1 - displayPrice / originalPrice) * 100)}%
                     </span>
                   </div>
                 )}
-                <p className="text-[11px] text-slate-400">zzgl. 19% MwSt.</p>
+                <p className="text-[11px] text-neutral-400">zzgl. 19% MwSt.</p>
               </div>
             )}
 
@@ -364,7 +364,7 @@ export default function KatalogProductContent({
                   <button
                     type="button"
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                    className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
                   </button>
@@ -372,7 +372,7 @@ export default function KatalogProductContent({
                   <button
                     type="button"
                     onClick={() => setQuantity((q) => q + 1)}
-                    className="px-3 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors"
+                    className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                   >
                     <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
                   </button>

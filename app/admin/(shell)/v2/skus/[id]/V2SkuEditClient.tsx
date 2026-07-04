@@ -140,7 +140,7 @@ export default function V2SkuEditClient({
         <button
           onClick={save}
           disabled={saving}
-          className="btn-orange px-5 py-2 text-sm"
+          className="btn-brand px-5 py-2 text-sm"
         >
           {saving ? "Speichert…" : "Speichern"}
         </button>
@@ -271,7 +271,7 @@ export default function V2SkuEditClient({
             </div>
             <div className="flex items-end pb-2">
               <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-                <input type="checkbox" checked={Boolean(form.is_active)} onChange={(e) => field("is_active", e.target.checked)} style={{ accentColor: "#0F172A" }} />
+                <input type="checkbox" checked={Boolean(form.is_active)} onChange={(e) => field("is_active", e.target.checked)} style={{ accentColor: "#022221" }} />
                 Aktiv
               </label>
             </div>

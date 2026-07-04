@@ -461,10 +461,10 @@ export default function KatalogCatalog({
         {/* Page header — custom (breadcrumb + H1 + intro) on /sortiment, else default breadcrumb */}
         {header ?? (
           <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
-            <nav className="flex items-center gap-1.5 text-xs text-slate-400">
-              <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-neutral-400">
+              <Link href="/" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>Home</Link>
               <span>/</span>
-              <span className="text-slate-700 font-medium">Katalog</span>
+              <span className="text-neutral-700 font-medium">Katalog</span>
             </nav>
           </div>
         )}
@@ -513,7 +513,7 @@ export default function KatalogCatalog({
                 <button
                   type="button"
                   onClick={() => setDrawerOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-sm border border-slate-200 text-sm font-medium text-slate-700 w-fit"
+                  className="flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-sm border border-neutral-200 text-sm font-medium text-neutral-700 w-fit"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
                   Filtern & Sortieren
@@ -530,15 +530,15 @@ export default function KatalogCatalog({
               {/* Result count + desktop view toggle */}
 
               <div className="mb-3 flex items-center gap-2">
-                <span className="text-sm text-slate-500">
+                <span className="text-sm text-neutral-500">
                   {`${filtered.length} Produkt${filtered.length !== 1 ? "e" : ""}`}
                   {totalPages > 1 && ` · Seite ${currentPage} von ${totalPages}`}
                 </span>
-                <span className="hidden lg:block text-sm text-slate-300">|</span>
+                <span className="hidden lg:block text-sm text-neutral-300">|</span>
                 <button
                   type="button"
                   onClick={() => handleView(viewParam === "list" ? "" : "list")}
-                  className="hidden lg:block text-sm text-slate-500 hover:text-slate-900 transition-colors underline underline-offset-2"
+                  className="hidden lg:block text-sm text-neutral-500 hover:text-slate-900 transition-colors underline underline-offset-2"
                   aria-label={viewParam === "list" ? "In Kachelansicht wechseln" : "In Listenansicht wechseln"}
                 >
                   {viewParam === "list" ? "Als Kacheln anzeigen" : "Als Liste anzeigen"}
@@ -601,7 +601,7 @@ export default function KatalogCatalog({
               {/* Grid */}
               {filtered.length === 0 ? (
                 <div className="text-center py-20">
-                  <p className="text-slate-500 text-sm mb-4">Keine Produkte gefunden.</p>
+                  <p className="text-neutral-500 text-sm mb-4">Keine Produkte gefunden.</p>
                   <button onClick={resetFilters} className="btn-outline text-sm">
                     Filter zurücksetzen
                   </button>
@@ -633,7 +633,7 @@ export default function KatalogCatalog({
                       >
                         Zurück
                       </button>
-                      <span className="text-sm text-slate-500 tabular-nums">
+                      <span className="text-sm text-neutral-500 tabular-nums">
                         Seite {currentPage} von {totalPages}
                       </span>
                       <button
@@ -661,9 +661,9 @@ export default function KatalogCatalog({
             onClick={() => setDrawerOpen(false)}
           />
           <div className="fixed top-0 left-0 h-full w-72 bg-white z-50 overflow-y-auto shadow-xl lg:hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
               <span className="text-sm font-semibold text-slate-900">Filtern & Sortieren</span>
-              <button onClick={() => setDrawerOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+              <button onClick={() => setDrawerOpen(false)} className="text-neutral-400 hover:text-neutral-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>

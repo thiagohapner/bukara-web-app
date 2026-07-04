@@ -21,7 +21,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function InfoRow({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="mt-0.5 text-[#00A597] flex-shrink-0">{icon}</span>
+      <span className="mt-0.5 text-[#01A497] flex-shrink-0">{icon}</span>
       <span className="text-slate-600 text-sm leading-relaxed">{children}</span>
     </div>
   );
@@ -174,7 +174,7 @@ export default function KontaktPage() {
                 <div className="border-t border-slate-100 pt-6">
                   <Link
                     href="/ueber-uns"
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00A597] hover:text-[#007A70] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-500 hover:text-brand-600 transition-colors"
                     style={{ textDecoration: "none" }}
                   >
                     Mehr über uns
@@ -193,7 +193,7 @@ export default function KontaktPage() {
                 <div className="flex flex-col sm:flex-row gap-4 mb-4">
                   <div className="flex-1">
                     <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                      Vor- und Nachname <span className="text-[#00A597]">*</span>
+                      Vor- und Nachname <span className="text-[#01A497]">*</span>
                     </label>
                     <input
                       type="text"
@@ -221,7 +221,7 @@ export default function KontaktPage() {
                 <div className="flex flex-col sm:flex-row gap-4 mb-4">
                   <div className="flex-1">
                     <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                      E-Mail <span className="text-[#00A597]">*</span>
+                      E-Mail <span className="text-[#01A497]">*</span>
                     </label>
                     <input
                       type="email"
@@ -249,7 +249,7 @@ export default function KontaktPage() {
                 <SectionLabel>Ihre Anfrage</SectionLabel>
                 <div className="mb-4">
                   <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                    Betreff <span className="text-[#00A597]">*</span>
+                    Betreff <span className="text-[#01A497]">*</span>
                   </label>
                   <CustomSelect
                     value={form.subject}
@@ -263,7 +263,7 @@ export default function KontaktPage() {
 
                 <div className="mb-8">
                   <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                    Nachricht <span className="text-[#00A597]">*</span>
+                    Nachricht <span className="text-[#01A497]">*</span>
                   </label>
                   <textarea
                     required
@@ -283,7 +283,7 @@ export default function KontaktPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="btn-orange inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="btn-brand inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Wird gesendet…" : "Nachricht senden"}
                     {!submitting && (

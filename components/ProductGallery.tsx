@@ -15,7 +15,7 @@ interface Props {
 function PlaceholderBlock({ label }: { label: string }) {
   return (
     <div className="w-full h-full flex items-center justify-center" style={{ background: "#EEEEEE" }}>
-      <span className="font-black tracking-tighter select-none text-2xl" style={{ color: "rgba(0,165,151,0.18)" }}>
+      <span className="font-semibold tracking-tighter select-none text-2xl" style={{ color: "rgba(1,164,151,0.18)" }}>
         {label}
       </span>
     </div>
@@ -60,7 +60,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
             <PlaceholderBlock label={placeholderLabel} />
           )}
           {badge && (
-            <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+            <span className="absolute top-3 left-3 z-10 bg-sale text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
               {badge}
             </span>
           )}
@@ -94,7 +94,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
           <div key={i} className="flex-shrink-0 w-[82%] aspect-[10/11] snap-start rounded-lg overflow-hidden relative"
             style={{ background: "#EEEEEE" }}>
             {i === 0 && badge && (
-              <span className="absolute top-3 left-3 z-10 bg-[#9B242A] text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+              <span className="absolute top-3 left-3 z-10 bg-sale text-white text-[12px] font-bold px-2.5 py-1 rounded-full tracking-wide">
                 {badge}
               </span>
             )}

@@ -12,7 +12,7 @@ function QtyButton({ onClick, children }: { onClick: () => void; children: React
     <button
       type="button"
       onClick={onClick}
-      className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:border-[#00A597] hover:text-[#00A597] transition-colors text-base font-semibold select-none"
+      className="w-9 h-9 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-700 hover:border-[#01A497] hover:text-[#01A497] transition-colors text-base font-semibold select-none"
     >
       {children}
     </button>
@@ -70,11 +70,11 @@ export default function CartDrawer() {
       <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h2 className="text-base font-extrabold text-slate-900">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
+          <h2 className="text-base font-medium text-slate-900">
             Warenkorb
             {items.length > 0 && (
-              <span className="ml-2 text-sm font-medium text-slate-500">
+              <span className="ml-2 text-sm font-medium text-neutral-500">
                 ({items.reduce((s, i) => s + i.quantity, 0)})
               </span>
             )}
@@ -82,10 +82,10 @@ export default function CartDrawer() {
           <button
             type="button"
             onClick={closeDrawer}
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-neutral-100 transition-colors"
             aria-label="Schließen"
           >
-            <X className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-neutral-500" />
           </button>
         </div>
 
@@ -93,12 +93,12 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-              <ShoppingBasket className="w-12 h-12 text-slate-200" strokeWidth={1.5} />
-              <p className="text-slate-500 text-sm">Ihr Warenkorb ist leer.</p>
+              <ShoppingBasket className="w-12 h-12 text-neutral-200" strokeWidth={1.5} />
+              <p className="text-neutral-500 text-sm">Ihr Warenkorb ist leer.</p>
               <Link
                 href="/katalog"
                 onClick={closeDrawer}
-                className="btn-orange text-sm"
+                className="btn-brand text-sm"
                 style={{ textDecoration: "none" }}
               >
                 Produkte entdecken
@@ -116,13 +116,13 @@ export default function CartDrawer() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-slate-900 leading-snug">{name}</p>
                       {variantLabel && (
-                        <p className="text-xs text-slate-500 mt-0.5 leading-snug">{variantLabel}</p>
+                        <p className="text-xs text-neutral-500 mt-0.5 leading-snug">{variantLabel}</p>
                       )}
                       {artikelNr && (
-                        <p className="text-[11px] text-slate-400 mt-0.5">Art.-Nr.: {artikelNr}</p>
+                        <p className="text-[11px] text-neutral-400 mt-0.5">Art.-Nr.: {artikelNr}</p>
                       )}
                       {hasStaffel && (
-                        <p className="text-[11px] text-slate-400 mt-0.5">{tierLabel(item.quantity)}</p>
+                        <p className="text-[11px] text-neutral-400 mt-0.5">{tierLabel(item.quantity)}</p>
                       )}
                       {stockQty < 10 && stockQty > 0 && (
                         <p className="text-[11px] font-medium mt-1" style={{ color: "#D97706" }}>
@@ -142,17 +142,17 @@ export default function CartDrawer() {
                       <button
                         type="button"
                         onClick={() => removeCartItem(item.id)}
-                        className="text-xs text-slate-500 hover:text-slate-900 transition-colors mt-1.5 font-medium"
+                        className="text-xs text-neutral-500 hover:text-slate-900 transition-colors mt-1.5 font-medium"
                       >
                         Vom Warenkorb entfernen
                       </button>
                       {hasStaffel && item.quantity === 4 && (
-                        <p className="text-[11px] mt-1" style={{ color: "#00A597" }}>
+                        <p className="text-[11px] mt-1" style={{ color: "#01A497" }}>
                           Noch 1 Stück bis zum Standardpreis
                         </p>
                       )}
                       {hasStaffel && item.quantity === 9 && (
-                        <p className="text-[11px] mt-1" style={{ color: "#00A597" }}>
+                        <p className="text-[11px] mt-1" style={{ color: "#01A497" }}>
                           Noch 1 Stück für −10% Mengenrabatt
                         </p>
                       )}
@@ -161,7 +161,7 @@ export default function CartDrawer() {
                     <div className="flex flex-col items-end justify-between">
                       <p className="text-sm font-semibold text-slate-900">{formatEur(lineTotal)}</p>
                       {item.quantity > 1 && (
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[11px] text-neutral-400">
                           {formatEur(hasStaffel ? unitPriceForQuantity(basePrice, true, item.quantity) : item.unit_price)} / Stk.
                         </p>
                       )}
@@ -175,39 +175,39 @@ export default function CartDrawer() {
 
         {/* Summary + CTAs */}
         {items.length > 0 && (
-          <div className="border-t border-slate-100 px-6 py-5 flex flex-col gap-3">
+          <div className="border-t border-neutral-100 px-6 py-5 flex flex-col gap-3">
             {/* Pricing rows */}
             <div className="flex flex-col gap-1.5 text-sm">
-              <div className="flex justify-between text-slate-500">
+              <div className="flex justify-between text-neutral-500">
                 <span>Zwischensumme</span>
                 <span>{formatEur(totals.subtotal)}</span>
               </div>
               {totals.bulkDiscountApplied && (
-                <div className="flex justify-between font-medium" style={{ color: "#00A597" }}>
+                <div className="flex justify-between font-medium" style={{ color: "#01A497" }}>
                   <span>Zusatzrabatt (10%)</span>
                   <span>−{formatEur(totals.bulkDiscount)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-slate-500">
+              <div className="flex justify-between text-neutral-500">
                 <span>19% MwSt.</span>
                 <span>{formatEur(totals.vat)}</span>
               </div>
-              <div className="flex justify-between text-slate-500">
+              <div className="flex justify-between text-neutral-500">
                 <span>Versand</span>
-                <span>{totals.shipping === 0 ? <span style={{ color: "#00A597" }} className="font-medium">Kostenlos</span> : formatEur(totals.shipping)}</span>
+                <span>{totals.shipping === 0 ? <span style={{ color: "#01A497" }} className="font-medium">Kostenlos</span> : formatEur(totals.shipping)}</span>
               </div>
-              <div className="h-px bg-slate-100 my-1" />
-              <div className="flex justify-between font-extrabold text-slate-900 text-base">
+              <div className="h-px bg-neutral-100 my-1" />
+              <div className="flex justify-between font-bold text-slate-900 text-base">
                 <span>Gesamt inkl. MwSt.</span>
                 <span>{formatEur(totals.gross)}</span>
               </div>
               {!totals.freeShippingApplied && (
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-neutral-400 mt-0.5">
                   Noch {formatEur(FREE_SHIPPING_THRESHOLD - totals.subtotal)} bis zum kostenlosen Versand.
                 </p>
               )}
               {totals.freeShippingApplied && !totals.bulkDiscountApplied && (
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-neutral-400 mt-0.5">
                   ✓ Kostenloser Versand! Noch {formatEur(BULK_DISCOUNT_THRESHOLD - totals.subtotal)} bis zum 10% Zusatzrabatt.
                 </p>
               )}
@@ -226,7 +226,7 @@ export default function CartDrawer() {
             <button
               type="button"
               onClick={closeDrawer}
-              className="text-sm text-slate-500 hover:text-slate-900 transition-colors text-center"
+              className="text-sm text-neutral-500 hover:text-slate-900 transition-colors text-center"
             >
               Weiter einkaufen
             </button>

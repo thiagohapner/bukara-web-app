@@ -31,14 +31,14 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
       <Link
         href="/angebote"
         className="group block rounded-lg overflow-hidden"
-        style={{ textDecoration: "none", background: "linear-gradient(135deg, #00A597 0%, #007A70 100%)" }}
+        style={{ textDecoration: "none", background: "linear-gradient(135deg, #01A497 0%, #04857B 100%)" }}
       >
         <div className="flex items-center gap-3 px-5 py-4">
           <span ref={emojiRef} className="flex w-12 h-12 rounded-xl bg-transparent items-center justify-center flex-shrink-0 text-white" style={{ fontSize: "4.5rem", lineHeight: 1 }}>
             🎁
           </span>
           <div>
-            <p className="text-sm font-extrabold text-white leading-snug">
+            <p className="text-sm font-semibold text-white leading-snug">
               30 Jahre Bukara — Ein Jahr voller Deals und Angebote
             </p>
             <p className="text-xs text-white/60 mt-0.5">Zuverlässige Präzision seit 1996</p>
@@ -54,7 +54,7 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
       className="group block rounded-lg overflow-hidden"
       style={{
         textDecoration: "none",
-        background: lightBg ? "#f1f5f9" : "linear-gradient(135deg, #00A597 0%, #007A70 100%)",
+        background: lightBg ? "#f1f5f9" : "linear-gradient(135deg, #01A497 0%, #04857B 100%)",
       }}
     >
       <div className={`flex flex-col sm:flex-row items-center justify-between gap-6 ${isCompact ? "px-6 py-5" : "px-16 py-16"}`}>
@@ -67,17 +67,17 @@ export default function DealsPromo({ variant = "full", lightBg = false }: Props)
             🎁
           </span>
           <div>
-            <p className="text-sm font-bold uppercase tracking-widest mb-1" style={{ color: lightBg ? "#00A597" : "rgba(255,255,255,0.7)" }}>
+            <p className="text-sm font-bold uppercase tracking-widest mb-1" style={{ color: lightBg ? "#01A497" : "rgba(255,255,255,0.7)" }}>
               Wir feiern mit Ihnen unser Jubiläum
             </p>
-            <p className={`${isCompact ? "text-sm sm:text-base" : "text-xl sm:text-2xl"} font-extrabold leading-snug`} style={{ color: lightBg ? "#022221" : "#ffffff" }}>
+            <p className={`${isCompact ? "text-sm sm:text-base" : "text-xl sm:text-2xl"} font-semibold leading-snug`} style={{ color: lightBg ? "#022221" : "#ffffff" }}>
               30 Jahre Bukara - Ein Jahr voller Deals und Angebote
             </p>
           </div>
         </div>
         <span
           className="flex-shrink-0 inline-flex items-center gap-2 font-semibold text-base rounded-sm px-7 py-3.5 transition-colors whitespace-nowrap"
-          style={lightBg ? { backgroundColor: "#00A597", color: "#ffffff" } : { backgroundColor: "#ffffff", color: "#00A597" }}
+          style={lightBg ? { backgroundColor: "#01A497", color: "#ffffff" } : { backgroundColor: "#ffffff", color: "#01A497" }}
         >
           Angebote entdecken
           <ArrowRight className="w-5 h-5" strokeWidth={2.5} />

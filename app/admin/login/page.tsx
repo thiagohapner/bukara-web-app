@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full btn-orange py-2 text-sm disabled:opacity-60"
+            className="w-full btn-brand py-2 text-sm disabled:opacity-60"
           >
             {loading ? "Bitte warten..." : "Anmelden"}
           </button>

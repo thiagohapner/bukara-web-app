@@ -22,7 +22,7 @@ export default async function SortimentTiles() {
               key={category.id}
               href={`/sortiment/${category.slug}`}
               style={{ textDecoration: "none" }}
-              className="group flex flex-col gap-4 rounded-md border border-slate-100 bg-white p-4 hover:border-slate-300 transition-colors"
+              className="group flex flex-col gap-4 rounded-md border border-neutral-100 bg-white p-4 hover:border-neutral-300 transition-colors"
             >
               <div className="relative w-full aspect-square rounded-md overflow-hidden bg-[#E8EAE3]">
                 {category.exampleImage && (
@@ -38,7 +38,7 @@ export default async function SortimentTiles() {
                 <h3 className="text-base font-semibold text-slate-900 leading-snug">
                   {category.name}
                 </h3>
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 group-hover:text-slate-900 transition-colors">
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 group-hover:text-slate-900 transition-colors">
                   Sortiment ansehen
                   <ArrowRight className="w-4 h-4" />
                 </span>

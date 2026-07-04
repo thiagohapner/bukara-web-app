@@ -8,6 +8,12 @@ import { Check, ArrowRight } from "lucide-react";
 const PLACEHOLDER_COLORS = ["#e8f7f6", "#f5ede8"];
 const PLACEHOLDER_LABELS = ["SRV", "SWZ"];
 
+// Each service links straight to its new dedicated request-form wizard.
+const SERVICE_FORM_HREF: Record<string, string> = {
+  schaerfservice: "/sonder-schaerfservice",
+  sonderwerkzeug: "/sonder-werkzeug",
+};
+
 interface ServiceCardProps {
   service: BukaraService;
   index: number;
@@ -15,7 +21,7 @@ interface ServiceCardProps {
 }
 
 function ServiceCheck() {
-  return <Check className="w-4 h-4 text-[#9B242A] mt-0.5 flex-shrink-0" strokeWidth={2.5} />;
+  return <Check className="w-4 h-4 text-sale mt-0.5 flex-shrink-0" strokeWidth={2.5} />;
 }
 
 export default function ServiceCard({ service, index, variant = "default" }: ServiceCardProps) {
@@ -24,17 +30,18 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
   const imageLabel = PLACEHOLDER_LABELS[index % 2];
 
   const heroImage = service.images?.[0];
+  const formHref = SERVICE_FORM_HREF[service.slug] ?? `/loesungen/${service.slug}`;
 
   if (variant === "panel") {
     return (
       <div className="service-card rounded-lg overflow-hidden bg-[#F5F5F7] flex flex-col h-full">
         <div className="p-10 flex flex-col flex-1">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+          <h2 className="heading-h3 mb-2">
             {service.name}
           </h2>
-          <p className="text-slate-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
+          <p className="text-neutral-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
           <div className="mb-6">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Leistungen</p>
+            <p className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-2">Leistungen</p>
             <ul className="flex flex-col gap-1.5">
               {service.highlights.map((h) => (
                 <li key={h} className="flex items-start gap-2 text-sm text-slate-900">
@@ -45,12 +52,12 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
             </ul>
           </div>
           <div className="mb-8">
-            <span className="text-xs text-slate-400 font-medium">Preis: </span>
-            <span className="text-lg font-extrabold text-slate-900">{service.priceLabel}</span>
+            <span className="text-xs text-neutral-400 font-medium">Preis: </span>
+            <span className="text-lg font-bold text-slate-900">{service.priceLabel}</span>
           </div>
           <Link
-            href={`/loesungen/${service.slug}`}
-            className="btn-orange inline-flex items-center gap-2 self-start mt-auto"
+            href={formHref}
+            className="btn-brand inline-flex items-center gap-2 self-start mt-auto"
             style={{ textDecoration: "none" }}
           >
             Zum Service
@@ -62,7 +69,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
             <Image src={heroImage} alt={service.name} fill className="object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center" style={{ background: imageBg }}>
-              <span className="text-5xl font-black tracking-tighter select-none" style={{ color: "rgba(0,165,151,0.15)" }}>
+              <span className="text-5xl font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.15)" }}>
                 {imageLabel}
               </span>
             </div>
@@ -86,8 +93,8 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
         />
       ) : (
         <span
-          className="text-5xl font-black tracking-tighter select-none text-center px-4"
-          style={{ color: "rgba(0,165,151,0.15)" }}
+          className="text-5xl font-semibold tracking-tighter select-none text-center px-4"
+          style={{ color: "rgba(1,164,151,0.15)" }}
         >
           {imageLabel}
         </span>
@@ -97,13 +104,13 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
 
   const contentBlock = (
     <div className={`flex-1 p-8 sm:p-10 flex flex-col justify-center ${!isEven ? "sm:order-first" : ""}`}>
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mb-2">
+      <h2 className="heading-h3 mb-2">
         {service.name}
       </h2>
-      <p className="text-slate-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
+      <p className="text-neutral-500 text-sm mb-6 leading-relaxed">{service.tagline}</p>
 
       <div className="mb-6">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+        <p className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-2">
           Leistungen
         </p>
         <ul className="flex flex-col gap-1.5">
@@ -117,14 +124,14 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
       </div>
 
       <div className="mb-7">
-        <span className="text-xs text-slate-400 font-medium">Preis: </span>
-        <span className="text-lg font-extrabold text-slate-900">{service.priceLabel}</span>
+        <span className="text-xs text-neutral-400 font-medium">Preis: </span>
+        <span className="text-lg font-bold text-slate-900">{service.priceLabel}</span>
       </div>
 
       <div>
         <Link
-          href={`/loesungen/${service.slug}`}
-          className="btn-orange inline-flex items-center gap-2"
+          href={formHref}
+          className="btn-brand inline-flex items-center gap-2"
           style={{ textDecoration: "none" }}
         >
           Zum Service
@@ -135,7 +142,7 @@ export default function ServiceCard({ service, index, variant = "default" }: Ser
   );
 
   return (
-    <div className="service-card border border-slate-100 rounded-lg overflow-hidden bg-white w-full flex flex-col sm:flex-row">
+    <div className="service-card border border-neutral-100 rounded-lg overflow-hidden bg-white w-full flex flex-col sm:flex-row">
       {imageBlock}
       {contentBlock}
     </div>

@@ -70,7 +70,7 @@ export default function Hero() {
             ))}
           </ul>
           <div className="hero-cta flex flex-col lg:flex-row gap-3">
-            <Link href="/loesungen/sonderwerkzeug" className="btn-orange w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>
+            <Link href="/sonder-werkzeug" className="btn-brand w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>
               Sonderlösung anfragen
             </Link>
             <Link href="/katalog" className="btn-outline w-full lg:w-auto justify-center" style={{ textDecoration: "none" }}>

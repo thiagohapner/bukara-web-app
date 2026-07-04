@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
       },
       { source: "/angebote/x99-only", destination: "/produkte/x99-fraeser", permanent: true },
       { source: "/produkte", destination: "/katalog", permanent: true },
+      // The old combined /loesungen/[slug] forms were replaced by the dedicated
+      // request-form wizards. Redirect so old links/bookmarks land on the new forms.
+      { source: "/loesungen/schaerfservice", destination: "/sonder-schaerfservice", permanent: true },
+      { source: "/loesungen/sonderwerkzeug", destination: "/sonder-werkzeug", permanent: true },
     ];
   },
   images: {

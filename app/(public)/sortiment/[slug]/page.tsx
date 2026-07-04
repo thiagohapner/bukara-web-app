@@ -96,7 +96,7 @@ export default async function SortimentPage({
         <span>/</span>
         <span className="text-slate-700 font-medium">{category.name}</span>
       </nav>
-      <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight mt-4">
+      <h1 className="heading-h3 mt-4">
         {heading}
       </h1>
       {category.seo_description && (

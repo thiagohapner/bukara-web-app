@@ -1,24 +1,65 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Bukara brand color tokens — override Tailwind's orange
-   palette so every *-orange-* class resolves to brand green.
-   Components are untouched.
+   Bukara Design System — token layer v1
+   Source: Bukara brand revamp (adapted from Stripe Marketing DS
+   structure, recolored/rescaled to Bukara's brand teal #01A497).
+
+   Back-compat: every previously-existing variable name below
+   keeps working with an updated value. New semantic --color-brand-*
+   / --color-neutral-* / type / shadow / motion tokens are additive
+   so existing components render immediately without edits.
    ============================================================ */
 @theme {
-  --color-orange-50:  #e8f7f6;   /* hero panel, category hover bg */
-  --color-orange-400: #00bfb3;   /* lighter hover variant           */
-  --color-orange-500: #00A597;   /* Action Green — primary accent   */
-  --color-orange-600: #007A70;   /* Focus / darker hover            */
+  /* Brand ramp — single source of truth, 500 = exact brand color */
+  --color-brand-25:  #F5FAFA;
+  --color-brand-50:  #EAF5F4;
+  --color-brand-75:  #E2F1F0;
+  --color-brand-100: #D6EBE9;
+  --color-brand-200: #B4DAD7;
+  --color-brand-300: #84CDC7;
+  --color-brand-400: #27D8CA;
+  --color-brand-500: #01A497; /* Bukara brand */
+  --color-brand-600: #04857B;
+  --color-brand-700: #07645D;
+  --color-brand-800: #074843;
+  --color-brand-900: #062F2C;
+  --color-brand-950: #05211F;
+  --color-brand-975: #041A19;
+
+  /* Sale / offer accent (badge, deal price, "-X%") — the one functional
+     non-brand color. Single source of truth; use text-sale/bg-sale/border-sale
+     or var(--color-sale). */
+  --color-sale: #9B242A;
+
+  /* Legacy hijack kept in sync with the brand ramp — do not diverge */
+  --color-orange-50:  #EAF5F4;
+  --color-orange-400: #27D8CA;
+  --color-orange-500: #01A497; /* Action Green — primary accent   */
+  --color-orange-600: #04857B; /* Focus / darker hover            */
 
   --color-slate-900: #022221;    /* Bukara dark — primary text      */
   --color-slate-800: #022221;    /* Bukara dark — secondary text    */
 
+  /* Green-tinted neutral ramp — for borders/icons/quiet text that must
+     stay off-brand-hue but on-DS (rule: never warm greys or blue-grey). */
+  --color-neutral-25:  #F7FBFA;
+  --color-neutral-50:  #E2EFED;
+  --color-neutral-100: #D0E1DE;
+  --color-neutral-200: #B2CDC9;
+  --color-neutral-300: #8AABA6;
+  --color-neutral-400: #6F938E;
+  --color-neutral-500: #567C76;
+  --color-neutral-600: #416963;
+  --color-neutral-700: #2B5751;
+
   /* Radius scale — single source of truth */
+  --radius-xs:   2px;     /* dropdown rows, calendar cells */
   --radius-sm:   4px;     /* buttons, inputs              */
   --radius-md:   8px;     /* cards                        */
   --radius-lg:   12px;    /* panels, containers, galleries */
-  --radius-pill: 9999px;  /* chips, badges, tags          */
+  --radius-xl:   24px;    /* hero frames, feature panels   */
+  --radius-pill: 9999px;  /* chips, badges, tags            */
 
 }
 
@@ -27,16 +68,17 @@
    ============================================================ */
 :root {
   /* Brand & Accent */
-  --orange:      #00A597;   /* replaces the old #F97316          */
-  --orange-dark: #007A70;   /* replaces the old #EA580C          */
+  --orange:      #01A497;   /* replaces the old #F97316          */
+  --orange-dark: #04857B;   /* replaces the old #EA580C          */
 
-  --color-primary:         #00A597;
-  --color-primary-focus:   #007A70;
-  --color-primary-on-dark: #00A597;
+  --color-primary:         #01A497;
+  --color-primary-focus:   #04857B;
+  --color-primary-on-dark: #01A497;
 
-  /* Text */
-  --color-ink:          #131514;
-  --color-body:         #131514;
+  /* Text — kept equal to slate-900/800 (#022221), the ink value actually
+     used across the app, to avoid a third near-black drifting in. */
+  --color-ink:          #022221;
+  --color-body:         #022221;
   --color-body-on-dark: #ffffff;
   --color-body-muted:   #cccccc;
   --color-ink-muted-80: #333333;
@@ -52,6 +94,15 @@
   --color-surface-black:            #000000;
   --color-surface-chip-translucent: #d2d2d7;
 
+  /* Dark sections — deep brand-teal band with light text, for dramatic
+     contrast against the otherwise light page (e.g. the homepage promo
+     banners). See DESIGN_SYSTEM.md §2. */
+  --color-surface-dark:      var(--color-brand-975); /* #041A19 */
+  --color-text-dark-heading: #ffffff;
+  --color-text-dark-body:    #A6CDC6;                /* muted light teal, AA on the dark surface */
+  --color-text-dark-link:    var(--color-brand-300); /* #84CDC7 */
+  --color-border-dark:       var(--color-brand-800); /* subtle hairline */
+
   /* Lines */
   --color-divider-soft: #f0f0f0;
   --color-hairline:     #e0e0e0;
@@ -66,8 +117,161 @@
   --font-mono: var(--font-geist-mono);
 
   /* Legacy aliases kept so nothing else breaks */
-  --navy:     #0F172A;
-  --navy-mid: #1E293B;
+
+  /* ─── TYPE SCALE (new, additive) ─────────────────────────── */
+  --fw-light:   300; /* display/heading + body text */
+  --fw-regular: 400; /* nav links, eyebrows, controls */
+  --fw-medium:  500;
+  --fw-bold:    600;
+
+  --fs-xs:          0.875rem;
+  --fs-sm:          0.875rem;
+  --fs-base:        1rem;
+  --fs-lg:          1.125rem;
+  --fs-h4:          1.375rem;
+  --fs-h3:          1.625rem;
+  --fs-h2:          2rem;
+  --fs-h1:          2.5rem;
+  --fs-display-l:   2.75rem;  /* sits between H1 (2.5rem) and Display XL (3rem) */
+  --fs-display-xl:  3rem;
+  --fs-display-xxl: 3.5rem;
+
+  --lh-display-l:  1.05;
+  --lh-display:    1.03;
+  --lh-heading:    1.1;
+  --lh-heading-md: 1.12;
+  --lh-body:       1.4;
+
+  --ls-xxl:     -0.025em;
+  --ls-display: -0.02em;
+  --ls-tight:   -0.01em;
+  --ls-normal:   0em;
+
+  /* ─── SHADOWS (brand-teal-tinted, replaces default grey) ──── */
+  --shadow-xs: 0px 2px 10px 0px rgba(4,72,67,0.06),  0px 1px 4px 0px rgba(4,72,67,0.04);
+  --shadow-sm: 0px 5px 14px 0px rgba(4,72,67,0.08),  0px 2px 8px 0px rgba(4,72,67,0.05);
+  --shadow-md: 0px 6px 22px 0px rgba(4,72,67,0.10),  0px 4px 8px 0px rgba(4,72,67,0.03);
+  --shadow-lg: 0px 15px 40px -2px rgba(4,72,67,0.10),0px 5px 20px -2px rgba(4,72,67,0.04);
+  --shadow-xl: 0px 20px 80px -16px rgba(4,72,67,0.14),0px 10px 60px -16px rgba(4,72,67,0.06);
+  --shadow-focus: 0 0 0 4px rgba(1,164,151,0.35);
+
+  /* ─── GRADIENTS (new, additive) — atmosphere only, monochrome
+     brand teal per the Stripe reference's "one aurora cluster,
+     never competing colors" rule. ────────────────────────────── */
+  --grad-aura-brand-core: radial-gradient(50% 50%, rgba(1,164,151,.55) 0%, rgba(1,164,151,0) 70%);
+  --grad-aura-brand-1: radial-gradient(50% 50%, rgba(1,164,151,.35) 0%, rgba(1,164,151,0) 70%);
+  --grad-aura-brand-2: radial-gradient(50% 50%, rgba(4,133,123,.28) 0%, rgba(4,133,123,0) 70%);
+  --grad-aura-brand-3: radial-gradient(50% 50%, rgba(132,205,199,.32) 0%, rgba(132,205,199,0) 70%);
+
+  /* ─── MOTION (new, additive) ─────────────────────────────── */
+  --ease-standard: cubic-bezier(0.45,0.05,0.55,0.95); /* nav / ui */
+  --ease-emphasis: cubic-bezier(0.25,1.00,0.50,1.00); /* buttons  */
+  --dur-fast: 240ms;
+  --dur-slow: 300ms;
+  --transition-nav:    color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+  --transition-button: background-color var(--dur-slow) var(--ease-emphasis), color var(--dur-slow) var(--ease-emphasis), border var(--dur-slow) var(--ease-emphasis);
+
+  /* ─── SPACING (new, additive) ────────────────────────────── */
+  --space-section: 96px;
+  --sp-1:   4px;
+  --sp-1-5: 6px;
+  --sp-2:   8px;
+  --sp-3:   12px;
+  --sp-4:   16px;
+  --sp-5:   20px;
+  --sp-6:   24px;
+  --sp-8:   32px;
+
+  /* ─── SEMANTIC SURFACE/BORDER (new, additive) ────────────── */
+  --color-border:  var(--color-neutral-50);
+  --color-surface: #ffffff;
+
+  /* ─── INPUTS (new, additive) ─────────────────────────────── */
+  --input-height: 48px;
+  --input-border-width: 1px;
+  --input-radius: var(--radius-sm);
+  --input-pad-x: 16px;
+  --input-pad-y: 12px;
+  --input-bg: #ffffff;
+  --input-border: rgba(208,225,222,.75);
+  --input-border-hover: var(--color-brand-500);
+  --input-text: #14403b;
+  --input-placeholder: var(--color-neutral-400);
+  --input-focus-ring: var(--color-brand-500);
+  --input-focus-ring-soft: rgba(1,164,151,.15);
+}
+
+/* ============================================================
+   Typography utilities — Stripe-inspired heading/body scale.
+   Canonical way to set a heading/body style; don't hand-roll
+   font-size/weight/letter-spacing combos on ad-hoc elements.
+   See DESIGN_SYSTEM.md §3.
+   ============================================================ */
+.heading-xxl {
+  font-size: var(--fs-display-xxl);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-xxl);
+  color: var(--color-ink);
+}
+.heading-xl {
+  font-size: var(--fs-display-xl);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-l {
+  font-size: var(--fs-display-l);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-display-l);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-h1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-h2 {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+  color: var(--color-ink);
+}
+.heading-h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-heading-md);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-ink);
+}
+.eyebrow {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  color: var(--color-ink);
+  letter-spacing: var(--ls-normal);
+  text-transform: none;
+}
+/* On a dark surface the ink color is invisible; use the light teal.
+   Defined after .eyebrow so it wins (both unlayered, same specificity). */
+.eyebrow--on-dark { color: var(--color-text-dark-link); }
+/* Brand-colored eyebrow on light surfaces (same cascade reasoning). */
+.eyebrow--brand { color: var(--color-brand-500); }
+.body-text {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-body);
+  color: var(--color-ink);
+}
+.body-text--subdued {
+  color: var(--color-neutral-500);
+}
+.body-text--on-dark {
+  color: var(--color-text-dark-body);
 }
 
 /* ============================================================
@@ -145,18 +349,6 @@ body {
    ============================================================ */
 
 /* Product card */
-.product-card {
-  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.product-card:hover {
-  transform: scale(1.03);
-}
-
-.img-zoom {
-  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
 /* Hand cursor on all interactive elements */
 a, button, [role="button"], select,
 input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="reset"],
@@ -164,8 +356,8 @@ label[for] {
   cursor: pointer;
 }
 
-/* Primary CTA button (named "orange" for back-compat, uses brand green) */
-.btn-orange {
+/* Primary CTA button */
+.btn-brand {
   background: var(--orange);
   color: white;
   border-radius: var(--radius-sm);
@@ -180,14 +372,14 @@ label[for] {
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-.btn-orange:hover {
+.btn-brand:hover {
   background: var(--orange-dark);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px -4px rgba(0, 165, 151, 0.45);
 }
 
 .btn-black {
-  background: #0F172A;
+  background: var(--color-ink);
   color: white;
   border-radius: var(--radius-sm);
   padding: 0.7rem 1.75rem;
@@ -202,7 +394,7 @@ label[for] {
 }
 
 .btn-black:hover {
-  background: #1e293b;
+  background: var(--color-brand-900);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.25);
 }
@@ -228,22 +420,498 @@ label[for] {
   color: var(--orange);
 }
 
+/* White CTA — for dark surfaces (e.g. the dark-hero banners). White fill,
+   brand-ink text, faint teal tint on hover. */
+.btn-white {
+  background: #ffffff;
+  color: var(--color-ink);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition-button);
+}
+.btn-white:hover {
+  background: var(--color-brand-50);
+}
+
+/* Link-CTA affordance (Stripe-style): a trailing chevron that cross-fades
+   into an arrow on hover. Add `.btn-arrow` to any .btn-* used as a link that
+   navigates somewhere, and drop a <CtaArrow/> as its last child. Both glyphs
+   are lucide icons (matching stroke language, same size). Don't use on
+   submit/step-action buttons. */
+.cta-arrow {
+  position: relative;
+  display: inline-block;
+  width: 1.05em;
+  height: 1.05em;
+  flex-shrink: 0;
+  /* The whole icon slides — both glyphs move together, so they never
+     separate into two offset arrows. */
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-arrow:hover .cta-arrow { transform: translateX(2px); }
+/* On an arrow-link CTA only the arrow moves — the button itself never lifts
+   or casts a shadow (keeps banner CTAs flat, matching .btn-white). */
+.btn-arrow:hover { transform: none; box-shadow: none; }
+.cta-arrow svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1.05em;
+  height: 1.05em;
+  /* Icons are stacked in the exact same spot and only cross-fade in place,
+     so the swap reads as one shape morphing — no ghosting, no motion blur. */
+  transition: opacity 420ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cta-arrow__arr { opacity: 0; }
+.btn-arrow:hover .cta-arrow__chev { opacity: 0; }
+.btn-arrow:hover .cta-arrow__arr  { opacity: 1; }
+
 @media (max-width: 1023px) {
-  .hero-cta a.btn-orange,
+  .hero-cta a.btn-brand,
   .hero-cta a.btn-outline {
     padding-top: 0.805rem;
     padding-bottom: 0.805rem;
   }
 }
 
+/* ============================================================
+   Icon tile — square/rounded icon container (trust badges,
+   contact links, feature callouts). See DESIGN_SYSTEM.md §7.
+   ============================================================ */
+.icon-tile {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-brand-100);
+  background: var(--color-brand-25);
+  color: var(--color-brand-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-tile--sm { width: 32px; height: 32px; border-radius: var(--radius-sm); }
+.icon-tile--lg { width: 48px; height: 48px; }
+
+/* ============================================================
+   Checklist — circular brand checkmark + label, for benefit/
+   feature lists (sidebars, promo panels).
+   ============================================================ */
+.checklist { display: flex; flex-direction: column; gap: var(--sp-3); }
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  color: var(--color-ink);
+  line-height: var(--lh-body);
+}
+.checklist-badge {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand-500);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+/* Checklist on a dark surface (e.g. the dark-hero promo banners) */
+.checklist--on-dark .checklist-item { color: var(--color-text-dark-heading); }
+.checklist--on-dark .checklist-badge { box-shadow: 0 0 0 4px rgba(1, 164, 151, 0.15); }
+
+/* Numbered 1-2-3 stepper for a dark-hero banner (Schärfservice process).
+   A single continuous connector line runs behind the circles (drawn per
+   step from its circle-bottom down to the next circle-top, so the segments
+   join seamlessly regardless of text height). --step-circle keeps the
+   circle size, connector x-offset, and line length in sync. */
+.banner-stepper {
+  --step-circle: 30px;
+  --step-gap: var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--step-gap);
+}
+.banner-step { display: flex; align-items: flex-start; gap: var(--sp-4); position: relative; }
+.banner-step-num {
+  position: relative;
+  z-index: 1;
+  width: var(--step-circle);
+  height: var(--step-circle);
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  /* Resting state: solid white fill, dark number (also what reduced-motion /
+     no-JS shows). The first-load animation fills it from hollow via JS. */
+  border: 1.5px solid #fff;
+  background: #fff;
+  color: var(--color-brand-950);
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Continuous connector as a real element (so GSAP can draw it): from this
+   circle's bottom edge to the next circle's top edge. Anchored to the step
+   so tall text never opens a gap. Centered via `left` (no translateX) so a
+   GSAP scaleY draw isn't fighting a transform. */
+.banner-step-line {
+  position: absolute;
+  left: calc(var(--step-circle) / 2 - 0.75px);
+  top: var(--step-circle);
+  bottom: calc(-1 * var(--step-gap));
+  width: 1.5px;
+  transform-origin: top center;
+  background: linear-gradient(var(--color-brand-500), var(--color-brand-700));
+  opacity: 0.55;
+}
+/* Nudge the text so the title's cap-height lines up with the circle centre. */
+.banner-step-body { padding-top: 3px; }
+.banner-step-title {
+  color: var(--color-text-dark-heading);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.banner-step-sub {
+  margin-top: 3px;
+  color: var(--color-text-dark-body);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+/* Light-mode stepper: ink text + brand numerals on the pale surface. */
+.banner-stepper--light .banner-step-num {
+  background: #fff;
+  border-color: var(--color-brand-500);
+  color: var(--color-brand-600);
+}
+.banner-stepper--light .banner-step-line {
+  background: linear-gradient(var(--color-brand-500), var(--color-brand-300));
+  opacity: 0.9;
+}
+.banner-stepper--light .banner-step-title { color: var(--color-ink); }
+.banner-stepper--light .banner-step-sub { color: var(--color-neutral-500); }
+
+/* ============================================================
+   Form elements — inputs, pill toggles, option cards, chips,
+   progress. Extracted from the Schärfservice form redesign
+   (design-system/schaerfservice-reference/) for reuse once that
+   flow gets rebuilt for real. Not wired into the live form yet.
+   ============================================================ */
+.form-label {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-ink);
+  margin-bottom: var(--sp-2);
+}
+.form-input,
+.form-textarea {
+  width: 100%;
+  height: var(--input-height);
+  padding: var(--input-pad-y) var(--input-pad-x);
+  background: var(--input-bg);
+  border: var(--input-border-width) solid var(--input-border);
+  border-radius: var(--input-radius);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  color: var(--input-text);
+  outline: none;
+  transition: var(--transition-nav);
+}
+.form-textarea { height: auto; resize: vertical; }
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--input-placeholder); }
+.form-input:hover,
+.form-textarea:hover { border-color: var(--input-border-hover); }
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--input-focus-ring);
+  box-shadow: 0 0 0 4px var(--input-focus-ring-soft);
+}
+
+/* Multi-select pill toggle (e.g. "which tool type") */
+.form-pill {
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-neutral-500);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  cursor: pointer;
+  transition: var(--transition-nav);
+}
+.form-pill--selected {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-25);
+  color: var(--color-ink);
+}
+
+/* Single-select option card (e.g. pickup location, package size) */
+.form-option-card {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition-nav);
+}
+.form-option-card--selected {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-25);
+}
+.form-option-badge {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--color-neutral-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: transparent;
+  background: transparent;
+}
+.form-option-badge--selected {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-500);
+  color: #fff;
+}
+
+/* Dropdown trigger chip (date/time pickers) */
+.form-chip {
+  height: var(--input-height);
+  padding: 0 var(--input-pad-x);
+  border-radius: var(--input-radius);
+  border: 1px solid var(--input-border);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1-5);
+  transition: var(--transition-nav);
+}
+.form-chip--active {
+  border-color: var(--color-brand-500);
+  background: var(--color-brand-25);
+}
+
+/* Multi-step progress bar */
+.form-step-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-brand-500);
+}
+.form-progress-track {
+  flex: 1;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+.form-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--color-brand-500);
+  border-radius: var(--radius-pill);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Keyboard-shortcut hint chip (e.g. "Enter ↵") */
+.kbd {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+  font-weight: var(--fw-medium);
+  color: var(--color-neutral-500);
+  font-size: 12px;
+}
+
+/* Dropdown panel + rows for date/time pickers anchored off a .form-chip */
+.form-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+.form-dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-2) var(--sp-3);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-ink);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  cursor: pointer;
+  font-family: inherit;
+}
+.form-dropdown-item--selected {
+  background: var(--color-brand-25);
+  color: var(--color-brand-500);
+  font-weight: var(--fw-medium);
+}
+
+/* Calendar grid inside a .form-dropdown */
+.form-calendar-nav-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-calendar-weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  color: var(--color-neutral-300);
+  padding: 4px 0;
+}
+.form-calendar-day {
+  width: 100%;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: var(--fw-regular);
+  background: transparent;
+  color: var(--color-ink);
+}
+.form-calendar-day--today { background: var(--color-brand-50); }
+.form-calendar-day--selected { background: var(--color-brand-500); color: #fff; }
+.form-calendar-day--outside { color: var(--color-neutral-200); }
+
+/* ============================================================
+   Banner aurora — ambient animated background blobs (GSAP-driven
+   drift, see components/BannerAurora.tsx). Atmosphere only: sits
+   behind content at z-0, never carries functional color/contrast.
+   ============================================================ */
+.banner-aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.banner-aurora__blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  will-change: transform;
+}
+/* Technical-drawing squared grid (graph-paper / CAD look) for the
+   Sonderlösungen dark-hero banner. Two-tier: fine minor lines every 24px,
+   stronger major lines every 96px (every 4th square). Light-teal brand-300
+   tint at low alpha so it whispers on the deep-teal gradient. A radial mask
+   dissolves it toward the card edges so it fades into the banner BG rather
+   than ending at a hard edge. Base opacity keeps it visible without JS
+   (reduced-motion); the GSAP tween breathes it in/out when motion is on. */
+.banner-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.65;
+  will-change: opacity;
+  background-image:
+    linear-gradient(rgba(132, 205, 199, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(132, 205, 199, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(132, 205, 199, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(132, 205, 199, 0.05) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  -webkit-mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
+  mask-image: radial-gradient(120% 130% at 30% 45%, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
+}
+/* Light-mode grid: dark teal lines on the pale surface — reads like real
+   graph/CAD paper (dark ruling on light paper). */
+.banner-grid--light {
+  background-image:
+    linear-gradient(rgba(1, 164, 151, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1, 164, 151, 0.18) 1px, transparent 1px),
+    linear-gradient(rgba(1, 164, 151, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1, 164, 151, 0.1) 1px, transparent 1px);
+}
+
+/* "Flowing ribbon petals" canvas background (Schärfservice) — see
+   components/HeroWaveAnimation.tsx. Clustered right, fading out to the left
+   via a mask so the headline zone stays clean. */
+.banner-petals {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 30%);
+  mask-image: linear-gradient(to right, transparent, #000 30%);
+}
+.banner-petals__canvas {
+  position: absolute;
+  inset: 0;
+}
+/* Dark layer over the whole animation so the banner reads dark overall and
+   the laser lines stay atmospheric (not glaring). Masked with the parent, so
+   it fades out on the left with the mesh. */
+.banner-petals::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 26, 25, 0.55);
+}
+/* Extra right-weighted scrim so the 1-2-3 stepper stays legible. */
+.banner-petals-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 45%, rgba(4, 26, 25, 0.55) 100%);
+}
+
 /* Section "View all" link */
 .view-all {
-  font-size: 0.875rem;
-  color: #64748B;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  color: var(--color-neutral-500);
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  transition: color 0.2s;
+  transition: var(--transition-nav);
   text-decoration: none;
 }
 

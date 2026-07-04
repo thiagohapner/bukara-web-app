@@ -169,7 +169,7 @@ export default function ProductEditClient({ productId }: { productId: string | n
             {productId ? product.name || "Produkt bearbeiten" : "Neues Produkt"}
           </h1>
         </div>
-        <button onClick={save} disabled={saving} className="btn-orange px-5 py-2 text-sm disabled:opacity-60">
+        <button onClick={save} disabled={saving} className="btn-brand px-5 py-2 text-sm disabled:opacity-60">
           {saving ? "Speichern..." : "Speichern"}
         </button>
       </div>
