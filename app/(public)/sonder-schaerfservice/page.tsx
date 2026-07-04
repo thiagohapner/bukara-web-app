@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, ChevronRight, Phone, Mail } from "lucide-react";
+import gsap from "gsap";
 import CtaArrow from "@/components/CtaArrow";
+
+// Run before paint on the client (so the stepper's hollow pre-state is set with
+// no flash); fall back to useEffect on the server render.
+const useIsoLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 // Multi-step Schärfservice request form. Layout/interaction pattern comes
 // from design-system/schaerfservice-reference/ (Claude Design prototype) —
@@ -13,12 +19,12 @@ import CtaArrow from "@/components/CtaArrow";
 
 const SERVICE_SLUG = "schaerfservice";
 
-const CHECKLIST_ITEMS = [
-  "Deutschlandweit",
-  "Kostenloser Abholservice",
-  "Fertig in 1–2 Wochen",
-  "Keine Mindestmenge",
-  "Auch für Fremdwerkzeuge",
+// The banner's Schärfservice 3-step flow, shown as an animated stepper in the
+// form sidebar.
+const SIDEBAR_STEPS = [
+  { title: "Online-Formular ausfüllen", sub: "In nur 2 Minuten Werkzeugdetails angeben" },
+  { title: "Gratis Abholung", sub: "Deutschlandweiter Abholservice" },
+  { title: "Fertig in 1–2 Wochen", sub: "Geschärft & geprüft zurück bei Ihnen" },
 ];
 
 const WERK_OPTIONS = [
@@ -118,6 +124,36 @@ function SchaerfPage() {
   const [calM, setCalM] = useState(today.getMonth());
   const vonListRef = useRef<HTMLDivElement>(null);
   const bisListRef = useRef<HTMLDivElement>(null);
+  const stepperRef = useRef<HTMLDivElement>(null);
+
+  // Sidebar stepper reveal: each hollow circle fills to the brand palette, then
+  // its connector line draws down to the next — same choreography as the home
+  // banner, in the light-panel colours. Reduced motion shows the resting state.
+  useIsoLayoutEffect(() => {
+    const el = stepperRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const nums = gsap.utils.toArray<HTMLElement>(".banner-step-num", el);
+    const lines = gsap.utils.toArray<HTMLElement>(".banner-step-line", el);
+
+    gsap.set(nums, { backgroundColor: "rgba(1,164,151,0.06)", borderColor: "#84CDC7", color: "#84CDC7" });
+    gsap.set(lines, { scaleY: 0 });
+
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" }, delay: 0.15 });
+    nums.forEach((num, i) => {
+      tl.to(
+        num,
+        { backgroundColor: "#ffffff", borderColor: "#01A497", color: "#04857B", duration: 0.5 },
+        i === 0 ? 0 : "-=0.05"
+      );
+      if (lines[i]) {
+        tl.to(lines[i], { scaleY: 1, duration: 0.6 }, "-=0.05");
+      }
+    });
+
+    return () => { tl.kill(); };
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -285,18 +321,23 @@ function SchaerfPage() {
 
             {/* Sidebar */}
             <aside className="w-full lg:w-[360px] flex-shrink-0 bg-brand-25 border border-neutral-100 rounded-md p-6 flex flex-col gap-5 lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
-              <div>
-                <h1 className="heading-h2">{service.name}</h1>
-                <p className="text-[15px] text-neutral-500 mt-1.5 leading-[1.4]">{service.tagline}</p>
-              </div>
+              <h1 className="heading-h2">{service.name}</h1>
 
               <div className="h-px bg-neutral-100" />
 
-              <div className="checklist">
-                {CHECKLIST_ITEMS.map((item) => (
-                  <div key={item} className="checklist-item">
-                    <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
-                    {item}
+              <p className="text-[13px] text-neutral-500 leading-relaxed">
+                Nachschliff für alle Bukara und Fremdwerkzeuge – Keine Mindestmenge, schnell, deutschlandweit.
+              </p>
+
+              <div ref={stepperRef} className="banner-stepper banner-stepper--light w-full">
+                {SIDEBAR_STEPS.map((s, i, arr) => (
+                  <div key={i} className="banner-step">
+                    <span className="banner-step-num">{i + 1}</span>
+                    {i < arr.length - 1 && <span className="banner-step-line" aria-hidden />}
+                    <div className="banner-step-body">
+                      <div className="banner-step-title">{s.title}</div>
+                      <div className="banner-step-sub">{s.sub}</div>
+                    </div>
                   </div>
                 ))}
               </div>
