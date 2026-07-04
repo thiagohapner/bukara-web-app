@@ -113,6 +113,9 @@ export interface V2Category {
   // Optional CMS fields for /sortiment landing pages (nullable in DB).
   seo_title?: string | null;
   seo_description?: string | null;
+  // Long visible hero intro (rendered at 16px/300); distinct from the short
+  // seo_description that feeds <meta name="description">.
+  category_intro?: string | null;
   show_on_home?: boolean;
   home_sort_order?: number | null;
 }

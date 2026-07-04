@@ -25,7 +25,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
   if (card.variant === "list") {
     return (
       <Link href={`${card.hrefPrefix ?? "/produkte"}/${card.slug}`} style={{ textDecoration: "none", display: "block" }}>
-        <div className="bg-white rounded-md overflow-hidden border border-neutral-100 group flex items-center gap-4 p-3">
+        <div className="bg-white rounded-md overflow-hidden border border-neutral-50 group flex items-center gap-4 p-3">
           <div className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden" style={{ background: "#EEEEEE" }}>
             {card.badge && (
               <span className="absolute top-2 left-2 z-10 bg-sale text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
@@ -78,11 +78,11 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
   }
 
   return (
-    <Link href={`${card.hrefPrefix ?? "/produkte"}/${card.slug}`} style={{ textDecoration: "none", display: "block" }}>
-      <div className="product-card bg-white rounded-md overflow-hidden border border-neutral-100 group">
+    <Link href={`${card.hrefPrefix ?? "/produkte"}/${card.slug}`} className="h-full" style={{ textDecoration: "none", display: "block" }}>
+      <div className="product-card bg-white rounded-md overflow-hidden border border-neutral-50 group flex flex-col h-full">
 
         {/* Portrait image */}
-        <div className="relative aspect-[10/11] overflow-hidden" style={{ background: "#EEEEEE" }}>
+        <div className="relative aspect-[10/11] overflow-hidden flex-shrink-0" style={{ background: "#EEEEEE" }}>
           {card.badge && (
             <span className="absolute top-3 left-3 z-10 bg-sale text-white text-[12px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
               {card.badge}
@@ -115,7 +115,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
         </div>
 
         {/* Info */}
-        <div className="p-4">
+        <div className="p-4 flex-1 flex flex-col">
           <h3 className="text-sm font-medium text-slate-900 mb-1 leading-snug line-clamp-2">
             {card.name}
           </h3>
@@ -123,7 +123,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
             <p className="text-sm text-neutral-500 mb-2 leading-snug">{card.variantLabel}</p>
           )}
           {showPrice && (
-            <div>
+            <div className="mt-auto">
               <div className={`text-[15px] font-bold ${isCampaign ? "text-sale" : "text-slate-900"}`}>
                 {card.hasVariants ? "ab " : ""}
                 {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}

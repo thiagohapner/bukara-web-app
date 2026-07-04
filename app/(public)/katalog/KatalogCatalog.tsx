@@ -617,7 +617,7 @@ export default function KatalogCatalog({
                     ].join(" ")}
                   >
                     {pageCards.map((card) => (
-                      <div key={card.slug} className="katalog-tile">
+                      <div key={card.slug} className={viewParam === "list" ? "katalog-tile" : "katalog-tile h-full"}>
                         <ProductCard card={{ ...card, variant: viewParam === "list" ? "list" : "grid" }} />
                       </div>
                     ))}

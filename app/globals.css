@@ -527,6 +527,8 @@ label[for] {
   align-items: center;
   justify-content: center;
   font-size: 11px;
+  /* Solid teal disc wrapped in a soft, semi-transparent ring of the same hue. */
+  box-shadow: 0 0 0 4px rgba(1, 164, 151, 0.15);
 }
 /* Checklist on a dark surface (e.g. the dark-hero promo banners) */
 .checklist--on-dark .checklist-item { color: var(--color-text-dark-heading); }

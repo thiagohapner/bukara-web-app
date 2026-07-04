@@ -83,27 +83,34 @@ export default async function SortimentPage({
     ],
   };
 
-  // Server-rendered page header (breadcrumb + H1 + optional intro), passed to the
-  // reused client catalog so it replaces the default "Home / Katalog" breadcrumb.
+  // Long visible hero intro; falls back to seo_description until a dedicated
+  // category_intro is set (item 7). seo_description alone still feeds <meta>.
+  const introText = category.category_intro ?? category.seo_description;
+
+  // Server-rendered page hero (breadcrumb + H1 + optional intro) in the
+  // design-system hero band, passed to the reused client catalog so it replaces
+  // the default "Home / Katalog" breadcrumb.
   const header = (
-    <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5 pb-1">
-      <nav className="flex items-center gap-1.5 text-xs text-slate-400">
-        <Link href="/" className="hover:text-slate-600 transition-colors" style={{ textDecoration: "none" }}>
-          Start
-        </Link>
-        <span>/</span>
-        <span>Sortiment</span>
-        <span>/</span>
-        <span className="text-slate-700 font-medium">{category.name}</span>
-      </nav>
-      <h1 className="heading-h3 mt-4">
-        {heading}
-      </h1>
-      {category.seo_description && (
-        <p className="text-slate-600 text-sm leading-relaxed mt-3 max-w-3xl">
-          {category.seo_description}
-        </p>
-      )}
+    <div className="bg-brand-25 border-b border-neutral-100">
+      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-10">
+        <nav className="flex items-center gap-1.5 text-xs text-neutral-400">
+          <Link href="/" className="hover:text-neutral-600 transition-colors" style={{ textDecoration: "none" }}>
+            Start
+          </Link>
+          <span>/</span>
+          <span>Sortiment</span>
+          <span>/</span>
+          <span className="text-neutral-700 font-medium">{category.name}</span>
+        </nav>
+        <h1 className="heading-h3 mt-4">
+          {heading}
+        </h1>
+        {introText && (
+          <p className="text-base font-light text-neutral-600 leading-relaxed mt-3 max-w-3xl">
+            {introText}
+          </p>
+        )}
+      </div>
     </div>
   );
 

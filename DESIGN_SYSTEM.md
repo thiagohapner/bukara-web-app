@@ -146,9 +146,9 @@ somewhat interchangeably for what should be the same "card" radius — pick one.
 carousel banners): outer container corner radius is `md` (`rounded-md`,
 8px) — not `rounded-2xl`. Headline size differs by slide: the two
 `darkHero` slides (Sonderlösungen, Schärfservice) use `.heading-l`
-(Display L); the X99 slide keeps `.heading-xl` (Display XL) and its own
-distinct look (dark bg, image panel, drop shadow) — it's intentionally
-not part of this restyle.
+(Display L); the X99 slide keeps `.heading-xl` (Display XL) and its
+image-panel look, now over the same (frozen) teal mesh background as
+Schärfservice — see the `bgPattern` note in the per-slide backgrounds below.
 
 Both `darkHero` slides share the same **layout** rendered behind
 `BannerAurora` (a left-clustered aurora glow + a breathing background line
@@ -168,8 +168,11 @@ on-surface right panel indented ~right.
   the GSAP ticker, reduced-motion-safe (static frame). Clustered right,
   masked to fade left (`.banner-petals`); a right-weighted scrim
   (`.banner-petals-scrim`) keeps the 1-2-3 stepper legible over it.
-- **X99 product teaser** → no pattern: a plain deep brand-950 surface with the
-  full-bleed product image on the right.
+- **X99 product teaser** → `petals` (frozen): the same teal mesh-gradient
+  background as Schärfservice, but rendered as a single static frame
+  (`staticPattern: true` → `HeroWaveAnimation animated={false}`, no WebGL
+  animation), over the deep diagonal brand-teal gradient, with the full-bleed
+  product image on the right.
 
 They differ in the **right panel** (`RightPanel` kind):
 - **Sonderlösungen** → `features`: the `.checklist` (6 benefit items with
