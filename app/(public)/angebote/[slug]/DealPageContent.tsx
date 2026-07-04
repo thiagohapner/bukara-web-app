@@ -11,6 +11,7 @@ import { formatEur } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import OrderBenefits from "@/components/OrderBenefits";
+import CtaArrow from "@/components/CtaArrow";
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -412,10 +413,10 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 type="button"
                 onClick={handleAddToCart}
                 disabled={loading || !offer}
-                className="btn-black flex-1 justify-center"
+                className="btn-black btn-arrow flex-1 justify-center"
                 style={{ opacity: loading || !offer ? 0.6 : 1 }}
               >
-                {addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
+                {addedState === "added" ? "✓ Hinzugefügt" : <>In den Warenkorb<CtaArrow /></>}
               </button>
             </div>
 

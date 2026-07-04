@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 import CustomSelect from "@/components/CustomSelect";
+import CtaArrow from "@/components/CtaArrow";
 import { DS_INPUT } from "@/lib/ds";
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -283,12 +284,10 @@ export default function KontaktPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="btn-brand inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="btn-brand btn-arrow inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Wird gesendet…" : "Nachricht senden"}
-                    {!submitting && (
-                      <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-                    )}
+                    {!submitting && <CtaArrow />}
                   </button>
                 </div>
 

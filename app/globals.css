@@ -440,11 +440,13 @@ label[for] {
   background: var(--color-brand-50);
 }
 
-/* Link-CTA affordance (Stripe-style): a trailing chevron that cross-fades
-   into an arrow on hover. Add `.btn-arrow` to any .btn-* used as a link that
-   navigates somewhere, and drop a <CtaArrow/> as its last child. Both glyphs
-   are lucide icons (matching stroke language, same size). Don't use on
-   submit/step-action buttons. */
+/* Primary-CTA affordance (Stripe-style): a trailing chevron that cross-fades
+   into an arrow on hover, with a flat hover (no lift/shadow). Add `.btn-arrow`
+   to any .btn-* used as a primary CTA — navigation links (banners, hero) and
+   primary form-submit / product add-to-cart action buttons alike — and drop a
+   <CtaArrow/> as its last child. Both glyphs are lucide icons (matching stroke
+   language, same size). Keep it to the ONE primary CTA per view; secondary or
+   icon-only controls (back, quantity ±, voucher) stay plain. */
 .cta-arrow {
   position: relative;
   display: inline-block;

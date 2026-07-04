@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, ChevronRight, Phone, Mail } from "lucide-react";
+import CtaArrow from "@/components/CtaArrow";
 
 // Multi-step Schärfservice request form. Layout/interaction pattern comes
 // from design-system/schaerfservice-reference/ (Claude Design prototype) —
@@ -577,9 +578,9 @@ function SchaerfPage() {
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                     )}
-                    <button type="button" onClick={goNext} disabled={submitting} className="btn-brand" style={{ opacity: submitting ? 0.7 : 1 }}>
+                    <button type="button" onClick={goNext} disabled={submitting} className="btn-brand btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
                       {submitting ? "Wird gesendet…" : STEP_LABELS[Math.min(step, 6) - 1]}
-                      {!submitting && <ChevronRight className="w-4 h-4" />}
+                      {!submitting && <CtaArrow />}
                     </button>
                     <span className="text-xs text-neutral-300 hidden sm:flex items-center gap-1.5">
                       drücken Sie <span className="kbd">Enter ↵</span>

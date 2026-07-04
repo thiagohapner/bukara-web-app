@@ -8,7 +8,8 @@ import { useCart } from "@/components/CartContext";
 import { cartTotals, formatEur } from "@/lib/pricing";
 import { submitOrder } from "@/app/actions/submitOrder";
 import { applyVoucher } from "@/app/actions/applyVoucher";
-import { FileText, Clock, Check, Phone, Mail, ArrowRight, X } from "lucide-react";
+import { FileText, Clock, Check, Phone, Mail, X } from "lucide-react";
+import CtaArrow from "@/components/CtaArrow";
 
 function inputClass(extra = "") {
   return `w-full border border-neutral-200 rounded-sm px-4 py-3 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#01A497]/20 focus:border-[#01A497] transition-colors ${extra}`;
@@ -404,13 +405,11 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={submitting || items.length === 0}
-                  className="btn-black w-full justify-center"
+                  className="btn-black btn-arrow w-full justify-center"
                   style={{ opacity: submitting || items.length === 0 ? 0.7 : 1 }}
                 >
                   {submitting ? "Wird gesendet…" : "Bestellung aufgeben"}
-                  {!submitting && (
-                    <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-                  )}
+                  {!submitting && <CtaArrow />}
                 </button>
 
                 <p className="text-[11px] text-neutral-400 mt-3 text-center">

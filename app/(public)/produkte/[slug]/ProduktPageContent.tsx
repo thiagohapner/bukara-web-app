@@ -7,6 +7,7 @@ import ProductAccordion from "@/components/ProductAccordion";
 import CustomSelect from "@/components/CustomSelect";
 import ProductAccessories, { type AccessoryItem } from "@/components/ProductAccessories";
 import OrderBenefits from "@/components/OrderBenefits";
+import CtaArrow from "@/components/CtaArrow";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/components/CartContext";
 import {
@@ -168,14 +169,16 @@ function PriceAndCart({
           type="button"
           onClick={handleAddToCart}
           disabled={outOfStock || loading}
-          className="btn-black flex-1 justify-center"
+          className="btn-black btn-arrow flex-1 justify-center"
           style={{ opacity: outOfStock || loading ? 0.6 : 1 }}
         >
-          {outOfStock
-            ? "Derzeit nicht verfügbar"
-            : addedState === "added"
-              ? "✓ Hinzugefügt"
-              : "In den Warenkorb"}
+          {outOfStock ? (
+            "Derzeit nicht verfügbar"
+          ) : addedState === "added" ? (
+            "✓ Hinzugefügt"
+          ) : (
+            <>In den Warenkorb<CtaArrow /></>
+          )}
         </button>
       </div>
       <OrderBenefits />

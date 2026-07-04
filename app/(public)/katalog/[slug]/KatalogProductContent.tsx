@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductGallery from "@/components/ProductGallery";
 import ProductAccordion from "@/components/ProductAccordion";
 import OrderBenefits from "@/components/OrderBenefits";
+import CtaArrow from "@/components/CtaArrow";
 import V2SeriesVariantPicker from "@/components/V2SeriesVariantPicker";
 import ProductAccessories from "@/components/ProductAccessories";
 import KatalogAbmessungenTable from "./KatalogAbmessungenTable";
@@ -381,10 +382,10 @@ export default function KatalogProductContent({
                   type="button"
                   onClick={handleAddToCart}
                   disabled={outOfStock}
-                  className="btn-black flex-1 justify-center"
+                  className="btn-black btn-arrow flex-1 justify-center"
                   style={{ opacity: outOfStock ? 0.6 : 1 }}
                 >
-                  {outOfStock ? "Derzeit nicht verfügbar" : addedState === "added" ? "✓ Hinzugefügt" : "In den Warenkorb"}
+                  {outOfStock ? "Derzeit nicht verfügbar" : addedState === "added" ? "✓ Hinzugefügt" : <>In den Warenkorb<CtaArrow /></>}
                 </button>
               </div>
             )}

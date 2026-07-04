@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
-import { Check, ChevronLeft, ChevronRight, Phone, Mail, Upload } from "lucide-react";
+import { Check, ChevronLeft, Phone, Mail, Upload } from "lucide-react";
+import CtaArrow from "@/components/CtaArrow";
 
 // Multi-step Sonderwerkzeug request form. Mirrors the Schärfservice wizard
 // (app/(public)/sonder-schaerfservice/page.tsx) — same sidebar + .form-*
@@ -483,9 +484,9 @@ export default function SonderWerkzeugPage() {
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                     )}
-                    <button type="button" onClick={goNext} disabled={submitting} className="btn-brand" style={{ opacity: submitting ? 0.7 : 1 }}>
+                    <button type="button" onClick={goNext} disabled={submitting} className="btn-brand btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
                       {submitting ? "Wird gesendet…" : step === TOTAL_STEPS ? "Anfrage absenden" : "Weiter"}
-                      {!submitting && <ChevronRight className="w-4 h-4" />}
+                      {!submitting && <CtaArrow />}
                     </button>
                     <span className="text-xs text-neutral-300 hidden sm:flex items-center gap-1.5">
                       drücken Sie <span className="kbd">Enter ↵</span>

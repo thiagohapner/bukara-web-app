@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 import { DS_INPUT, DS_LABEL } from "@/lib/ds";
-import { ExternalLink, ArrowRight } from "lucide-react";
+import CtaArrow from "@/components/CtaArrow";
+import { ExternalLink } from "lucide-react";
 
 type B2BForm = {
   name: string;
@@ -201,10 +202,10 @@ export default function B2BPortalPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn-brand w-full sm:w-auto inline-flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="btn-brand btn-arrow w-full sm:w-auto inline-flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   {submitting ? "Wird gesendet…" : "Zugang anfordern"}
-                  {!submitting && <ArrowRight className="w-4 h-4" strokeWidth={2.2} />}
+                  {!submitting && <CtaArrow />}
                 </button>
               </div>
             </form>
