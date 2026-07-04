@@ -324,7 +324,7 @@ function SchaerfPage() {
               {/* Intro */}
               <div>
                 <h1 className="heading-h2">{service.name}</h1>
-                <p className="mt-3 text-sm text-neutral-500 leading-relaxed">
+                <p className="mt-3 text-[13px] text-neutral-400 leading-relaxed">
                   Nachschliff für alle Bukara und Fremdwerkzeuge. Keine Mindestmenge, schnell, deutschlandweit.
                 </p>
               </div>
