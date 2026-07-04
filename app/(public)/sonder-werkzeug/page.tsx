@@ -258,7 +258,7 @@ export default function SonderWerkzeugPage() {
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
             {/* Sidebar */}
-            <aside className="w-full lg:w-[360px] flex-shrink-0 bg-brand-25 border border-neutral-100 rounded-md p-8 flex flex-col gap-7 lg:sticky lg:top-[96px]">
+            <aside className="w-full lg:w-[360px] flex-shrink-0 bg-brand-25 border border-neutral-100 rounded-md p-6 flex flex-col gap-5 lg:sticky lg:top-[96px] lg:max-h-[calc(100vh-112px)] lg:overflow-y-auto">
               <div>
                 <h1 className="heading-h2">{service.name}</h1>
                 <p className="text-[15px] text-neutral-500 mt-1.5 leading-[1.4]">{service.tagline}</p>
@@ -280,10 +280,7 @@ export default function SonderWerkzeugPage() {
               </p>
 
               <div className="mt-auto border-t border-neutral-100 pt-6">
-                <div className="text-[15px] font-medium text-slate-900 mb-1">Noch Fragen?</div>
-                <p className="text-[13px] text-neutral-500 leading-relaxed mb-3.5">
-                  Wir beraten Sie gerne persönlich und unverbindlich.
-                </p>
+                <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
                 <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
                   <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
                   +49 7443 / 9661-0
