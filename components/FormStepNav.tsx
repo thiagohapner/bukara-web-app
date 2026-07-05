@@ -27,11 +27,12 @@ export default function FormStepNav({
                 className={[
                   "w-6 h-6 flex-shrink-0 rounded-pill flex items-center justify-center text-[11px] font-medium transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)]",
                   done
-                    ? "bg-brand-500 text-white"
+                    ? "text-white"
                     : active
-                      ? "border-2 border-brand-500 text-brand-600 bg-white"
-                      : "border border-neutral-200 text-neutral-400 bg-white",
+                      ? "border-2 border-brand-500 text-brand-600"
+                      : "border border-neutral-200 text-neutral-400",
                 ].join(" ")}
+                style={{ backgroundColor: done ? "var(--color-brand-500)" : "#ffffff" }}
               >
                 {done ? <Check className="w-3.5 h-3.5" strokeWidth={3} /> : i + 1}
               </span>
