@@ -17,8 +17,9 @@ const SERVICE_SLUG = "schaerfservice";
 // Grouped phases for the vertical step nav (6 wizard steps → 4 phases):
 // Werkzeug (1) · Abholung (2–3) · Service (4–5) · Kontakt (6).
 const PHASES = ["Werkzeugtyp", "Abholung buchen", "Service wählen", "Kontaktdaten"];
+// Abholung buchen covers steps 2–4 (Termin · Ort · Ihr Paket); Service = step 5.
 const phaseIndex = (step: number) =>
-  step <= 1 ? 0 : step <= 3 ? 1 : step <= 5 ? 2 : step <= 6 ? 3 : 4;
+  step <= 1 ? 0 : step <= 4 ? 1 : step <= 5 ? 2 : step <= 6 ? 3 : 4;
 
 const WERK_OPTIONS = [
   "Bohrer",
