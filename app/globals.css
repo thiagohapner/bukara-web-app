@@ -632,7 +632,7 @@ label[for] {
   width: 100%;
   height: var(--input-height);
   padding: var(--input-pad-y) var(--input-pad-x);
-  background: var(--input-bg);
+  background: #ffffff;
   border: var(--input-border-width) solid var(--input-border);
   border-radius: var(--input-radius);
   font-size: var(--fs-base);
@@ -657,7 +657,7 @@ label[for] {
   padding: var(--sp-2) var(--sp-5);
   border-radius: var(--radius-pill);
   border: 1.5px solid var(--color-border);
-  background: var(--color-surface);
+  background: #ffffff;
   color: var(--color-neutral-500);
   font-size: var(--fs-base);
   font-weight: var(--fw-regular);
@@ -679,11 +679,16 @@ label[for] {
   padding: var(--sp-4) var(--sp-5);
   border-radius: var(--radius-md);
   border: 1.5px solid var(--color-border);
-  background: var(--color-surface);
+  background: #ffffff;
   text-align: left;
   cursor: pointer;
   font-family: inherit;
   transition: var(--transition-nav);
+}
+/* Compact variant — tighter vertical padding (e.g. the parcel-size cards). */
+.form-option-card--compact {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
 }
 .form-option-card--selected {
   border-color: var(--color-brand-500);
@@ -700,7 +705,7 @@ label[for] {
   justify-content: center;
   font-size: 13px;
   color: transparent;
-  background: transparent;
+  background: #ffffff;
 }
 .form-option-badge--selected {
   border-color: var(--color-brand-500);

@@ -279,10 +279,10 @@ function SchaerfPage() {
     <>
       <main className="min-h-screen form-aurora-bg">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-8 py-12 lg:min-h-[calc(100vh-156px)]">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-[120px] xl:gap-[200px] py-12 lg:min-h-[calc(100vh-156px)]">
 
             {/* Left rail — plain vertical phase nav, centered as one block */}
-            <aside className="w-full lg:flex-1 flex flex-col lg:max-w-[240px]">
+            <aside className="w-full lg:w-[220px] flex-shrink-0 flex flex-col">
               <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
 
               <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
@@ -443,7 +443,7 @@ function SchaerfPage() {
                           key={sz.label}
                           type="button"
                           onClick={() => { setData((d) => ({ ...d, size: sz.label })); setErr(""); }}
-                          className={`form-option-card ${data.size === sz.label ? "form-option-card--selected" : ""}`}
+                          className={`form-option-card form-option-card--compact ${data.size === sz.label ? "form-option-card--selected" : ""}`}
                         >
                           <span className={`form-option-badge ${data.size === sz.label ? "form-option-badge--selected" : ""}`}><Check className="w-3 h-3" strokeWidth={3} /></span>
                           <span className="flex-1 flex flex-col gap-0.5 text-left">
@@ -455,7 +455,7 @@ function SchaerfPage() {
                     </div>
                     <div className="flex justify-between items-baseline mb-4">
                       <span className="form-label mb-0">Paketgewicht</span>
-                      <span className="heading-h3">{data.gewicht >= 20 ? "20+ kg" : `${data.gewicht} kg`}</span>
+                      <span className="text-base font-bold text-slate-900">{data.gewicht >= 20 ? "20+ kg" : `${data.gewicht} kg`}</span>
                     </div>
                     <input
                       type="range"
@@ -565,9 +565,6 @@ function SchaerfPage() {
                 )}
               </div>
             </div>
-
-            {/* Right spacer — balances the left rail so the form sits centered */}
-            <div className="hidden lg:block lg:flex-1" />
           </div>
         </div>
       </main>

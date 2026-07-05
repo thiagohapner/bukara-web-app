@@ -261,10 +261,10 @@ export default function SonderWerkzeugPage() {
     <>
       <main className="min-h-screen form-aurora-bg">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-8 py-12 lg:min-h-[calc(100vh-156px)]">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-[120px] xl:gap-[200px] py-12 lg:min-h-[calc(100vh-156px)]">
 
             {/* Left rail — plain vertical phase nav, centered as one block */}
-            <aside className="w-full lg:flex-1 flex flex-col lg:max-w-[240px]">
+            <aside className="w-full lg:w-[220px] flex-shrink-0 flex flex-col">
               <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
 
               <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
@@ -475,9 +475,6 @@ export default function SonderWerkzeugPage() {
                 )}
               </div>
             </div>
-
-            {/* Right spacer — balances the left rail so the form sits centered */}
-            <div className="hidden lg:block lg:flex-1" />
           </div>
         </div>
       </main>
