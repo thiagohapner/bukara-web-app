@@ -267,10 +267,13 @@ export default function SonderWerkzeugPage() {
             <aside className="w-full lg:w-[220px] flex-shrink-0 flex flex-col">
               <h1 className="text-[15px] font-medium text-slate-900 mb-7">{service.name}</h1>
 
-              <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
+              {/* Step nav — desktop only; hidden on mobile */}
+              <div className="hidden lg:block">
+                <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
+              </div>
 
-              {/* Contact */}
-              <div className="mt-9">
+              {/* Contact — desktop only (duplicated below the mobile CTA) */}
+              <div className="hidden lg:block mt-9">
                 <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
                 <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
                   <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
@@ -471,6 +474,21 @@ export default function SonderWerkzeugPage() {
                     <span className="text-xs text-neutral-300 hidden sm:flex items-center gap-1.5">
                       oder drücken Sie <span className="kbd">Enter ↵</span>
                     </span>
+                  </div>
+                )}
+
+                {/* Contact — mobile only, below the CTA */}
+                {step <= TOTAL_STEPS && (
+                  <div className="lg:hidden mt-9">
+                    <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
+                    <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
+                      <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
+                      +49 7443 / 9661-0
+                    </a>
+                    <a href="mailto:info@bukara.de" className="flex items-center gap-3 text-slate-900 text-sm" style={{ textDecoration: "none" }}>
+                      <span className="icon-tile icon-tile--sm"><Mail className="w-4 h-4" strokeWidth={1.75} /></span>
+                      info@bukara.de
+                    </a>
                   </div>
                 )}
               </div>
