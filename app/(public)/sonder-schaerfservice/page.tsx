@@ -1,17 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, ChevronRight, Phone, Mail } from "lucide-react";
-import gsap from "gsap";
 import CtaArrow from "@/components/CtaArrow";
-
-// Run before paint on the client (so the stepper's hollow pre-state is set with
-// no flash); fall back to useEffect on the server render.
-const useIsoLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+import FormStepNav from "@/components/FormStepNav";
 
 // Multi-step Schärfservice request form. Layout/interaction pattern comes
 // from design-system/schaerfservice-reference/ (Claude Design prototype) —
@@ -19,13 +14,11 @@ const useIsoLayoutEffect =
 
 const SERVICE_SLUG = "schaerfservice";
 
-// The banner's Schärfservice 3-step flow, shown as an animated stepper in the
-// form sidebar.
-const SIDEBAR_STEPS = [
-  { title: "Online-Formular ausfüllen", sub: "In nur 2 Minuten Werkzeugdetails angeben" },
-  { title: "Gratis Abholung", sub: "Deutschlandweiter Abholservice" },
-  { title: "Fertig in 1–2 Wochen", sub: "Geschärft & geprüft zurück bei Ihnen" },
-];
+// Grouped phases for the vertical step nav (6 wizard steps → 4 phases):
+// Werkzeug (1) · Abholung (2–3) · Service (4–5) · Kontakt (6).
+const PHASES = ["Werkzeug", "Abholung", "Service", "Kontakt"];
+const phaseIndex = (step: number) =>
+  step <= 1 ? 0 : step <= 3 ? 1 : step <= 5 ? 2 : step <= 6 ? 3 : 4;
 
 const WERK_OPTIONS = [
   "Bohrer",
@@ -124,36 +117,6 @@ function SchaerfPage() {
   const [calM, setCalM] = useState(today.getMonth());
   const vonListRef = useRef<HTMLDivElement>(null);
   const bisListRef = useRef<HTMLDivElement>(null);
-  const stepperRef = useRef<HTMLDivElement>(null);
-
-  // Sidebar stepper reveal: each hollow circle fills to the brand palette, then
-  // its connector line draws down to the next — same choreography as the home
-  // banner, in the light-panel colours. Reduced motion shows the resting state.
-  useIsoLayoutEffect(() => {
-    const el = stepperRef.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const nums = gsap.utils.toArray<HTMLElement>(".banner-step-num", el);
-    const lines = gsap.utils.toArray<HTMLElement>(".banner-step-line", el);
-
-    gsap.set(nums, { backgroundColor: "rgba(1,164,151,0.06)", borderColor: "#84CDC7", color: "#84CDC7" });
-    gsap.set(lines, { scaleY: 0 });
-
-    const tl = gsap.timeline({ defaults: { ease: "power2.out" }, delay: 0.15 });
-    nums.forEach((num, i) => {
-      tl.to(
-        num,
-        { backgroundColor: "#ffffff", borderColor: "#01A497", color: "#04857B", duration: 0.5 },
-        i === 0 ? 0 : "-=0.05"
-      );
-      if (lines[i]) {
-        tl.to(lines[i], { scaleY: 1, duration: 0.6 }, "-=0.05");
-      }
-    });
-
-    return () => { tl.kill(); };
-  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -310,46 +273,22 @@ function SchaerfPage() {
     setCalM(m); setCalY(y);
   }
 
-  const progress = (Math.min(step, 6) / 6) * 100;
   const canBack = step > 1 && step < 7;
 
   return (
     <>
-      <main className="min-h-screen bg-brand-25">
+      <main className="min-h-screen form-aurora-bg">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-start">
 
-            {/* Sidebar (borderless — blends into the #F5FAFA page) */}
-            <aside className="w-full lg:w-[280px] flex-shrink-0 bg-brand-25 rounded-lg p-7 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
-              {/* Intro */}
-              <div>
-                <h1 className="heading-h2">{service.name}</h1>
-                <p className="mt-3 text-[13px] text-neutral-400 leading-relaxed">
-                  Nachschliff für alle Bukara und Fremdwerkzeuge. Keine Mindestmenge, schnell, deutschlandweit.
-                </p>
-              </div>
+            {/* Left column — plain (no box), sticky vertical phase nav */}
+            <aside className="w-full lg:w-[280px] flex-shrink-0 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
+              <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
 
-              {/* Steps */}
-              <div
-                ref={stepperRef}
-                className="banner-stepper banner-stepper--light banner-stepper--sidebar w-full mt-7 pt-7 border-t border-neutral-100"
-              >
-                {SIDEBAR_STEPS.map((s, i, arr) => (
-                  <div key={i} className="banner-step">
-                    <span className="banner-step-num">{i + 1}</span>
-                    {i < arr.length - 1 && <span className="banner-step-line" aria-hidden />}
-                    <div className="banner-step-body">
-                      <div className="banner-step-title">{s.title}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
 
-              {/* Flexible spacer: fills the panel on desktop, holds a fixed gap on mobile */}
-              <div className="flex-1 min-h-[2rem]" />
-
-              {/* Footer: fine print + contact */}
-              <div className="pt-6 border-t border-neutral-100">
+              {/* Fine print + contact, pinned to the bottom of the sticky column */}
+              <div className="mt-auto pt-6">
                 <p className="text-[13px] text-neutral-400 leading-relaxed">
                   Für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.
                 </p>
@@ -367,19 +306,9 @@ function SchaerfPage() {
               </div>
             </aside>
 
-            {/* Step content — big white card, top-aligned + same height as the sidebar */}
+            {/* Step content — card-less, directly on the aurora background */}
             <div className="flex-1 min-w-0">
-              <div className="w-full bg-white rounded-md p-6 sm:p-10 shadow-[var(--shadow-sm)] lg:min-h-[calc(100vh-204px)]">
-              <div className="w-full max-w-[560px] mx-auto">
-
-                {step !== 7 && (
-                  <div className="flex items-center gap-3 mb-7 text-sm">
-                    <span className="form-step-label whitespace-nowrap">Schritt {Math.min(step, 6)} von 6</span>
-                    <span className="form-progress-track">
-                      <span className="form-progress-fill" style={{ width: `${progress}%` }} />
-                    </span>
-                  </div>
-                )}
+              <div className="w-full max-w-[560px]">
 
                 {step === 1 && (
                   <div>
@@ -634,7 +563,6 @@ function SchaerfPage() {
                     </span>
                   </div>
                 )}
-              </div>
               </div>
             </div>
           </div>

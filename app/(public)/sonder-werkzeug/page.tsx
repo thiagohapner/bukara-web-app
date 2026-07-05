@@ -6,6 +6,7 @@ import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, Phone, Mail, Upload } from "lucide-react";
 import CtaArrow from "@/components/CtaArrow";
+import FormStepNav from "@/components/FormStepNav";
 
 // Multi-step Sonderwerkzeug request form. Mirrors the Schärfservice wizard
 // (app/(public)/sonder-schaerfservice/page.tsx) — same sidebar + .form-*
@@ -14,6 +15,12 @@ import CtaArrow from "@/components/CtaArrow";
 
 const SERVICE_SLUG = "sonderwerkzeug";
 const TOTAL_STEPS = 11;
+
+// Grouped phases for the vertical step nav (11 wizard steps → 4 phases):
+// Anwendung (1–2) · Bearbeitung (3–6) · Anforderungen (7–10) · Kontakt (11).
+const PHASES = ["Anwendung", "Bearbeitung", "Anforderungen", "Kontakt"];
+const phaseIndex = (step: number) =>
+  step <= 2 ? 0 : step <= 6 ? 1 : step <= 10 ? 2 : step <= 11 ? 3 : 4;
 
 const ANWENDUNG = ["Plattenzuschnitt", "Nuten / Falzen", "Kantenbearbeitung", "Bohren", "Fräsen / Kontur", "Profilbearbeitung", "Sonstiges"];
 const MATERIAL = ["Spanplatte", "MDF / HDF", "Multiplex", "Massivholz", "HPL / Kompaktplatte", "Kunststoff", "Aluminium", "Verbundmaterial", "Sonstiges"];
@@ -216,7 +223,6 @@ export default function SonderWerkzeugPage() {
     setErr("");
   }
 
-  const progress = (Math.min(step, TOTAL_STEPS) / TOTAL_STEPS) * 100;
   const canBack = step > 1 && step <= TOTAL_STEPS;
 
   // Reusable renderers
@@ -253,33 +259,18 @@ export default function SonderWerkzeugPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-brand-25">
+      <main className="min-h-screen form-aurora-bg">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-start">
 
-            {/* Sidebar (borderless — blends into the #F5FAFA page) */}
-            <aside className="w-full lg:w-[280px] flex-shrink-0 bg-brand-25 rounded-lg p-7 flex flex-col gap-5 lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
-              <div>
-                <h1 className="heading-h2">{service.name}</h1>
-                <p className="text-[15px] text-neutral-500 mt-1.5 leading-[1.4]">{service.tagline}</p>
-              </div>
+            {/* Left column — plain (no box), sticky vertical phase nav */}
+            <aside className="w-full lg:w-[280px] flex-shrink-0 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
+              <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
 
-              <div className="h-px bg-neutral-100" />
+              <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
 
-              <div className="checklist">
-                {service.highlights.map((item) => (
-                  <div key={item} className="checklist-item">
-                    <span className="checklist-badge"><Check className="w-3 h-3" strokeWidth={3} /></span>
-                    {item}
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-[13px] text-neutral-500 leading-relaxed">
-                Wir beraten Sie von der Spezifikation bis zur Lieferung — Einzelteil oder Serie.
-              </p>
-
-              <div className="mt-auto border-t border-neutral-100 pt-6">
+              {/* Contact, pinned to the bottom of the sticky column */}
+              <div className="mt-auto pt-6">
                 <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
                 <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
                   <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
@@ -292,19 +283,10 @@ export default function SonderWerkzeugPage() {
               </div>
             </aside>
 
-            {/* Step content — big white card, top-aligned + same height as the sidebar */}
+            {/* Step content — card-less, directly on the aurora background */}
             <div className="flex-1 min-w-0">
-              <div className="w-full bg-white rounded-md p-6 sm:p-10 shadow-[var(--shadow-sm)] lg:min-h-[calc(100vh-204px)]">
-              <div className="w-full max-w-[560px] mx-auto">
+              <div className="w-full max-w-[560px]">
 
-                {step <= TOTAL_STEPS && (
-                  <div className="flex items-center gap-3 mb-7 text-sm">
-                    <span className="form-step-label whitespace-nowrap">Schritt {step} von {TOTAL_STEPS}</span>
-                    <span className="form-progress-track">
-                      <span className="form-progress-fill" style={{ width: `${progress}%` }} />
-                    </span>
-                  </div>
-                )}
 
                 {step === 1 && (
                   <div>
@@ -491,7 +473,6 @@ export default function SonderWerkzeugPage() {
                     </span>
                   </div>
                 )}
-              </div>
               </div>
             </div>
           </div>

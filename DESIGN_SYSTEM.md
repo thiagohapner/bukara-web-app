@@ -289,8 +289,18 @@ should reuse these classes rather than inventing new ad-hoc styling.
   (+ `--today` / `--selected` / `--outside`) — the calendar grid inside a
   `.form-dropdown`
 - `.form-step-label`, `.form-progress-track`, `.form-progress-fill` —
-  multi-step progress bar ("Schritt 2 von 6")
+  horizontal multi-step progress bar ("Schritt 2 von 6"). Superseded on the
+  request-form pages by the vertical phase nav below, but kept for reuse.
 - `.kbd` — small keyboard-shortcut hint chip (e.g. "Enter ↵")
+
+**Request-form page chrome (canonical).** The two request wizards
+(`sonder-schaerfservice`, `sonder-werkzeug`) use a Stripe-onboarding layout:
+the static `.form-aurora-bg` page background (near-white with soft teal corner
+glows, `background-attachment: fixed`), **no** side-panel box and **no** white
+form card — content sits directly on the background. The left column is a plain
+sticky column with `components/FormStepNav.tsx` (a vertical done/active/upcoming
+**phase** stepper — the many wizard steps collapse into ~4 named phases) plus a
+plain contact block; the form fields sit card-less in the right column.
 
 ## 10. Known inconsistencies (migration backlog)
 
