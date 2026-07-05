@@ -666,7 +666,7 @@ label[for] {
 }
 .form-pill--selected {
   border-color: var(--color-brand-500);
-  background: var(--color-brand-25);
+  background: #ffffff;
   color: var(--color-ink);
 }
 
@@ -692,7 +692,7 @@ label[for] {
 }
 .form-option-card--selected {
   border-color: var(--color-brand-500);
-  background: var(--color-brand-25);
+  background: #ffffff;
 }
 .form-option-badge {
   width: 24px;

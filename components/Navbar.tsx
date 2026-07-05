@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
 import { useHeaderChrome } from "./HeaderChrome";
@@ -132,6 +132,12 @@ export default function Navbar({
   // Don't hide the chrome while the mobile menu is open.
   const navHidden = hidden && !menuOpen;
 
+  // On the request-form pages, drop the category-nav row (+ ITA badge) so the
+  // header is a clean, focused bar over the form's aurora canvas.
+  const pathname = usePathname();
+  const isFormPage =
+    pathname === "/sonder-schaerfservice" || pathname === "/sonder-werkzeug";
+
   // Row 3 — Top-Angebote · DB categories · Mehr.
   const categoryLinks = [
     { label: "Top-Angebote", href: "/angebote" },
@@ -256,27 +262,29 @@ export default function Navbar({
           </button>
         </div>
 
-        {/* Row 3 — category nav (desktop) */}
-        <div className="hidden lg:block border-t border-neutral-50">
-          <div className="max-w-[1320px] mx-auto px-4 sm:px-6 flex items-center justify-between h-12 gap-6">
-            <ul className="flex items-center gap-7">
-              {categoryLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm font-normal text-neutral-600 hover:text-brand-500 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] whitespace-nowrap"
-                    style={{ textDecoration: "none" }}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="flex-shrink-0">
-              <ItaBadge />
+        {/* Row 3 — category nav (desktop). Hidden on the request-form pages. */}
+        {!isFormPage && (
+          <div className="hidden lg:block border-t border-neutral-50">
+            <div className="max-w-[1320px] mx-auto px-4 sm:px-6 flex items-center justify-between h-12 gap-6">
+              <ul className="flex items-center gap-7">
+                {categoryLinks.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm font-normal text-neutral-600 hover:text-brand-500 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] whitespace-nowrap"
+                      style={{ textDecoration: "none" }}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex-shrink-0">
+                <ItaBadge />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Mobile menu */}
         <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[calc(100dvh-72px)] border-t border-neutral-50" : "max-h-0"}`}>

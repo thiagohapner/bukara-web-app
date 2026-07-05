@@ -261,7 +261,7 @@ export default function SonderWerkzeugPage() {
     <>
       <main className="min-h-screen form-aurora-bg">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-[120px] xl:gap-[200px] py-12 lg:min-h-[calc(100vh-156px)]">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-[120px] xl:gap-[200px] py-12 lg:min-h-[calc(100vh-108px)]">
 
             {/* Left rail — plain vertical phase nav, centered as one block */}
             <aside className="w-full lg:w-[220px] flex-shrink-0 flex flex-col">
@@ -464,7 +464,7 @@ export default function SonderWerkzeugPage() {
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                     )}
-                    <button type="button" onClick={goNext} disabled={submitting} className="btn-brand btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
+                    <button type="button" onClick={goNext} disabled={submitting} className="btn-black btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
                       {submitting ? "Wird gesendet…" : step === TOTAL_STEPS ? "Anfrage absenden" : "Weiter"}
                       {!submitting && <CtaArrow />}
                     </button>

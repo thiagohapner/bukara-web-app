@@ -279,7 +279,7 @@ function SchaerfPage() {
     <>
       <main className="min-h-screen form-aurora-bg">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-[120px] xl:gap-[200px] py-12 lg:min-h-[calc(100vh-156px)]">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-[120px] xl:gap-[200px] py-12 lg:min-h-[calc(100vh-108px)]">
 
             {/* Left rail — plain vertical phase nav, centered as one block */}
             <aside className="w-full lg:w-[220px] flex-shrink-0 flex flex-col">
@@ -437,7 +437,7 @@ function SchaerfPage() {
                     <h2 className="heading-h2">Ihr Paket</h2>
                     <p className="text-neutral-500 mt-2 mb-6 leading-[1.4]">Wählen Sie die ungefähre Größe — die genauen Maße klären wir bei der Abholung.</p>
                     <p className="form-label mb-2.5">Paketgröße <span className="text-brand-500">*</span></p>
-                    <div className="flex flex-col gap-2 mb-8">
+                    <div className="flex flex-col gap-2 mb-5">
                       {SIZE_OPTIONS.map((sz) => (
                         <button
                           key={sz.label}
@@ -453,7 +453,7 @@ function SchaerfPage() {
                         </button>
                       ))}
                     </div>
-                    <div className="flex justify-between items-baseline mb-4">
+                    <div className="flex justify-between items-baseline mb-2">
                       <span className="form-label mb-0">Paketgewicht</span>
                       <span className="text-base font-bold text-slate-900">{data.gewicht >= 20 ? "20+ kg" : `${data.gewicht} kg`}</span>
                     </div>
@@ -466,7 +466,7 @@ function SchaerfPage() {
                       onChange={(e) => setData((d) => ({ ...d, gewicht: parseFloat(e.target.value) }))}
                       className="w-full accent-brand-500"
                     />
-                    <div className="flex justify-between text-xs text-neutral-300 mt-2">
+                    <div className="flex justify-between text-xs text-neutral-300 mt-1.5">
                       <span>0 kg</span><span>20+ kg</span>
                     </div>
                   </div>
@@ -554,7 +554,7 @@ function SchaerfPage() {
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                     )}
-                    <button type="button" onClick={goNext} disabled={submitting} className="btn-brand btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
+                    <button type="button" onClick={goNext} disabled={submitting} className="btn-black btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
                       {submitting ? "Wird gesendet…" : STEP_LABELS[Math.min(step, 6) - 1]}
                       {!submitting && <CtaArrow />}
                     </button>
