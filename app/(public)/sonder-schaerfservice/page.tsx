@@ -291,7 +291,7 @@ function SchaerfPage() {
               {/* Fine print + contact */}
               <div className="mt-9">
                 <p className="text-[13px] text-neutral-400 leading-relaxed">
-                  Für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.
+                  Für kleine Aufträge unter 150€ fällt lediglich eine einmalige Pauschale von 15€ an.
                 </p>
                 <div className="mt-6">
                   <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
