@@ -16,7 +16,7 @@ const SERVICE_SLUG = "schaerfservice";
 
 // Grouped phases for the vertical step nav (6 wizard steps → 4 phases):
 // Werkzeug (1) · Abholung (2–3) · Service (4–5) · Kontakt (6).
-const PHASES = ["Werkzeug", "Abholung", "Service", "Kontakt"];
+const PHASES = ["Werkzeugtyp", "Abholung buchen", "Service wählen", "Kontaktdaten"];
 const phaseIndex = (step: number) =>
   step <= 1 ? 0 : step <= 3 ? 1 : step <= 5 ? 2 : step <= 6 ? 3 : 4;
 
@@ -278,17 +278,17 @@ function SchaerfPage() {
   return (
     <>
       <main className="min-h-screen form-aurora-bg">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-start">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-8 py-12 lg:min-h-[calc(100vh-156px)]">
 
-            {/* Left column — plain (no box), sticky vertical phase nav */}
-            <aside className="w-full lg:w-[280px] flex-shrink-0 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
+            {/* Left rail — plain vertical phase nav, centered as one block */}
+            <aside className="w-full lg:flex-1 flex flex-col lg:max-w-[240px]">
               <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
 
               <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
 
-              {/* Fine print + contact, pinned to the bottom of the sticky column */}
-              <div className="mt-auto pt-6">
+              {/* Fine print + contact */}
+              <div className="mt-9">
                 <p className="text-[13px] text-neutral-400 leading-relaxed">
                   Für sehr kleine Aufträge unter 150 € fällt lediglich eine einmalige Pauschale von 15 € an.
                 </p>
@@ -306,9 +306,9 @@ function SchaerfPage() {
               </div>
             </aside>
 
-            {/* Step content — card-less, directly on the aurora background */}
-            <div className="flex-1 min-w-0">
-              <div className="w-full max-w-[560px]">
+            {/* Step content — card-less, centered in the page */}
+            <div className="w-full lg:w-[560px] flex-shrink-0 min-w-0">
+              <div className="w-full">
 
                 {step === 1 && (
                   <div>
@@ -565,6 +565,9 @@ function SchaerfPage() {
                 )}
               </div>
             </div>
+
+            {/* Right spacer — balances the left rail so the form sits centered */}
+            <div className="hidden lg:block lg:flex-1" />
           </div>
         </div>
       </main>

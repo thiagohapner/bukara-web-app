@@ -260,17 +260,17 @@ export default function SonderWerkzeugPage() {
   return (
     <>
       <main className="min-h-screen form-aurora-bg">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 py-6">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-start">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-8 py-12 lg:min-h-[calc(100vh-156px)]">
 
-            {/* Left column — plain (no box), sticky vertical phase nav */}
-            <aside className="w-full lg:w-[280px] flex-shrink-0 flex flex-col lg:sticky lg:top-[144px] lg:h-[calc(100vh-204px)] lg:overflow-y-auto">
+            {/* Left rail — plain vertical phase nav, centered as one block */}
+            <aside className="w-full lg:flex-1 flex flex-col lg:max-w-[240px]">
               <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
 
               <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
 
-              {/* Contact, pinned to the bottom of the sticky column */}
-              <div className="mt-auto pt-6">
+              {/* Contact */}
+              <div className="mt-9">
                 <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
                 <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
                   <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
@@ -283,9 +283,9 @@ export default function SonderWerkzeugPage() {
               </div>
             </aside>
 
-            {/* Step content — card-less, directly on the aurora background */}
-            <div className="flex-1 min-w-0">
-              <div className="w-full max-w-[560px]">
+            {/* Step content — card-less, centered in the page */}
+            <div className="w-full lg:w-[560px] flex-shrink-0 min-w-0">
+              <div className="w-full">
 
 
                 {step === 1 && (
@@ -475,6 +475,9 @@ export default function SonderWerkzeugPage() {
                 )}
               </div>
             </div>
+
+            {/* Right spacer — balances the left rail so the form sits centered */}
+            <div className="hidden lg:block lg:flex-1" />
           </div>
         </div>
       </main>
