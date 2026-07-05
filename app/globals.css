@@ -664,6 +664,7 @@ label[for] {
   cursor: pointer;
   transition: var(--transition-nav);
 }
+.form-pill:hover { border-color: var(--color-brand-500); }
 .form-pill--selected {
   border-color: var(--color-brand-500);
   background: #ffffff;
@@ -685,6 +686,7 @@ label[for] {
   font-family: inherit;
   transition: var(--transition-nav);
 }
+.form-option-card:hover { border-color: var(--color-brand-500); }
 /* Compact variant — tighter vertical padding (e.g. the parcel-size cards). */
 .form-option-card--compact {
   padding-top: 0.625rem;
@@ -729,6 +731,7 @@ label[for] {
   gap: var(--sp-1-5);
   transition: var(--transition-nav);
 }
+.form-chip:hover { border-color: var(--color-brand-500); }
 .form-chip--active {
   border-color: var(--color-brand-500);
   background: var(--color-brand-25);
@@ -791,7 +794,9 @@ label[for] {
   font-weight: var(--fw-regular);
   cursor: pointer;
   font-family: inherit;
+  transition: var(--transition-nav);
 }
+.form-dropdown-item:not(.form-dropdown-item--selected):hover { background: var(--color-brand-25); }
 .form-dropdown-item--selected {
   background: var(--color-brand-25);
   color: var(--color-brand-500);
@@ -810,7 +815,9 @@ label[for] {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: var(--transition-nav);
 }
+.form-calendar-nav-btn:hover { border-color: var(--color-brand-500); }
 .form-calendar-weekday {
   text-align: center;
   font-size: 11px;
@@ -829,10 +836,48 @@ label[for] {
   font-weight: var(--fw-regular);
   background: transparent;
   color: var(--color-ink);
+  transition: var(--transition-nav);
 }
+.form-calendar-day:not(.form-calendar-day--selected):hover { background: var(--color-brand-25); }
 .form-calendar-day--today { background: var(--color-brand-50); }
 .form-calendar-day--selected { background: var(--color-brand-500); color: #fff; }
 .form-calendar-day--outside { color: var(--color-neutral-200); }
+
+/* Weight range slider (Schärfservice step 4). Track colour is set inline via a
+   gradient (brand fill → #E2EFED unfilled); this styles the thumb + geometry. */
+.form-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  outline: none;
+}
+.form-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-brand-500);
+  border: 2px solid #ffffff;
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+}
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-brand-500);
+  border: 2px solid #ffffff;
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+}
+.form-range::-moz-range-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
 
 /* ============================================================
    Banner aurora — ambient animated background blobs (GSAP-driven
@@ -893,11 +938,11 @@ label[for] {
 .form-aurora-bg {
   background-color: #ffffff;
   background-image:
-    radial-gradient(45% 45% at 2% 8%, rgba(1, 164, 151, 0.28) 0%, rgba(1, 164, 151, 0) 62%),
-    radial-gradient(40% 42% at 20% 30%, rgba(39, 216, 202, 0.22) 0%, rgba(39, 216, 202, 0) 60%),
-    radial-gradient(48% 50% at 0% 78%, rgba(132, 205, 199, 0.30) 0%, rgba(132, 205, 199, 0) 60%),
-    radial-gradient(42% 46% at 24% 100%, rgba(150, 150, 230, 0.16) 0%, rgba(150, 150, 230, 0) 58%),
-    radial-gradient(50% 55% at 12% 55%, rgba(7, 72, 67, 0.10) 0%, rgba(7, 72, 67, 0) 65%);
+    radial-gradient(42% 46% at 6% 6%, rgba(1, 164, 151, 0.22) 0%, rgba(1, 164, 151, 0) 62%),
+    radial-gradient(40% 44% at 82% 14%, rgba(39, 216, 202, 0.18) 0%, rgba(39, 216, 202, 0) 60%),
+    radial-gradient(46% 48% at 44% 92%, rgba(132, 205, 199, 0.20) 0%, rgba(132, 205, 199, 0) 60%),
+    radial-gradient(40% 44% at 92% 82%, rgba(150, 150, 230, 0.14) 0%, rgba(150, 150, 230, 0) 58%),
+    radial-gradient(52% 56% at 58% 44%, rgba(7, 72, 67, 0.08) 0%, rgba(7, 72, 67, 0) 66%);
   background-repeat: no-repeat;
   background-attachment: fixed;
 }

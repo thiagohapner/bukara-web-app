@@ -59,9 +59,11 @@ const SEARCH_HINTS = [
 function SearchBar({
   className = "",
   onSubmitted,
+  animated = true,
 }: {
   className?: string;
   onSubmitted?: () => void;
+  animated?: boolean;
 }) {
   const router = useRouter();
   const [term, setTerm] = useState("");
@@ -97,10 +99,11 @@ function SearchBar({
           value={term}
           onChange={(e) => setTerm(e.target.value)}
           aria-label="Produkte suchen"
+          placeholder={animated ? undefined : "Suchen"}
           className="w-full h-12 pl-12 pr-4 rounded-full bg-neutral-50 text-[15px] text-slate-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-brand-500/30 transition-shadow duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)]"
         />
         {/* Animated placeholder overlay — only while the input is empty */}
-        {!term && (
+        {animated && !term && (
           <div
             aria-hidden
             className="pointer-events-none absolute left-12 right-4 flex items-center overflow-hidden whitespace-nowrap text-[15px] text-neutral-400"
@@ -205,7 +208,7 @@ export default function Navbar({
           </Link>
 
           {/* Search (desktop/tablet) */}
-          <SearchBar className="hidden md:block w-[448px] max-w-full" />
+          <SearchBar className="hidden md:block w-[448px] max-w-full" animated={!isFormPage} />
 
           {/* Spacer to push the cart/hamburger right on mobile (no inline search) */}
           <div className="flex-1 md:hidden" />
@@ -289,7 +292,7 @@ export default function Navbar({
         {/* Mobile menu */}
         <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[calc(100dvh-72px)] border-t border-neutral-50" : "max-h-0"}`}>
           <div className="px-4 sm:px-6 py-4 bg-white max-h-[calc(100dvh-72px)] overflow-y-auto">
-            <SearchBar className="md:hidden mb-4" onSubmitted={() => setMenuOpen(false)} />
+            <SearchBar className="md:hidden mb-4" onSubmitted={() => setMenuOpen(false)} animated={!isFormPage} />
             <ul className="flex flex-col gap-1">
               <li>
                 <Link

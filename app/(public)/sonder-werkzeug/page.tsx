@@ -265,7 +265,7 @@ export default function SonderWerkzeugPage() {
 
             {/* Left rail — plain vertical phase nav, centered as one block */}
             <aside className="w-full lg:w-[220px] flex-shrink-0 flex flex-col">
-              <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
+              <h1 className="text-[15px] font-medium text-slate-900 mb-7">{service.name}</h1>
 
               <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
 
@@ -469,7 +469,7 @@ export default function SonderWerkzeugPage() {
                       {!submitting && <CtaArrow />}
                     </button>
                     <span className="text-xs text-neutral-300 hidden sm:flex items-center gap-1.5">
-                      drücken Sie <span className="kbd">Enter ↵</span>
+                      oder drücken Sie <span className="kbd">Enter ↵</span>
                     </span>
                   </div>
                 )}

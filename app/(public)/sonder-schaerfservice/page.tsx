@@ -283,7 +283,7 @@ function SchaerfPage() {
 
             {/* Left rail — plain vertical phase nav, centered as one block */}
             <aside className="w-full lg:w-[220px] flex-shrink-0 flex flex-col">
-              <h1 className="text-sm font-medium text-neutral-500 mb-7">{service.name}</h1>
+              <h1 className="text-[15px] font-medium text-slate-900 mb-7">{service.name}</h1>
 
               <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
 
@@ -464,7 +464,10 @@ function SchaerfPage() {
                       step={0.5}
                       value={data.gewicht}
                       onChange={(e) => setData((d) => ({ ...d, gewicht: parseFloat(e.target.value) }))}
-                      className="w-full accent-brand-500"
+                      className="w-full form-range"
+                      style={{
+                        background: `linear-gradient(to right, var(--color-brand-500) ${(data.gewicht / 20) * 100}%, #E2EFED ${(data.gewicht / 20) * 100}%)`,
+                      }}
                     />
                     <div className="flex justify-between text-xs text-neutral-300 mt-1.5">
                       <span>0 kg</span><span>20+ kg</span>
@@ -559,7 +562,7 @@ function SchaerfPage() {
                       {!submitting && <CtaArrow />}
                     </button>
                     <span className="text-xs text-neutral-300 hidden sm:flex items-center gap-1.5">
-                      drücken Sie <span className="kbd">Enter ↵</span>
+                      oder drücken Sie <span className="kbd">Enter ↵</span>
                     </span>
                   </div>
                 )}
