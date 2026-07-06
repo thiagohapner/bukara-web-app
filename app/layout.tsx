@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Mulish } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -58,6 +59,7 @@ export default function RootLayout({
           gtag('config', 'G-0REYXM8F7G');
         `}</Script>
         {children}
+        <Analytics />
       </body>
     </html>
   );
