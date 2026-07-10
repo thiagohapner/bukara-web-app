@@ -5,6 +5,7 @@ import FeatureBar from "@/components/FeatureBar";
 import Footer from "@/components/Footer";
 // import SortimentTiles from "@/components/SortimentTiles";
 import SelectedProducts from "@/components/SelectedProducts";
+import PopularProducts from "@/components/PopularProducts";
 import CategoryShowcase from "@/components/CategoryShowcase";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
         <BannerSonderwerkzeuge />
         {/* <SortimentTiles /> */}
         <SelectedProducts />
+        <PopularProducts />
         <BannerSonderwerkzeuge only="sonderloesungen" />
         <CategoryShowcase />
         <BannerSonderwerkzeuge only="schaerfservice" />

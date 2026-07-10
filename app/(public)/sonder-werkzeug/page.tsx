@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, ChevronRight, Phone, Mail, Upload } from "lucide-react";
+import RecommendationsClient from "@/components/recommendations/RecommendationsClient";
+import { WERKZEUG_MATERIAL_MAP, WERKZEUG_ANWENDUNG_MAP, mapSeeds } from "@/lib/recommendations/formSeedMaps";
 
 // Multi-step Sonderwerkzeug request form. Mirrors the Schärfservice wizard
 // (app/(public)/sonder-schaerfservice/page.tsx) — same sidebar + .form-*
@@ -467,6 +469,17 @@ export default function SonderWerkzeugPage() {
                       Ihre Anfrage wurde übermittelt. Wir melden uns innerhalb von <strong className="text-slate-900 font-medium">24 Stunden</strong> bei Ihnen.
                     </p>
                     <button type="button" onClick={restart} className="btn-outline mt-7">Neue Anfrage starten</button>
+                    <div className="mt-10 text-left">
+                      <RecommendationsClient
+                        surface="form_success"
+                        seedFilters={{
+                          material: mapSeeds(data.material, WERKZEUG_MATERIAL_MAP),
+                          application: mapSeeds(data.anwendung, WERKZEUG_ANWENDUNG_MAP),
+                        }}
+                        title="Das könnte zu Ihrer Anfrage passen"
+                        limit={8}
+                      />
+                    </div>
                   </div>
                 )}
 

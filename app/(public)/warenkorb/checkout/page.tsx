@@ -9,6 +9,7 @@ import { cartTotals, formatEur } from "@/lib/pricing";
 import { submitOrder } from "@/app/actions/submitOrder";
 import { applyVoucher } from "@/app/actions/applyVoucher";
 import { FileText, Clock, Check, Phone, Mail, ArrowRight, X } from "lucide-react";
+import RecommendationsClient from "@/components/recommendations/RecommendationsClient";
 
 function inputClass(extra = "") {
   return `w-full border border-neutral-200 rounded-sm px-4 py-3 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#01A497]/20 focus:border-[#01A497] transition-colors ${extra}`;
@@ -111,6 +112,21 @@ function OrderSummary({
             );
           })}
         </ul>
+
+        {(() => {
+          const cartProductIds = [...new Set(items.map((i) => i.v2Sku?.product?.id).filter((id): id is string => Boolean(id)))];
+          if (cartProductIds.length === 0) return null;
+          return (
+            <div className="mb-5">
+              <RecommendationsClient
+                surface="cart"
+                anchorProductIds={cartProductIds}
+                limit={3}
+                accessoriesTitle="Passend zu Ihrer Bestellung"
+              />
+            </div>
+          );
+        })()}
 
         {/* Voucher code */}
         <div className="mb-5">

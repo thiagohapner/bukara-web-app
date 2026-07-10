@@ -6,6 +6,7 @@ import { useCart } from "./CartContext";
 import { cartTotals, formatEur, unitPriceForQuantity, FREE_SHIPPING_THRESHOLD, BULK_DISCOUNT_THRESHOLD } from "@/lib/pricing";
 import type { CartItem } from "@/lib/cart";
 import { X, ShoppingBasket, Trash2, ArrowRight } from "lucide-react";
+import RecommendationsClient from "@/components/recommendations/RecommendationsClient";
 
 function QtyButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
@@ -47,6 +48,7 @@ function tierLabel(qty: number): string {
 export default function CartDrawer() {
   const { items, isDrawerOpen, closeDrawer, updateItem, removeCartItem } = useCart();
   const totals = cartTotals(items);
+  const cartProductIds = [...new Set(items.map((i) => i.v2Sku?.product?.id).filter((id): id is string => Boolean(id)))];
 
   // Lock background scroll while the drawer is open.
   useEffect(() => {
@@ -170,6 +172,16 @@ export default function CartDrawer() {
                 );
               })}
             </ul>
+          )}
+          {cartProductIds.length > 0 && (
+            <div className="mt-6">
+              <RecommendationsClient
+                surface="cart"
+                anchorProductIds={cartProductIds}
+                limit={3}
+                accessoriesTitle="Passend zu Ihrem Warenkorb"
+              />
+            </div>
           )}
         </div>
 

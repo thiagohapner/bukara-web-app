@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, ChevronRight, Phone, Mail } from "lucide-react";
+import RecommendationsClient from "@/components/recommendations/RecommendationsClient";
+import { SCHAERFSERVICE_CATEGORY_MAP } from "@/lib/recommendations/formSeedMaps";
 
 // Multi-step Schärfservice request form. Layout/interaction pattern comes
 // from design-system/schaerfservice-reference/ (Claude Design prototype) —
@@ -561,6 +563,16 @@ function SchaerfPage() {
                       Ihre Anfrage wurde übermittelt. Wir melden uns innerhalb von <strong className="text-slate-900 font-medium">24 Stunden</strong> bei Ihnen.
                     </p>
                     <button type="button" onClick={restart} className="btn-outline mt-7">Neue Anfrage starten</button>
+                    <div className="mt-10 text-left">
+                      <RecommendationsClient
+                        surface="form_success"
+                        seedFilters={{
+                          categoryId: data.werkzeuge.map((w) => SCHAERFSERVICE_CATEGORY_MAP[w]).find(Boolean),
+                        }}
+                        title="Das könnte zu Ihrer Anfrage passen"
+                        limit={8}
+                      />
+                    </div>
                   </div>
                 )}
 

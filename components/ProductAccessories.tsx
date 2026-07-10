@@ -138,15 +138,17 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
 export default function ProductAccessories({
   accessories,
   linkBase = "/produkte",
+  title = "Passend dazu",
 }: {
   accessories: AccessoryItem[];
   linkBase?: string;
+  title?: string;
 }) {
   if (accessories.length === 0) return null;
 
   return (
     <div className="mb-6">
-      <p className="text-base font-bold text-slate-900 mb-2">Passend dazu</p>
+      <p className="text-base font-bold text-slate-900 mb-2">{title}</p>
       <div className="border border-slate-800 rounded-lg p-4">
         {accessories.map((acc, idx) => (
           <div key={acc.id}>

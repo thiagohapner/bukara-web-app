@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
+import RefreshRecommendationsButton from "./RefreshRecommendationsButton";
 
 export const dynamic = "force-dynamic";
 
@@ -27,9 +28,12 @@ export default async function V2ProductsPage() {
           <h1 className="text-2xl font-semibold text-slate-800">v2 Produkte</h1>
           <p className="text-sm text-slate-400 mt-0.5">{(products ?? []).length} Produkte im v2-Katalog</p>
         </div>
-        <Link href="/admin/v2/products/new" className="btn-brand px-4 py-2 text-sm">
-          + Neues Produkt
-        </Link>
+        <div className="flex items-center gap-3">
+          <RefreshRecommendationsButton />
+          <Link href="/admin/v2/products/new" className="btn-brand px-4 py-2 text-sm">
+            + Neues Produkt
+          </Link>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">

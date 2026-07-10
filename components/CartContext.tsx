@@ -15,6 +15,7 @@ import {
   type CartItem,
 } from "@/lib/cart";
 import { unitPriceForQuantity } from "@/lib/pricing";
+import { useTrackEvent } from "@/lib/events/useTrackEvent";
 
 type CartContextValue = {
   cartId: string | null;
@@ -62,6 +63,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const { trackEvent } = useTrackEvent();
 
   useEffect(() => {
     const stored = getStoredCartId();
@@ -91,6 +93,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const id = await ensureCart();
     await addV2SkuToCart(id, v2SkuId, qty, unitPrice);
     const updated = await fetchItems(id);
+    const addedProductId = updated.find((i) => i.v2_sku_id === v2SkuId)?.v2Sku?.product?.id;
+    if (addedProductId) trackEvent("add_to_cart", addedProductId, { skuId: v2SkuId });
     // Fix unit_price for the merged line if tier changed
     const merged = updated.find(i => i.v2_sku_id === v2SkuId && i.v2Sku?.has_staffelpreis);
     if (merged) {

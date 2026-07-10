@@ -19,7 +19,7 @@ export type CartItemV2Sku = {
   campaign_price: number | null;
   stock_quantity: number;
   has_staffelpreis: boolean;
-  product: { base_name: string; display_name: string | null; slug: string } | null;
+  product: { id: string; base_name: string; display_name: string | null; slug: string } | null;
 };
 
 export type CartItemDeal = {
@@ -90,7 +90,7 @@ export async function getCartItems(cartId: string): Promise<CartItem[]> {
   if (v2Ids.length > 0) {
     const { data: v2Rows } = await supabaseV2
       .from("skus")
-      .select("id, identnummer, variant_label, price_eur, campaign_price, stock_quantity, has_staffelpreis, product:products(base_name, display_name, slug)")
+      .select("id, identnummer, variant_label, price_eur, campaign_price, stock_quantity, has_staffelpreis, product:products(id, base_name, display_name, slug)")
       .in("id", v2Ids);
     v2Map = Object.fromEntries(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

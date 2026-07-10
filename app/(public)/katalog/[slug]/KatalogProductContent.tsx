@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductGallery from "@/components/ProductGallery";
@@ -11,6 +11,7 @@ import ProductAccessories from "@/components/ProductAccessories";
 import KatalogAbmessungenTable from "./KatalogAbmessungenTable";
 import { getDimensionRows } from "@/lib/v2/dimensions";
 import { useCart } from "@/components/CartContext";
+import { useTrackEvent } from "@/lib/events/useTrackEvent";
 import { formatEur, unitPriceForQuantity } from "@/lib/pricing";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant, V2ProductCuttingData } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
@@ -66,12 +67,18 @@ export default function KatalogProductContent({
   cuttingData,
 }: Props) {
   const { addV2Item, openDrawer } = useCart();
+  const { trackEvent } = useTrackEvent();
 
   const [selectedSkuId, setSelectedSkuId] = useState<string>(initialSkuId ?? skus[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const [addedState, setAddedState] = useState<"idle" | "added">("idle");
 
   const selectedSku = skus.find((s) => s.id === selectedSkuId) ?? skus[0] ?? null;
+
+  useEffect(() => {
+    trackEvent("view", product.id, { skuId: selectedSku?.id, surface: "pdp" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id]);
 
   const productName = product.display_name ?? product.base_name ?? "";
 

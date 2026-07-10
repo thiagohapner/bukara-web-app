@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 import {
   unitPriceForQuantity,
@@ -151,6 +152,24 @@ export async function submitOrder(
   });
 
   if (orderError) return { error: "Bestellung konnte nicht gespeichert werden." };
+
+  // Purchase events feed the recommendation co-purchase signal — only written
+  // for visitors who already accepted tracking consent (i.e. have a session
+  // cookie); no PII, just product ids.
+  const sessionId = (await cookies()).get("bukara_sid")?.value;
+  if (sessionId) {
+    const purchasedProductIds = [...new Set(pricedItems.map((p) => p.product_id).filter((id): id is string => Boolean(id)))];
+    if (purchasedProductIds.length > 0) {
+      const { error: eventsError } = await admin.from("product_events").insert(
+        purchasedProductIds.map((product_id) => ({
+          session_id: sessionId,
+          event_type: "purchase",
+          product_id,
+        }))
+      );
+      if (eventsError) console.error("[recommendations] purchase event insert:", eventsError.message);
+    }
+  }
 
   // Record the redemption (order already saved; a failure here is logged, not fatal).
   if (voucherId && voucherDiscount > 0) {

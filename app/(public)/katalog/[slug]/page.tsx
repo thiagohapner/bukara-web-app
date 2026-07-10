@@ -5,6 +5,8 @@ import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import KatalogProductContent from "./KatalogProductContent";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant, V2ProductCuttingData } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
+import { getRecommendations } from "@/lib/recommendations/service";
+import SimilarProducts from "@/components/recommendations/SimilarProducts";
 
 export const dynamic = "force-dynamic";
 
@@ -300,6 +302,18 @@ export default async function KatalogDetailPage({
       .filter((a): a is AccessoryItem => a !== null);
   }
 
+  // Fill out the "Passend dazu" slot with rule-generated complements when the
+  // merchant hasn't curated enough of their own (curated rows always come first).
+  if (accessories.length < 4) {
+    const { accessories: complementItems } = await getRecommendations({
+      surface: "pdp_cross_sell",
+      anchorProductIds: [product.id],
+      excludeProductIds: accessories.map((a) => a.accessory_product_id),
+      limit: 4 - accessories.length,
+    });
+    accessories = [...accessories, ...complementItems];
+  }
+
   return (
     <>
       <main className="min-h-screen bg-white">
@@ -315,6 +329,7 @@ export default async function KatalogDetailPage({
           initialSkuId={initialSkuId}
           cuttingData={(cutting ?? []) as V2ProductCuttingData[]}
         />
+        <SimilarProducts productId={product.id} />
       </main>
       <Footer />
     </>
