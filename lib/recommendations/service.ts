@@ -28,6 +28,9 @@ const DEFAULT_LIMIT: Record<RecSurface, number> = {
   form_success: 8,
 };
 
+// The "Weitere Produkte" carousel must always show at least this many items.
+const MIN_RECS = 5;
+
 // Serve-time similarity: the v2.similar_for() SQL function applies the diameter
 // re-rank against the viewed SKU's size, dedupes by display_name (no two cards
 // alike), excludes the same product family, and drops hard size-mismatches. The
@@ -38,11 +41,65 @@ async function similarProductIds(anchorId: string, viewedDiameter: number | null
     p_anchor: anchorId,
     p_diam: viewedDiameter ?? null,
     p_limit: limit + exclude.size,
+    p_min: MIN_RECS + exclude.size,
   });
   return ((data ?? []) as { recommended_product_id: string }[])
     .map((r) => r.recommended_product_id)
     .filter((id) => !exclude.has(id))
     .slice(0, limit);
+}
+
+// Guarantees the "Weitere Produkte" carousel never renders fewer than MIN_RECS.
+// Only reached for the handful of products whose category is too small to yield
+// MIN_RECS similar items (e.g. the 7 Spannzangen): tops up with same-category
+// products first, then the merchant's global sort order — never repeating a
+// display_name, the anchor, or its own family.
+async function fallbackFillProductIds(anchorId: string, exclude: Set<string>, needed: number): Promise<string[]> {
+  const { data: anchorRow } = await supabaseAdminV2.from("products").select("series").eq("id", anchorId).maybeSingle();
+  const anchorSeries = (anchorRow as { series: string | null } | null)?.series ?? null;
+
+  const chosen: string[] = [];
+  const seenIds = new Set<string>(exclude);
+  seenIds.add(anchorId);
+  const seenNames = new Set<string>();
+
+  type FillProduct = { id: string; display_name: string | null; base_name: string | null; series: string | null };
+  const consider = (rows: FillProduct[]) => {
+    for (const p of rows) {
+      if (chosen.length >= needed) break;
+      if (seenIds.has(p.id)) continue;
+      if (anchorSeries && p.series === anchorSeries) continue;
+      const name = p.display_name ?? p.base_name ?? p.id;
+      if (seenNames.has(name)) continue;
+      seenNames.add(name);
+      seenIds.add(p.id);
+      chosen.push(p.id);
+    }
+  };
+
+  // Same category first.
+  const { data: catRows } = await supabaseAdminV2.from("product_categories").select("category_id").eq("product_id", anchorId);
+  const catIds = ((catRows ?? []) as { category_id: string }[]).map((r) => r.category_id);
+  if (catIds.length > 0) {
+    const { data: pcRows } = await supabaseAdminV2.from("product_categories").select("product_id").in("category_id", catIds);
+    const catProductIds = [...new Set(((pcRows ?? []) as { product_id: string }[]).map((r) => r.product_id))];
+    const { data: catProducts } = await supabaseAdminV2
+      .from("products")
+      .select("id, display_name, base_name, series, sort_order")
+      .in("id", catProductIds).eq("is_active", true).eq("has_public_page", true).order("sort_order");
+    consider((catProducts ?? []) as FillProduct[]);
+  }
+
+  // Then the global merchandising order.
+  if (chosen.length < needed) {
+    const { data: globalProducts } = await supabaseAdminV2
+      .from("products")
+      .select("id, display_name, base_name, series, sort_order")
+      .eq("is_active", true).eq("has_public_page", true).order("sort_order").limit(300);
+    consider((globalProducts ?? []) as FillProduct[]);
+  }
+
+  return chosen;
 }
 
 // "Passend dazu" is exact-fit accessories only — hand-curated in
@@ -100,10 +157,13 @@ export async function getRecommendations(opts: GetRecommendationsOptions): Promi
     case "pdp_similar": {
       const anchor = opts.anchorProductIds?.[0];
       if (!anchor) return { cards: [], accessories: [] };
-      let ids = await similarProductIds(anchor, opts.viewedDiameter, exclude, limit);
-      if (ids.length === 0) {
-        // Niche types (few same-type peers) can come up empty — fall back to popularity.
-        ids = await popularProductIds(exclude, limit);
+      const ids = await similarProductIds(anchor, opts.viewedDiameter, exclude, limit);
+      // Guarantee at least MIN_RECS: top up the few products whose catalog niche
+      // is too small (e.g. Spannzangen) with next-closest products.
+      if (ids.length < MIN_RECS) {
+        const fillExclude = new Set([...exclude, ...ids]);
+        const fill = await fallbackFillProductIds(anchor, fillExclude, MIN_RECS - ids.length);
+        ids.push(...fill);
       }
       return { cards: await hydrateProductCards(ids, limit), accessories: [] };
     }

@@ -81,7 +81,7 @@ export default function RecommendationsClient({
     return <ProductAccessories accessories={result.accessories} linkBase={linkBase} title={accessoriesTitle} />;
   }
   if (result.cards.length > 0) {
-    return <RecommendationsCarousel title={title ?? "Ähnliche Produkte"} cards={result.cards} />;
+    return <RecommendationsCarousel title={title ?? "Weitere Produkte"} cards={result.cards} />;
   }
   return null;
 }
