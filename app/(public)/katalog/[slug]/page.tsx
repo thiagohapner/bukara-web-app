@@ -5,7 +5,6 @@ import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import KatalogProductContent from "./KatalogProductContent";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant, V2ProductCuttingData } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
-import { getRecommendations } from "@/lib/recommendations/service";
 import SimilarProducts from "@/components/recommendations/SimilarProducts";
 
 export const dynamic = "force-dynamic";
@@ -302,17 +301,12 @@ export default async function KatalogDetailPage({
       .filter((a): a is AccessoryItem => a !== null);
   }
 
-  // Fill out the "Passend dazu" slot with rule-generated complements when the
-  // merchant hasn't curated enough of their own (curated rows always come first).
-  if (accessories.length < 4) {
-    const { accessories: complementItems } = await getRecommendations({
-      surface: "pdp_cross_sell",
-      anchorProductIds: [product.id],
-      excludeProductIds: accessories.map((a) => a.accessory_product_id),
-      limit: 4 - accessories.length,
-    });
-    accessories = [...accessories, ...complementItems];
-  }
+  // "Passend dazu" shows only the merchant's curated exact-fit accessories —
+  // never algorithmic suggestions (those live in the "Ähnliche Produkte" carousel).
+
+  // The recommendation carousel re-ranks toward the size the visitor is viewing.
+  const viewedSku = skuList.find((s) => s.id === initialSkuId) ?? skuList[0];
+  const viewedDiameter = viewedSku?.diameter_mm ?? null;
 
   return (
     <>
@@ -329,7 +323,7 @@ export default async function KatalogDetailPage({
           initialSkuId={initialSkuId}
           cuttingData={(cutting ?? []) as V2ProductCuttingData[]}
         />
-        <SimilarProducts productId={product.id} />
+        <SimilarProducts productId={product.id} viewedDiameter={viewedDiameter} />
       </main>
       <Footer />
     </>
