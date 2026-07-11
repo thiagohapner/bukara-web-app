@@ -311,7 +311,7 @@ export default function KatalogProductContent({
             {selectedSku && (
               <div className="mb-4">
                 <div className={`text-2xl font-bold mb-1 ${isCampaign ? "text-sale" : "text-slate-900"}`}>
-                  {formatEur(displayPrice)}
+                  {formatEur(cartPrice)}
                 </div>
                 {isCampaign && (
                   <div className="text-sm text-neutral-400 mb-1">
