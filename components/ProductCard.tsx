@@ -58,7 +58,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
             {showPrice && (
               <div>
                 <div className={`text-[15px] font-bold ${isCampaign ? "text-sale" : "text-slate-900"}`}>
-                  {card.hasVariants ? "ab " : ""}
+                  {card.hasVariants ? "ab " : card.hasStaffelpreis ? "Ab " : ""}
                   {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}
                 </div>
                 {isCampaign && (
@@ -125,7 +125,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
           {showPrice && (
             <div className="mt-auto">
               <div className={`text-[15px] font-bold ${isCampaign ? "text-sale" : "text-slate-900"}`}>
-                {card.hasVariants ? "ab " : ""}
+                {card.hasVariants ? "ab " : card.hasStaffelpreis ? "Ab " : ""}
                 {formatEur(card.fromCampaignPrice ?? card.fromOriginalPrice ?? 0)}
               </div>
               {isCampaign && (
