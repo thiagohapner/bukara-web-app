@@ -51,7 +51,6 @@ function ItaBadge() {
 // Animated placeholder hint — fixed "Suchen nach " + a rotating trailing term.
 const SEARCH_HINTS = [
   "Schaftfräser",
-  "DIA Scharnierbohrer",
   "Schärfservice",
   "Vollhartmetall",
 ];
