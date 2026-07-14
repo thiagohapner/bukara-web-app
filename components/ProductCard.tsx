@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ProductImage from "@/components/ProductImage";
 import Link from "next/link";
 import { formatEur } from "@/lib/pricing";
 import CardFlag, { CardFlagStack } from "@/components/CardFlag";
@@ -32,15 +32,21 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
                 {card.badge}
               </span>
             )}
-            {card.image ? (
-              <Image src={card.image} alt={card.name} fill unoptimized className="object-contain" sizes="80px" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <span className="text-sm font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.18)" }}>
-                  {card.name.substring(0, 3).toUpperCase()}
-                </span>
-              </div>
-            )}
+            <ProductImage
+              src={card.image ?? ""}
+              alt={card.name}
+              fill
+              unoptimized
+              className="object-contain"
+              sizes="80px"
+              fallback={
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-sm font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.18)" }}>
+                    {card.name.substring(0, 3).toUpperCase()}
+                  </span>
+                </div>
+              }
+            />
             {(isCampaign || card.hasStaffelpreis) && (
               <CardFlagStack size="list">
                 {isCampaign && <CardFlag label="Deal" tone="deal" size="list" />}
@@ -88,24 +94,23 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               {card.badge}
             </span>
           )}
-          {card.image ? (
-            <div className="absolute inset-0">
-              <Image
-                src={card.image}
-                alt={card.name}
-                fill
-                unoptimized
-                className="object-contain img-zoom"
-                sizes="(max-width: 768px) 50vw, 33vw"
-              />
-            </div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <span className="text-4xl font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.18)" }}>
-                {card.name.substring(0, 3).toUpperCase()}
-              </span>
-            </div>
-          )}
+          <div className="absolute inset-0">
+            <ProductImage
+              src={card.image ?? ""}
+              alt={card.name}
+              fill
+              unoptimized
+              className="object-contain img-zoom"
+              sizes="(max-width: 768px) 50vw, 33vw"
+              fallback={
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-4xl font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.18)" }}>
+                    {card.name.substring(0, 3).toUpperCase()}
+                  </span>
+                </div>
+              }
+            />
+          </div>
           {(isCampaign || card.hasStaffelpreis) && (
             <CardFlagStack>
               {isCampaign && <CardFlag label="Deal" tone="deal" />}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
+import ProductImage from "@/components/ProductImage";
 import Link from "next/link";
 import CustomSelect from "@/components/CustomSelect";
 import { useCart } from "@/components/CartContext";
@@ -53,16 +53,15 @@ function AccessoryRow({ accessory, linkBase }: { accessory: AccessoryItem; linkB
     <div className="flex gap-3 items-start">
       {/* Thumbnail */}
       <div className="w-20 flex-shrink-0 rounded-lg overflow-hidden bg-neutral-100 relative aspect-[3/4]">
-        {accessory.images[0] && (
-          <Image
-            src={accessory.images[0]}
-            alt={accessory.name}
-            fill
-            unoptimized
-            className="object-cover"
-            sizes="80px"
-          />
-        )}
+        <ProductImage
+          src={accessory.images[0] ?? ""}
+          alt={accessory.name}
+          fill
+          unoptimized
+          className="object-cover"
+          sizes="80px"
+          fallback={null}
+        />
       </div>
 
       {/* Details */}

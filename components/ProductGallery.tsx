@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
+import ProductImage from "@/components/ProductImage";
 import { X } from "lucide-react";
 
 interface Props {
@@ -53,8 +53,9 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
         >
           {mainImage ? (
             <div className="absolute inset-2">
-              <Image src={mainImage} alt={placeholderLabel} fill unoptimized className="object-contain"
-                sizes="(max-width: 1024px) 100vw, 55vw" />
+              <ProductImage src={mainImage} alt={placeholderLabel} fill unoptimized className="object-contain"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+                fallback={<PlaceholderBlock label={placeholderLabel} />} />
             </div>
           ) : (
             <PlaceholderBlock label={placeholderLabel} />
@@ -77,7 +78,8 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
                 onClick={() => setLightboxIndex(idx + 1)}
               >
                 <div className="absolute inset-2">
-                  <Image src={img} alt={`${placeholderLabel} ${idx + 2}`} fill unoptimized className="object-contain" sizes="27vw" />
+                  <ProductImage src={img} alt={`${placeholderLabel} ${idx + 2}`} fill unoptimized className="object-contain" sizes="27vw"
+                    fallback={<PlaceholderBlock label={placeholderLabel} />} />
                 </div>
               </div>
             ))}
@@ -100,7 +102,8 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
             )}
             {img ? (
               <div className="absolute inset-2">
-                <Image src={img} alt={`${placeholderLabel} ${i + 1}`} fill unoptimized className="object-contain" sizes="82vw" />
+                <ProductImage src={img} alt={`${placeholderLabel} ${i + 1}`} fill unoptimized className="object-contain" sizes="82vw"
+                  fallback={<PlaceholderBlock label={placeholderLabel} />} />
               </div>
             ) : (
               <PlaceholderBlock label={placeholderLabel} />
@@ -134,7 +137,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
               style={{ width: "min(85vw, 700px)", height: "85vh" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
+              <ProductImage
                 src={images[lightboxIndex]}
                 alt={`${placeholderLabel} ${lightboxIndex + 1}`}
                 fill
@@ -142,6 +145,7 @@ export default function ProductGallery({ images, placeholderLabel, badge }: Prop
                 className="object-contain"
                 sizes="85vw"
                 priority
+                fallback={<PlaceholderBlock label={placeholderLabel} />}
               />
             </div>
           </div>,
