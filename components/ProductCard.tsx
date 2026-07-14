@@ -32,21 +32,23 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
                 {card.badge}
               </span>
             )}
-            <ProductImage
-              src={card.image ?? ""}
-              alt={card.name}
-              fill
-              unoptimized
-              className="object-contain"
-              sizes="80px"
-              fallback={
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-sm font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.18)" }}>
-                    {card.name.substring(0, 3).toUpperCase()}
-                  </span>
-                </div>
-              }
-            />
+            <div className="absolute inset-[12%]">
+              <ProductImage
+                src={card.image ?? ""}
+                alt={card.name}
+                fill
+                unoptimized
+                className="object-contain"
+                sizes="80px"
+                fallback={
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-sm font-semibold tracking-tighter select-none" style={{ color: "rgba(1,164,151,0.18)" }}>
+                      {card.name.substring(0, 3).toUpperCase()}
+                    </span>
+                  </div>
+                }
+              />
+            </div>
             {(isCampaign || card.hasStaffelpreis) && (
               <CardFlagStack size="list">
                 {isCampaign && <CardFlag label="Deal" tone="deal" size="list" />}
@@ -94,7 +96,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               {card.badge}
             </span>
           )}
-          <div className="absolute inset-0">
+          <div className="absolute inset-[12%]">
             <ProductImage
               src={card.image ?? ""}
               alt={card.name}
