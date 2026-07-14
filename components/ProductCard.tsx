@@ -16,6 +16,8 @@ export interface ProductCardData {
   hasStaffelpreis?: boolean;
   hrefPrefix?: string;
   variant?: "grid" | "list";
+  /** Inset the image within the card (for tightly-cropped category images, e.g. Wendemesser). */
+  paddedImage?: boolean;
 }
 
 export default function ProductCard({ card }: { card: ProductCardData }) {
@@ -32,7 +34,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
                 {card.badge}
               </span>
             )}
-            <div className="absolute inset-[18%]">
+            <div className={`absolute ${card.paddedImage ? "inset-[18%]" : "inset-0"}`}>
               <ProductImage
                 src={card.image ?? ""}
                 alt={card.name}
@@ -96,7 +98,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               {card.badge}
             </span>
           )}
-          <div className="absolute inset-[18%]">
+          <div className={`absolute ${card.paddedImage ? "inset-[18%]" : "inset-0"}`}>
             <ProductImage
               src={card.image ?? ""}
               alt={card.name}

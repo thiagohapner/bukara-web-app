@@ -96,6 +96,11 @@ const fetchCatalog = unstable_cache(
 export async function getCatalogData(): Promise<CatalogData> {
   const { cardRows, categories } = await fetchCatalog();
 
+  // Products in the Wendemesser category use tightly-cropped (background-removed)
+  // images that would otherwise render edge-to-edge; flag them so the card insets
+  // the image for a consistent scale. Resolved by slug at query time (no hardcoded id).
+  const wendemesserCatId = categories.find((c) => c.slug === "wendemesser")?.id;
+
   const cards: EnrichedCard[] = cardRows.map((r) => {
     // A campaign card shows the campaign price with the original struck through.
     const hasCampaign =
@@ -131,6 +136,7 @@ export async function getCatalogData(): Promise<CatalogData> {
       maxShank: r.shank_mm,
       searchText: r.search_text ?? "",
       hasStaffelpreis: r.has_staffelpreis ?? false,
+      paddedImage: wendemesserCatId ? (r.category_ids ?? []).includes(wendemesserCatId) : false,
     };
   });
 
