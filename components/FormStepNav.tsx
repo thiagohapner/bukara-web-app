@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 // Sonderwerkzeug). Mirrors the Stripe-onboarding reference: a column of dots
 // joined by a thin connector, each in one of three states.
 //   i <  activeIndex → done     (brand-filled dot + check)
-//   i === activeIndex → active  (brand ring dot, brand label)
+//   i === activeIndex → active  (black-filled dot + white number, brand label)
 //   i >  activeIndex → upcoming (neutral dot + number, muted label)
 export default function FormStepNav({
   phases,
@@ -26,13 +26,17 @@ export default function FormStepNav({
               <span
                 className={[
                   "w-6 h-6 flex-shrink-0 rounded-pill flex items-center justify-center text-[11px] font-medium transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)]",
-                  done
+                  done || active
                     ? "text-white"
-                    : active
-                      ? "border-2 border-brand-500 text-brand-600"
-                      : "border border-neutral-200 text-neutral-400",
+                    : "border border-neutral-200 text-neutral-400",
                 ].join(" ")}
-                style={{ backgroundColor: done ? "var(--color-brand-500)" : "#ffffff" }}
+                style={{
+                  backgroundColor: done
+                    ? "var(--color-brand-500)"
+                    : active
+                      ? "var(--color-slate-900)"
+                      : "#ffffff",
+                }}
               >
                 {done ? <Check className="w-3.5 h-3.5" strokeWidth={3} /> : i + 1}
               </span>
