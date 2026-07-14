@@ -32,7 +32,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
                 {card.badge}
               </span>
             )}
-            <div className="absolute inset-[12%]">
+            <div className="absolute inset-[18%]">
               <ProductImage
                 src={card.image ?? ""}
                 alt={card.name}
@@ -96,7 +96,7 @@ export default function ProductCard({ card }: { card: ProductCardData }) {
               {card.badge}
             </span>
           )}
-          <div className="absolute inset-[12%]">
+          <div className="absolute inset-[18%]">
             <ProductImage
               src={card.image ?? ""}
               alt={card.name}
