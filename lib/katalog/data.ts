@@ -88,7 +88,7 @@ const fetchCatalog = unstable_cache(
       categories: (catsRes.data ?? []) as V2Category[],
     };
   },
-  ["catalog-sku-cards-v2"],
+  ["catalog-sku-cards-v3"],
   { tags: ["catalog"], revalidate: 86400 },
 );
 
