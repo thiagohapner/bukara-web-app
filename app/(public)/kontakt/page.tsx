@@ -50,6 +50,7 @@ export default function KontaktPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [consent, setConsent] = useState(false);
   const [form, setForm] = useState<ContactForm>({
     name: "", company: "", email: "", phone: "", subject: "", message: "",
   });
@@ -280,10 +281,23 @@ export default function KontaktPage() {
                   <p className="text-sm text-red-600 mb-4">{submitError}</p>
                 )}
 
+                <label className="flex items-start gap-2.5 mb-5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="accent-[#01A497] w-4 h-4 flex-shrink-0 mt-0.5"
+                  />
+                  <span className="text-[13px] text-neutral-500 leading-relaxed">
+                    Ich stimme zu, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert und ich hierzu kontaktiert werden darf. Weitere Informationen finden Sie in der{" "}
+                    <Link href="/datenschutz" className="underline hover:text-slate-900">Datenschutzerklärung</Link>.
+                  </span>
+                </label>
+
                 <div>
                   <button
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || !consent}
                     className="btn-brand btn-arrow inline-flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Wird gesendet…" : "Nachricht senden"}

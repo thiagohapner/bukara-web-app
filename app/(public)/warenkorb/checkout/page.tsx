@@ -230,6 +230,7 @@ export default function CheckoutPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [consent, setConsent] = useState(false);
 
   const [voucherInput, setVoucherInput] = useState("");
   const [appliedVoucher, setAppliedVoucher] = useState<AppliedVoucher | null>(null);
@@ -402,11 +403,24 @@ export default function CheckoutPage() {
 
                 {submitError && <p className="text-sm text-red-500 mb-4">{submitError}</p>}
 
+                <label className="flex items-start gap-2.5 mb-4 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="accent-[#01A497] w-4 h-4 flex-shrink-0 mt-0.5"
+                  />
+                  <span className="text-[13px] text-neutral-500 leading-relaxed">
+                    Ich stimme zu, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert und ich hierzu kontaktiert werden darf. Weitere Informationen finden Sie in der{" "}
+                    <Link href="/datenschutz" className="underline hover:text-slate-900">Datenschutzerklärung</Link>.
+                  </span>
+                </label>
+
                 <button
                   type="submit"
-                  disabled={submitting || items.length === 0}
+                  disabled={submitting || items.length === 0 || !consent}
                   className="btn-black btn-arrow w-full justify-center"
-                  style={{ opacity: submitting || items.length === 0 ? 0.7 : 1 }}
+                  style={{ opacity: submitting || items.length === 0 || !consent ? 0.7 : 1 }}
                 >
                   {submitting ? "Wird gesendet…" : "Bestellung aufgeben"}
                   {!submitting && <CtaArrow />}
@@ -414,9 +428,6 @@ export default function CheckoutPage() {
 
                 <p className="text-[11px] text-neutral-400 mt-3 text-center">
                   Zahlung bequem auf Rechnung nach Lieferung.
-                </p>
-                <p className="text-[11px] text-neutral-400 mt-1 text-center">
-                  Mit dem Absenden stimmen Sie zu, dass wir Sie bezüglich Ihrer Anfrage kontaktieren dürfen.
                 </p>
               </form>
             </div>

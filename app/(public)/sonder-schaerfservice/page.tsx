@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
@@ -112,6 +113,7 @@ function SchaerfPage() {
   const [data, setData] = useState<FormState>(initialState);
   const [err, setErr] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [consent, setConsent] = useState(false);
   const [openPicker, setOpenPicker] = useState<"" | "cal" | "von" | "bis">("");
   const today = new Date();
   const [calY, setCalY] = useState(today.getFullYear());
@@ -255,6 +257,7 @@ function SchaerfPage() {
     setData(initialState());
     setStep(1);
     setErr("");
+    setConsent(false);
     setOpenPicker("");
   }
 
@@ -291,12 +294,9 @@ function SchaerfPage() {
                 <FormStepNav phases={PHASES} activeIndex={phaseIndex(step)} />
               </div>
 
-              {/* Fine print + contact — desktop only (duplicated below the mobile CTA) */}
+              {/* Contact — desktop only (duplicated below the mobile CTA) */}
               <div className="hidden lg:block mt-9">
-                <p className="text-[13px] text-neutral-400 leading-relaxed">
-                  Für kleine Aufträge unter 150€ fällt lediglich eine einmalige Pauschale von 15€ an.
-                </p>
-                <div className="mt-6">
+                <div>
                   <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
                   <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
                     <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>
@@ -532,6 +532,23 @@ function SchaerfPage() {
                       <span className="form-label mb-0">E-Mail <span className="text-brand-500">*</span></span>
                       <input type="email" value={data.email} onChange={(e) => setData((d) => ({ ...d, email: e.target.value }))} placeholder="anfrage@firma.de" className="form-input" />
                     </label>
+
+                    <p className="text-[13px] text-neutral-400 leading-relaxed mt-7">
+                      Für kleine Aufträge unter 150€ fällt lediglich eine einmalige Pauschale von 15€ an.
+                    </p>
+
+                    <label className="flex items-start gap-2.5 mt-4 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        className="accent-[#01A497] w-4 h-4 flex-shrink-0 mt-0.5"
+                      />
+                      <span className="text-[13px] text-neutral-500 leading-relaxed">
+                        Ich stimme zu, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert und ich hierzu kontaktiert werden darf. Weitere Informationen finden Sie in der{" "}
+                        <Link href="/datenschutz" className="underline hover:text-slate-900">Datenschutzerklärung</Link>.
+                      </span>
+                    </label>
                   </div>
                 )}
 
@@ -561,7 +578,7 @@ function SchaerfPage() {
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                     )}
-                    <button type="button" onClick={goNext} disabled={submitting} className="btn-black btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
+                    <button type="button" onClick={goNext} disabled={submitting || (step === 6 && !consent)} className="btn-black btn-arrow" style={{ opacity: submitting || (step === 6 && !consent) ? 0.7 : 1 }}>
                       {submitting ? "Wird gesendet…" : STEP_LABELS[Math.min(step, 6) - 1]}
                       {!submitting && <CtaArrow />}
                     </button>
@@ -571,13 +588,10 @@ function SchaerfPage() {
                   </div>
                 )}
 
-                {/* Fine print + contact — mobile only, below the CTA */}
+                {/* Contact — mobile only, below the CTA */}
                 {step !== 7 && (
                   <div className="lg:hidden mt-9">
-                    <p className="text-[13px] text-neutral-400 leading-relaxed">
-                      Für kleine Aufträge unter 150€ fällt lediglich eine einmalige Pauschale von 15€ an.
-                    </p>
-                    <div className="mt-6">
+                    <div>
                       <div className="text-[15px] font-medium text-slate-900 mb-3">Noch Fragen?</div>
                       <a href="tel:+4974439661-0" className="flex items-center gap-3 text-slate-900 text-sm mb-2.5" style={{ textDecoration: "none" }}>
                         <span className="icon-tile icon-tile--sm"><Phone className="w-4 h-4" strokeWidth={1.75} /></span>

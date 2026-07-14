@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Footer from "@/components/Footer";
 import { SERVICES } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
@@ -84,6 +85,7 @@ export default function SonderWerkzeugPage() {
   const [data, setData] = useState<FormState>(initialState);
   const [err, setErr] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [consent, setConsent] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -221,6 +223,7 @@ export default function SonderWerkzeugPage() {
     setFileName(null);
     setStep(1);
     setErr("");
+    setConsent(false);
   }
 
   const canBack = step > 1 && step <= TOTAL_STEPS;
@@ -438,6 +441,19 @@ export default function SonderWerkzeugPage() {
                     <label className="form-label mt-6" htmlFor="message">Nachricht</label>
                     <textarea id="message" className="form-textarea" rows={4} value={data.message} onChange={(e) => setField("message", e.target.value)}
                       placeholder="Weitere Angaben zu Ihrem Projekt oder besonderen Anforderungen…" />
+
+                    <label className="flex items-start gap-2.5 mt-6 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        className="accent-[#01A497] w-4 h-4 flex-shrink-0 mt-0.5"
+                      />
+                      <span className="text-[13px] text-neutral-500 leading-relaxed">
+                        Ich stimme zu, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert und ich hierzu kontaktiert werden darf. Weitere Informationen finden Sie in der{" "}
+                        <Link href="/datenschutz" className="underline hover:text-slate-900">Datenschutzerklärung</Link>.
+                      </span>
+                    </label>
                   </div>
                 )}
 
@@ -467,7 +483,7 @@ export default function SonderWerkzeugPage() {
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                     )}
-                    <button type="button" onClick={goNext} disabled={submitting} className="btn-black btn-arrow" style={{ opacity: submitting ? 0.7 : 1 }}>
+                    <button type="button" onClick={goNext} disabled={submitting || (step === TOTAL_STEPS && !consent)} className="btn-black btn-arrow" style={{ opacity: submitting || (step === TOTAL_STEPS && !consent) ? 0.7 : 1 }}>
                       {submitting ? "Wird gesendet…" : step === TOTAL_STEPS ? "Anfrage absenden" : "Weiter"}
                       {!submitting && <CtaArrow />}
                     </button>
