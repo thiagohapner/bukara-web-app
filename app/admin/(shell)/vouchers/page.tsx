@@ -8,6 +8,7 @@ const SCOPE_LABEL: Record<string, string> = {
   order: "Gesamter Warenkorb",
   product: "Produkt",
   product_series: "Serie",
+  category: "Kategorie",
 };
 
 const BADGE: Record<VoucherStatus, string> = {

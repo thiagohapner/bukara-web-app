@@ -16,7 +16,7 @@ export default async function EditVoucherPage({ params }: { params: Promise<{ id
     .select("id", { count: "exact", head: true })
     .eq("voucher_id", id);
 
-  const { products, seriesList } = await loadVoucherOptions();
+  const { products, seriesList, categories } = await loadVoucherOptions();
 
   return (
     <VoucherEditClient
@@ -25,6 +25,7 @@ export default async function EditVoucherPage({ params }: { params: Promise<{ id
       redemptionCount={count ?? 0}
       products={products}
       seriesList={seriesList}
+      categories={categories}
     />
   );
 }

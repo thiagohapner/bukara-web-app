@@ -49,7 +49,9 @@ export async function POST(request: NextRequest) {
   const discount_type = body.discount_type === "fixed_amount" ? "fixed_amount" : "percentage";
   const discount_value = num(body.discount_value);
   const scope =
-    body.scope === "product" || body.scope === "product_series" ? body.scope : "order";
+    body.scope === "product" || body.scope === "product_series" || body.scope === "category"
+      ? body.scope
+      : "order";
   const scope_target_id = scope === "order" ? null : (body.scope_target_id?.trim() || null);
 
   // Validate the bits the DB can't phrase nicely.

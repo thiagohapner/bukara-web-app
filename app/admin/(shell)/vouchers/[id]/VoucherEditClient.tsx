@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { normalizeVoucherCode, voucherStatus, VOUCHER_STATUS_LABEL } from "@/lib/vouchers";
-import type { ProductOption } from "../options";
+import type { ProductOption, CategoryOption } from "../options";
 
 export type VoucherRecord = {
   id: string;
@@ -12,7 +12,7 @@ export type VoucherRecord = {
   description: string | null;
   discount_type: "percentage" | "fixed_amount";
   discount_value: number;
-  scope: "order" | "product" | "product_series";
+  scope: "order" | "product" | "product_series" | "category";
   scope_target_id: string | null;
   min_order_value: number | null;
   max_redemptions: number | null;
@@ -28,7 +28,7 @@ type FormState = {
   description: string;
   discount_type: "percentage" | "fixed_amount";
   discount_value: string;
-  scope: "order" | "product" | "product_series";
+  scope: "order" | "product" | "product_series" | "category";
   scope_target_id: string;
   min_order_value: string;
   max_redemptions: string;
@@ -88,12 +88,14 @@ export default function VoucherEditClient({
   redemptionCount,
   products,
   seriesList,
+  categories,
 }: {
   voucherId: string | null;
   initial: VoucherRecord | null;
   redemptionCount: number;
   products: ProductOption[];
   seriesList: string[];
+  categories: CategoryOption[];
 }) {
   const router = useRouter();
   const [f, setF] = useState<FormState>(() => initialState(initial));
@@ -241,6 +243,7 @@ export default function VoucherEditClient({
             <option value="order">Gesamter Warenkorb</option>
             <option value="product">Einzelnes Produkt</option>
             <option value="product_series">Produktserie</option>
+            <option value="category">Kategorie</option>
           </select>
         </Row>
 
@@ -261,6 +264,17 @@ export default function VoucherEditClient({
               <option value="">– bitte wählen –</option>
               {seriesList.map((s) => (
                 <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </Row>
+        )}
+
+        {f.scope === "category" && (
+          <Row label="Kategorie *">
+            <select className={inp} value={f.scope_target_id} onChange={(e) => set("scope_target_id", e.target.value)}>
+              <option value="">– bitte wählen –</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </Row>
