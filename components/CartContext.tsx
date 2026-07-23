@@ -14,7 +14,6 @@ import {
   removeItem,
   type CartItem,
 } from "@/lib/cart";
-import { unitPriceForQuantity } from "@/lib/pricing";
 
 type CartContextValue = {
   cartId: string | null;
@@ -45,15 +44,6 @@ async function fetchItems(id: string): Promise<CartItem[]> {
   } catch {
     return [];
   }
-}
-
-function reprice(item: CartItem, qty: number): number | undefined {
-  const basePrice = item.sku?.price ?? item.v2Sku?.price_eur;
-  const hasStaffel = item.v2Sku?.has_staffelpreis ?? false;
-  if (hasStaffel && basePrice != null) {
-    return unitPriceForQuantity(basePrice, true, qty);
-  }
-  return undefined;
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -90,19 +80,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addV2Item = useCallback(async (v2SkuId: string, qty: number, unitPrice: number) => {
     const id = await ensureCart();
     await addV2SkuToCart(id, v2SkuId, qty, unitPrice);
-    const updated = await fetchItems(id);
-    // Fix unit_price for the merged line if tier changed
-    const merged = updated.find(i => i.v2_sku_id === v2SkuId && i.v2Sku?.has_staffelpreis);
-    if (merged) {
-      const tiered = unitPriceForQuantity(merged.v2Sku!.price_eur, true, merged.quantity);
-      if (Math.abs(tiered - merged.unit_price) > 0.001) {
-        await updateQuantityAndPrice(merged.id, merged.quantity, tiered);
-        const final = await fetchItems(id);
-        setItems(final);
-        return;
-      }
-    }
-    setItems(updated);
+    setItems(await fetchItems(id));
   }, [ensureCart]);
 
   const addDeal = useCallback(async (dealId: string, selectedSkuId: string | null, qty: number, unitPrice: number) => {
@@ -114,11 +92,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const updateItem = useCallback(async (itemId: string, qty: number) => {
     if (!cartId) return;
-    const item = items.find(i => i.id === itemId);
-    const unitPrice = item ? reprice(item, qty) : undefined;
-    await updateQuantityAndPrice(itemId, qty, unitPrice);
+    // Flat list price per unit — quantity changes do not retier the line price.
+    await updateQuantityAndPrice(itemId, qty, undefined);
     setItems(await fetchItems(cartId));
-  }, [cartId, items]);
+  }, [cartId]);
 
   const removeCartItem = useCallback(async (itemId: string) => {
     if (!cartId) return;

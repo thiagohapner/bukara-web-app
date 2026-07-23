@@ -2,7 +2,6 @@
 
 import { createClient } from "@supabase/supabase-js";
 import {
-  unitPriceForQuantity,
   cartTotals,
   BULK_DISCOUNT_THRESHOLD,
   BULK_DISCOUNT_PERCENT,
@@ -80,9 +79,10 @@ export async function submitOrder(
   const pricedItems = rows.map((row) => {
     if (row.v2_sku_id) {
       const sku = v2Map[row.v2_sku_id];
-      // Honor an active campaign price as the base when present.
-      const base = sku?.campaign_price ?? sku?.price_eur ?? 0;
-      const unit_price = unitPriceForQuantity(base, sku?.has_staffelpreis ?? false, row.quantity);
+      // Honor an active campaign price as the base when present. Flat list price
+      // per unit — per-quantity Staffelpreis tiers are not applied at charge time
+      // (see lib/pricing/staffel.ts; tiered charging is a separate follow-up).
+      const unit_price = sku?.campaign_price ?? sku?.price_eur ?? 0;
       return {
         unit_price,
         quantity: row.quantity,

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "./CartContext";
-import { cartTotals, formatEur, unitPriceForQuantity, FREE_SHIPPING_THRESHOLD, BULK_DISCOUNT_THRESHOLD } from "@/lib/pricing";
+import { cartTotals, formatEur, FREE_SHIPPING_THRESHOLD, BULK_DISCOUNT_THRESHOLD } from "@/lib/pricing";
 import type { CartItem } from "@/lib/cart";
 import { X, ShoppingBasket, Trash2, ArrowRight } from "lucide-react";
 
@@ -33,15 +33,7 @@ function itemDisplayFields(item: CartItem) {
       ? (item.selected_sku?.artikel_nr ?? null)
       : (item.sku?.artikel_nr ?? item.v2Sku?.identnummer ?? null),
     stockQty: item.sku?.stock_quantity ?? item.v2Sku?.stock_quantity ?? 999,
-    hasStaffel: item.v2Sku?.has_staffelpreis ?? false,
-    basePrice: item.v2Sku?.price_eur ?? item.sku?.price ?? item.unit_price,
   };
-}
-
-function tierLabel(qty: number): string {
-  if (qty >= 10) return "Mengenstaffel: ab 10 Stück −10%";
-  if (qty >= 5)  return "Mengenstaffel: 5–9 Stück Standardpreis";
-  return "Mengenstaffel: 1–4 Stück +20% Mindermengenzuschlag";
 }
 
 export default function CartDrawer() {
@@ -107,7 +99,7 @@ export default function CartDrawer() {
           ) : (
             <ul className="flex flex-col gap-5">
               {items.map((item) => {
-                const { name, variantLabel, artikelNr, stockQty, hasStaffel, basePrice } = itemDisplayFields(item);
+                const { name, variantLabel, artikelNr, stockQty } = itemDisplayFields(item);
                 const lineTotal = item.unit_price * item.quantity;
 
                 return (
@@ -120,9 +112,6 @@ export default function CartDrawer() {
                       )}
                       {artikelNr && (
                         <p className="text-[11px] text-neutral-400 mt-0.5">Art.-Nr.: {artikelNr}</p>
-                      )}
-                      {hasStaffel && (
-                        <p className="text-[11px] text-neutral-400 mt-0.5">{tierLabel(item.quantity)}</p>
                       )}
                       {stockQty < 10 && stockQty > 0 && (
                         <p className="text-[11px] font-medium mt-1" style={{ color: "#D97706" }}>
@@ -146,23 +135,13 @@ export default function CartDrawer() {
                       >
                         Vom Warenkorb entfernen
                       </button>
-                      {hasStaffel && item.quantity === 4 && (
-                        <p className="text-[11px] mt-1" style={{ color: "#01A497" }}>
-                          Noch 1 Stück bis zum Standardpreis
-                        </p>
-                      )}
-                      {hasStaffel && item.quantity === 9 && (
-                        <p className="text-[11px] mt-1" style={{ color: "#01A497" }}>
-                          Noch 1 Stück für −10% Mengenrabatt
-                        </p>
-                      )}
                     </div>
                     {/* Price */}
                     <div className="flex flex-col items-end justify-between">
                       <p className="text-sm font-semibold text-slate-900">{formatEur(lineTotal)}</p>
                       {item.quantity > 1 && (
                         <p className="text-[11px] text-neutral-400">
-                          {formatEur(hasStaffel ? unitPriceForQuantity(basePrice, true, item.quantity) : item.unit_price)} / Stk.
+                          {formatEur(item.unit_price)} / Stk.
                         </p>
                       )}
                     </div>

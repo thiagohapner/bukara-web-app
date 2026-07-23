@@ -25,13 +25,6 @@ function round(n: number) {
   return Math.round(n * 100) / 100;
 }
 
-export function unitPriceForQuantity(basePrice: number, hasStaffelpreis: boolean, qty: number): number {
-  if (!hasStaffelpreis) return basePrice;
-  if (qty >= 10) return round(basePrice * 0.90);
-  if (qty >= 5)  return basePrice;
-  return round(basePrice * 1.20); // 1–4
-}
-
 export function calculatePrice(input: PriceInput): PriceResult {
   const fixedOriginal = input.fixedItems.reduce((s, i) => s + i.originalPrice, 0);
   const fixedCampaign = input.fixedItems.reduce((s, i) => s + i.campaignPrice, 0);

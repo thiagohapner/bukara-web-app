@@ -9,10 +9,12 @@ import OrderBenefits from "@/components/OrderBenefits";
 import CtaArrow from "@/components/CtaArrow";
 import V2SeriesVariantPicker from "@/components/V2SeriesVariantPicker";
 import ProductAccessories from "@/components/ProductAccessories";
+import StaffelpreisBlock from "@/components/StaffelpreisBlock";
 import KatalogAbmessungenTable from "./KatalogAbmessungenTable";
 import { getDimensionRows } from "@/lib/v2/dimensions";
 import { useCart } from "@/components/CartContext";
-import { formatEur, unitPriceForQuantity } from "@/lib/pricing";
+import { formatEur } from "@/lib/pricing";
+import { parseStaffelSpecs } from "@/lib/pricing/staffel";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant, V2ProductCuttingData } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
@@ -85,14 +87,12 @@ export default function KatalogProductContent({
       ? [product.default_image_url]
       : [];
 
-  const isStaffel = !!selectedSku?.has_staffelpreis;
   const basePrice = selectedSku?.price_eur ?? 0;
+  // Headline = flat list price (campaign price honored). Real Staffelpreis tiers
+  // are shown in the StaffelpreisBlock from v2.sku_specs, never derived here.
   const displayPrice = selectedSku?.campaign_price ?? basePrice;
-  const cartPrice = isStaffel
-    ? unitPriceForQuantity(basePrice, true, quantity)
-    : displayPrice;
   const originalPrice = basePrice;
-  const isCampaign = !isStaffel && selectedSku?.campaign_price != null && selectedSku.campaign_price < originalPrice;
+  const isCampaign = selectedSku?.campaign_price != null && selectedSku.campaign_price < originalPrice;
   const stockQty = selectedSku?.stock_quantity ?? 999;
   const outOfStock = stockQty === 0;
   const lowStock = stockQty > 0 && stockQty < 10;
@@ -101,9 +101,24 @@ export default function KatalogProductContent({
     ? skuSpecs.filter((s) => s.sku_id === selectedSkuId)
     : skuSpecs.filter((s) => s.sku_id === skus[0]?.id);
 
+  // Real Staffelpreis data (from v2.sku_specs). Drives the tier block and, when a
+  // Verpackungseinheit is set, the quantity selector's step/min/default.
+  const staffel = parseStaffelSpecs(currentSpecs);
+  const packagingUnit = staffel?.packagingUnit && staffel.packagingUnit > 0 ? staffel.packagingUnit : null;
+  const qtyStep = packagingUnit ?? 1;
+
+  // Reset the quantity to the packaging unit (or 1) whenever the variant changes.
+  // Adjusting state during render (guarded) instead of in an effect avoids an
+  // extra render pass. See react.dev "storing information from previous renders".
+  const [prevSkuId, setPrevSkuId] = useState(selectedSkuId);
+  if (selectedSkuId !== prevSkuId) {
+    setPrevSkuId(selectedSkuId);
+    setQuantity(qtyStep);
+  }
+
   async function handleAddToCart() {
     if (!selectedSku || outOfStock) return;
-    await addV2Item(selectedSku.id, quantity, cartPrice);
+    await addV2Item(selectedSku.id, quantity, displayPrice);
     setAddedState("added");
     openDrawer();
     setTimeout(() => setAddedState("idle"), 1500);
@@ -126,29 +141,6 @@ export default function KatalogProductContent({
     });
   }
 
-  function StaffelpreisTable() {
-    const tiers = [
-      { label: "1–4 Stück",   price: unitPriceForQuantity(basePrice, true, 1) },
-      { label: "5–9 Stück",   price: unitPriceForQuantity(basePrice, true, 5) },
-      { label: "ab 10 Stück", price: unitPriceForQuantity(basePrice, true, 10) },
-    ];
-    return (
-      <div className="mb-6">
-        <p className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wide mb-2">Staffelpreise</p>
-        <table className="w-full text-sm border border-neutral-100 rounded-lg overflow-hidden">
-          <tbody>
-            {tiers.map(({ label, price }) => (
-              <tr key={label}>
-                <td className="py-2 px-3 text-neutral-500">{label}</td>
-                <td className="py-2 px-3 text-right text-neutral-500">{formatEur(price)} / Stk.</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-
   function SpecRow({ s }: { s: { id: string; spec_key: string | null; spec_value: string } }) {
     if (s.spec_key && s.spec_key !== "details") {
       return (
@@ -161,7 +153,14 @@ export default function KatalogProductContent({
     return <p className="text-base text-neutral-700 leading-snug">{s.spec_value}</p>;
   }
 
-  const techItems = currentSpecs.filter((s) => s.spec_section === "technische_details");
+  // Staffelpreis / Verpackungseinheit rows are surfaced in the StaffelpreisBlock,
+  // so exclude them from the raw Technische Details list (display filter only).
+  const techItems = currentSpecs.filter(
+    (s) =>
+      s.spec_section === "technische_details" &&
+      !(s.spec_key ?? "").startsWith("Staffelpreis") &&
+      s.spec_key !== "Verpackungseinheit",
+  );
   if (techItems.length > 0) {
     accordionSections.push({
       id: "technische-details",
@@ -311,7 +310,7 @@ export default function KatalogProductContent({
             {selectedSku && (
               <div className="mb-4">
                 <div className={`text-2xl font-bold mb-1 ${isCampaign ? "text-sale" : "text-slate-900"}`}>
-                  {formatEur(cartPrice)}
+                  {formatEur(displayPrice)}
                 </div>
                 {isCampaign && (
                   <div className="text-sm text-neutral-400 mb-1">
@@ -325,8 +324,8 @@ export default function KatalogProductContent({
               </div>
             )}
 
-            {isStaffel && selectedSku && (
-              <StaffelpreisTable />
+            {selectedSku && (
+              <StaffelpreisBlock specs={currentSpecs} quantity={quantity} />
             )}
 
             {product.short_description && (
@@ -364,20 +363,25 @@ export default function KatalogProductContent({
                 <div className="flex items-center border border-slate-800 rounded-sm select-none h-12">
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    aria-label="Menge verringern"
+                    onClick={() => setQuantity((q) => Math.max(qtyStep, q - qtyStep))}
                     className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
                   </button>
-                  <span className="min-w-[1.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
+                  <span className="min-w-[2.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity} Stück</span>
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => q + 1)}
+                    aria-label="Menge erhöhen"
+                    onClick={() => setQuantity((q) => q + qtyStep)}
                     className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                   >
                     <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
                   </button>
                 </div>
+                {packagingUnit && (
+                  <span className="text-[11px] text-neutral-400 whitespace-nowrap">VE {packagingUnit} Stück</span>
+                )}
                 <button
                   type="button"
                   onClick={handleAddToCart}
