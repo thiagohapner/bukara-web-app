@@ -1,5 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { unitPriceForQuantity } from "@/lib/pricing";
 import { normalizeVoucherCode, type VoucherValidation } from "@/lib/vouchers";
 
 /** One cart line reduced to what the validation RPC needs for scope/min/stacking. */
@@ -24,7 +25,7 @@ function seriesOf(v2Sku: AnyMap | undefined): string | null {
 
 /**
  * Price a single cart row identically to how the order total is computed in
- * `submitOrder` (campaign price honored, flat list price per unit; deal bundles
+ * `submitOrder` (campaign price honored, quantity Staffel applied; deal bundles
  * priced at 0 there). Keeping this shared guarantees the discount shown at
  * "apply" equals the discount recomputed at placement.
  */
@@ -32,7 +33,8 @@ export function priceVoucherRow(row: CartRow, v2Map: AnyMap, pubMap: AnyMap): Vo
   if (row.v2_sku_id) {
     const s = v2Map[row.v2_sku_id];
     const campaign = s?.campaign_price ?? null;
-    const unit = campaign ?? s?.price_eur ?? 0;
+    const base = campaign ?? s?.price_eur ?? 0;
+    const unit = unitPriceForQuantity(base, s?.has_staffelpreis ?? false, row.quantity);
     return { product_id: s?.product_id ?? null, series: seriesOf(s), line_net: round(unit * row.quantity), on_deal: campaign != null };
   }
   if (row.sku_id) {

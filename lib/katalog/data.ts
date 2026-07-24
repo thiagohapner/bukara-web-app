@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 import { supabaseAdminV2 } from "@/lib/v2/supabaseAdmin";
 import type { V2Category } from "@/lib/v2/types";
 import type { EnrichedCard } from "@/lib/katalog/filter";
+import { unitPriceForQuantity } from "@/lib/pricing";
 
 // One row per public+active SKU, pre-aggregated by the v2.catalog_sku_cards view.
 // Each catalog card is a single SKU with its own slug, exact price, and exact
@@ -104,6 +105,12 @@ export async function getCatalogData(): Promise<CatalogData> {
     // A campaign card shows the campaign price with the original struck through.
     const hasCampaign =
       r.campaign_price != null && r.original_price != null && r.campaign_price < r.original_price;
+    // Staffelpreise SKUs show the highest-quantity (lowest unit price) tier,
+    // prefixed with "Ab" by ProductCard — resolved via the same tier formula
+    // used everywhere else (lib/pricing.ts), not re-derived here.
+    const staffelFromPrice = r.has_staffelpreis
+      ? unitPriceForQuantity(r.original_price ?? r.price ?? 0, true, 10)
+      : null;
     return {
       id: r.id,
       slug: r.slug,
@@ -111,10 +118,11 @@ export async function getCatalogData(): Promise<CatalogData> {
       badge: r.badge ?? undefined,
       image: r.image ?? undefined,
       galleryBg: r.gallery_bg ?? "#e6eff5",
-      // Each card is a single SKU — never "ab …".
+      // Each card is a single SKU — never "ab …" from variants (Staffelpreise
+      // still gets its own "Ab" prefix via hasStaffelpreis, see ProductCard).
       hasVariants: false,
-      // r.price is COALESCE(campaign_price, price_eur): the effective list price.
-      fromCampaignPrice: r.price ?? undefined,
+      // r.price is COALESCE(campaign_price, price_eur): the effective price shown.
+      fromCampaignPrice: staffelFromPrice ?? r.price ?? undefined,
       fromOriginalPrice: hasCampaign ? r.original_price ?? undefined : undefined,
       variantLabel: r.variant_label ?? undefined,
       hrefPrefix: "/katalog",

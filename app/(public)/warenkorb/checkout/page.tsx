@@ -87,12 +87,22 @@ function OrderSummary({
               : (item.sku?.product?.name ?? item.v2Sku?.product?.display_name ?? item.v2Sku?.product?.base_name ?? "Produkt");
             const variantLabel = isDeal ? item.selected_sku?.variant_label : (item.sku?.variant_label ?? item.v2Sku?.variant_label);
             const artikelNr = isDeal ? item.selected_sku?.artikel_nr : (item.sku?.artikel_nr ?? item.v2Sku?.identnummer);
+            const hasStaffel = item.v2Sku?.has_staffelpreis ?? false;
             return (
               <li key={item.id} className="flex justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-900">{name}</p>
                   {variantLabel && <p className="text-xs text-neutral-500 mt-0.5">{variantLabel}</p>}
                   {artikelNr && <p className="text-[11px] text-neutral-400 mt-0.5">Art.-Nr.: {artikelNr}</p>}
+                  {hasStaffel && (
+                    <p className="text-[11px] text-neutral-400 mt-0.5">
+                      {item.quantity >= 10
+                        ? "Mengenstaffel: ab 10 Stück −10%"
+                        : item.quantity >= 5
+                          ? "Mengenstaffel: 5–9 Stück Standardpreis"
+                          : "Mengenstaffel: 1–4 Stück +20% Mindermengenzuschlag"}
+                    </p>
+                  )}
                   <p className="text-xs text-neutral-500 mt-0.5">× {item.quantity}</p>
                 </div>
                 <p className="text-sm font-semibold text-slate-900 whitespace-nowrap">
