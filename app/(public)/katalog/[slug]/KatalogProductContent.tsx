@@ -70,6 +70,7 @@ export default function KatalogProductContent({
 
   const [selectedSkuId, setSelectedSkuId] = useState<string>(initialSkuId ?? skus[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
+  const [qtyTouched, setQtyTouched] = useState(false);
   const [addedState, setAddedState] = useState<"idle" | "added">("idle");
 
   const selectedSku = skus.find((s) => s.id === selectedSkuId) ?? skus[0] ?? null;
@@ -91,6 +92,18 @@ export default function KatalogProductContent({
   const cartPrice = isStaffel
     ? unitPriceForQuantity(basePrice, true, quantity)
     : displayPrice;
+  // Cheapest Staffelpreis tier (ab 10) — shown as the "Ab …" headline teaser until
+  // the customer picks a quantity, at which point the headline shows the exact tier.
+  const abPrice = unitPriceForQuantity(basePrice, true, 10);
+  const showAbHeadline = isStaffel && !qtyTouched;
+
+  // Reset the "Ab" teaser when the variant changes (guarded adjust-during-render).
+  const [prevSkuId, setPrevSkuId] = useState(selectedSkuId);
+  if (selectedSkuId !== prevSkuId) {
+    setPrevSkuId(selectedSkuId);
+    setQtyTouched(false);
+  }
+
   const originalPrice = basePrice;
   const isCampaign = !isStaffel && selectedSku?.campaign_price != null && selectedSku.campaign_price < originalPrice;
   const stockQty = selectedSku?.stock_quantity ?? 999;
@@ -161,7 +174,15 @@ export default function KatalogProductContent({
     return <p className="text-base text-neutral-700 leading-snug">{s.spec_value}</p>;
   }
 
-  const techItems = currentSpecs.filter((s) => s.spec_section === "technische_details");
+  // The calculated Staffelpreis table above is the single source of truth for tier
+  // pricing, so exclude the raw per-box Staffelpreis / Verpackungseinheit spec rows
+  // (present only on Messer SKUs) from Technische Details to avoid a duplicate table.
+  const techItems = currentSpecs.filter(
+    (s) =>
+      s.spec_section === "technische_details" &&
+      !(s.spec_key ?? "").startsWith("Staffelpreis") &&
+      s.spec_key !== "Verpackungseinheit",
+  );
   if (techItems.length > 0) {
     accordionSections.push({
       id: "technische-details",
@@ -311,7 +332,7 @@ export default function KatalogProductContent({
             {selectedSku && (
               <div className="mb-4">
                 <div className={`text-2xl font-bold mb-1 ${isCampaign ? "text-sale" : "text-slate-900"}`}>
-                  {formatEur(cartPrice)}
+                  {showAbHeadline ? `Ab ${formatEur(abPrice)}` : formatEur(cartPrice)}
                 </div>
                 {isCampaign && (
                   <div className="text-sm text-neutral-400 mb-1">
@@ -364,7 +385,7 @@ export default function KatalogProductContent({
                 <div className="flex items-center border border-slate-800 rounded-sm select-none h-12">
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    onClick={() => { setQtyTouched(true); setQuantity((q) => Math.max(1, q - 1)); }}
                     className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
@@ -372,7 +393,7 @@ export default function KatalogProductContent({
                   <span className="min-w-[1.75rem] text-center text-sm font-semibold text-slate-900 px-1">{quantity}</span>
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => q + 1)}
+                    onClick={() => { setQtyTouched(true); setQuantity((q) => q + 1); }}
                     className="px-3 h-full flex items-center justify-center text-neutral-400 hover:text-slate-900 transition-colors"
                   >
                     <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
