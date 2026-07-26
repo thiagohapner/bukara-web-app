@@ -96,9 +96,14 @@ Hinweise:
   prüfen, dass Wortmarke, Button und Link korrekt dargestellt werden.
 - Die Invite-Vorlage erst aktivieren, wenn die Kontoanlage durch Bukara
   (`/admin/kunden`, Phase 4) live ist.
-- Kein externes CSS/keine externen Bilder – die Vorlagen sind bewusst
-  inline-gestylt und nutzen eine Text-Wortmarke, damit sie in Gmail, Outlook &
-  Co. zuverlässig rendern.
+- Logo im Header: Die Vorlagen laden `https://www.bukara.de/email/bukara-logo.png`
+  (liegt unter `public/email/` und wird mit dem Deploy automatisch unter dieser
+  URL ausgeliefert – **kein** separater Storage-Upload nötig). Voraussetzung:
+  der Branch ist auf die Produktionsdomain deployt. Bis dahin greift der
+  `alt="Bukara"`-Text. Wird eine andere Domain verwendet, die `src`-URL in allen
+  vier Dateien entsprechend anpassen.
+- Sonst kein externes CSS/keine weiteren externen Bilder – die Vorlagen sind
+  bewusst inline-gestylt, damit sie in Gmail, Outlook & Co. zuverlässig rendern.
 
 ---
 
