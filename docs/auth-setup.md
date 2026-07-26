@@ -74,49 +74,31 @@ Reset-Mails.
 
 ## 6. Deutsche E-Mail-Templates
 
-**Authentication → Emails → Templates**. Alle Links müssen auf
-`/auth/bestaetigen` mit `{{ .TokenHash }}` zeigen. `{{ .SiteURL }}` ist die unter
-Punkt 5 gesetzte Site URL.
+**Authentication → Emails → Templates**. Für jede Vorlage den Reiter auf
+**„Source"** (HTML) stellen und den **kompletten** Inhalt der passenden Datei aus
+`docs/email-templates/` in das Feld „Message body" einfügen. Die Vorlagen sind
+Bukara-gebrandet (Markenfarbe `#01A497`, Wortmarke, deutsche, sachliche Texte).
+Alle Links zeigen bereits auf `/auth/bestaetigen` mit `{{ .TokenHash }}`;
+`{{ .SiteURL }}` wird von Supabase aus der unter Punkt 5 gesetzten Site URL
+eingesetzt.
 
-### Confirm signup
+| Dashboard-Vorlage | Datei | Betreff |
+|---|---|---|
+| Confirm signup | `docs/email-templates/confirm-signup.html` | `Willkommen bei Bukara – bitte bestätigen Sie Ihre E-Mail-Adresse` |
+| Reset Password | `docs/email-templates/reset-password.html` | `Passwort zurücksetzen – Bukara` |
+| Change Email Address | `docs/email-templates/change-email.html` | `Bitte bestätigen Sie Ihre neue E-Mail-Adresse` |
+| Invite user (Phase 4) | `docs/email-templates/invite.html` | `Sie wurden zu Bukara eingeladen` |
 
-Betreff: `Bitte bestätigen Sie Ihre Registrierung`
-
-```html
-<p>Guten Tag,</p>
-<p>bitte bestätigen Sie Ihre E-Mail-Adresse, um Ihr Konto bei der Bukara GmbH zu aktivieren.</p>
-<p><a href="{{ .SiteURL }}/auth/bestaetigen?token_hash={{ .TokenHash }}&type=signup">E-Mail-Adresse bestätigen</a></p>
-<p>Falls Sie kein Konto angelegt haben, können Sie diese Nachricht ignorieren.</p>
-<p>Bukara GmbH</p>
-```
-
-### Reset password
-
-Betreff: `Passwort zurücksetzen`
-
-```html
-<p>Guten Tag,</p>
-<p>Sie haben das Zurücksetzen Ihres Passworts angefordert. Über den folgenden Link vergeben Sie ein neues Passwort:</p>
-<p><a href="{{ .SiteURL }}/auth/bestaetigen?token_hash={{ .TokenHash }}&type=recovery">Neues Passwort vergeben</a></p>
-<p>Falls Sie dies nicht angefordert haben, können Sie diese Nachricht ignorieren. Ihr Passwort bleibt unverändert.</p>
-<p>Bukara GmbH</p>
-```
-
-### Change email address
-
-Betreff: `E-Mail-Änderung bestätigen`
-
-```html
-<p>Guten Tag,</p>
-<p>bitte bestätigen Sie die Änderung Ihrer E-Mail-Adresse:</p>
-<p><a href="{{ .SiteURL }}/auth/bestaetigen?token_hash={{ .TokenHash }}&type=email_change">Änderung bestätigen</a></p>
-<p>Bukara GmbH</p>
-```
-
-### Invite (Phase 4 – noch nicht in Betrieb)
-
-Template zurückstellen, bis die Kontoanlage durch Bukara (`/admin/kunden`)
-umgesetzt ist.
+Hinweise:
+- Den Betreff jeweils oben im Feld „Subject heading" eintragen (der `<title>`
+  im HTML wird von Supabase nicht als Betreff verwendet).
+- Nach dem Einfügen mit „Send test email" bzw. einer echten Testregistrierung
+  prüfen, dass Wortmarke, Button und Link korrekt dargestellt werden.
+- Die Invite-Vorlage erst aktivieren, wenn die Kontoanlage durch Bukara
+  (`/admin/kunden`, Phase 4) live ist.
+- Kein externes CSS/keine externen Bilder – die Vorlagen sind bewusst
+  inline-gestylt und nutzen eine Text-Wortmarke, damit sie in Gmail, Outlook &
+  Co. zuverlässig rendern.
 
 ---
 
