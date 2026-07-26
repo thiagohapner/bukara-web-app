@@ -107,6 +107,36 @@ Hinweise:
 
 ---
 
+## Testen auf der Vercel-Preview (ohne SMTP)
+
+Für einen schnellen End-to-End-Test des angemeldeten Bereichs auf einem
+Preview-Deployment ist **kein** SMTP nötig:
+
+1. **Env-Variablen prüfen:** Das Preview-Deployment braucht dieselben Variablen
+   wie Production (siehe `.env.example`) – im Vercel-Projekt unter
+   Settings → Environment Variables auch für die **Preview**-Umgebung setzen.
+2. **Preview-Domain freischalten:** Unter **Authentication → URL Configuration →
+   Redirect URLs** die Vercel-Preview-Domain aufnehmen (z. B.
+   `https://*.vercel.app/**`), sonst verwirft Supabase die Redirect-Ziele.
+3. **„Confirm email" vorübergehend deaktivieren** (Authentication → Sign In /
+   Providers → Email). Dann liefert `signUp` direkt eine Session und
+   `/registrieren` leitet unmittelbar auf `/konto` – ohne Bestätigungsmail.
+4. Danach testbar: Registrierung → `/konto`, Anmeldung, Abmeldung, Redirect von
+   `/konto` im abgemeldeten Zustand, sowie `/konto/passwort` (falsches vs.
+   korrektes aktuelles Passwort).
+5. **Nach dem Test „Confirm email" wieder aktivieren** (Punkt 2 oben) – vor dem
+   Go-live ist die E-Mail-Bestätigung Pflicht.
+
+Alternativ mit echten Mails testen: Custom SMTP (Abschnitt 1) und Redirect-URLs
+(Abschnitt 5) konfigurieren und „Confirm email" aktiviert lassen.
+
+> ⚠️ **Ein Supabase-Projekt für Preview und Production.** Es gibt nur das Projekt
+> `qdycgspamxfiurajizmt`; die Auth-Einstellungen sind **nicht** pro Branch/Deploy
+> getrennt. Jede Umschaltung (z. B. „Confirm email" aus) betrifft damit auch die
+> Live-Seite. Daher nach dem Test unbedingt zurückstellen.
+
+---
+
 ## Verifikation nach der Konfiguration
 
 - Testregistrierung mit echter Adresse → Bestätigungsmail kommt an → nach Klick
