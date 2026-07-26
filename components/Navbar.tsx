@@ -19,6 +19,7 @@ const TOP_INFO = [
 const MAIN_LINKS = [
   { label: "Kontakt & Support", href: "/kontakt" },
   { label: "Über uns", href: "/ueber-uns" },
+  { label: "Konto", href: "/konto" },
 ];
 
 type ProductCategory = { name: string; slug: string };
