@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { login, type LoginState } from "./actions";
 import AuthShell from "@/components/auth/AuthShell";
+import SocialAuth from "@/components/auth/SocialAuth";
 import { DS_INPUT } from "@/lib/ds";
 
 const LABEL = "block text-xs font-medium text-slate-500 mb-1.5";
@@ -36,6 +37,10 @@ function AnmeldenForm() {
         </>
       }
     >
+      <div className="mb-4">
+        <SocialAuth />
+      </div>
+
       <form action={formAction} className="flex flex-col gap-4">
         <input type="hidden" name="redirectTo" value={redirectTo} />
 
