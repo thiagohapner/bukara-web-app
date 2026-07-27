@@ -11,26 +11,35 @@ Klickpfade beziehen sich auf das Supabase Dashboard (Stand 2026).
   `https://www.bukara.de`). Wenn gesetzt, werden Reset-Links darauf aufgebaut,
   sonst aus den Request-Headern abgeleitet.
 
-## 1. Custom SMTP (Resend)
+## 1. Custom SMTP (Gmail – wie bereits im Projekt genutzt)
+
+Die App versendet ihre Bestell-/Anfrage-Mails bereits über Gmail-SMTP
+(`app/api/send-email/route.ts`, `nodemailer`, `EMAIL_USER` / `EMAIL_PASS`).
+Für die Supabase-Auth-Mails wird dasselbe Gmail-Konto als Custom SMTP
+hinterlegt – kein zusätzlicher Dienstleister nötig.
 
 1. **Project Settings → Authentication → SMTP Settings** (bzw.
    **Authentication → Emails → SMTP**).
 2. „Enable Custom SMTP" aktivieren.
 3. Werte eintragen:
-   - Host: `smtp.resend.com`
+   - Host: `smtp.gmail.com`
    - Port: `465` (SSL) oder `587` (STARTTLS)
-   - Username: `resend`
-   - Password: Resend API Key (`re_…`)
-   - Sender email: eine verifizierte Absenderadresse auf einer **bukara.de**-Domain,
-     z. B. `no-reply@bukara.de`
+   - Username: die Gmail-Adresse (Wert aus `EMAIL_USER`)
+   - Password: ein **Google App-Passwort** (nicht das normale Kontopasswort;
+     unter Google-Konto → Sicherheit → App-Passwörter erzeugen, 2FA
+     vorausgesetzt) – derselbe Wert wie `EMAIL_PASS`
+   - Sender email: die Gmail-Adresse (bzw. eine im Gmail-Konto verifizierte
+     „Senden als"-Adresse, z. B. `no-reply@bukara.de`)
    - Sender name: `Bukara GmbH`
-4. Voraussetzung bei Resend: Domain `bukara.de` unter **resend.com → Domains**
-   verifizieren (SPF/DKIM DNS-Einträge setzen). Ohne verifizierte Domain lehnt
-   Resend den Versand ab.
-5. Speichern und mit einer Testregistrierung prüfen.
+4. Speichern und mit einer Testregistrierung prüfen.
 
 > Der eingebaute Supabase-Mailer ist auf wenige Mails/Stunde limitiert und nicht
 > produktionstauglich – Custom SMTP ist Pflicht vor dem Go-live.
+>
+> Grenzen von Gmail-SMTP: ca. **500 Mails/Tag** und keine dedizierte
+> Versand-Infrastruktur. Für den Start und Tests ausreichend; bei steigendem
+> Volumen bzw. für bessere Zustellbarkeit später einen transaktionalen
+> Mailprovider (mit verifizierter `bukara.de`-Domain, SPF/DKIM) erwägen.
 
 ## 2. E-Mail-Bestätigung verpflichtend
 
