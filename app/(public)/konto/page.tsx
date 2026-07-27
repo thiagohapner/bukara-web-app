@@ -1,57 +1,36 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import KontoShell from "@/components/konto/KontoShell";
 
-// Minimal account overview (Phase 1). Orders, inquiries and data editing
-// follow in Phase 2. Access is enforced by middleware (/konto/*).
+// Account overview. Orders, password and sign-out live in the left-rail menu
+// (KontoShell); this page shows the stored profile data. Access is enforced by
+// middleware (/konto/*).
 export default async function KontoPage() {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   const { data: profile } = await supabase
     .schema("v2")
     .from("customer_profiles")
-    .select("contact_name, company_name, email")
+    .select("contact_name, company_name, vat_number, phone, email")
     .maybeSingle();
 
   const email = profile?.email ?? userData.user?.email ?? "";
+  const hasCompany = !!profile?.company_name?.trim();
 
   return (
-    <KontoShell title="Mein Konto">
-      <div className="rounded-sm border border-slate-200 divide-y divide-slate-100">
+    <KontoShell title="Übersicht">
+      <div className="rounded-sm border border-slate-200 divide-y divide-slate-100 bg-white/70">
         <Row label="Ansprechpartner" value={profile?.contact_name} />
         <Row label="Firma" value={profile?.company_name} />
+        <Row label="USt-IdNr." value={profile?.vat_number} />
+        <Row label="Telefon" value={profile?.phone} />
         <Row label="E-Mail" value={email} />
       </div>
 
-      <div className="mt-6">
-        <Link
-          href="/konto/bestellungen"
-          className="flex items-center justify-between rounded-sm border border-slate-200 px-4 py-4 hover:bg-brand-25/50 hover:border-brand-600 transition-colors"
-          style={{ textDecoration: "none" }}
-        >
-          <span className="text-sm font-medium text-slate-900">Meine Bestellungen</span>
-          <span className="text-slate-400" aria-hidden>→</span>
-        </Link>
-      </div>
-
-      <div className="mt-8 flex flex-wrap items-center gap-4">
-        <Link
-          href="/konto/passwort"
-          className="inline-flex items-center rounded-sm border border-slate-800 px-4 py-2.5 text-sm font-medium text-slate-900 hover:bg-brand-25 hover:border-brand-600 transition-colors"
-          style={{ textDecoration: "none" }}
-        >
-          Passwort ändern
-        </Link>
-
-        <form action="/auth/abmelden" method="post">
-          <button
-            type="submit"
-            className="inline-flex items-center rounded-sm px-4 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
-          >
-            Abmelden
-          </button>
-        </form>
-      </div>
+      {!hasCompany && (
+        <p className="mt-4 text-sm text-slate-500 leading-relaxed">
+          Ihre Firmendaten ergänzen wir automatisch bei Ihrer ersten Bestellung.
+        </p>
+      )}
     </KontoShell>
   );
 }

@@ -141,7 +141,12 @@ export default function Navbar({
   // header is a clean, focused bar over the form's aurora canvas.
   const pathname = usePathname();
   const isFormPage =
-    pathname === "/sonder-schaerfservice" || pathname === "/sonder-werkzeug";
+    pathname === "/sonder-schaerfservice" ||
+    pathname === "/sonder-werkzeug" ||
+    pathname === "/anmelden" ||
+    pathname === "/registrieren" ||
+    pathname.startsWith("/passwort-") ||
+    pathname.startsWith("/konto");
 
   // Row 3 — Top-Angebote · DB categories · Mehr.
   const categoryLinks = [
