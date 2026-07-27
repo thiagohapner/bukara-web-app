@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { changePassword, type ChangePwState } from "./actions";
 import { DS_INPUT } from "@/lib/ds";
+import CtaArrow from "@/components/CtaArrow";
 
 const LABEL = "block text-xs font-medium text-slate-500 mb-1.5";
 
@@ -47,8 +48,9 @@ export default function PasswortForm() {
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
 
       <button type="submit" disabled={pending}
-        className="btn-brand py-3 mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+        className="btn-black btn-arrow w-full justify-center mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
         {pending ? "Wird gespeichert…" : "Passwort ändern"}
+        {!pending && <CtaArrow />}
       </button>
     </form>
   );

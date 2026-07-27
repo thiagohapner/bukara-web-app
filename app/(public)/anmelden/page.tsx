@@ -7,6 +7,7 @@ import { login, type LoginState } from "./actions";
 import AuthShell from "@/components/auth/AuthShell";
 import SocialAuth from "@/components/auth/SocialAuth";
 import { DS_INPUT } from "@/lib/ds";
+import CtaArrow from "@/components/CtaArrow";
 
 const LABEL = "block text-xs font-medium text-slate-500 mb-1.5";
 
@@ -64,8 +65,9 @@ function AnmeldenForm() {
         {state.error && <p className="text-sm text-red-600">{state.error}</p>}
 
         <button type="submit" disabled={pending || state.ok}
-          className="btn-brand py-3 mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+          className="btn-black btn-arrow w-full justify-center mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
           {pending || state.ok ? "Anmeldung läuft…" : "Anmelden"}
+          {!(pending || state.ok) && <CtaArrow />}
         </button>
       </form>
     </AuthShell>

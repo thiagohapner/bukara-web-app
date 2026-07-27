@@ -7,6 +7,7 @@ import { authErrorToGerman } from "@/lib/auth/errors";
 import AuthShell from "@/components/auth/AuthShell";
 import SocialAuth from "@/components/auth/SocialAuth";
 import { DS_INPUT } from "@/lib/ds";
+import CtaArrow from "@/components/CtaArrow";
 
 const LABEL = "block text-xs font-medium text-slate-500 mb-1.5";
 const REQ = <span className="text-[#01A497]">*</span>;
@@ -136,8 +137,9 @@ export default function RegistrierenPage() {
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="btn-brand py-3 mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+          className="btn-black btn-arrow w-full justify-center mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
           {submitting ? "Wird erstellt…" : "Konto erstellen"}
+          {!submitting && <CtaArrow />}
         </button>
       </form>
     </AuthShell>
