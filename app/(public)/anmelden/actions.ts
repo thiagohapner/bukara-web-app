@@ -1,11 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { authErrorToGerman } from "@/lib/auth/errors";
 import { safeRedirect } from "@/lib/auth/redirect";
 
-export type LoginState = { error?: string };
+export type LoginState = { error?: string; ok?: boolean; to?: string };
 
 export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const email = String(formData.get("email") ?? "").trim();
@@ -28,5 +27,10 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
   // no-ops if the address is unconfirmed, so this is safe to always call.
   await supabase.schema("v2").rpc("claim_submissions");
 
-  redirect(redirectTo);
+  // Return the target instead of redirect(): the client then performs a
+  // full-page navigation so the browser Supabase client re-initialises from the
+  // freshly set auth cookie and the header shows the logged-in state at once. A
+  // server-side (soft) redirect would leave the client session stale — the user
+  // would still see "Anmelden" in the header until a manual reload.
+  return { ok: true, to: redirectTo };
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
-import { useActionState } from "react";
+import { Suspense, useActionState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { login, type LoginState } from "./actions";
@@ -17,6 +16,12 @@ function AnmeldenForm() {
   // or from the account icon) still takes precedence.
   const redirectTo = params.get("redirectTo") ?? "/";
   const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {});
+
+  // On success, do a full-page navigation so the header (browser Supabase
+  // client) picks up the new session immediately — no manual reload needed.
+  useEffect(() => {
+    if (state.ok) window.location.assign(state.to ?? "/");
+  }, [state]);
 
   return (
     <AuthShell
@@ -53,9 +58,9 @@ function AnmeldenForm() {
 
         {state.error && <p className="text-sm text-red-600">{state.error}</p>}
 
-        <button type="submit" disabled={pending}
+        <button type="submit" disabled={pending || state.ok}
           className="btn-brand py-3 mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
-          {pending ? "Anmeldung läuft…" : "Anmelden"}
+          {pending || state.ok ? "Anmeldung läuft…" : "Anmelden"}
         </button>
       </form>
     </AuthShell>
