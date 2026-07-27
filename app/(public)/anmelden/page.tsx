@@ -12,7 +12,10 @@ const LABEL = "block text-xs font-medium text-slate-500 mb-1.5";
 
 function AnmeldenForm() {
   const params = useSearchParams();
-  const redirectTo = params.get("redirectTo") ?? "/konto";
+  // Default post-login landing is the homepage (shoppable). A `redirectTo`
+  // query param (e.g. from the middleware when a guarded page sent them here,
+  // or from the account icon) still takes precedence.
+  const redirectTo = params.get("redirectTo") ?? "/";
   const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {});
 
   return (

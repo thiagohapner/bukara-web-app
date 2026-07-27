@@ -7,7 +7,7 @@ import { safeRedirect } from "@/lib/auth/redirect";
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = safeRedirect(searchParams.get("next"), "/konto");
+  const next = safeRedirect(searchParams.get("next"), "/");
 
   if (code) {
     const supabase = await createClient();

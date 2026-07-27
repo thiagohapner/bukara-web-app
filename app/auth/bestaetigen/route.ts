@@ -16,7 +16,10 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.verifyOtp({ type, token_hash });
 
     if (!error) {
-      const fallback = type === "recovery" ? "/passwort-neu" : "/konto";
+      // After a confirmed signup send customers to the homepage (somewhere they
+      // can shop) rather than the account page. A password recovery still goes
+      // to the set-new-password screen. An explicit `next` overrides either.
+      const fallback = type === "recovery" ? "/passwort-neu" : "/";
       const dest = safeRedirect(next, fallback);
 
       // On a confirmed signup / email change, attach earlier guest submissions.

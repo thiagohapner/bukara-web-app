@@ -10,7 +10,8 @@ export type LoginState = { error?: string };
 export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
-  const redirectTo = safeRedirect(String(formData.get("redirectTo") ?? ""));
+  // Fall back to the homepage when no explicit return path was provided.
+  const redirectTo = safeRedirect(String(formData.get("redirectTo") ?? ""), "/");
 
   if (!email || !password) {
     return { error: "Bitte geben Sie E-Mail und Passwort ein." };

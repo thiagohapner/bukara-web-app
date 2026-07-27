@@ -82,14 +82,15 @@ export default function RegistrierenPage() {
     }
 
     // Ist „Confirm email" im Supabase-Projekt deaktiviert, liefert signUp
-    // direkt eine Session – der Nutzer ist bereits angemeldet und wird ins
-    // Konto geleitet (praktisch v. a. für Tests auf der Preview ohne SMTP).
-    // Bei aktivierter Bestätigung ist session === null (auch bei der
-    // Anti-Enumeration-Antwort für bereits existierende Adressen); dann bleibt
-    // der bestehende „E-Mail bestätigen"-Hinweis. Harte Navigation, damit die
-    // Middleware das frisch gesetzte Auth-Cookie sieht.
+    // direkt eine Session – der Nutzer ist bereits angemeldet und wird auf die
+    // Startseite geleitet (dort kann er direkt einkaufen; praktisch v. a. für
+    // Tests auf der Preview ohne SMTP). Bei aktivierter Bestätigung ist
+    // session === null (auch bei der Anti-Enumeration-Antwort für bereits
+    // existierende Adressen); dann bleibt der bestehende „E-Mail bestätigen"-
+    // Hinweis. Harte Navigation, damit die Middleware das frisch gesetzte
+    // Auth-Cookie sieht.
     if (data.session) {
-      window.location.assign("/konto");
+      window.location.assign("/");
       return;
     }
 
