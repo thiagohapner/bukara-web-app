@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
+import { createClient } from "@/lib/supabase/client";
 import { useCart } from "@/components/CartContext";
 import { cartTotals, formatEur } from "@/lib/pricing";
 import { submitOrder } from "@/app/actions/submitOrder";
@@ -231,6 +232,34 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
+  const [businessConfirmed, setBusinessConfirmed] = useState(false);
+
+  // Prefill the contact fields for a signed-in customer from their profile
+  // (progressive profiling: after the first order these are already saved).
+  useEffect(() => {
+    const supabase = createClient();
+    let active = true;
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (!active || !data.user) return;
+      const { data: profile } = await supabase
+        .schema("v2")
+        .from("customer_profiles")
+        .select("contact_name, company_name, vat_number, phone, email")
+        .maybeSingle();
+      if (!active) return;
+      setForm((f) => ({
+        firmenname: f.firmenname || profile?.company_name || "",
+        ust_idnr: f.ust_idnr || profile?.vat_number || "",
+        ansprechpartner: f.ansprechpartner || profile?.contact_name || "",
+        email: f.email || data.user.email || profile?.email || "",
+        telefon: f.telefon || profile?.phone || "",
+        nachricht: f.nachricht,
+      }));
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const [voucherInput, setVoucherInput] = useState("");
   const [appliedVoucher, setAppliedVoucher] = useState<AppliedVoucher | null>(null);
@@ -403,6 +432,18 @@ export default function CheckoutPage() {
 
                 {submitError && <p className="text-sm text-red-500 mb-4">{submitError}</p>}
 
+                <label className="flex items-start gap-2.5 mb-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={businessConfirmed}
+                    onChange={(e) => setBusinessConfirmed(e.target.checked)}
+                    className="accent-[#01A497] w-4 h-4 flex-shrink-0 mt-0.5"
+                  />
+                  <span className="text-[13px] text-neutral-500 leading-relaxed">
+                    Ich bestelle als Gewerbetreibender. Die Preise auf bukara.de sind Nettopreise. <span className="text-sale">*</span>
+                  </span>
+                </label>
+
                 <label className="flex items-start gap-2.5 mb-4 cursor-pointer">
                   <input
                     type="checkbox"
@@ -411,16 +452,18 @@ export default function CheckoutPage() {
                     className="accent-[#01A497] w-4 h-4 flex-shrink-0 mt-0.5"
                   />
                   <span className="text-[13px] text-neutral-500 leading-relaxed">
-                    Ich stimme zu, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert und ich hierzu kontaktiert werden darf. Weitere Informationen finden Sie in der{" "}
-                    <Link href="/datenschutz" className="underline hover:text-slate-900">Datenschutzerklärung</Link>.
+                    Ich akzeptiere die{" "}
+                    <Link href="/agbs" className="underline hover:text-slate-900">AGB</Link> und die{" "}
+                    <Link href="/datenschutz" className="underline hover:text-slate-900">Datenschutzerklärung</Link>{" "}
+                    und stimme der Verarbeitung meiner Angaben zur Bearbeitung der Bestellung zu. <span className="text-sale">*</span>
                   </span>
                 </label>
 
                 <button
                   type="submit"
-                  disabled={submitting || items.length === 0 || !consent}
+                  disabled={submitting || items.length === 0 || !consent || !businessConfirmed}
                   className="btn-black btn-arrow w-full justify-center"
-                  style={{ opacity: submitting || items.length === 0 || !consent ? 0.7 : 1 }}
+                  style={{ opacity: submitting || items.length === 0 || !consent || !businessConfirmed ? 0.7 : 1 }}
                 >
                   {submitting ? "Wird gesendet…" : "Bestellung aufgeben"}
                   {!submitting && <CtaArrow />}

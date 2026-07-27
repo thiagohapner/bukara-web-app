@@ -61,10 +61,10 @@ export type OrderDetail = {
   items: OrderLineItem[];
 };
 
-async function sessionEmail(): Promise<string | null> {
+async function sessionIdentity(): Promise<{ id: string | null; email: string | null }> {
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
-  return data.user?.email ?? null;
+  return { id: data.user?.id ?? null, email: data.user?.email ?? null };
 }
 
 // Case-insensitive exact match on e-mail. `ilike` treats `%` and `_` as
@@ -75,33 +75,44 @@ function ilikeLiteral(value: string): string {
 }
 
 export async function getMyOrders(): Promise<OrderListItem[]> {
-  const email = await sessionEmail();
-  if (!email) return [];
+  const { id, email } = await sessionIdentity();
+  if (!id && !email) return [];
+
+  // Match orders linked to the account (customer_id, set at checkout while
+  // logged in) OR placed as a guest with the verified session email. The latter
+  // covers pre-account orders; the former is robust when the account email
+  // differs from the checkout email (e.g. social login).
+  const clauses: string[] = [];
+  if (id) clauses.push(`customer_id.eq.${id}`);
+  if (email) clauses.push(`email.ilike.${ilikeLiteral(email)}`);
 
   const { data } = await supabaseAdmin
     .from("orders")
     .select("id, submitted_at, status, total_gross")
-    .ilike("email", ilikeLiteral(email))
+    .or(clauses.join(","))
     .order("submitted_at", { ascending: false });
 
   return (data ?? []) as OrderListItem[];
 }
 
 export async function getMyOrder(id: string): Promise<OrderDetail | null> {
-  const email = await sessionEmail();
-  if (!email) return null;
+  const { id: userId, email } = await sessionIdentity();
+  if (!userId && !email) return null;
 
   const { data: order } = await supabaseAdmin
     .from("orders")
     .select(
-      "id, submitted_at, status, total_net, total_gross, voucher_code, voucher_discount, firmenname, ust_idnr, ansprechpartner, email, telefon, nachricht, cart_id"
+      "id, submitted_at, status, total_net, total_gross, voucher_code, voucher_discount, firmenname, ust_idnr, ansprechpartner, email, telefon, nachricht, cart_id, customer_id"
     )
     .eq("id", id)
     .maybeSingle();
 
   if (!order) return null;
-  // IDOR guard: the order must belong to the signed-in customer.
-  if ((order.email ?? "").toLowerCase() !== email.toLowerCase()) return null;
+  // IDOR guard: the order must belong to the signed-in customer — either via
+  // the account link (customer_id) or the verified session email.
+  const ownsById = !!userId && order.customer_id === userId;
+  const ownsByEmail = !!email && (order.email ?? "").toLowerCase() === email.toLowerCase();
+  if (!ownsById && !ownsByEmail) return null;
 
   const items = await reconstructItems(order.cart_id as string | null);
 

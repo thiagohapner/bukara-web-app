@@ -9,6 +9,7 @@ import {
 } from "@/lib/pricing";
 import { validateVoucherRpc, type VoucherItem } from "@/lib/server/voucher";
 import { normalizeVoucherCode } from "@/lib/vouchers";
+import { createClient as createSSRClient } from "@/lib/supabase/server";
 
 export type OrderFormState = {
   firmenname: string;
@@ -132,9 +133,16 @@ export async function submitOrder(
   const orderId = crypto.randomUUID();
   const submitted_at = new Date().toISOString();
 
+  // Associate the order with the signed-in customer, if any. The id comes from
+  // the verified server-side session (getUser), never from client input.
+  const ssr = await createSSRClient();
+  const { data: userData } = await ssr.auth.getUser();
+  const customerId = userData.user?.id ?? null;
+
   const { error: orderError } = await admin.from("orders").insert({
     id: orderId,
     cart_id: cartId,
+    customer_id: customerId,
     firmenname: form.firmenname,
     ust_idnr: form.ust_idnr || null,
     ansprechpartner: form.ansprechpartner,
@@ -161,6 +169,29 @@ export async function submitOrder(
       discount_applied: voucherDiscount,
     });
     if (redErr) console.error("[voucher] redemption insert:", redErr.message);
+  }
+
+  // Progressive profiling: write the business data back to the signed-in
+  // customer's profile so it's prefilled next time (and the account is complete
+  // for social/slim signups). Placing a B2B order also confirms business status
+  // and terms acceptance. vat/phone only overwrite when actually provided.
+  if (customerId) {
+    const profileUpdate: Record<string, unknown> = {
+      company_name: form.firmenname.trim(),
+      contact_name: form.ansprechpartner.trim(),
+      is_business_confirmed: true,
+      accepted_terms_at: submitted_at,
+      updated_at: submitted_at,
+    };
+    if (form.ust_idnr.trim()) profileUpdate.vat_number = form.ust_idnr.trim();
+    if (form.telefon.trim()) profileUpdate.phone = form.telefon.trim();
+
+    const { error: profErr } = await admin
+      .schema("v2")
+      .from("customer_profiles")
+      .update(profileUpdate)
+      .eq("id", customerId);
+    if (profErr) console.error("[profile] write-back:", profErr.message);
   }
 
   const emailItems = pricedItems.map((item) => ({
