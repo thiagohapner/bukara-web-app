@@ -66,9 +66,9 @@ export default function AccountMenu() {
         {isAuthed && (
           <span
             aria-hidden
-            className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-brand-500 ring-2 ring-white flex items-center justify-center"
+            className="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-brand-500 ring-2 ring-white flex items-center justify-center"
           >
-            <Check className="w-2 h-2 text-white" strokeWidth={3.5} />
+            <Check className="w-2.5 h-2.5 text-white" strokeWidth={3.5} />
           </span>
         )}
       </Link>
