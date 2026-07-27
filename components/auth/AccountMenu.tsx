@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { UserRound, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import CtaArrow from "@/components/CtaArrow";
 
 // Account entry point in the header — an icon (left of the cart) rather than a
 // written link. On hover (desktop) a popover shows the login status and account
@@ -74,8 +75,8 @@ export default function AccountMenu() {
 
       {/* Hover / focus popover (desktop only). The pt-2 wrapper bridges the gap
           between icon and card so the hover isn't lost in transit. */}
-      <div className="hidden lg:block absolute right-0 top-full pt-2 w-64 z-50 opacity-0 invisible translate-y-1 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0">
-        <div className="rounded-sm border border-neutral-100 bg-white shadow-lg shadow-slate-900/[0.08] p-4">
+      <div className="hidden lg:block absolute right-0 top-full pt-2 w-72 z-50 opacity-0 invisible translate-y-1 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0">
+        <div className="rounded-lg border border-slate-100 bg-white shadow-xl shadow-slate-900/10 p-5">
           {isAuthed ? (
             <>
               <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
@@ -104,22 +105,23 @@ export default function AccountMenu() {
             </>
           ) : (
             <>
-              <p className="text-sm font-semibold text-slate-900">Willkommen</p>
-              <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+              <p className="text-base font-semibold text-slate-900">Willkommen</p>
+              <p className="mt-1.5 text-sm text-slate-500 leading-relaxed">
                 Melden Sie sich an, um Ihre Bestellungen und Anfragen an einem
                 Ort zu sehen.
               </p>
-              <div className="mt-3 flex flex-col gap-2">
+              <div className="mt-4 flex flex-col gap-2.5">
                 <Link
                   href="/anmelden"
-                  className="btn-brand py-2 text-center text-sm"
+                  className="btn-black btn-arrow w-full justify-center"
                   style={{ textDecoration: "none" }}
                 >
                   Anmelden
+                  <CtaArrow />
                 </Link>
                 <Link
                   href="/registrieren"
-                  className="inline-flex items-center justify-center rounded-sm border border-slate-800 py-2 text-sm font-medium text-slate-900 hover:bg-brand-25 hover:border-brand-600 transition-colors"
+                  className="btn-outline w-full justify-center"
                   style={{ textDecoration: "none" }}
                 >
                   Konto erstellen
