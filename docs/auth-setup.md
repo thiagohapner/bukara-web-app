@@ -11,35 +11,69 @@ Klickpfade beziehen sich auf das Supabase Dashboard (Stand 2026).
   `https://www.bukara.de`). Wenn gesetzt, werden Reset-Links darauf aufgebaut,
   sonst aus den Request-Headern abgeleitet.
 
-## 1. Custom SMTP (Gmail – wie bereits im Projekt genutzt)
+## 1. Custom SMTP (Brevo)
 
-Die App versendet ihre Bestell-/Anfrage-Mails bereits über Gmail-SMTP
-(`app/api/send-email/route.ts`, `nodemailer`, `EMAIL_USER` / `EMAIL_PASS`).
-Für die Supabase-Auth-Mails wird dasselbe Gmail-Konto als Custom SMTP
-hinterlegt – kein zusätzlicher Dienstleister nötig.
+Die **kundenseitigen** Auth-Mails (Bestätigung, Passwort-Reset) laufen über
+Brevo mit verifizierter `bukara.de`-Absenderdomain. Das sorgt für einen
+markenkonformen Absender und gute Zustellbarkeit.
+
+> Hinweis zur Abgrenzung: Die App verschickt daneben **interne**
+> Benachrichtigungen (Bestell-/Anfrage-Hinweise) an das eigene Bukara-Postfach
+> (`app/api/send-email/route.ts`). Die sind nicht kundenseitig; ihre Umstellung
+> auf Brevo ist optional (siehe Abschnitt 1b).
+
+### 1a. Domain `bukara.de` in Brevo authentifizieren (Voraussetzung)
+
+1. Brevo → **Senders, Domains & Dedicated IPs → Domains** → `bukara.de`
+   hinzufügen und **Authenticate** wählen.
+2. Die von Brevo **angezeigten** DNS-Einträge beim Domain-/DNS-Anbieter setzen
+   (Brevo generiert die konkreten Werte pro Konto – aus Brevo übernehmen, nicht
+   raten): i. d. R. ein `brevo-code`-TXT-Record, DKIM (CNAME/TXT), ein
+   SPF-Eintrag und optional DMARC.
+3. In Brevo auf **Verify/Authenticate** klicken, bis alle Einträge grün sind
+   (DNS-Propagation kann bis zu einige Stunden dauern).
+4. Einen Absender wie `no-reply@bukara.de` als **verified sender** anlegen.
+
+### 1b. SMTP-Zugang holen
+
+Brevo → **SMTP & API → SMTP**. Dort stehen die exakten Werte; typischerweise:
+
+- Host: `smtp-relay.brevo.com`
+- Port: `587` (STARTTLS) oder `465` (SSL)
+- Login: der angezeigte SMTP-Login (Brevo-Konto-Login)
+- Passwort: ein **SMTP-Key** (in Brevo erzeugen – **nicht** das Kontopasswort)
+
+### 1c. In Supabase eintragen
 
 1. **Project Settings → Authentication → SMTP Settings** (bzw.
    **Authentication → Emails → SMTP**).
 2. „Enable Custom SMTP" aktivieren.
 3. Werte eintragen:
-   - Host: `smtp.gmail.com`
-   - Port: `465` (SSL) oder `587` (STARTTLS)
-   - Username: die Gmail-Adresse (Wert aus `EMAIL_USER`)
-   - Password: ein **Google App-Passwort** (nicht das normale Kontopasswort;
-     unter Google-Konto → Sicherheit → App-Passwörter erzeugen, 2FA
-     vorausgesetzt) – derselbe Wert wie `EMAIL_PASS`
-   - Sender email: die Gmail-Adresse (bzw. eine im Gmail-Konto verifizierte
-     „Senden als"-Adresse, z. B. `no-reply@bukara.de`)
+   - Host / Port / Username / Password: die Brevo-Werte aus 1b.
+   - Sender email: `no-reply@bukara.de` (der in 1a verifizierte Absender).
    - Sender name: `Bukara GmbH`
-4. Speichern und mit einer Testregistrierung prüfen.
+4. Speichern und mit einer Testregistrierung prüfen (Bestätigungsmail muss
+   ankommen und als `bukara.de`-Absender erscheinen).
 
 > Der eingebaute Supabase-Mailer ist auf wenige Mails/Stunde limitiert und nicht
-> produktionstauglich – Custom SMTP ist Pflicht vor dem Go-live.
->
-> Grenzen von Gmail-SMTP: ca. **500 Mails/Tag** und keine dedizierte
-> Versand-Infrastruktur. Für den Start und Tests ausreichend; bei steigendem
-> Volumen bzw. für bessere Zustellbarkeit später einen transaktionalen
-> Mailprovider (mit verifizierter `bukara.de`-Domain, SPF/DKIM) erwägen.
+> produktionstauglich – Custom SMTP ist Pflicht vor dem Go-live. Supabase warnt
+> generisch bei „persönlichen" Providern (z. B. Gmail); mit einer
+> authentifizierten Brevo-Domain entfällt dieser Hinweis.
+
+### 1d (optional). Interne App-Mails ebenfalls über Brevo
+
+Der Code in `app/api/send-email/route.ts` ist bereits Brevo-fähig: Sobald
+`SMTP_HOST` gesetzt ist, wird Brevo statt Gmail genutzt (sonst bleibt Gmail als
+Fallback aktiv). Dafür in der Umgebung (z. B. Vercel) setzen:
+
+- `SMTP_HOST=smtp-relay.brevo.com`
+- `SMTP_PORT=587`
+- `SMTP_USER=<brevo-smtp-login>`
+- `SMTP_PASS=<brevo-smtp-key>`
+- `EMAIL_FROM=no-reply@bukara.de` (verifizierter Absender)
+
+`EMAIL_TO` (Empfänger der internen Hinweise) bleibt unverändert. Ohne diese
+Variablen versendet die App weiter über Gmail – kein Bruch.
 
 ## 2. E-Mail-Bestätigung verpflichtend
 

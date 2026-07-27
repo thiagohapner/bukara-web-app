@@ -1,13 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Sender transport. When SMTP_HOST is set (e.g. Brevo: smtp-relay.brevo.com)
+// we use that host; otherwise we fall back to the existing Gmail service, so
+// nothing breaks until the Brevo env is in place. SMTP_USER/SMTP_PASS fall back
+// to EMAIL_USER/EMAIL_PASS to keep the Gmail path untouched.
+const smtpHost = process.env.SMTP_HOST;
+const smtpPort = Number(process.env.SMTP_PORT ?? 587);
+
+const transporter = smtpHost
+  ? nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465, // 465 = implicit TLS; 587 = STARTTLS
+      auth: {
+        user: process.env.SMTP_USER ?? process.env.EMAIL_USER,
+        pass: process.env.SMTP_PASS ?? process.env.EMAIL_PASS,
+      },
+    })
+  : nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
 function formatEur(n: number) {
   return n.toFixed(2).replace(".", ",") + " €";
@@ -248,7 +265,9 @@ export async function POST(request: NextRequest) {
     }
 
     await transporter.sendMail({
-      from: `"BuKaRa GmbH" <${process.env.EMAIL_USER}>`,
+      // Branded sender when EMAIL_FROM is set (a Brevo-verified bukara.de
+      // address); otherwise the Gmail login address, as before.
+      from: `"BuKaRa GmbH" <${process.env.EMAIL_FROM ?? process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_TO ?? "bukaragmbh@gmail.com",
       subject,
       html,
