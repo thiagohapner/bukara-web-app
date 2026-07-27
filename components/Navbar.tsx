@@ -8,6 +8,7 @@ import BukaraLogo from "./BukaraLogo";
 import { useCart } from "./CartContext";
 import { useHeaderChrome } from "./HeaderChrome";
 import { ShoppingBasket, Search, ShieldCheck, Gem, PencilRuler } from "lucide-react";
+import AccountMenu from "./auth/AccountMenu";
 
 // Row 1 — trust labels (one links to the Schärfservice page).
 const TOP_INFO = [
@@ -15,11 +16,12 @@ const TOP_INFO = [
   { label: "Deutschlandweiter Schärfservice", Icon: Gem, href: "/sonder-schaerfservice" },
 ];
 
-// Row 2 — text action links (besides search, the Sonderlösung button and cart).
+// Row 2 — text action links (besides search, the Sonderlösung button, the
+// account icon and the cart). "Konto" is no longer a written link — it lives as
+// an icon left of the cart (see <AccountMenu />).
 const MAIN_LINKS = [
   { label: "Kontakt & Support", href: "/kontakt" },
   { label: "Über uns", href: "/ueber-uns" },
-  { label: "Konto", href: "/konto" },
 ];
 
 type ProductCategory = { name: string; slug: string };
@@ -235,12 +237,17 @@ export default function Navbar({
             ))}
           </div>
 
+          {/* Account (icon, left of the cart) */}
+          <div className="ml-auto">
+            <AccountMenu />
+          </div>
+
           {/* Cart */}
           <button
             type="button"
             aria-label="Warenkorb"
             onClick={openDrawer}
-            className="relative ml-auto w-10 h-10 flex items-center justify-center rounded-full hover:bg-brand-25 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] flex-shrink-0"
+            className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-brand-25 transition-colors duration-[240ms] ease-[cubic-bezier(0.45,0.05,0.55,0.95)] flex-shrink-0"
           >
             <ShoppingBasket className="w-5 h-5 text-neutral-600" strokeWidth={1.7} />
             {cartCount > 0 && (

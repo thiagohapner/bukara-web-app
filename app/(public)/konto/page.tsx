@@ -23,6 +23,17 @@ export default async function KontoPage() {
         <Row label="E-Mail" value={email} />
       </div>
 
+      <div className="mt-6">
+        <Link
+          href="/konto/bestellungen"
+          className="flex items-center justify-between rounded-sm border border-slate-200 px-4 py-4 hover:bg-brand-25/50 hover:border-brand-600 transition-colors"
+          style={{ textDecoration: "none" }}
+        >
+          <span className="text-sm font-medium text-slate-900">Meine Bestellungen</span>
+          <span className="text-slate-400" aria-hidden>→</span>
+        </Link>
+      </div>
+
       <div className="mt-8 flex flex-wrap items-center gap-4">
         <Link
           href="/konto/passwort"
