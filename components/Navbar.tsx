@@ -242,10 +242,9 @@ export default function Navbar({
             ))}
           </div>
 
-          {/* Account (icon, left of the cart) */}
-          <div className="ml-auto">
+          {/* Account · Cart · Menu — grouped tight together on the right */}
+          <div className="ml-auto flex items-center gap-1">
             <AccountMenu />
-          </div>
 
           {/* Cart */}
           <button
@@ -275,6 +274,7 @@ export default function Navbar({
             <span className={`block w-5 h-0.5 bg-neutral-600 transition-all duration-[300ms] ease-[cubic-bezier(0.25,1.00,0.50,1.00)] ${menuOpen ? "opacity-0" : ""}`} />
             <span className={`block w-5 h-0.5 bg-neutral-600 transition-all duration-[300ms] ease-[cubic-bezier(0.25,1.00,0.50,1.00)] ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
           </button>
+          </div>
         </div>
 
         {/* Row 3 — category nav (desktop). Hidden on the request-form pages. */}
