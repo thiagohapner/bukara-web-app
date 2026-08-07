@@ -21,7 +21,7 @@ const TOP_INFO = [
 // an icon left of the cart (see <AccountMenu />).
 const MAIN_LINKS = [
   { label: "Kontakt & Support", href: "/kontakt" },
-  { label: "Über uns", href: "/ueber-uns" },
+  { label: "Über Bukara", href: "/ueber-uns" },
 ];
 
 type ProductCategory = { name: string; slug: string };
