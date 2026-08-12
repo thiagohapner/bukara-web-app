@@ -6,6 +6,7 @@ import {
   cartTotals,
   BULK_DISCOUNT_THRESHOLD,
   BULK_DISCOUNT_PERCENT,
+  type Herkunft,
 } from "@/lib/pricing";
 import { validateVoucherRpc, type VoucherItem } from "@/lib/server/voucher";
 import { normalizeVoucherCode } from "@/lib/vouchers";
@@ -18,6 +19,7 @@ export type OrderFormState = {
   email: string;
   telefon: string;
   nachricht: string;
+  land: string;
 };
 
 export type SubmitOrderResult =
@@ -50,6 +52,7 @@ export async function submitOrder(
   cartId: string,
   form: OrderFormState,
   voucherCode?: string,
+  herkunft: Herkunft = "de",
 ): Promise<SubmitOrderResult> {
   const admin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -129,7 +132,10 @@ export async function submitOrder(
     voucherCodeNorm = res.code ?? normalizeVoucherCode(voucherCode);
   }
 
-  const totals = cartTotals(pricedItems, voucherDiscount);
+  // Land wird nur bei „Ausland“ verlangt — bei „de“ ignorieren wir ein evtl.
+  // übermitteltes Land und schreiben authoritativ „DE“.
+  const land = herkunft === "ausland" ? (form.land || "").trim() : "DE";
+  const totals = cartTotals(pricedItems, voucherDiscount, { herkunft, vatId: form.ust_idnr });
   const orderId = crypto.randomUUID();
   const submitted_at = new Date().toISOString();
 
@@ -149,6 +155,8 @@ export async function submitOrder(
     email: form.email,
     telefon: form.telefon || null,
     nachricht: form.nachricht || null,
+    land,
+    vat_exempt: totals.vatExempt,
     total_net: totals.net,
     total_gross: totals.gross,
     voucher_id: voucherId,
@@ -185,6 +193,7 @@ export async function submitOrder(
     };
     if (form.ust_idnr.trim()) profileUpdate.vat_number = form.ust_idnr.trim();
     if (form.telefon.trim()) profileUpdate.phone = form.telefon.trim();
+    if (land) profileUpdate.land = land;
 
     const { error: profErr } = await admin
       .schema("v2")

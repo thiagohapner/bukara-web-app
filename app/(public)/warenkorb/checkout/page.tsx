@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/client";
 import { useCart } from "@/components/CartContext";
-import { cartTotals, formatEur } from "@/lib/pricing";
+import { cartTotals, formatEur, isValidForeignVatId, type Herkunft } from "@/lib/pricing";
+import { useHerkunft } from "@/components/HerkunftContext";
 import { submitOrder } from "@/app/actions/submitOrder";
 import { applyVoucher } from "@/app/actions/applyVoucher";
 import { FileText, Clock, Check, Phone, Mail, X } from "lucide-react";
@@ -23,6 +24,7 @@ type FormState = {
   email: string;
   telefon: string;
   nachricht: string;
+  land: string;
 };
 
 type AppliedVoucher = { code: string; discount: number };
@@ -44,6 +46,8 @@ function OrderSummary({
   onRemoveVoucher,
   voucherError,
   voucherApplying,
+  herkunft,
+  vatId,
 }: {
   appliedVoucher: AppliedVoucher | null;
   voucherInput: string;
@@ -52,9 +56,11 @@ function OrderSummary({
   onRemoveVoucher: () => void;
   voucherError: string | null;
   voucherApplying: boolean;
+  herkunft: Herkunft;
+  vatId: string;
 }) {
   const { items } = useCart();
-  const totals = cartTotals(items, appliedVoucher?.discount ?? 0);
+  const totals = cartTotals(items, appliedVoucher?.discount ?? 0, { herkunft, vatId });
 
   if (items.length === 0) {
     return (
@@ -173,7 +179,7 @@ function OrderSummary({
             </div>
           )}
           <div className="flex justify-between text-neutral-500">
-            <span>19% MwSt.</span>
+            <span>{totals.vatExempt ? "MwSt. (Reverse-Charge)" : "19% MwSt."}</span>
             <span>{formatEur(totals.vat)}</span>
           </div>
           <div className="flex justify-between text-neutral-500">
@@ -184,6 +190,16 @@ function OrderSummary({
                 : formatEur(totals.shipping)}
             </span>
           </div>
+          {totals.vatExempt && (
+            <p className="text-[11px] text-neutral-400">
+              Steuerfrei gemäß § 13b UStG (Reverse-Charge) — Sie versteuern die Lieferung in Ihrem Land selbst.
+            </p>
+          )}
+          {herkunft === "ausland" && !totals.vatExempt && (
+            <p className="text-[11px] text-neutral-400">
+              MwSt. entfällt nur mit gültiger ausländischer USt-IdNr.
+            </p>
+          )}
           {totalSavings > 0 && (
             <div className="flex justify-between font-semibold rounded-lg px-3 py-2.5" style={{ background: "#e8f7f6", color: "#01A497" }}>
               <span>Ihr Ersparnis</span>
@@ -192,7 +208,7 @@ function OrderSummary({
           )}
           <div className="h-px bg-neutral-200 my-1" />
           <div className="flex justify-between font-bold text-slate-900 text-base">
-            <span>Gesamt inkl. MwSt.</span>
+            <span>{totals.vatExempt ? "Gesamt" : "Gesamt inkl. MwSt."}</span>
             <span>{formatEur(totals.gross)}</span>
           </div>
         </div>
@@ -226,8 +242,9 @@ function OrderSummary({
 export default function CheckoutPage() {
   const router = useRouter();
   const { cartId, items, clearAll } = useCart();
+  const { herkunft } = useHerkunft();
   const [form, setForm] = useState<FormState>({
-    firmenname: "", ust_idnr: "", ansprechpartner: "", email: "", telefon: "", nachricht: "",
+    firmenname: "", ust_idnr: "", ansprechpartner: "", email: "", telefon: "", nachricht: "", land: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -244,7 +261,7 @@ export default function CheckoutPage() {
       const { data: profile } = await supabase
         .schema("v2")
         .from("customer_profiles")
-        .select("contact_name, company_name, vat_number, phone, email")
+        .select("contact_name, company_name, vat_number, phone, email, land")
         .maybeSingle();
       if (!active) return;
       setForm((f) => ({
@@ -254,6 +271,7 @@ export default function CheckoutPage() {
         email: f.email || data.user.email || profile?.email || "",
         telefon: f.telefon || profile?.phone || "",
         nachricht: f.nachricht,
+        land: f.land || profile?.land || "",
       }));
     });
     return () => {
@@ -298,6 +316,10 @@ export default function CheckoutPage() {
       setSubmitError("Bitte füllen Sie alle Pflichtfelder aus.");
       return;
     }
+    if (herkunft === "ausland" && !form.land.trim()) {
+      setSubmitError("Bitte geben Sie Ihr Land an.");
+      return;
+    }
     if (items.length === 0) {
       setSubmitError("Ihr Warenkorb ist leer.");
       return;
@@ -311,7 +333,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    const result = await submitOrder(cartId, form, appliedVoucher?.code);
+    const result = await submitOrder(cartId, form, appliedVoucher?.code, herkunft);
 
     if ("error" in result) {
       setSubmitting(false);
@@ -388,6 +410,8 @@ export default function CheckoutPage() {
                 onRemoveVoucher={handleRemoveVoucher}
                 voucherError={voucherError}
                 voucherApplying={voucherApplying}
+                herkunft={herkunft}
+                vatId={form.ust_idnr}
               />
             </div>
 
@@ -405,9 +429,24 @@ export default function CheckoutPage() {
                     <input type="text" required value={form.firmenname} onChange={field("firmenname")} className={inputClass()} placeholder="Muster GmbH" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-neutral-500 mb-1.5">USt-IdNr.</label>
+                    <label className="block text-xs font-medium text-neutral-500 mb-1.5">
+                      USt-IdNr. {herkunft === "ausland" && <span className="text-neutral-400 font-normal">(für MwSt.-Befreiung)</span>}
+                    </label>
                     <input type="text" value={form.ust_idnr} onChange={field("ust_idnr")} className={inputClass()} placeholder="DE123456789" />
+                    {herkunft === "ausland" && !isValidForeignVatId(form.ust_idnr) && (
+                      <p className="text-[11px] text-neutral-400 mt-1">
+                        Ohne gültige ausländische USt-IdNr. berechnen wir die deutsche MwSt.
+                      </p>
+                    )}
                   </div>
+                  {herkunft === "ausland" && (
+                    <div>
+                      <label className="block text-xs font-medium text-neutral-500 mb-1.5">
+                        Land <span className="text-sale">*</span>
+                      </label>
+                      <input type="text" required value={form.land} onChange={field("land")} className={inputClass()} placeholder="Österreich" />
+                    </div>
+                  )}
                   <div>
                     <label className="block text-xs font-medium text-neutral-500 mb-1.5">
                       Ansprechpartner <span className="text-sale">*</span>

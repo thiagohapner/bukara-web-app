@@ -11,6 +11,7 @@ import { formatEur } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import OrderBenefits from "@/components/OrderBenefits";
+import VatHint from "@/components/VatHint";
 import CtaArrow from "@/components/CtaArrow";
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
@@ -342,7 +343,7 @@ export default function DealPageContent({ dealSlug }: { dealSlug: string }) {
                 </>
               )}
             </div>
-            <p className="text-[11px] text-neutral-400 mb-4">zzgl. 19% MwSt.</p>
+            <VatHint className="text-[11px] text-neutral-400 mb-4" />
 
             {offer?.subtitle && (
               <p className="text-base text-slate-900 leading-relaxed mb-2">{offer.subtitle}</p>

@@ -9,6 +9,7 @@ import { useCart } from "./CartContext";
 import { useHeaderChrome } from "./HeaderChrome";
 import { ShoppingBasket, Search, ShieldCheck, Gem, PencilRuler } from "lucide-react";
 import AccountMenu from "./auth/AccountMenu";
+import HerkunftSwitch from "./HerkunftSwitch";
 
 // Row 1 — trust labels (one links to the Schärfservice page).
 const TOP_INFO = [
@@ -194,6 +195,9 @@ export default function Navbar({
                 )}
               </li>
             ))}
+            <li className="inline-flex items-center ml-auto">
+              <HerkunftSwitch />
+            </li>
           </ul>
         </div>
       </div>
@@ -305,6 +309,9 @@ export default function Navbar({
         <div className={`lg:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-[calc(100dvh-72px)] border-t border-neutral-50" : "max-h-0"}`}>
           <div className="px-4 sm:px-6 py-4 bg-white max-h-[calc(100dvh-72px)] overflow-y-auto">
             <SearchBar className="md:hidden mb-4" onSubmitted={() => setMenuOpen(false)} animated={!isFormPage} />
+            <div className="mb-3 text-[13px] font-bold text-neutral-700">
+              <HerkunftSwitch />
+            </div>
             <ul className="flex flex-col gap-1">
               <li>
                 <Link

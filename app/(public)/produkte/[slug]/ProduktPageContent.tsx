@@ -15,6 +15,7 @@ import {
 } from "@/lib/data";
 import { formatEur } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase";
+import VatHint from "@/components/VatHint";
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
@@ -111,7 +112,7 @@ function PriceAndCart({
               </span>
             )}
           </div>
-          <p className="text-[11px] text-neutral-400">zzgl. 19% MwSt.</p>
+          <VatHint />
         </div>
       )}
 

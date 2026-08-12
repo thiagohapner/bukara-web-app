@@ -110,6 +110,9 @@ export default async function BestellungDetailPage({
           <span>Brutto</span>
           <span>{fmtEur(order.total_gross)}</span>
         </div>
+        {order.vat_exempt && (
+          <p className="text-xs text-slate-400 pt-1">Steuerfrei (Reverse-Charge, § 13b UStG)</p>
+        )}
       </div>
 
       {/* Order data summary */}
@@ -117,6 +120,7 @@ export default async function BestellungDetailPage({
         <InfoCard title="Rechnungsdaten">
           {order.firmenname && <p className="font-medium text-slate-800">{order.firmenname}</p>}
           {order.ust_idnr && <p className="text-sm text-slate-500">USt-IdNr: {order.ust_idnr}</p>}
+          {order.land && order.land !== "DE" && <p className="text-sm text-slate-500">Land: {order.land}</p>}
           {order.ansprechpartner && <p className="text-sm text-slate-600 mt-1">{order.ansprechpartner}</p>}
           {order.email && <p className="text-sm text-slate-500">{order.email}</p>}
           {order.telefon && <p className="text-sm text-slate-500">{order.telefon}</p>}

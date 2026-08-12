@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import ScrollToTop from "@/components/ScrollToTop";
 import { CartProvider } from "@/components/CartContext";
+import { HerkunftProvider } from "@/components/HerkunftContext";
 import { HeaderChromeProvider } from "@/components/HeaderChrome";
 import CartDrawer from "@/components/CartDrawer";
 import { getSortimentCategories } from "@/lib/sortiment/data";
@@ -12,13 +13,15 @@ export default async function PublicLayout({ children }: { children: React.React
   const productCategories = categories.map((c) => ({ name: c.name, slug: c.slug }));
 
   return (
-    <CartProvider>
-      <HeaderChromeProvider>
-        <ScrollToTop />
-        <Navbar productCategories={productCategories} />
-        {children}
-        <CartDrawer />
-      </HeaderChromeProvider>
-    </CartProvider>
+    <HerkunftProvider>
+      <CartProvider>
+        <HeaderChromeProvider>
+          <ScrollToTop />
+          <Navbar productCategories={productCategories} />
+          {children}
+          <CartDrawer />
+        </HeaderChromeProvider>
+      </CartProvider>
+    </HerkunftProvider>
   );
 }

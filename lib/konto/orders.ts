@@ -54,6 +54,8 @@ export type OrderDetail = {
   voucher_discount: number | null;
   firmenname: string | null;
   ust_idnr: string | null;
+  land: string | null;
+  vat_exempt: boolean;
   ansprechpartner: string | null;
   email: string | null;
   telefon: string | null;
@@ -102,7 +104,7 @@ export async function getMyOrder(id: string): Promise<OrderDetail | null> {
   const { data: order } = await supabaseAdmin
     .from("orders")
     .select(
-      "id, submitted_at, status, total_net, total_gross, voucher_code, voucher_discount, firmenname, ust_idnr, ansprechpartner, email, telefon, nachricht, cart_id, customer_id"
+      "id, submitted_at, status, total_net, total_gross, voucher_code, voucher_discount, firmenname, ust_idnr, land, vat_exempt, ansprechpartner, email, telefon, nachricht, cart_id, customer_id"
     )
     .eq("id", id)
     .maybeSingle();
@@ -126,6 +128,8 @@ export async function getMyOrder(id: string): Promise<OrderDetail | null> {
     voucher_discount: order.voucher_discount,
     firmenname: order.firmenname,
     ust_idnr: order.ust_idnr,
+    land: order.land,
+    vat_exempt: order.vat_exempt,
     ansprechpartner: order.ansprechpartner,
     email: order.email,
     telefon: order.telefon,

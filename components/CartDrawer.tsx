@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import { cartTotals, formatEur, unitPriceForQuantity, FREE_SHIPPING_THRESHOLD, BULK_DISCOUNT_THRESHOLD } from "@/lib/pricing";
+import { useHerkunft } from "./HerkunftContext";
 import type { CartItem } from "@/lib/cart";
 import { X, ShoppingBasket, Trash2, ArrowRight } from "lucide-react";
 
@@ -46,7 +47,10 @@ function tierLabel(qty: number): string {
 
 export default function CartDrawer() {
   const { items, isDrawerOpen, closeDrawer, updateItem, removeCartItem } = useCart();
-  const totals = cartTotals(items);
+  const { herkunft } = useHerkunft();
+  // USt-IdNr. wird erst im Checkout erfasst — hier gilt provisorisch die deutsche
+  // MwSt., der Versandaufschlag fürs Ausland zählt aber schon jetzt.
+  const totals = cartTotals(items, 0, { herkunft });
 
   // Lock background scroll while the drawer is open.
   useEffect(() => {
@@ -189,7 +193,7 @@ export default function CartDrawer() {
                 </div>
               )}
               <div className="flex justify-between text-neutral-500">
-                <span>19% MwSt.</span>
+                <span>{totals.vatExempt ? "MwSt. (Reverse-Charge)" : "19% MwSt."}</span>
                 <span>{formatEur(totals.vat)}</span>
               </div>
               <div className="flex justify-between text-neutral-500">
@@ -198,9 +202,15 @@ export default function CartDrawer() {
               </div>
               <div className="h-px bg-neutral-100 my-1" />
               <div className="flex justify-between font-bold text-slate-900 text-base">
-                <span>Gesamt inkl. MwSt.</span>
+                <span>{totals.vatExempt ? "Gesamt" : "Gesamt inkl. MwSt."}</span>
                 <span>{formatEur(totals.gross)}</span>
               </div>
+              {herkunft === "ausland" && (
+                <p className="text-[11px] text-neutral-400 mt-0.5">
+                  Lieferung ins Ausland: Versand 15,00 €. Für Geschäftskunden mit gültiger
+                  USt-IdNr. entfällt die MwSt. — Angabe im nächsten Schritt.
+                </p>
+              )}
               {!totals.freeShippingApplied && (
                 <p className="text-[11px] text-neutral-400 mt-0.5">
                   Noch {formatEur(FREE_SHIPPING_THRESHOLD - totals.subtotal)} bis zum kostenlosen Versand.

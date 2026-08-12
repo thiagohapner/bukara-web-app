@@ -13,6 +13,7 @@ import KatalogAbmessungenTable from "./KatalogAbmessungenTable";
 import { getDimensionRows } from "@/lib/v2/dimensions";
 import { useCart } from "@/components/CartContext";
 import { formatEur, unitPriceForQuantity } from "@/lib/pricing";
+import VatHint from "@/components/VatHint";
 import type { V2Product, V2Sku, V2SkuImage, V2SkuSpec, V2ProductMaterial, V2ProductApplication, V2GroupVariant, V2ProductCuttingData } from "@/lib/v2/types";
 import type { AccessoryItem } from "@/components/ProductAccessories";
 
@@ -342,7 +343,7 @@ export default function KatalogProductContent({
                     </span>
                   </div>
                 )}
-                <p className="text-[11px] text-neutral-400">zzgl. 19% MwSt.</p>
+                <VatHint />
               </div>
             )}
 

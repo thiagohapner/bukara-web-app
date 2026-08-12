@@ -49,6 +49,10 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         <InfoCard title="Kunde">
           <p className="font-medium">{order.firmenname}</p>
           {order.ust_idnr && <p className="text-slate-500 text-sm">USt-IdNr: {order.ust_idnr}</p>}
+          {order.land && order.land !== "DE" && <p className="text-slate-500 text-sm">Land: {order.land}</p>}
+          {order.vat_exempt && (
+            <p className="text-sm font-medium" style={{ color: "#01A497" }}>Steuerfrei (Reverse-Charge, §13b UStG)</p>
+          )}
           <p className="text-sm mt-1">{order.ansprechpartner}</p>
           <p className="text-sm text-slate-500">{order.email}</p>
           {order.telefon && <p className="text-sm text-slate-500">{order.telefon}</p>}

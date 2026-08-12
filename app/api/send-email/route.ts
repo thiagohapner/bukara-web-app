@@ -165,7 +165,7 @@ function buildOrderEmail(d: {
   order: Record<string, string>;
   voucherCode?: string | null;
   items: Array<{ name: string; artikel_nr: string; variant_label: string | null; qty: number; unit_price: number; line_total: number }>;
-  totals: { subtotal: number; bulkDiscountApplied: boolean; bulkDiscount: number; voucherDiscount?: number; net: number; vat: number; shipping: number; gross: number };
+  totals: { subtotal: number; bulkDiscountApplied: boolean; bulkDiscount: number; voucherDiscount?: number; net: number; vat: number; shipping: number; gross: number; vatExempt?: boolean };
 }) {
   const itemRows = d.items.map(item => `
     <tr>
@@ -203,7 +203,7 @@ function buildOrderEmail(d: {
         <td style="padding:8px 12px;font-size:13px;color:#01A497;text-align:right;border-bottom:1px solid #e2e8f0;">−${formatEur(d.totals.voucherDiscount ?? 0)}</td>
       </tr>` : ""}
       <tr>
-        <td colspan="3" style="padding:8px 12px;font-size:12px;color:#64748b;border-bottom:1px solid #e2e8f0;">19% MwSt.</td>
+        <td colspan="3" style="padding:8px 12px;font-size:12px;color:#64748b;border-bottom:1px solid #e2e8f0;">${d.totals.vatExempt ? "MwSt. (Reverse-Charge)" : "19% MwSt."}</td>
         <td style="padding:8px 12px;font-size:13px;text-align:right;border-bottom:1px solid #e2e8f0;">${formatEur(d.totals.vat)}</td>
       </tr>
       <tr>
@@ -211,7 +211,7 @@ function buildOrderEmail(d: {
         <td style="padding:8px 12px;font-size:13px;text-align:right;border-bottom:1px solid #e2e8f0;">${d.totals.shipping === 0 ? "Kostenlos" : formatEur(d.totals.shipping)}</td>
       </tr>
       <tr style="background:#f8fafc;">
-        <td colspan="3" style="padding:10px 12px;font-size:14px;font-weight:700;color:#1e293b;">Gesamt inkl. MwSt.</td>
+        <td colspan="3" style="padding:10px 12px;font-size:14px;font-weight:700;color:#1e293b;">${d.totals.vatExempt ? "Gesamt" : "Gesamt inkl. MwSt."}</td>
         <td style="padding:10px 12px;font-size:14px;font-weight:700;color:#1e293b;text-align:right;">${formatEur(d.totals.gross)}</td>
       </tr>
     </table>`;
@@ -219,6 +219,7 @@ function buildOrderEmail(d: {
   const contactSection = section("Kunde", [
     ["Firma", d.order.firmenname],
     ["USt-IdNr.", d.order.ust_idnr],
+    ["Land", d.order.land && d.order.land !== "DE" ? d.order.land : "Deutschland"],
     ["Ansprechpartner", d.order.ansprechpartner],
     ["E-Mail", d.order.email],
     ["Telefon", d.order.telefon],

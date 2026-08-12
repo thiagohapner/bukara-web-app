@@ -40,8 +40,11 @@ export default function AGBsPage() {
             <p className="text-sm text-slate-600 leading-relaxed mb-3">
               2.3 Liegen zwischen Vertragsschluss und Lieferung mehr als vier Monate und treten unvorhersehbare Kostenerhöhungen (z. B. Rohstoffpreise, Löhne) ein, sind wir berechtigt, den Preis im angemessenen Verhältnis zu den gestiegenen Kosten anzupassen.
             </p>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-slate-600 leading-relaxed mb-3">
               2.4 Mit Erscheinen einer neuen Preisliste verlieren alle vorherigen Preisangaben ihre Gültigkeit. Für bereits bestätigte Aufträge gelten die zum Zeitpunkt der Bestätigung vereinbarten Preise, sofern nichts anderes vereinbart wurde.
+            </p>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              2.5 Für Lieferungen außerhalb Deutschlands berechnen wir eine Versandpauschale von 15,00 EUR pro Sendung anstelle der sonst üblichen Versandkosten. Bei Lieferungen an Geschäftskunden mit Sitz im Ausland und gültiger Umsatzsteuer-Identifikationsnummer erfolgt die Rechnungsstellung ohne deutsche Umsatzsteuer im Rahmen des Reverse-Charge-Verfahrens (§ 13b UStG); der Besteller ist in diesem Fall verpflichtet, die Umsatzsteuer in seinem Sitzland selbst zu erklären und abzuführen. Wird keine gültige ausländische Umsatzsteuer-Identifikationsnummer angegeben, stellen wir die Rechnung mit deutscher Umsatzsteuer.
             </p>
           </section>
 
