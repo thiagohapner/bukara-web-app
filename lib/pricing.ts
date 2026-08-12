@@ -83,7 +83,8 @@ export function cartTotals(
   const voucher = round(Math.min(Math.max(voucherDiscount, 0), Math.max(subtotal - bulkDiscount, 0)));
   const net = round(subtotal - bulkDiscount - voucher);
   const shipping = freeShippingApplied ? 0 : BASE_SHIPPING_COST;
-  const vat = round(net * 0.19);
-  const gross = round(net + vat + shipping);
+  // Versandkosten sind Teil der Bemessungsgrundlage und werden vor der MwSt. addiert.
+  const vat = round((net + shipping) * 0.19);
+  const gross = round(net + shipping + vat);
   return { subtotal, bulkDiscount, bulkDiscountApplied, voucherDiscount: voucher, freeShippingApplied, net, vat, shipping, gross };
 }
