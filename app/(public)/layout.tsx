@@ -3,6 +3,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { CartProvider } from "@/components/CartContext";
 import { HeaderChromeProvider } from "@/components/HeaderChrome";
 import CartDrawer from "@/components/CartDrawer";
+import ChatWidget from "@/components/ChatWidget";
 import { getSortimentCategories } from "@/lib/sortiment/data";
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,7 @@ export default async function PublicLayout({ children }: { children: React.React
         <Navbar productCategories={productCategories} />
         {children}
         <CartDrawer />
+        <ChatWidget />
       </HeaderChromeProvider>
     </CartProvider>
   );

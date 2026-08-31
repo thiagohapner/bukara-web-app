@@ -10,6 +10,7 @@ import {
   Ticket,
   ShoppingCart,
   Boxes,
+  MessagesSquare,
   Inbox,
   Megaphone,
   Database,
@@ -73,6 +74,17 @@ export default function AdminNav() {
           }`}
         />
         Varianten
+      </Link>
+      <Link
+        href="/admin/v2/chat"
+        className={linkCls(pathname.startsWith("/admin/v2/chat"))}
+      >
+        <MessagesSquare
+          className={`w-4 h-4 ${
+            pathname.startsWith("/admin/v2/chat") ? "text-slate-700" : "text-slate-400"
+          }`}
+        />
+        Chat-Anfragen
       </Link>
       {V2_INERT.map(({ label, icon: Icon }) => (
         <span
