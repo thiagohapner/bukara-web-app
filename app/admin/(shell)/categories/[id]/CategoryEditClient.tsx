@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import CustomSelect from "@/components/CustomSelect";
+import { purgeCatalogCache } from "../actions";
 
 const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -70,6 +71,9 @@ export default function CategoryEditClient({
           is_active: form.is_active,
         }).eq("id", categoryId);
         if (e) throw e;
+        // Der öffentliche Katalog cached den Kategoriebaum 24 h — ohne diesen
+        // Purge wäre die Änderung nur hier im Admin (force-dynamic) sichtbar.
+        await purgeCatalogCache();
         router.refresh();
       } else {
         const { error: e } = await supabase.from("categories").insert({
@@ -80,6 +84,7 @@ export default function CategoryEditClient({
           is_active: form.is_active,
         });
         if (e) throw e;
+        await purgeCatalogCache();
         router.push("/admin/categories");
       }
     } catch (e: unknown) {
