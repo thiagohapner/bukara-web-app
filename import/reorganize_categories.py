@@ -54,7 +54,18 @@ Usage:
   SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... uv run --with supabase python3 import/reorganize_categories.py
 
   # 2. Nach Prüfung der Ausgabe tatsächlich anwenden:
-  SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... uv run --with supabase python3 import/reorganize_categories.py --apply
+  SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... REVALIDATE_SECRET=... \
+    uv run --with supabase python3 import/reorganize_categories.py --apply
+
+Env:
+  SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY   Pflicht.
+  SUPABASE_SCHEMA    Default "v2" — dasselbe Schema, das der Shop liest
+                     (lib/v2/supabaseAdmin.ts). Der Preflight bricht ab, wenn dort
+                     keine der erwarteten Kategorien liegt.
+  REVALIDATE_SECRET  Optional, aber empfohlen: purgt nach --apply den 24-h-Katalog-
+                     Cache über POST /api/revalidate. Ohne diesen Purge zeigt der
+                     Shop die alte Struktur noch bis zu 24 h.
+  SITE_URL           Default "https://www.bukara.de" — Ziel des Purge-Requests.
 
 Das Skript ist idempotent: ein zweiter Lauf mit --apply erkennt bereits umbenannte/
 angelegte/verschobene Zeilen und überspringt sie (Abgleich per Slug bzw. per bereits
@@ -63,15 +74,25 @@ bestehender product_categories-Zuordnung).
 
 import os
 import sys
+import urllib.error
+import urllib.request
 
-from supabase import create_client
+from supabase import ClientOptions, create_client
 
 APPLY = "--apply" in sys.argv
 DRY_RUN = not APPLY
 
+# Der Shop liest Kategorien über supabaseAdminV2 mit db: { schema: "v2" }
+# (lib/v2/supabaseAdmin.ts) — hier also explizit dasselbe Schema ansprechen und
+# sich NICHT auf das PostgREST-Default-Schema verlassen. Die älteren Skripte in
+# diesem Verzeichnis setzen kein Schema; ob sie damit in v2 oder public landen,
+# hängt an der PostgREST-Konfiguration des Projekts. Der Preflight unten prüft,
+# ob im gewählten Schema tatsächlich die erwarteten Kategorien liegen.
+SCHEMA = os.environ.get("SUPABASE_SCHEMA", "v2")
+
 url = os.environ["SUPABASE_URL"]
 key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
-sb = create_client(url, key)
+sb = create_client(url, key, options=ClientOptions(schema=SCHEMA))
 
 # =====================================================================================
 # 1. Neue Ebene-1-Kategorien (Material). parent_id bleibt NULL — das ist bereits die
@@ -220,8 +241,74 @@ def log(msg: str) -> None:
     print(prefix + msg)
 
 
+def preflight(categories: list[dict]) -> None:
+    """Abbrechen, wenn im gewählten Schema nicht die erwarteten Kategorien liegen.
+
+    Ohne diese Prüfung würde ein falsch konfiguriertes Schema stillschweigend
+    entweder gar nichts finden (alles 'nicht gefunden') oder in einer zweiten,
+    nicht vom Shop gelesenen Tabelle herumschreiben.
+    """
+    slugs = {c["slug"] for c in categories}
+    print(f"Schema '{SCHEMA}': {len(categories)} Kategorien gefunden.")
+    if categories:
+        print("  " + ", ".join(sorted(slugs)))
+
+    expected_old = set(RENAME_REPARENT) | {"spannfutter-zubehoer"}
+    expected_new = {cfg["new_slug"] for cfg in RENAME_REPARENT.values()}
+    found_old = expected_old & slugs
+    found_new = expected_new & slugs
+
+    if not found_old and not found_new:
+        sys.exit(
+            f"\n[ABBRUCH] In Schema '{SCHEMA}' liegt keine der erwarteten Kategorien "
+            f"({', '.join(sorted(expected_old))}).\n"
+            f"          Falls die Daten in einem anderen Schema liegen, das Skript mit "
+            f"SUPABASE_SCHEMA=<schema> erneut starten."
+        )
+
+    missing = expected_old - slugs - {
+        old for old, cfg in RENAME_REPARENT.items() if cfg["new_slug"] in slugs
+    }
+    if missing:
+        print(f"[WARN] Erwartete Kategorien fehlen (evtl. zwischenzeitlich umbenannt): {sorted(missing)}")
+    if found_new:
+        print(f"[INFO] Bereits migrierte Kategorien erkannt: {sorted(found_new)} — Lauf ist idempotent.")
+    print()
+
+
+def purge_catalog_cache() -> None:
+    """Den 24-h-Katalog-Cache der Website purgen (POST /api/revalidate).
+
+    Ohne diesen Aufruf zeigt der Shop den alten Kategoriebaum noch bis zu 24 h —
+    Supabase-Änderungen erreichen Next.js sonst auf keinem Weg. Übersprungen,
+    wenn REVALIDATE_SECRET bzw. SITE_URL nicht gesetzt sind.
+    """
+    secret = os.environ.get("REVALIDATE_SECRET")
+    site_url = os.environ.get("SITE_URL", "https://www.bukara.de").rstrip("/")
+    if not secret:
+        print(
+            "[HINWEIS] REVALIDATE_SECRET nicht gesetzt — Katalog-Cache NICHT gepurgt. "
+            "Der Shop zeigt die alte Struktur noch bis zu 24 h (oder bis zum nächsten Deploy)."
+        )
+        return
+
+    req = urllib.request.Request(
+        f"{site_url}/api/revalidate",
+        method="POST",
+        headers={"x-revalidate-secret": secret},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as res:
+            print(f"Katalog-Cache gepurgt ({site_url}/api/revalidate → HTTP {res.status}).")
+    except urllib.error.HTTPError as e:
+        print(f"[WARN] Cache-Purge fehlgeschlagen: HTTP {e.code} {e.reason}. Bitte manuell redeployen.")
+    except urllib.error.URLError as e:
+        print(f"[WARN] Cache-Purge nicht erreichbar: {e.reason}. Bitte manuell redeployen.")
+
+
 def main() -> None:
     categories = sb.table("categories").select("*").execute().data
+    preflight(categories)
     products = sb.table("products").select("id,slug").execute().data
     product_categories = sb.table("product_categories").select("product_id,category_id").execute().data
 
@@ -247,6 +334,9 @@ def main() -> None:
                 "home_sort_order": cfg["home_sort_order"],
                 "seo_title": cfg.get("seo_title"),
                 "seo_description": cfg.get("seo_description"),
+                # Der Admin-Kategorie-Editor führt is_active — explizit setzen,
+                # damit neue Zeilen dort nicht als inaktiv erscheinen.
+                "is_active": True,
             }
             inserted = sb.table("categories").insert(row).execute().data[0]
             parent_id_by_slug[slug] = inserted["id"]
@@ -312,6 +402,7 @@ def main() -> None:
                 "parent_id": parent_id,
                 "show_on_home": False,
                 "home_sort_order": None,
+                "is_active": True,
             }
             inserted = sb.table("categories").insert(row).execute().data[0]
             child_id_by_slug[slug] = inserted["id"]
@@ -347,6 +438,10 @@ def main() -> None:
                     sb.table("product_categories").insert(
                         {"product_id": prod_id, "category_id": target_cat_id}
                     ).execute()
+
+    if APPLY:
+        print()
+        purge_catalog_cache()
 
     log("\nFertig." if APPLY else "\nTrockenlauf abgeschlossen — keine Schreibvorgänge. Mit --apply erneut ausführen, um anzuwenden.")
     log(
